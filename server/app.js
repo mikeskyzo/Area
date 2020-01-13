@@ -33,33 +33,62 @@ MongoClient.connect('mongodb+srv://Admin:Admin44000@cluster0-boacc.mongodb.net/t
   db = client.db('Area51')
 })
 
-app.post('/quotes', (req, res) => {
-  db.collection('Users').save(req.body, (err, result) => {
-    if (err) return console.log(err)
+app.post('/create/:username/:pass', (req, res) => {
+    db.collection('Users').insertOne({name : req.params.username, pass : req.params.pass}, (err, result) => {
+        if (err) {
+            res.json({
+                success : false,
+                message : err.message
+            });
+        }
+        res.json({
+            success : true,
+            message : 'Created succesful'
+        })
+    })
+})
 
-    console.log('saved to database')
-    res.redirect('/')
-  })
+app.get('/connect/:username/:pass', (req, res) => {
+    db.collection('Users').findOne({name : req.params.username, pass : req.params.pass}, (err, result) => {
+        if (err) {
+            res.json({
+                success : false,
+                message : err.message
+            });
+        } else {
+            if(!result) {
+                res.json({
+                    success : false,
+                    message : 'User not found'
+                })
+            } else {
+                res.json({
+                    success : true,
+                    message : 'Connect succesful'
+                })
+            }
+        }
+    })
 })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+    next(createError(404));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 app.listen(8080, function (req, res) {
-  console.log("server listen on 8080")
+    console.log("server listen on 8080")
 })
 
 module.exports = app;
