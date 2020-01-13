@@ -279,3 +279,5 @@ temp/
 # Markdown Navigator plugin
 
 # End of https://www.gitignore.io/api/git,node,clion,webstorm,visualstudiocode
+
+node_modules/*
