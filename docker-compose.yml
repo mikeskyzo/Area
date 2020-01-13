@@ -3,9 +3,9 @@ services:
   webapp:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: server/Dockerfile
     ports:
       - "8080:8080"
-    command: npm start
+    command: npm start server/
     image: area2019
     container_name: DEV_area_2019
