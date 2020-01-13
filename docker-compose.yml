@@ -9,11 +9,13 @@ services:
         command: npm start server/
         image: area2019
         container_name: DEV_area_2019
+        ports:
+            - "8080:8080"
 
     client:
         build: ./web-client/.
         ports:
-            - "8000:8081"
+            - "8081:8081"
         volumes:
             - ./web-client/:/usr/src/app/
         links:

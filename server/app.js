@@ -24,16 +24,13 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(usersRouter);
 
 var db
 
 MongoClient.connect('mongodb+srv://Admin:Admin44000@cluster0-boacc.mongodb.net/test?retryWrites=true&w=majority', (err, client) => {
   if (err) return console.log(err)
   db = client.db('Area51')
-  app.listen(3000, () => {
-    console.log('listening on 3000')
-  })
 })
 
 app.post('/quotes', (req, res) => {
@@ -60,5 +57,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.listen(8080, function (req, res) {
+  console.log("server listen on 8080")
+})
 
 module.exports = app;
