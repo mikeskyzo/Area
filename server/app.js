@@ -40,11 +40,12 @@ app.post('/create/:username/:pass', (req, res) => {
                 success : false,
                 message : err.message
             });
+        } else {
+            res.json({
+                success : true,
+                message : 'Created succesful'
+            })
         }
-        res.json({
-            success : true,
-            message : 'Created succesful'
-        })
     })
 })
 
@@ -65,7 +66,7 @@ app.get('/connect/:username/:pass', (req, res) => {
                 res.json({
                     success : true,
                     message : 'Connect succesful'
-                })
+                });
             }
         }
     })
