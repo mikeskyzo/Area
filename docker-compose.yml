@@ -1,0 +1,8 @@
+version: "3"
+services:
+
+    client_mobile:
+        build: ./client_mobile
+        ports:
+        - "1212:1212"
+
