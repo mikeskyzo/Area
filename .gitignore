@@ -281,3 +281,6 @@ temp/
 # End of https://www.gitignore.io/api/git,node,clion,webstorm,visualstudiocode
 
 node_modules/*
+web-client/node_modules/
+.idea/
+.vs/
