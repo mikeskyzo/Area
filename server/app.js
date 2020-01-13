@@ -33,8 +33,18 @@ MongoClient.connect('mongodb+srv://Admin:Admin44000@cluster0-boacc.mongodb.net/t
   db = client.db('Area51')
 })
 
-app.post('/create/:username/:pass', (req, res) => {
-    db.collection('Users').insertOne({name : req.params.username, pass : req.params.pass}, (err, result) => {
+app.post('/createUser', (req, res) => {
+    var username = req.get('username');
+    var pass = req.get('password');
+    if (!username || !pass) {
+        res.json({
+            success : false,
+            message : 'Bad Header'
+        });
+        return;
+    }
+
+    db.collection('Users').insertOne({name : username, pass : pass}, (err, result) => {
         if (err) {
             res.json({
                 success : false,
@@ -49,8 +59,18 @@ app.post('/create/:username/:pass', (req, res) => {
     })
 })
 
-app.get('/connect/:username/:pass', (req, res) => {
-    db.collection('Users').findOne({name : req.params.username, pass : req.params.pass}, (err, result) => {
+app.get('/connectUser', (req, res) => {
+    var username = req.get('username');
+    var pass = req.get('password');
+    if (!username || !pass) {
+        res.json({
+            success : false,
+            message : 'Bad Header'
+        });
+        return;
+    }
+
+    db.collection('Users').findOne({name : username, pass : pass}, (err, result) => {
         if (err) {
             res.json({
                 success : false,
