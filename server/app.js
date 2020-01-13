@@ -37,6 +37,7 @@ app.post('/createUser', (req, res) => {
     var username = req.get('username');
     var pass = req.get('password');
     if (!username || !pass) {
+        res.status(401);
         res.json({
             success : false,
             message : 'Bad Header'
@@ -46,11 +47,13 @@ app.post('/createUser', (req, res) => {
 
     db.collection('Users').insertOne({name : username, pass : pass}, (err, result) => {
         if (err) {
+            res.status(401);
             res.json({
                 success : false,
                 message : err.message
             });
         } else {
+            res.status(201);
             res.json({
                 success : true,
                 message : 'Created succesful'
@@ -63,6 +66,7 @@ app.get('/connectUser', (req, res) => {
     var username = req.get('username');
     var pass = req.get('password');
     if (!username || !pass) {
+        res.status(401);
         res.json({
             success : false,
             message : 'Bad Header'
@@ -72,17 +76,20 @@ app.get('/connectUser', (req, res) => {
 
     db.collection('Users').findOne({name : username, pass : pass}, (err, result) => {
         if (err) {
+            res.status(401);
             res.json({
                 success : false,
                 message : err.message
             });
         } else {
             if(!result) {
+                res.status(401);
                 res.json({
                     success : false,
                     message : 'User not found'
                 })
             } else {
+                res.status(200);
                 res.json({
                     success : true,
                     message : 'Connect succesful'
