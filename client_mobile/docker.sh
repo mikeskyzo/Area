@@ -2,4 +2,4 @@
 
 set -e
 echo "le docker fonctionne"
-#eval "./gradlew build"
+eval "./client_mobile/gradlew build"

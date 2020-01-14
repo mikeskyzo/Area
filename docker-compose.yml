@@ -5,4 +5,8 @@ services:
         build: ./client_mobile
         ports:
         - "8081:8081"
+        environment:
+            - PORT=80
+            - DB_NAME=db
+            - DB_PORT=27017
 
