@@ -11,6 +11,8 @@ services:
         container_name: DEV_area_2019
         ports:
             - "8080:8080"
+        volumes:
+            - ./server/:/usr/src/app/
 
     client:
         build: ./web-client/.
