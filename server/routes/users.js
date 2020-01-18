@@ -3,13 +3,13 @@ var router = express.Router();
 
 
 router.post('/createuser', function(req, res, next) {
-    var username = req.get('username');
-    var pass = req.get('password');
+    var username = req.body.username;
+    var pass = req.body.password;
     if (!username || !pass) {
         res.status(401);
         res.json({
             success : false,
-            message : 'Bad Header'
+            message : 'Bad Body'
         });
         return;
     }
@@ -31,13 +31,13 @@ router.post('/createuser', function(req, res, next) {
 });
 
 router.get('/connectUser', function(req, res) {
-    var username = req.get('username');
-    var pass = req.get('password');
+    var username = req.body.username;
+    var pass = req.body.password;
     if (!username || !pass) {
         res.status(401);
         res.json({
             success : false,
-            message : 'Bad Header'
+            message : 'Bad Body'
         });
         return;
     }
