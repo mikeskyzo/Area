@@ -22,82 +22,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}))
 
-
 app.use('/', indexRouter);
-app.use(usersRouter);
+app.use('/', usersRouter);
 
-var db
+var db;
 
 MongoClient.connect('mongodb+srv://Admin:Admin44000@cluster0-boacc.mongodb.net/test?retryWrites=true&w=majority', (err, client) => {
   if (err) return console.log(err)
   db = client.db('Area51')
-})
+    // Global variable to be used in all route
+    global.db = db;
+});
 
-app.post('/createUser', (req, res) => {
-    var username = req.get('username');
-    var pass = req.get('password');
-    if (!username || !pass) {
-        res.status(401);
-        res.json({
-            success : false,
-            message : 'Bad Header'
-        });
-        return;
-    }
-
-    db.collection('Users').insertOne({name : username, pass : pass}, (err, result) => {
-        if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-            });
-        } else {
-            res.status(201);
-            res.json({
-                success : true,
-                message : 'Created succesful'
-            })
-        }
-    })
-})
-
-app.get('/connectUser', (req, res) => {
-    var username = req.get('username');
-    var pass = req.get('password');
-    if (!username || !pass) {
-        res.status(401);
-        res.json({
-            success : false,
-            message : 'Bad Header'
-        });
-        return;
-    }
-
-    db.collection('Users').findOne({name : username, pass : pass}, (err, result) => {
-        if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-            });
-        } else {
-            if(!result) {
-                res.status(401);
-                res.json({
-                    success : false,
-                    message : 'User not found'
-                })
-            } else {
-                res.status(200);
-                res.json({
-                    success : true,
-                    message : 'Connect succesful'
-                });
-            }
-        }
-    })
-})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
