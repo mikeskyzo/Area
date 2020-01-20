@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fill-height fluid>
 
     <AppBar/>
 
@@ -14,16 +14,18 @@ import AppBar from '../components/app-bar/app-bar.vue'
 import AppFooter from '../components/app-footer/app-footer.vue'
 
 export default {
-  data () {
-    return {
+    data () {
+        return {
+            name: 'Home'
+        }
+    },
+    components: {
+        AppBar,
+        AppFooter,
+    },
+    methods: {
+
     }
-  },
-  components: {
-    AppBar,
-    AppFooter,
-  },
-  methods: {
-  }
 }
 
 </script>
