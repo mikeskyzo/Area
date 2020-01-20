@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar flat app dark color="blue accent-2">
+  <v-app-bar flat app dark color="gray">
     <v-app-bar-title>
-      <span>[B-DEV-510] - Area</span>
+      <v-btn text @click="navigateTo('home')">[B-DEV-510] - Area</v-btn>
     </v-app-bar-title>
 
     <v-spacer/>
@@ -52,8 +52,8 @@ export default {
     },
 
     logOut () {
-      this.$store.dispatch('setToken', null)
-      this.$store.dispatch('setUser', null)
+      this.$store.dispatch('setToken', null);
+      this.$store.dispatch('setUser', null);
       this.navigateTo('authentication')
     }
 
