@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var uniqid = require('uniqid');
+
 
 router.post('/createuser', function(req, res, next) {
     var username = req.body.username;
@@ -13,7 +15,8 @@ router.post('/createuser', function(req, res, next) {
         });
         return;
     }
-    global.db.collection('Users').insertOne({name : username, pass : pass}, (err, result) => {
+    var id = uniqid();
+    global.db.collection('Users').insertOne({name : username, pass : pass, id : id}, (err, result) => {
         if (err) {
             res.status(401);
             res.json({
@@ -24,7 +27,8 @@ router.post('/createuser', function(req, res, next) {
             res.status(201);
             res.json({
                 success : true,
-                message : 'Created succesful'
+                message : 'Created successfully',
+                user_id : id
             })
         }
     })
@@ -60,12 +64,34 @@ router.get('/connectUser', function(req, res) {
                 res.status(200);
                 res.json({
                     success : true,
-                    message : 'Connect succesful'
+                    message : 'Connect successfully',
+                    user_id : result.id
                 });
             }
         }
     })
 })
 
-
 module.exports = router;
+
+module.exports.DoesUserExist = function (user_id, req, res, next) {
+    global.db.collection('Users').findOne({id : user_id}, (err, result) => {
+        if (err) {
+            res.status(401);
+            res.json({
+                success : false,
+                message : err.message
+            });
+            return;
+        }
+        if(!result) {
+            res.status(401);
+            res.json({
+                success : false,
+                message : 'User not found'
+            })
+            return;
+        }
+        next(req, res);
+    });
+}
