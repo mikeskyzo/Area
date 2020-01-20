@@ -3,6 +3,8 @@
 
     <AppBar/>
 
+    {{error}}
+
   <v-container fill-height fluid
     class="grey lighten-2">
     <v-container
@@ -14,10 +16,11 @@
         :padding="4">
         <v-row>
 
-          <v-col v-if="ActiveView === 'SignIn'">
+          <v-col v-if="ActiveView === 'SignIn'" class="grey darken-3">
             <v-container fluid fill-height>
               <v-container align-center>
                 <v-sheet
+                  class="transparent"
                   align="center"
                   :margin="4"
                   :elevation="0">
@@ -26,9 +29,10 @@
                     autocomplete="on">
 
                     <v-text-field
+                      background-color="transparent"
+                      color="orange"
                       label="Email"
                       v-model="email"
-
                       :hint="`exemple: john.doe@epitech.eu`"
                       outlined
                       clearable/>
@@ -37,18 +41,19 @@
                       label="Password"
                       type="password"
                       v-model="password"
-
                       :max-width="40"
                       :hint="`Must only contains the followings : lower case alphabetical characters, upper case alphabetical characters, numerical characters`"
                       :counter="32"
                       outlined
-                      clearable/>
+                      clearable
+                      background-color="transparent"
+                      color="orange"/>
 
                   </form>
 
                   <div v-html="signInError"/>
 
-                  <v-btn text-center dark rounded color="blue accent-2" x-large @click="login">Sign in</v-btn>
+                  <v-btn text-center dark rounded color="orange accent-2" x-large @click="login">Sign in</v-btn>
 
                 </v-sheet>
               </v-container>
@@ -159,7 +164,7 @@
 </template>
 
 <script>
-//import AuthenticationService from '@/services/AuthenticationService'
+import AuthenticationService from '@/services/AuthenticationService'
 import AppBar from '../components/app-bar/app-bar.vue'
 import AppFooter from '../components/app-footer/app-footer.vue'
 
@@ -172,6 +177,8 @@ export default {
       username: '',
       email: '',
       password: '',
+
+      error: '()',
 
       signUpError: null,
       signInError: null,
@@ -190,12 +197,13 @@ export default {
 
     async register () {
       try {
-        /*
+        this.error = 'Trying to register';
         const response = await AuthenticationService.register({
-          email: this.email,
+          username: this.email,
           password: this.password
         });
-        */
+        this.error = '(has a response)';
+          // eslint-disable-next-line no-console
         this.signUpError = null;
         //await this.$store.dispatch('setToken', /*response.data.token*/);
         await this.$store.dispatch('setUser', {} /*response.data.user*/);
