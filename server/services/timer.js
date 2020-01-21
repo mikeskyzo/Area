@@ -15,7 +15,7 @@ refresh = function () {
             if(!result) {
 				console.log('No area in data base')
             } else {
-				console.log(result);
+				//console.log(result);
             }
         }
     })
