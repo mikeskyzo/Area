@@ -1,8 +1,10 @@
 var express = require('express');
+var uniqid = require('uniqid');
+
 var router = express.Router();
 
 var users = require('./users');
-var uniqid = require('uniqid');
+var weather = require('../services/weather')
 
 const areaCollection = 'Area'
 
@@ -34,7 +36,7 @@ function redirectToAction(req, res)
 					'city' : req.body.city,
 					'time' : req.body.time
 				};
-				redirectToReaction(req, res, json, req.body.reaction);
+				weather.DoesCityExist(req.body.city, req, res, json, redirectToReaction)
 				return;
 			}
 		default:
@@ -43,10 +45,10 @@ function redirectToAction(req, res)
 	returnError(res);
 }
 
-function redirectToReaction(req, res, json, reaction)
+function redirectToReaction(req, res, json)
 {
-	json.reaction = reaction;
-	switch (reaction) {
+	json.reaction = req.body.reaction;
+	switch (req.body.reaction) {
 		case 'discord_send_message':
 			if (req.body.channel_id && req.body.message) {
 				json.reactionParams = {
