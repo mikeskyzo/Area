@@ -8,9 +8,12 @@ var logger = require('morgan');
 var aboutRouter = require('./routes/aboutJson');
 var usersRouter = require('./routes/users');
 var areaCreator = require('./routes/areaCreator');
+var tokens = require('./routes/tokens')
 
 var timer = require('./services/timer')
 var weather = require('./services/weather')
+
+var utils = require('./utils')
 
 var app = express();
 const MongoClient = require('mongodb').MongoClient;
@@ -28,9 +31,10 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', usersRouter);
 app.use('/', aboutRouter);
+app.use('/', usersRouter);
 app.use('/', areaCreator);
+app.use('/', tokens);
 
 var db;
 
