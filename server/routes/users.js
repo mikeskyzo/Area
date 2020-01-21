@@ -16,7 +16,7 @@ router.post('/createuser', function(req, res, next) {
         return;
     }
     var id = uniqid();
-    global.db.collection('Users').insertOne({name : username, pass : pass, id : id}, (err, result) => {
+    global.db.collection(global.CollectionUsers).insertOne({name : username, pass : pass, id : id}, (err, result) => {
         if (err) {
             res.status(401);
             res.json({
@@ -46,7 +46,7 @@ router.get('/connectUser', function(req, res) {
         return;
     }
 
-    global.db.collection('Users').findOne({name : username, pass : pass}, (err, result) => {
+    global.db.collection(global.CollectionUsers).findOne({name : username, pass : pass}, (err, result) => {
         if (err) {
             res.status(401);
             res.json({
@@ -70,12 +70,12 @@ router.get('/connectUser', function(req, res) {
             }
         }
     })
-})
+});
 
 module.exports = router;
 
 module.exports.DoesUserExist = function (user_id, req, res, next) {
-    global.db.collection('Users').findOne({id : user_id}, (err, result) => {
+    global.db.collection(global.CollectionUsers).findOne({id : user_id}, (err, result) => {
         if (err) {
             res.status(401);
             res.json({
@@ -92,6 +92,7 @@ module.exports.DoesUserExist = function (user_id, req, res, next) {
             })
             return;
         }
-        next(req, res);
+        if (next)
+            next(req, res);
     });
 }

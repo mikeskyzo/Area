@@ -6,8 +6,6 @@ var router = express.Router();
 var users = require('./users');
 var weather = require('../services/weather')
 
-const areaCollection = 'Area'
-
 router.post('/CreateArea', function(req, res, next) {
 	var action = req.body.action,
 		reaction = req.body.reaction;
@@ -30,26 +28,28 @@ function redirectToAction(req, res)
 	json.action = req.body.action;
 
 	switch (req.body.action) {
-		case 'weather_time':
+		case global.Action_weather_time:
 			if (req.body.time && req.body.city) {
 				json.actionParams = {
 					'city' : req.body.city,
 					'time' : req.body.time
-				};
+				}
 				weather.DoesCityExist(req.body.city, req, res, json, redirectToReaction)
 				return;
 			}
+			break;
 		default:
-			returnError(res);
+			responseError(res, 401, 'Bad header');
+			return;
 	}
-	returnError(res);
+	responseError(res, 401, 'Bad header');
 }
 
 function redirectToReaction(req, res, json)
 {
 	json.reaction = req.body.reaction;
 	switch (req.body.reaction) {
-		case 'discord_send_message':
+		case global.Reaction_discord_send_message:
 			if (req.body.channel_id && req.body.message) {
 				json.reactionParams = {
 					'channel_id' : req.body.channel_id,
@@ -58,38 +58,16 @@ function redirectToReaction(req, res, json)
 				createAREA(req, res, json);
 				return;
 			}
+			break;
 		default:
-			returnError(res);
+			responseError(res, 401, 'Bad header');
+			return;
 	}
-	returnError(res);
+	responseError(res, 401, 'Bad header');
 }
 
 function createAREA(req, res, json){
-    global.db.collection(areaCollection).insertOne(json, (err, result) => {
-        if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-			});
-			return;
-		}
-        res.status(201);
-        res.json({
-            success : true,
-            message : 'Area created successfully'
-        })
-	});
-}
-
-
-function returnError(res) {
-	res.status(401);
-	res.json({
-		success : false,
-		message : 'Bad header, check all body'
-	});
-	return;
+	global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
 }
 
 router.get('/GetArea', function(req, res, next) {
@@ -102,7 +80,7 @@ router.get('/GetArea', function(req, res, next) {
         });
 		return;
 	}
-    global.db.collection(areaCollection).find({user_id : user_id}).toArray(function (err, result) {
+    global.db.collection(global.CollectionArea).find({user_id : user_id}).toArray(function (err, result) {
         if (err) {
             res.status(401);
             res.json({
