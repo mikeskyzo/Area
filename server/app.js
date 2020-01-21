@@ -9,6 +9,7 @@ var aboutRouter = require('./routes/aboutJson');
 var usersRouter = require('./routes/users');
 var areaCreator = require('./routes/areaCreator');
 
+var timer = require('./services/timer')
 var weather = require('./services/weather')
 
 var app = express();
@@ -40,8 +41,9 @@ MongoClient.connect('mongodb+srv://Admin:Admin44000@cluster0-boacc.mongodb.net/t
     global.db = db;
 });
 
-// INIT all services
+// Init all services
 weather.initWeather();
+timer.initTimer();
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
