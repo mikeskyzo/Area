@@ -42,7 +42,7 @@ function redirectApp(req, res)
 	global.saveInDb(global.CollectionToken, json, req, res, 'Token saved');
 };
 
-router.get('auth/getServices', function(req, res) {
+router.get('/auth/getServices', function(req, res) {
 	if (!req.body.user_id) {
 		res.status(401);
 		res.json({
@@ -65,7 +65,26 @@ function getServices(req, res)
 			});
 			return;
 		}
-		res.json(result);
+		var json = new Object();
+		json.Discord = false;
+		json.Reddit = false;
+		json.Imgur = false;
+		json.Steam = false;
+
+		var i = 0;
+		while (i < result.length) {
+			var tk = result[i];
+			if (tk.service == global.serviceDiscord)
+				json.Discord = true;
+			if (tk.service == global.serviceReddit)
+				json.Reddit = true;
+			if (tk.service == global.serviceImgur)
+				json.Imgur = true;
+			if (tk.service == global.serviceSteam)
+				json.Steam = true;
+			i++;
+		}
+		res.json(json);
     })
 }
 
