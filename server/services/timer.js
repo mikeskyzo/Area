@@ -7,7 +7,7 @@ exports.stopTimer = function () {
 };
 
 refresh = function () {
-	global.db.collection('Area').findOne({}, (err, result) => {
+	global.db.collection('Area').find({}).toArray(function (err, result) {
         if (err) {
 			console.log('Error in data base :');
 			console.log(err);
@@ -15,11 +15,14 @@ refresh = function () {
             if(!result) {
 				console.log('No area in data base')
             } else {
-                for (var area in result)
-                    exec_area(area);
+                var i = 0;
+                while (i < result.length) {
+                    exec_area(result[i]);
+                    i++;
+                }
             }
         }
-    })
+    });
 };
 
 function exec_area(area) {
