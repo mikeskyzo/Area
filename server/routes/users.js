@@ -73,26 +73,3 @@ router.get('/connectUser', function(req, res) {
 });
 
 module.exports = router;
-
-module.exports.DoesUserExist = function (user_id, req, res, next) {
-    global.db.collection(global.CollectionUsers).findOne({id : user_id}, (err, result) => {
-        if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-            });
-            return;
-        }
-        if(!result) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : 'User not found'
-            })
-            return;
-        }
-        if (next)
-            next(req, res);
-    });
-}

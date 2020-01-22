@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var users = require('./users');
-
 router.post('/auth/:app', function(req, res) {
 	if (!req.body.user_id) {
 		res.status(401);
@@ -12,7 +10,7 @@ router.post('/auth/:app', function(req, res) {
 		});
 		return;
 	}
-	users.DoesUserExist(req.body.user_id, req ,res, redirectApp);
+	global.DoesUserExist(req.body.user_id, req ,res, redirectApp);
 });
 
 function redirectApp(req, res)
@@ -43,5 +41,32 @@ function redirectApp(req, res)
 		};
 	global.saveInDb(global.CollectionToken, json, req, res, 'Token saved');
 };
+
+router.get('auth/getServices', function(req, res) {
+	if (!req.body.user_id) {
+		res.status(401);
+		res.json({
+			success : false,
+			message : 'Bad body'
+		});
+		return;
+	}
+	global.DoesUserExist(req.body.user_id, req ,res, getServices);
+});
+
+function getServices(req, res)
+{
+	global.db.collection(global.CollectionToken).find({user_id : req.body.user_id}).toArray(function (err, result) {
+        if (err) {
+            res.status(401);
+            res.json({
+                success : false,
+                message : err.message
+			});
+			return;
+		}
+		res.json(result);
+    })
+}
 
 module.exports = router;
