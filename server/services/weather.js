@@ -24,3 +24,11 @@ exports.DoesCityExist = function (city, req, res, json, next) {
 		}
 	});
 };
+
+exports.wetherAtTime = function(area, next)
+{
+	var params = area.action_params;
+	var city = area.action_params.city;
+	var time = area.action_params.time;
+	// next(area.reaction_params, area.user_id, );
+}
