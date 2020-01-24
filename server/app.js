@@ -13,10 +13,10 @@ var tokens = require('./routes/tokens')
 var timer = require('./services/timer')
 var weather = require('./services/weather')
 
-var utils = require('./utils')
+var utils = require('./src/utils')
+var mongoDb = require('./src/manageDb')
 
 var app = express();
-const MongoClient = require('mongodb').MongoClient;
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -36,14 +36,7 @@ app.use('/', usersRouter);
 app.use('/', areaCreator);
 app.use('/', tokens);
 
-var db;
-
-MongoClient.connect('mongodb+srv://Admin:Admin44000@cluster0-boacc.mongodb.net/test?retryWrites=true&w=majority', (err, client) => {
-  if (err) return console.log(err)
-  db = client.db('Area51')
-    // Global variable to be used in all route
-    global.db = db;
-});
+mongoDb.initDb();
 
 // Init all services
 weather.initWeather();

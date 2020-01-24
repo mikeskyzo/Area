@@ -11,8 +11,13 @@ services:
         container_name: server_area
         ports:
             - "8080:8080"
-        volumes:
-            - ./server/:/usr/src/app/
+        # volumes:
+        #     - ./server/:/usr/src/app/
+        restart: always
+        depends_on:
+            - db
+        links:
+            - db:db
 
     client:
         build: ./web-client/.
@@ -23,3 +28,7 @@ services:
             - ./web-client/:/usr/src/app/
         links:
             - server:server
+    db:
+        image: mongo
+        ports:
+            - "27017:27017"

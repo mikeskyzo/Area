@@ -21,11 +21,16 @@ router.post('/CreateArea', function(req, res, next) {
 
 function redirectToAction(req, res)
 {
+	global.new_area = true;
+	switchAction(uniqid(), req, res);
+}
+
+function switchAction(area_id, req, res)
+{
 	var json = new Object();
-	json.area_id = uniqid();
+	json.area_id = area_id;
 	json.user_id = req.body.user_id;
 	json.action = req.body.action;
-
 	switch (req.body.action) {
 		case global.Action_weather_time:
 			if (req.body.time && req.body.city) {
@@ -97,8 +102,27 @@ function redirectToReaction(req, res, json)
 	responseError(res, 401, 'Bad header');
 }
 
-function createAREA(req, res, json){
-	global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
+function createAREA(req, res, json)
+{
+	if (global.new_area)
+		global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
+	else {
+		global.db.collection(global.CollectionArea).updateOne({area_id : json.area_id}, json, function(err, res) {
+			if (err){
+				res.status(401);
+				res.json({
+					success : false,
+					message : err.message
+				});
+				return;
+			}
+			res.status(201);
+            res.json({
+                success : true,
+                message : 'Area updated',
+            });
+		});
+	}
 }
 
 router.get('/GetArea', function(req, res, next) {
@@ -126,7 +150,18 @@ function getAreas(req, res)
 			return;
 		}
 		res.json(result);
-    })
+    });
 }
+
+router.post('/updateArea', function(req, res, next) {
+	var json = new Object();
+	if (!req.body.area_id || !req.body.user_id || !req.body.action || !req.body.reaction) {
+		global.responseError(res, 401, 'Bad body');
+		return ;
+	}
+	global.new_area = false;
+	switchAction(req.body.area_id, req, res);
+});
+
 
 module.exports = router;
