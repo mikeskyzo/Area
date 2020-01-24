@@ -1,12 +1,36 @@
-version: "3"
+version: "3.3"
 services:
+    server:
+        build:
+            context: .
+            dockerfile: server/Dockerfile
+        ports:
+            - "8080:8080"
+        command: npm start server/
+        image: area2019
+        container_name: server_area
+        volumes:
+            - ./server/:/usr/src/app/
 
-    client_mobile:
+    web_client:
+        build: ./web-client/.
+        ports:
+            - "8081:8081"
+        container_name: client_web_area
+        volumes:
+            - ./clients/:/usr/src/web_client/
+        links:
+            - server:server
+
+    mobile_client:
         build: ./client_mobile
         ports:
         - "8081:8081"
+        container_name: client_web_area
+        volumes:
+            - ./clients/:/usr/src/mobile_client/
         environment:
             - PORT=80
             - DB_NAME=db
-            - DB_PORT=27017
+            - DB_PORT=27017y
 
