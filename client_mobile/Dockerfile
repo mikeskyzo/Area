@@ -1,5 +1,8 @@
 FROM gradle:4.7.0-jdk8
 
+# Create app directory
+WORKDIR /usr/src/mobile_client
+
 COPY . /client_mobile
 USER root
 ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip" \
