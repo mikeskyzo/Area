@@ -1,25 +1,8 @@
-var express = require('express');
 var uniqid = require('uniqid');
 
-var router = express.Router();
+var weather = require('../services/weather');
 
-var weather = require('../services/weather')
-
-router.post('/CreateArea', function(req, res, next) {
-	var action = req.body.action,
-		reaction = req.body.reaction;
-	if (!action || !reaction || !req.body.user_id) {
-		res.status(401);
-        res.json({
-            success : false,
-            message : 'Bad Body'
-        });
-		return;
-	}
-	global.DoesUserExist(req.body.user_id, req, res, redirectToAction);
-});
-
-function redirectToAction(req, res)
+exports.CreateArea = function (req, res)
 {
 	global.new_area = true;
 	switchAction(uniqid(), req, res);
@@ -27,6 +10,14 @@ function redirectToAction(req, res)
 
 function switchAction(area_id, req, res)
 {
+	if (!req.body.action || !req.body.reaction) {
+		res.status(401);
+        res.json({
+            success : false,
+            message : 'Bad Body'
+        });
+		return;
+	}
 	var json = new Object();
 	json.area_id = area_id;
 	json.user_id = req.body.user_id;
@@ -125,20 +116,7 @@ function createAREA(req, res, json)
 	}
 }
 
-router.get('/GetArea', function(req, res, next) {
-	var user_id = req.body.user_id;
-	if (!user_id) {
-		res.status(401);
-        res.json({
-            success : false,
-            message : 'Bad Body'
-        });
-		return;
-	}
-	global.DoesUserExist(user_id, req, res, getAreas);
-});
-
-function getAreas(req, res)
+exports.getAreas = function (req, res)
 {
     global.db.collection(global.CollectionArea).find({user_id : req.body.user_id}).toArray(function (err, result) {
         if (err) {
@@ -153,7 +131,7 @@ function getAreas(req, res)
     });
 }
 
-router.post('/updateArea', function(req, res, next) {
+exports.updateArea = function (req, res) {
 	var json = new Object();
 	if (!req.body.area_id || !req.body.user_id || !req.body.action || !req.body.reaction) {
 		global.responseError(res, 401, 'Bad body');
@@ -161,7 +139,4 @@ router.post('/updateArea', function(req, res, next) {
 	}
 	global.new_area = false;
 	switchAction(req.body.area_id, req, res);
-});
-
-
-module.exports = router;
+};

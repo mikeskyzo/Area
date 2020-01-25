@@ -1,8 +1,4 @@
-var express = require('express');
-var router = express.Router();
-
-/* GET home page. */
-router.get('/about.json', function(req, res, next) {
+exports.sendAbout = function(req, res) {
 	res.json({
 		"client": {
 			"host": req.connection.remoteAddress
@@ -32,6 +28,4 @@ router.get('/about.json', function(req, res, next) {
 			]
 		}
 	});
-});
-
-module.exports = router;
+};
