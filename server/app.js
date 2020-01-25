@@ -3,12 +3,9 @@ var express = require('express');
 const bodyParser= require('body-parser')
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
 
-var aboutRouter = require('./routes/aboutJson');
 var usersRouter = require('./routes/users');
-var areaCreator = require('./routes/areaCreator');
-var tokens = require('./routes/tokens')
+var routes = require('./routes/routes');
 
 var timer = require('./services/timer')
 var weather = require('./services/weather')
@@ -18,7 +15,6 @@ var mongoDb = require('./src/manageDb')
 
 var app = express();
 
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -31,10 +27,8 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', aboutRouter);
 app.use('/', usersRouter);
-app.use('/', areaCreator);
-app.use('/', tokens);
+app.use('/', routes);
 
 mongoDb.initDb();
 

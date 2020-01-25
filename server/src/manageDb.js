@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 
-const dev_db = 'mongodb+srv://Admin:Admin44000@cluster0-boacc.mongodb.net/test?retryWrites=true&w=majority'
+const dev_db = 'mongodb+srv://MikeTest:GrosSexDu44@cluster0-boacc.mongodb.net/test?retryWrites=true&w=majority'
 const prod_db = 'mongodb://db:27017/Db_Area'
 
 exports.initDb = function () {
