@@ -4,7 +4,9 @@ FROM gradle:4.7.0-jdk8
 WORKDIR /usr/src/mobile_client
 
 COPY . /client_mobile
+
 USER root
+
 ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip" \
     ANDROID_HOME="/usr/local/android-sdk" \
     ANDROID_VERSION=28 \
@@ -26,7 +28,9 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSIO
 # Install Build Essentials
 RUN apt-get update && apt-get install build-essential -y && apt-get install file -y && apt-get install apt-utils -y
 
+
+WORKDIR /client_mobile
+
 RUN ls
-RUN ls /
-RUN pwd
-RUN cd /client_mobile && ./gradlew build
+
+RUN ./gradlew assembleRelease
