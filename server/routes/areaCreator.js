@@ -1,14 +1,16 @@
-var express = require('express');
 var uniqid = require('uniqid');
 
-var router = express.Router();
+var weather = require('../services/weather');
 
-var weather = require('../services/weather')
+exports.CreateArea = function (req, res)
+{
+	global.new_area = true;
+	switchAction(uniqid(), req, res);
+}
 
-router.post('/CreateArea', function(req, res, next) {
-	var action = req.body.action,
-		reaction = req.body.reaction;
-	if (!action || !reaction || !req.body.user_id) {
+function switchAction(area_id, req, res)
+{
+	if (!req.body.action || !req.body.reaction) {
 		res.status(401);
         res.json({
             success : false,
@@ -16,16 +18,10 @@ router.post('/CreateArea', function(req, res, next) {
         });
 		return;
 	}
-	global.DoesUserExist(req.body.user_id, req, res, redirectToAction);
-});
-
-function redirectToAction(req, res)
-{
 	var json = new Object();
-	json.area_id = uniqid();
+	json.area_id = area_id;
 	json.user_id = req.body.user_id;
 	json.action = req.body.action;
-
 	switch (req.body.action) {
 		case global.Action_weather_time:
 			if (req.body.time && req.body.city) {
@@ -97,24 +93,30 @@ function redirectToReaction(req, res, json)
 	responseError(res, 401, 'Bad header');
 }
 
-function createAREA(req, res, json){
-	global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
+function createAREA(req, res, json)
+{
+	if (global.new_area)
+		global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
+	else {
+		global.db.collection(global.CollectionArea).updateOne({area_id : json.area_id}, json, function(err, res) {
+			if (err){
+				res.status(401);
+				res.json({
+					success : false,
+					message : err.message
+				});
+				return;
+			}
+			res.status(201);
+            res.json({
+                success : true,
+                message : 'Area updated',
+            });
+		});
+	}
 }
 
-router.get('/GetArea', function(req, res, next) {
-	var user_id = req.body.user_id;
-	if (!user_id) {
-		res.status(401);
-        res.json({
-            success : false,
-            message : 'Bad Body'
-        });
-		return;
-	}
-	global.DoesUserExist(user_id, req, res, getAreas);
-});
-
-function getAreas(req, res)
+exports.getAreas = function (req, res)
 {
     global.db.collection(global.CollectionArea).find({user_id : req.body.user_id}).toArray(function (err, result) {
         if (err) {
@@ -126,7 +128,15 @@ function getAreas(req, res)
 			return;
 		}
 		res.json(result);
-    })
+    });
 }
 
-module.exports = router;
+exports.updateArea = function (req, res) {
+	var json = new Object();
+	if (!req.body.area_id || !req.body.user_id || !req.body.action || !req.body.reaction) {
+		global.responseError(res, 401, 'Bad body');
+		return ;
+	}
+	global.new_area = false;
+	switchAction(req.body.area_id, req, res);
+};
