@@ -3,22 +3,18 @@ var express = require('express');
 const bodyParser= require('body-parser')
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
 
-var aboutRouter = require('./routes/aboutJson');
 var usersRouter = require('./routes/users');
-var areaCreator = require('./routes/areaCreator');
-var tokens = require('./routes/tokens')
+var routes = require('./routes/routes');
 
 var timer = require('./services/timer')
 var weather = require('./services/weather')
 
-var utils = require('./utils')
+var utils = require('./src/utils')
+var mongoDb = require('./src/manageDb')
 
 var app = express();
-const MongoClient = require('mongodb').MongoClient;
 
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -31,19 +27,10 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', aboutRouter);
 app.use('/', usersRouter);
-app.use('/', areaCreator);
-app.use('/', tokens);
+app.use('/', routes);
 
-var db;
-
-MongoClient.connect('mongodb+srv://Admin:Admin44000@cluster0-boacc.mongodb.net/test?retryWrites=true&w=majority', (err, client) => {
-  if (err) return console.log(err)
-  db = client.db('Area51')
-    // Global variable to be used in all route
-    global.db = db;
-});
+mongoDb.initDb();
 
 // Init all services
 weather.initWeather();

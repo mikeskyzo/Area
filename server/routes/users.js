@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var uniqid = require('uniqid');
-
+var jwt = require('jsonwebtoken');
 
 router.post('/createuser', function(req, res, next) {
     var username = req.body.username;
@@ -25,10 +25,13 @@ router.post('/createuser', function(req, res, next) {
             });
         } else {
             res.status(201);
+            var token = jwt.sign({ id: id }, global.secret, {
+                expiresIn: '1h'
+            });
             res.json({
                 success : true,
                 message : 'Created successfully',
-                user_id : id
+                token : token
             })
         }
     })
@@ -62,10 +65,13 @@ router.get('/connectUser', function(req, res) {
                 })
             } else {
                 res.status(200);
+                var token = jwt.sign({ id: result.id }, global.secret, {
+                    expiresIn: '1h'
+                });
                 res.json({
                     success : true,
                     message : 'Connect successfully',
-                    user_id : result.id
+                    token : token
                 });
             }
         }
