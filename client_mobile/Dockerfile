@@ -1,8 +1,5 @@
 FROM gradle:4.7.0-jdk8
 
-# Create app directory
-WORKDIR /usr/src/mobile_client
-
 COPY . /client_mobile
 
 USER root
@@ -27,7 +24,6 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSIO
     "platform-tools"
 # Install Build Essentials
 RUN apt-get update && apt-get install build-essential -y && apt-get install file -y && apt-get install apt-utils -y
-
 
 WORKDIR /client_mobile
 

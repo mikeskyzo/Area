@@ -10,27 +10,45 @@ services:
         image: area2019
         container_name: server_area
         volumes:
-            - ./server/:/usr/src/app/
-
-    web_client:
-        build: ./web-client/.
-        ports:
-            - "8081:8081"
-        container_name: client_web_area
-        volumes:
-            - ./clients/:/usr/src/web_client/
+            - ./server/:/usr/src/app/:ro
+        restart: always
+        depends_on:
+            - db
         links:
-            - server:server
+            - db:db
 
     mobile_client:
         build: ./client_mobile
+        depends_on:
+            - server
         ports:
         - "8081:8081"
         container_name: client_web_area
         volumes:
-            - ./clients/:/usr/src/mobile_client/
+            - ./clients/:/client_mobile/app/build/outputs/apk/release/:ro 
         environment:
-            - PORT=80
+            - PORT=81
             - DB_NAME=db
             - DB_PORT=27017y
 
+    web_client:
+        build: ./web-client/.
+        depends_on:
+            - server
+            - mobile_client
+        ports:
+            - "8081:8081"
+        container_name: client_web_area
+        volumes:
+            - ./clients/:/usr/src/:ro
+        links:
+            - server:server
+
+    db:
+        image: mongo
+        ports:
+            - "27017:27017"
+
+volumes:
+    server:
+    clients:

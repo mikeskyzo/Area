@@ -25,7 +25,7 @@ exports.DoesCityExist = function (city, req, res, json, next) {
 	});
 };
 
-exports.wetherAtTime = function(area, next)
+exports.weatherAtTime = function(area, next)
 {
 	var params = area.action_params;
 	var city = area.action_params.city;
