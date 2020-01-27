@@ -149,7 +149,6 @@ exports.deleteArea = function (req, res) {
 	}
 	var json = {user_id : req.body.user_id, area_id : req.body.area_id}
     global.db.collection(global.CollectionArea).deleteOne(json, function (err, result) {
-		console.log("sex3");
 		if (err) {
             res.status(401);
             res.json({
