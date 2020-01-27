@@ -21,15 +21,15 @@ services:
         build: ./client_mobile
         depends_on:
             - server
-        ports:
-        - "8081:8081"
-        container_name: client_web_area
+        container_name: client_mobile_area
         volumes:
             - ./clients/:/client_mobile/app/build/outputs/apk/release/:ro 
         environment:
-            - PORT=81
+            - PORT=80
             - DB_NAME=db
             - DB_PORT=27017y
+        links:
+            - server:server
 
     web_client:
         build: ./web-client/.
