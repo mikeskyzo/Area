@@ -2,6 +2,7 @@ version: "3"
 services:
 
     client_mobile:
+        image: mobile
         build: ./client_mobile
         ports:
         - "8081:8081"

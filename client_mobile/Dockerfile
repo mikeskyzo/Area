@@ -27,4 +27,4 @@ RUN apt-get update && apt-get install build-essential -y && apt-get install file
 
 WORKDIR /client_mobile
 
-RUN ./gradlew assembleRelease
+CMD ["./gradlew", "assembleRelease"]
