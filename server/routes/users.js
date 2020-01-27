@@ -4,7 +4,7 @@ var router = express.Router();
 var uniqid = require('uniqid');
 var jwt = require('jsonwebtoken');
 
-router.post('/createuser', function(req, res, next) {
+router.post('/createUser', function(req, res, next) {
     var username = req.body.username;
     var pass = req.body.password;
     if (!username || !pass) {
@@ -15,26 +15,33 @@ router.post('/createuser', function(req, res, next) {
         });
         return;
     }
-    var id = uniqid();
-    global.db.collection(global.CollectionUsers).insertOne({name : username, pass : pass, id : id}, (err, result) => {
-        if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-            });
-        } else {
-            res.status(201);
-            var token = jwt.sign({ id: id }, global.secret, {
-                expiresIn: '1h'
-            });
-            res.json({
-                success : true,
-                message : 'Created successfully',
-                token : token
-            })
+    global.db.collection(global.CollectionUsers).findOne({name : username.toLowerCase()}, (err, result) => {
+        if (result) {
+            global.responseError(res, 401, 'Username already taken');
+            return;
         }
-    })
+
+        var id = uniqid();
+        global.db.collection(global.CollectionUsers).insertOne({name : username.toLowerCase(), pass : pass, id : id}, (err, result) => {
+            if (err) {
+                res.status(401);
+                res.json({
+                    success : false,
+                    message : err.message
+                });
+            } else {
+                res.status(201);
+                var token = jwt.sign({ id: id }, global.secret, {
+                    expiresIn: '1h'
+                });
+                res.json({
+                    success : true,
+                    message : 'Created successfully',
+                    token : token
+                })
+            }
+        })
+    });
 });
 
 router.get('/connectUser', function(req, res) {
@@ -49,7 +56,7 @@ router.get('/connectUser', function(req, res) {
         return;
     }
 
-    global.db.collection(global.CollectionUsers).findOne({name : username, pass : pass}, (err, result) => {
+    global.db.collection(global.CollectionUsers).findOne({name : username.toLowerCase(), pass : pass}, (err, result) => {
         if (err) {
             res.status(401);
             res.json({
