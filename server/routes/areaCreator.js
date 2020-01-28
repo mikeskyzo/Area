@@ -24,15 +24,16 @@ function switchAction(area_id, req, res)
 	json.action = req.body.action;
 	switch (req.body.action) {
 		case global.Action_weather_time:
-			if (req.body.time && req.body.city) {
-				json.action_params = {
-					'city' : req.body.city,
-					'time' : req.body.time
-				}
-				weather.DoesCityExist(req.body.city, req, res, json, redirectToReaction)
+			if (!req.body.time || !req.body.city) {
+				responseError(res, 401, 'Action of weather time need a city and a time')
 				return;
 			}
-			break;
+			json.action_params = {
+				'city' : req.body.city,
+				'time' : req.body.time
+			}
+			weather.DoesCityExist(req.body.city, req, res, json, redirectToReaction)
+			return;
 		case global.Action_weather_change :
 			break;
 		case global.Action_imgur_new_post :
@@ -58,10 +59,10 @@ function switchAction(area_id, req, res)
 		case global.Action_youtube_channel_views :
 			break;
 		default:
-			responseError(res, 401, 'Bad header');
+			responseError(res, 401, 'Bad Action');
 			return;
 	}
-	responseError(res, 401, 'Bad header');
+	responseError(res, 401, 'Bad Action');
 }
 
 function redirectToReaction(req, res, json)
@@ -69,15 +70,16 @@ function redirectToReaction(req, res, json)
 	json.reaction = req.body.reaction;
 	switch (req.body.reaction) {
 		case global.Reaction_discord_send_message:
-			if (req.body.channel_id && req.body.message) {
-				json.reaction_params = {
-					'channel_id' : req.body.channel_id,
-					'message' : req.body.message
-				};
-				createAREA(req, res, json);
+			if (!req.body.channel_id || !req.body.message) {
+				responseError(res, 401, 'Reaction of discord need a channel_id and a message')
 				return;
 			}
-			break;
+			json.reaction_params = {
+				'channel_id' : req.body.channel_id,
+				'message' : req.body.message
+			};
+			saveAREA(req, res, json);
+			return;
 		case global.Reaction_discord_message_reaction :
 			break;
 		case global.Reaction_imgur_upload_picture :
@@ -87,20 +89,20 @@ function redirectToReaction(req, res, json)
 		case global.Reaction_reddit_post_vote :
 			break;
 		default:
-			responseError(res, 401, 'Bad header');
+			responseError(res, 401, 'Bad Reaction');
 			return;
 	}
-	responseError(res, 401, 'Bad header');
+	responseError(res, 401, 'Bad Reaction');
 }
 
-function createAREA(req, res, json)
+function saveAREA(req, res, json)
 {
 	if (global.new_area)
 		global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
 	else {
-		global.db.collection(global.CollectionArea).updateOne({area_id : json.area_id}, json, function(err, res) {
+		global.db.collection(global.CollectionArea).update({'area_id' : json.area_id, 'user_id' : json.user_id}, json, function(err, result) {
 			if (err){
-				res.status(401);
+				res.status(500);
 				res.json({
 					success : false,
 					message : err.message
@@ -132,11 +134,34 @@ exports.getAreas = function (req, res)
 }
 
 exports.updateArea = function (req, res) {
-	var json = new Object();
-	if (!req.body.area_id || !req.body.user_id || !req.body.action || !req.body.reaction) {
+	if (!req.body.area_id || !req.body.action || !req.body.reaction) {
 		global.responseError(res, 401, 'Bad body');
 		return ;
 	}
 	global.new_area = false;
 	switchAction(req.body.area_id, req, res);
 };
+
+exports.deleteArea = function (req, res) {
+	if (!req.body.area_id || !req.body.user_id) {
+		global.responseError(res, 401, 'Need a area id');
+		return ;
+	}
+	var json = {user_id : req.body.user_id, area_id : req.body.area_id}
+    global.db.collection(global.CollectionArea).deleteOne(json, function (err, result) {
+		if (err) {
+            res.status(401);
+            res.json({
+                success : false,
+                message : err.message
+			});
+		}
+			console.log(result);
+			res.status(201);
+            res.json({
+                success : true,
+                message : 'Area deleted',
+            });
+			return;
+		});
+}
