@@ -18,12 +18,13 @@ services:
             - db:db
 
     mobile_client:
+        image: mobile_client
         build: ./client_mobile
         depends_on:
             - server
         container_name: client_mobile_area
         volumes:
-            - ./clients/:/client_mobile/app/build/outputs/apk/release/:ro 
+            - clients:/client_mobile/app/build/outputs/apk/
         environment:
             - PORT=80
             - DB_NAME=db
@@ -40,7 +41,7 @@ services:
             - "8081:8081"
         container_name: client_web_area
         volumes:
-            - ./clients/:/usr/src/:ro
+            - clients:/usr/src/:ro
         links:
             - server:server
 
