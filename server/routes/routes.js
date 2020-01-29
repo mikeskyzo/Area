@@ -22,6 +22,10 @@ router.post('/UpdateArea', function(req, res, next) {
 	utils.verifyToken(req, res, area.updateArea);
 });
 
+router.delete('/DeleteArea', function(req, res, next) {
+	utils.verifyToken(req, res, area.deleteArea);
+});
+
 router.get('/about.json', function(req, res, next) {
 	about.sendAbout(req, res);
 });
