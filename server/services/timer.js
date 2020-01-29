@@ -35,7 +35,7 @@ function exec_area(area) {
 
     switch (area.action) {
         case global.Action_weather_time :
-            weather.wetherAtTime(area, reaction);
+            weather.weatherAtTime(area, reaction);
             break;
         case global.Action_weather_change :
             break;

@@ -6,7 +6,8 @@
     "start": "node src/client.js"
   },
   "dependencies": {
-    "express": "",
+    "express": "^4.17.1",
+    "ejs": "^3.0.1",
     "axios": "^0.19.0",
     "core-js": "^3.3.2"
   }
