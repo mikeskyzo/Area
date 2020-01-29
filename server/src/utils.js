@@ -1,5 +1,7 @@
 "use strict";
 
+var uniqid = require('uniqid');
+
 // Collections name
 global.CollectionToken = 'Tokens'
 global.CollectionUsers = 'Users'
@@ -36,6 +38,9 @@ global.Action_discord_user_send_message = 'discord_user_send_message'
 global.Action_youtube_channel_sub = 'youtube_channel_sub'
 global.Action_youtube_channel_views = 'youtube_channel_views'
 
+
+global.secret = uniqid();
+
 global.saveInDb = function (collection, json, req, res, success_message){
 
 	global.db.collection(collection).insertOne(json, (err, result) => {
@@ -63,6 +68,27 @@ global.responseError = function(res, status, massage) {
     });
     return;
 };
+
+var jwt = require('jsonwebtoken');
+
+exports.verifyToken = function(req, res, next)
+{
+    var token = req.headers.access_token;
+	if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
+
+	jwt.verify(token, global.secret, function(err, decoded) {
+        if (err) {
+		    res.json({ success: false, message: 'Failed to authenticate token.' });
+		    return;
+        }
+        if (decoded.exp > Date.now()){
+		    res.json({ success: false, message: 'Token expired' });
+		    return;
+        }
+        req.body.user_id = decoded.id;
+        DoesUserExist(decoded.id, req, res, next);
+	});
+}
 
 global.DoesUserExist = function (user_id, req, res, next) {
     global.db.collection(global.CollectionUsers).findOne({id : user_id}, (err, result) => {
