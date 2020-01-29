@@ -15,8 +15,7 @@ services:
         links:
             - db:db
 
-
-mobile_client:
+    mobile_client:
         image: mobile_client
         build: ./client_mobile
         depends_on:
