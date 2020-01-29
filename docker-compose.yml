@@ -9,8 +9,6 @@ services:
         command: npm start server/
         image: area2019
         container_name: server_area
-        volumes:
-            - ./server/:/usr/src/app/:ro
         restart: always
         depends_on:
             - db
