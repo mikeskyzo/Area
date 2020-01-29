@@ -6,8 +6,7 @@ var cookieParser = require('cookie-parser');
 
 var usersRouter = require('./routes/users');
 var routes = require('./routes/routes');
-
-var timer = require('./services/timer')
+var webhooks = require('./routes/webhooks');
 var weather = require('./services/weather')
 
 var utils = require('./src/utils')
@@ -29,12 +28,12 @@ app.use(function(req, res, next) {
 
 app.use('/', usersRouter);
 app.use('/', routes);
+app.use('/', webhooks);
 
 mongoDb.initDb();
 
 // Init all services
 weather.initWeather();
-timer.initTimer();
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
