@@ -38,8 +38,6 @@ services:
         ports:
             - "8081:8081"
         container_name: client_web_area
-        volumes:
-            - clients:/usr/src/:ro
         links:
             - server:server
 
