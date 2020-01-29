@@ -78,8 +78,8 @@ exports.verifyToken = function(req, res, next)
 
 	jwt.verify(token, global.secret, function(err, decoded) {
         if (err) {
-		res.json({ success: false, message: 'Failed to authenticate token.' });
-		return;
+		    res.json({ success: false, message: 'Failed to authenticate token.' });
+		    return;
         }
         if (decoded.exp > Date.now()){
 		    res.json({ success: false, message: 'Token expired' });
