@@ -10,25 +10,46 @@ services:
         image: area2019
         container_name: server_area
         volumes:
-            - ./server/:/usr/src/app/
-        ports:
-            - "8080:8080"
+            - ./server/:/usr/src/app/:ro
         restart: always
         depends_on:
             - db
         links:
             - db:db
 
-    client:
+    mobile_client:
+        image: mobile_client
+        build: ./client_mobile
+        depends_on:
+            - server
+        container_name: client_mobile_area
+        volumes:
+            - clients:/client_mobile/app/build/outputs/apk/
+        environment:
+            - PORT=80
+            - DB_NAME=db
+            - DB_PORT=27017y
+        links:
+            - server:server
+
+    web_client:
         build: ./web-client/.
+        depends_on:
+            - server
+            - mobile_client
         ports:
             - "8081:8081"
         container_name: client_web_area
         volumes:
-            - ./web-client/:/usr/src/app/
+            - clients:/usr/src/:ro
         links:
             - server:server
+
     db:
         image: mongo
         ports:
             - "27017:27017"
+
+volumes:
+    server:
+    clients:
