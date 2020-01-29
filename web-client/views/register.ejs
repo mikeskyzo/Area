@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Rushboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style type="text/css">
+        <%- include('css/login.css'); -%>
+    </style>
+</head>
+
+<body>
+<div class="page">
+    <div class="container">
+        <div class="right black">
+            <form class="form" method="POST" action="/client/login">
+                <label for="user" class="orange-text">Username</label>
+                <input type="text" id="user" name="usernameLogin" class="white-text" required>
+                <label for="password" class="orange-text">Password</label>
+                <input type="password" id="password" name="passwordLogin" class="white-text" required>
+                <input class="btn orange" type="submit" style="margin-top:25px; color:black;" value="Login">
+            </form>
+        </div>
+        <div class="left orange">
+            <div class="login black-text">Register</div>
+            <div class="no_account black-text">
+                You already have an account ?<br>
+                <a href="/login">Login now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+
+<!-- By registering in you agree to the ridiculously long terms that you didn't bother to read-->
+
+</html>

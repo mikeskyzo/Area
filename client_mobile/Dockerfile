@@ -1,4 +1,4 @@
-FROM gradle:4.7.0-jdk8
+FROM gradle:5.4.1-jdk8
 
 COPY . /client_mobile
 
