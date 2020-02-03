@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAppName"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintVertical_bias="0.225" />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -46,27 +46,27 @@
         android:drawableStart="@drawable/ic_lock_outline_orange_24dp"
         android:drawableLeft="@drawable/ic_lock_outline_orange_24dp"
         android:drawablePadding="5dp"
+        android:ems="10"
         android:hint="@string/password"
         android:importantForAutofill="no"
-        android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
-        app:layout_constraintVertical_bias="0.117" />
+        app:layout_constraintVertical_bias="0.078" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="148dp"
         android:layout_height="53dp"
+        android:background="@drawable/login_button"
         android:text="@string/log_in"
-        android:background="@color/orangeTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-        app:layout_constraintVertical_bias="0.33" />
+        app:layout_constraintVertical_bias="0.212" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
