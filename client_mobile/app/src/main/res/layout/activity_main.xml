@@ -59,8 +59,8 @@
         app:backgroundTint="@color/gray" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="148dp"
+        android:id="@+id/buttonLogin"
+        android:layout_width="170dp"
         android:layout_height="53dp"
         android:background="@drawable/login_button"
         android:text="@string/log_in"
@@ -70,5 +70,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
         app:layout_constraintVertical_bias="0.212" />
+
+    <Button
+        android:id="@+id/buttonCreateAccount"
+        android:layout_width="170dp"
+        android:layout_height="53dp"
+        android:background="@drawable/login_button"
+        android:text="@string/create_account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
+        app:layout_constraintVertical_bias="0.272" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
