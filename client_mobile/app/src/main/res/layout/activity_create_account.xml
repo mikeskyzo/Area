@@ -6,8 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".activity_create_account">
 
+    <TextView
+        android:id="@+id/textViewCreateAccount"
+        android:layout_width="278dp"
+        android:layout_height="121dp"
+        android:gravity="center"
+        android:text="@string/create_account"
+        android:textColor="@color/orangeTheme"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.138" />
+
     <EditText
-        android:id="@+id/editTextUsername2"
+        android:id="@+id/editTextUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="364dp"
@@ -23,21 +38,68 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCreateAccount"
-        app:layout_constraintVertical_bias="0.777" />
+        app:layout_constraintVertical_bias="0.752" />
 
-    <TextView
-        android:id="@+id/textViewCreateAccount"
-        android:layout_width="278dp"
-        android:layout_height="121dp"
-        android:gravity="center"
-        android:text="@string/create_account"
-        android:textColor="@color/orangeTheme"
-        android:textSize="36sp"
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_lock_outline_orange_24dp"
+        android:drawableLeft="@drawable/ic_lock_outline_orange_24dp"
+        android:drawablePadding="5dp"
+        android:ems="10"
+        android:hint="@string/password"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        app:backgroundTint="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
+        app:layout_constraintVertical_bias="0.06" />
+
+    <EditText
+        android:id="@+id/editTextConfirmPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_lock_outline_orange_24dp"
+        android:drawableLeft="@drawable/ic_lock_outline_orange_24dp"
+        android:drawablePadding="5dp"
+        android:ems="10"
+        android:hint="@string/confirm_password"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        app:backgroundTint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <Button
+        android:id="@+id/buttonCreateAccount"
+        android:layout_width="170dp"
+        android:layout_height="53dp"
+        android:background="@drawable/rounded_button"
+        android:text="@string/create_account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword"
+        app:layout_constraintVertical_bias="0.272" />
+
+    <ImageButton
+        android:id="@+id/imageButtonBack"
+        android:layout_width="73dp"
+        android:layout_height="63dp"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.138" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_arrow_back_orange_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
