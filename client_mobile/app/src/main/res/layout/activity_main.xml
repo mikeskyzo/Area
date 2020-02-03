@@ -33,11 +33,12 @@
         android:hint="@string/username"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
+        app:backgroundTint="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAppName"
-        app:layout_constraintVertical_bias="0.225" />
+        app:layout_constraintVertical_bias="0.187" />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -54,7 +55,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
-        app:layout_constraintVertical_bias="0.078" />
+        app:layout_constraintVertical_bias="0.078"
+        app:backgroundTint="@color/gray" />
 
     <Button
         android:id="@+id/button"
