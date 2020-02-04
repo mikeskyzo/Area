@@ -1,23 +1,31 @@
 package com.example.client_mobile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_start.*
 import okhttp3.*
 import okhttp3.FormBody
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 
-class MainActivity : AppCompatActivity() {
+class Start : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        //askForConnection()
-    }
+        setContentView(R.layout.activity_start)
+        askForConnection()
 
+        buttonLogin.setOnClickListener {
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
+        }
+
+        buttonCreateAccount.setOnClickListener {
+            val intent = Intent(this, createAccount::class.java)
+            startActivity(intent)
+        }
+    }
 
     fun askForConnection() {
 
@@ -33,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             .post(formBody)
             .build()
 
-        val call: Call = client.newCall(request)
+        //val call: Call = client.newCall(request)
 
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
