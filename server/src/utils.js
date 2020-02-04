@@ -39,7 +39,7 @@ global.Action_youtube_channel_sub = 'youtube_channel_sub'
 global.Action_youtube_channel_views = 'youtube_channel_views'
 
 
-global.secret = uniqid();
+global.secret = 'secret';
 
 global.saveInDb = function (collection, json, req, res, success_message){
 
@@ -113,3 +113,15 @@ global.DoesUserExist = function (user_id, req, res, next) {
     });
 }
 
+global.getToken = function (user_id, service, result, next) {
+    global.db.collection(global.CollectionToken).findOne({id : user_id, service : service}, (err, rslt) => {
+        if (err) return;
+        if(!rslt) return;
+        if (next)
+            next(params, result, rslt);
+    });
+}
+
+global.enhanceMessage = function (message, json) {
+    return message;
+}
