@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        askForConnection()
+        //askForConnection()
     }
 
 
@@ -25,16 +25,15 @@ class MainActivity : AppCompatActivity() {
         val client = OkHttpClient()
         val formBody: RequestBody = FormBody.Builder()
             .add("username", "test")
-            .add("password", "cul")
+            .add("password", "pwd")
             .build()
 
         val request: Request = Request.Builder()
-            .url("http://localhost:8080/createUser")
+            .url("http://10.29.125.210:8080/createUser")
             .post(formBody)
             .build()
 
         val call: Call = client.newCall(request)
-        val response = call.execute()
 
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
@@ -45,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
+                println(e)
             }
         })
 
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 println("Failed to execute request")
             }
         })*/
-        println("slap her")
+        println("punch her")
     }
 
     class Account(val username: String, val password: String)
