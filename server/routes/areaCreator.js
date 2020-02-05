@@ -3,10 +3,10 @@ var uniqid = require('uniqid');
 exports.CreateArea = function (req, res)
 {
 	global.new_area = true;
-	switchAction(uniqid(), req, res);
+	checkAndSaveAREA(uniqid(), req, res);
 }
 
-function switchAction(area_id, req, res)
+function checkAndSaveAREA(area_id, req, res)
 {
 	if (!req.body.action || !req.body.reaction) {
 		res.status(401);
@@ -20,41 +20,17 @@ function switchAction(area_id, req, res)
 	json.area_id = area_id;
 	json.user_id = req.body.user_id;
 	json.action = req.body.action;
-
-	// for (var key in global.Action) {
-	// 	global.ActionMap.set()
-	// }
-
-	responseError(res, 401, 'Bad Action');
-}
-
-function redirectToReaction(req, res, json)
-{
 	json.reaction = req.body.reaction;
-	responseError(res, 401, 'Bad Reaction');
-}
 
-function saveAREA(req, res, json)
-{
-	if (global.new_area)
-		global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
-	else {
-		global.db.collection(global.CollectionArea).update({'area_id' : json.area_id, 'user_id' : json.user_id}, json, function(err, result) {
-			if (err){
-				res.status(500);
-				res.json({
-					success : false,
-					message : err.message
-				});
-				return;
-			}
-			res.status(201);
-            res.json({
-                success : true,
-                message : 'Area updated',
-            });
-		});
+	if (!global.ReactionCheckArgsMap.get(json.reaction)) {
+		responseError(res, 401, 'Reaction not found');
+		return;
 	}
+	if (global.ActionMap.get(json.action)) {
+		global.ActionMap.get(json.action)(req, res, json, global.ReactionCheckArgsMap.get(json.reaction));
+		return;
+	}
+	responseError(res, 401, 'Action not found');
 }
 
 exports.getAreas = function (req, res)
@@ -78,7 +54,7 @@ exports.updateArea = function (req, res) {
 		return ;
 	}
 	global.new_area = false;
-	switchAction(req.body.area_id, req, res);
+	checkAndSaveAREA(req.body.area_id, req, res);
 };
 
 exports.deleteArea = function (req, res) {
