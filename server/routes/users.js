@@ -24,7 +24,7 @@ router.post('/createUser', function(req, res, next) {
         var id = uniqid();
         global.db.collection(global.CollectionUsers).insertOne({name : username.toLowerCase(), pass : pass, id : id}, (err, result) => {
             if (err) {
-                res.status(401);
+                res.status(501);
                 res.json({
                     success : false,
                     message : err.message
@@ -44,7 +44,7 @@ router.post('/createUser', function(req, res, next) {
     });
 });
 
-router.get('/connectUser', function(req, res) {
+router.post('/connectUser', function(req, res) {
     var username = req.body.username;
     var pass = req.body.password;
     if (!username || !pass) {
