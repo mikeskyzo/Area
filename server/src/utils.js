@@ -1,43 +1,44 @@
 "use strict";
 
-var uniqid = require('uniqid');
-
 // Collections name
 global.CollectionToken = 'Tokens'
 global.CollectionUsers = 'Users'
 global.CollectionArea = 'Area'
 
 // Services name
-global.serviceDiscord = 'Discord'
-global.serviceWeather = 'Weather'
-global.serviceImgur = 'Imgur'
-global.serviceReddit = 'Reddit'
-global.serviceClock = 'Clock'
-global.serviceSteam = 'Steam'
-global.serviceYoutube = 'Youtube'
+global.service = new Object();
+global.service.Discord = 'Discord'
+global.service.Reddit = 'Reddit'
+global.service.Github = 'Github'
+global.service.Trello = 'Trello'
 
 // Reaction name
-global.Reaction_discord_send_message = 'discord_send_message'
-global.Reaction_discord_message_reaction = 'discord_message_reaction'
-global.Reaction_imgur_upload_picture = 'imgur_upload_picture'
-global.Reaction_reddit_post_a_post = 'reddit_post_a_post'
-global.Reaction_reddit_post_vote = 'reddit_post_vote'
+global.Reaction = new Object();
+global.Reaction.discord_send_message = 'discord_send_message'
+global.Reaction.discord_add_reaction = 'discord_message_reaction'
+global.Reaction.reddit_new_post = 'reddit_new_post'
 
 // Action name
-global.Action_weather_time = 'weather_time'
-global.Action_weather_change = 'weather_change'
-global.Action_imgur_new_post = 'imgur_new_post'
-global.Action_reddit_new_post_sub = 'reddit_new_post_sub'
-global.Action_reddit_new_post_follower = 'reddit_new_post_follower'
-global.Action_reddit_new_notification = 'reddit_new_notification'
-global.Action_clock_time_place = 'clock_time_place'
-global.Action_steam_players_on_game = 'steam_players_on_game'
-global.Action_steam_friend_online = 'steam_friend_online'
-global.Action_discord_new_message = 'discord_new_message'
-global.Action_discord_user_send_message = 'discord_user_send_message'
-global.Action_youtube_channel_sub = 'youtube_channel_sub'
-global.Action_youtube_channel_views = 'youtube_channel_views'
+global.Action = new Object();
+global.Action.github_new_push = 'github_new_push'
 
+var Discord = require('../services/discord')
+var github = require('../services/github')
+
+// Map Action Function
+global.ActionMap = new Map();
+global.ActionMap.set(global.Action.github_new_push, github.createWebhookPushOnRepo)
+
+// Map Reaction Function
+global.ReactionMap = new Map();
+global.ReactionMap.set(global.Reaction.discord_send_message, Discord.send_message)
+// global.reactionMap.set(global.Reaction.discord_add_reaction, null)
+// global.reactionMap.set(global.Reaction.reddit_new_post, null)
+
+global.ReactionCheckArgsMap = new Map();
+global.ReactionCheckArgsMap.set(global.Reaction.discord_send_message, Discord.send_message_check_args)
+
+var uniqid = require('uniqid');
 
 global.secret = 'secret';
 
@@ -124,4 +125,27 @@ global.getToken = function (user_id, service, result, next) {
 
 global.enhanceMessage = function (message, json) {
     return message;
+}
+
+global.saveAREA = function (req, res, json)
+{
+	if (global.new_area)
+		global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
+	else {
+		global.db.collection(global.CollectionArea).update({'area_id' : json.area_id, 'user_id' : json.user_id}, json, function(err, result) {
+			if (err){
+				res.status(500);
+				res.json({
+					success : false,
+					message : err.message
+				});
+				return;
+			}
+			res.status(201);
+            res.json({
+                success : true,
+                message : 'Area updated',
+            });
+		});
+	}
 }
