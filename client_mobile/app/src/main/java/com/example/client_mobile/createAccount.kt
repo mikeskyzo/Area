@@ -13,11 +13,6 @@ import java.io.IOException
 
 class createAccount : AppCompatActivity() {
 
-    companion object {
-        var accountUsername = ""
-        var token = ""
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
@@ -67,10 +62,9 @@ class createAccount : AppCompatActivity() {
                     if (code >= 400) {
                         Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(getContext(), "Account successfully created", Toast.LENGTH_SHORT).show()
-                        token = account.token
-                        accountUsername = username
                         val intent = Intent(getContext(), Home::class.java)
+                        intent.putExtra("username", username)
+                        intent.putExtra("token", account.token)
                         startActivity(intent)
                     }
                 }
