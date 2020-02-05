@@ -7,7 +7,6 @@ var cookieParser = require('cookie-parser');
 var usersRouter = require('./routes/users');
 var routes = require('./routes/routes');
 var webhooks = require('./routes/webhooks');
-var weather = require('./services/weather')
 
 var logger = require('morgan');
 
@@ -36,18 +35,14 @@ app.use('/', webhooks);
 
 mongoDb.initDb();
 
-// Init all services
-weather.initWeather();
-
-app.route('/home').get(function(req, res) {
-});
-
 app.route('/test').get(function(req, res) {
-    res.json({ok : 'boomer'})
+    res.json({
+        test : 'success'
+    })
 });
 
-app.listen(8080, function (req, res) {
-    console.log("server listen on 8080")
+app.listen(8080, '0.0.0.0', function (req, res) {
+    console.log("server listen on 8080");
 })
 
 module.exports = app;
