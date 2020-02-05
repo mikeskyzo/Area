@@ -21,6 +21,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        val username = intent.getStringExtra("username")
+        val token = intent.getStringExtra("token")
+        Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
+
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
