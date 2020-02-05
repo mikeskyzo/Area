@@ -1,0 +1,58 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <title>Rushboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style type="text/css">
+        <%- include('css/profil.css'); -%>
+    </style>
+</head>
+
+<body style="background: #1b1b1b">
+<nav class="black">
+    <div class="nav-wrapper">
+        <a href="#" class="left brand-logo orange-text" style="margin-left: 20px"><b>AREA</b></a>
+        <a href="#" class="right waves-effect waves-light black-text orange btn" style="margin-right: 20px; margin-top: 14px"><b>Disconnect</b></a>
+        <a href="/dashboard" class="right waves-effect waves-light black-text orange btn" style="margin-right: 20px; margin-top: 14px"><b>Dashboard</b></a>
+    </div>
+</nav>
+
+<div id="bodySettings" class="center" style="background: #363636; min-height: 100vh; margin-right: 300px; margin-left: 300px; margin-top: 50px; margin-bottom: 50px;">
+
+    <div id="titleSettings" style="border-bottom: 4px solid #ff9800;">
+        <i class="orange-text small material-icons">settings</i>
+        <label class="orange-text" style="font-size: 30px;"><b>Settings</b></label>
+    </div>
+    <div id="changeSettings">
+        <form class="form" method="POST" action="#">
+            <label id="label" for="user" class="orange-text">Change username :</label>
+            <input type="text" class="white-text" required>
+            <input class="btn orange" type="submit" style="margin-top:25px; color:black; font-weight: bold;" value="Change">
+        </form>
+        <form class="form" method="POST" action="#">
+            <label id="label" for="user" class="orange-text">Change password :</label>
+            <input type="text" class="white-text" required>
+            <input class="btn orange" type="submit" style="margin-top:25px; color:black; font-weight: bold;" value="Change">
+        </form>
+    </div>
+
+    <div id="titleOAuth" style="border-bottom: 4px solid #ff9800; margin-top: 50px">
+        <i class="orange-text small material-icons">account_box</i>
+        <label class="orange-text" style="font-size: 30px;"><b>Authentication</b></label>
+    </div>
+
+    <div id="buttonOAuth">
+        <a href="#" id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Service 1</b></a><br>
+        <a href="#" id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Service 2</b></a><br>
+        <a href="#" id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Service 3</b></a><br>
+        <a href="#" id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Service 4</b></a>
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+
+</html>
