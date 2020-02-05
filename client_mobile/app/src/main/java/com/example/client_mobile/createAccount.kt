@@ -30,7 +30,7 @@ class createAccount : AppCompatActivity() {
             } else if (editTextPassword.getText().toString() != editTextConfirmPassword.getText().toString()) {
                 Toast.makeText(this, "The password and the password confirmation must be the same", Toast.LENGTH_SHORT).show()
             } else {
-                askForConnection(editTextUsername.getText().toString(), editTextPassword.getText().toString())
+                askForAccountCreation(editTextUsername.getText().toString(), editTextPassword.getText().toString())
             }
         }
     }
@@ -39,7 +39,7 @@ class createAccount : AppCompatActivity() {
         return this as Context
     }
 
-    fun askForConnection(username: String, password: String) {
+    fun askForAccountCreation(username: String, password: String) {
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
