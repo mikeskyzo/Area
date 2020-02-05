@@ -23,5 +23,9 @@ app.get('/dashboard', function (req, res) {
     res.render('dashboard.ejs');
 });
 
+app.get('/profil', function (req, res) {
+    res.render('profil.ejs');
+});
+
 app.listen(8081);
 app.on('listening', ()=>{});
