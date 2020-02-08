@@ -1,24 +1,25 @@
 var express = require('express');
-var jwt = require('jsonwebtoken');
-
-var utils = require('../src/utils')
-
-var area = require('./areaCreator')
-var authToken = require('./tokens')
-
-var Discord = require('../services/discord')
-
 var router = express.Router();
 
-router.post('/github', function(req, res, next) {
-	Discord.send_message({
-		message : req.body.pusher.name + ' just push on ' + req.body.repository.name,
-		channel_id : '664031224855265291'
-	 }, '', req.body, {});
-
-	//  if (global.ReactionMap.get(json.reaction)) {
-	// 	return;
-	// }
+router.post('/webhooks/:areaId', function(req, res) {
+	global.findInDb(global.CollectionArea, {area_id : req.params.areaId}, req, res, redirectToArea)
 });
 
 module.exports = router;
+
+function redirectToArea(area, req, res)
+{
+	if (!area) {
+		global.responseError(res, 401, 'Area not is not existing')
+		return;
+	}
+	if (!global.ReactionMap.get(area.reaction)) {
+		global.responseError(res, 500, 'Reaction not found')
+		return;
+	}
+	if (global.ActionFormatResultMap.get(area.action)) {
+		global.ActionFormatResultMap.get(area.action)(req, res, area, global.ReactionMap.get(area.reaction));
+		return;
+	}
+	global.responseError(res, 500, 'Action not found')
+}
