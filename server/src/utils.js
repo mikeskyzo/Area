@@ -25,16 +25,19 @@ global.Action.github_new_push = 'github_new_push'
 var Discord = require('../services/discord')
 var github = require('../services/github')
 
-// Map Action Function
+// Map Action creation Function
 global.ActionMap = new Map();
 global.ActionMap.set(global.Action.github_new_push, github.createWebhookPushOnRepo)
+
+// Map of formating the result of the webhooks
+global.ActionFormatResultMap = new Map();
+global.ActionFormatResultMap.set(global.Action.github_new_push, github.FormatWebhookPushOnRepo)
 
 // Map Reaction Function
 global.ReactionMap = new Map();
 global.ReactionMap.set(global.Reaction.discord_send_message, Discord.send_message)
-// global.reactionMap.set(global.Reaction.discord_add_reaction, null)
-// global.reactionMap.set(global.Reaction.reddit_new_post, null)
 
+// Map of the function to add the argument in Db and check if there are correct
 global.ReactionCheckArgsMap = new Map();
 global.ReactionCheckArgsMap.set(global.Reaction.discord_send_message, Discord.send_message_check_args)
 
@@ -123,10 +126,6 @@ global.getToken = function (user_id, service, result, next) {
     });
 }
 
-global.enhanceMessage = function (message, json) {
-    return message;
-}
-
 global.saveAREA = function (req, res, json)
 {
 	if (global.new_area)
@@ -148,4 +147,17 @@ global.saveAREA = function (req, res, json)
             });
 		});
 	}
+}
+
+global.findInDb = function (collection, params, req, res, next)
+{
+    global.db.collection(collection).findOne(params, (err, result) => {
+        if (err) {
+            global.responseError(res, 401, err.message)
+            return;
+        }
+        if (next)
+            next(result, req, res);
+    });
+
 }

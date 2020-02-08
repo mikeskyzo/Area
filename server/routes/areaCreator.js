@@ -6,6 +6,15 @@ exports.CreateArea = function (req, res)
 	checkAndSaveAREA(uniqid(), req, res);
 }
 
+exports.updateArea = function (req, res) {
+	if (!req.body.area_id) {
+		global.responseError(res, 401, 'Bad body');
+		return ;
+	}
+	global.new_area = false;
+	checkAndSaveAREA(req.body.area_id, req, res);
+};
+
 function checkAndSaveAREA(area_id, req, res)
 {
 	if (!req.body.action || !req.body.reaction) {
@@ -37,25 +46,12 @@ exports.getAreas = function (req, res)
 {
     global.db.collection(global.CollectionArea).find({user_id : req.body.user_id}).toArray(function (err, result) {
         if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-			});
+            global.responseError(res, 401, err.message)
 			return;
 		}
 		res.json(result);
     });
 }
-
-exports.updateArea = function (req, res) {
-	if (!req.body.area_id || !req.body.action || !req.body.reaction) {
-		global.responseError(res, 401, 'Bad body');
-		return ;
-	}
-	global.new_area = false;
-	checkAndSaveAREA(req.body.area_id, req, res);
-};
 
 exports.deleteArea = function (req, res) {
 	if (!req.body.area_id || !req.body.user_id) {
@@ -65,18 +61,15 @@ exports.deleteArea = function (req, res) {
 	var json = {user_id : req.body.user_id, area_id : req.body.area_id}
     global.db.collection(global.CollectionArea).deleteOne(json, function (err, result) {
 		if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-			});
-		}
-			console.log(result);
-			res.status(201);
-            res.json({
-                success : true,
-                message : 'Area deleted',
-            });
+            global.responseError(res, 500, err.message)
 			return;
+		}
+		// console.log(result);
+		res.status(201);
+        res.json({
+            success : true,
+            message : 'Area deleted',
+        });
+		return;
 		});
 }
