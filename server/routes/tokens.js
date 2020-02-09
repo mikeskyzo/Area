@@ -20,8 +20,6 @@ exports.getServices = function (req, res)
 		var json = new Object();
 		json.Discord = false;
 		json.Github = false;
-		json.Imgur = false;
-		json.Steam = false;
 
 		var i = 0;
 		while (i < result.length) {
@@ -34,10 +32,6 @@ exports.getServices = function (req, res)
 				json.Discord = true;
 			if (tk.service == global.service.Github)
 				json.Github = true;
-			if (tk.service == global.service.Imgur)
-				json.Imgur = true;
-			if (tk.service == global.service.Steam)
-				json.Steam = true;
 			i++;
 		}
 		res.json(json);
