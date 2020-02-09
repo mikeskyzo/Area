@@ -19,7 +19,9 @@ router.get('/GetArea', function(req, res, next) {
 });
 
 router.post('/UpdateArea', function(req, res, next) {
-	utils.verifyToken(req, res, area.updateArea);
+	res.send('This route id deprecated');
+	// This will create a new webhook without delete the actual
+	// utils.verifyToken(req, res, area.updateArea);
 });
 
 router.delete('/DeleteArea', function(req, res, next) {
