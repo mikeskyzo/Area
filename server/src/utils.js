@@ -12,18 +12,18 @@ global.service.Reddit = 'Reddit'
 global.service.Github = 'Github'
 global.service.Trello = 'Trello'
 
-// Reaction name
-global.Reaction = new Object();
-global.Reaction.discord_send_message = 'discord_send_message'
-global.Reaction.discord_add_reaction = 'discord_message_reaction'
-global.Reaction.reddit_new_post = 'reddit_new_post'
+
+var Discord = require('../services/discord')
+var github = require('../services/github')
+
+// Map of the verification of tokens
+global.ActionTokenCheckMap = new Map();
+global.ActionTokenCheckMap.set(global.service.Github, github.CheckToken)
+
 
 // Action name
 global.Action = new Object();
 global.Action.github_new_push = 'github_new_push'
-
-var Discord = require('../services/discord')
-var github = require('../services/github')
 
 // Map Action creation Function
 global.ActionMap = new Map();
@@ -33,6 +33,17 @@ global.ActionMap.set(global.Action.github_new_push, github.createWebhookPushOnRe
 global.ActionFormatResultMap = new Map();
 global.ActionFormatResultMap.set(global.Action.github_new_push, github.FormatWebhookPushOnRepo)
 
+// Map for the deletion of the webhooks
+global.ActionDeleteWebhookMap = new Map();
+global.ActionDeleteWebhookMap.set(global.Action.github_new_push, github.deleteWebhook)
+
+
+// Reaction name
+global.Reaction = new Object();
+global.Reaction.discord_send_message = 'discord_send_message'
+global.Reaction.discord_add_reaction = 'discord_message_reaction'
+global.Reaction.reddit_new_post = 'reddit_new_post'
+
 // Map Reaction Function
 global.ReactionMap = new Map();
 global.ReactionMap.set(global.Reaction.discord_send_message, Discord.send_message)
@@ -40,8 +51,6 @@ global.ReactionMap.set(global.Reaction.discord_send_message, Discord.send_messag
 // Map of the function to add the argument in Db and check if there are correct
 global.ReactionCheckArgsMap = new Map();
 global.ReactionCheckArgsMap.set(global.Reaction.discord_send_message, Discord.send_message_check_args)
-
-var uniqid = require('uniqid');
 
 global.secret = 'secret';
 
@@ -126,6 +135,10 @@ global.getToken = function (user_id, service, result, next) {
     });
 }
 
+global.findInDbAsync = async function (collection, param) {
+    return db.collection(collection).findOne(param);
+}
+
 global.saveAREA = function (req, res, json)
 {
 	if (global.new_area)
@@ -147,6 +160,22 @@ global.saveAREA = function (req, res, json)
             });
 		});
 	}
+}
+
+global.deleteInDb = function (collection, params, req, res)
+{
+    global.db.collection(collection).deleteOne(params, function (err, result) {
+		if (err) {
+            global.responseError(res, 500, err.message)
+			return;
+		}
+		res.status(201);
+        res.json({
+            success : true,
+            message : 'Deleted',
+        });
+		return;
+	});
 }
 
 global.findInDb = function (collection, params, req, res, next)

@@ -30,7 +30,7 @@ router.get('/about.json', function(req, res, next) {
 	about.sendAbout(req, res);
 });
 
-router.post('/auth/:app', function(req, res) {
+router.post('/auth/addToken', function(req, res) {
 	utils.verifyToken(req, res, authToken.newAuth);
 });
 

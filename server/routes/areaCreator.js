@@ -58,18 +58,17 @@ exports.deleteArea = function (req, res) {
 		global.responseError(res, 401, 'Need a area id');
 		return ;
 	}
-	var json = {user_id : req.body.user_id, area_id : req.body.area_id}
-    global.db.collection(global.CollectionArea).deleteOne(json, function (err, result) {
-		if (err) {
-            global.responseError(res, 500, err.message)
-			return;
-		}
-		// console.log(result);
-		res.status(201);
-        res.json({
-            success : true,
-            message : 'Area deleted',
-        });
+	global.findInDb(global.CollectionArea, {area_id : req.body.area_id}, req, res, redirectToAreaDelete)
+}
+
+function redirectToAreaDelete(result, req, res)
+{
+	if (!result) {
+		global.responseError(res, 401, 'Area not found');
 		return;
-		});
+	}
+	if (global.ActionDeleteWebhookMap.get(result.action))
+		global.ActionDeleteWebhookMap.get(result.action)(result, req, res)
+	else
+		responseError(res, 500, 'Error, Service not found, please contact Mike')
 }
