@@ -3,6 +3,7 @@ var express = require('express');
 const bodyParser= require('body-parser')
 var path = require('path');
 var cookieParser = require('cookie-parser');
+const localtunnel = require('localtunnel');
 
 var usersRouter = require('./routes/users');
 var routes = require('./routes/routes');
@@ -35,14 +36,32 @@ app.use('/', webhooks);
 
 mongoDb.initDb();
 
+const fetch = require('node-fetch');
+
 app.route('/test').get(function(req, res) {
+
     res.json({
         test : 'success'
     })
 });
 
-app.listen(8080, '0.0.0.0', function (req, res) {
+var server = app.listen(8080, function (req, res) {
     console.log("server listen on 8080");
+})
+
+process.on('SIGINT', function() {
+    tunnel.close();
+    server.close();
+});
+
+const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
+.then(function (err, tunnel)
+{
+    global.url = err.url;
+    console.log(global.url);
+})
+.catch( function (err) {
+    console.log(err);
 })
 
 module.exports = app;

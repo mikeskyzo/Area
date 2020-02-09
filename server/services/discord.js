@@ -17,8 +17,10 @@ exports.send_message = function(area, res)
         if (channel) {
             channel.send(area.message);
             res.status(200).send();
+            client.destroy();
             return;
         }
+        client.destroy();
         res.status(500).send();
     });
 }
