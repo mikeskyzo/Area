@@ -57,20 +57,26 @@ class createAccount : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                val code = response.code
-                val account = GsonBuilder().create().fromJson(body, Account::class.java)
-
-                runOnUiThread {
-                    if (code >= 400) {
-                        Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
-                    } else {
-                        val intent = Intent(getContext(), Home::class.java)
-                        intent.putExtra("server_location", server_location)
-                        intent.putExtra("username", username)
-                        intent.putExtra("token", account.token)
-                        startActivity(intent)
+                if (body == "404") {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    runOnUiThread {
+                        val code = response.code
+                        val account = GsonBuilder().create().fromJson(body, Account::class.java)
+                        if (code >= 400) {
+                            Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
+                        } else {
+                            val intent = Intent(getContext(), Home::class.java)
+                            intent.putExtra("server_location", server_location)
+                            intent.putExtra("username", username)
+                            intent.putExtra("token", account.token)
+                            startActivity(intent)
+                        }
                     }
                 }
+
             }
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
