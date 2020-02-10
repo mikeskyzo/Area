@@ -22,7 +22,7 @@ services:
             - server
         container_name: client_mobile_area
         volumes:
-            - clients:/client_mobile/app/build/outputs/apk/
+            - clients:/client_mobile/app/build/outputs/apk/:rw
         links:
             - server:server
 
@@ -35,7 +35,7 @@ services:
             - "8081:8081"
         container_name: client_web_area
         volumes:
-            - clients:/web-client/app/:ro
+            - clients:/web-client/public/app/:ro
         links:
             - server:server
 
