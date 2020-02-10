@@ -8,4 +8,6 @@
     <string name="home">Home</string>
     <string name="server_location">Server location</string>
     <string name="server_addr">https://areacoon-api.localtunnel.me</string>
+    <string name="client_id_discord">676366574768095232</string>
+    <string name="client_secret_discord">SoACsXnw86IOLMwsAM-sBRfCtMhf1Wwu</string>
 </resources>
