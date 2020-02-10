@@ -58,7 +58,9 @@ const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
 .then(function (err, tunnel)
 {
     global.url = err.url;
-    console.log(global.url);
+    console.log('=================================================');
+    console.log('Url of you\'r api : ' + global.url);
+    console.log('=================================================');
 })
 .catch( function (err) {
     console.log(err);
