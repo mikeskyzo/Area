@@ -17,6 +17,8 @@ class createAccount : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
 
+        val server_location = intent.getStringExtra("server_location")
+
         imageButtonBack.setOnClickListener {
             val intent = Intent(this, Start::class.java)
             startActivity(intent)
@@ -30,7 +32,7 @@ class createAccount : AppCompatActivity() {
             } else if (editTextPassword.getText().toString() != editTextConfirmPassword.getText().toString()) {
                 Toast.makeText(this, "The password and the password confirmation must be the same", Toast.LENGTH_SHORT).show()
             } else {
-                askForAccountCreation(editTextUsername.getText().toString(), editTextPassword.getText().toString())
+                askForAccountCreation(editTextUsername.getText().toString(), editTextPassword.getText().toString(), server_location)
             }
         }
     }
@@ -39,7 +41,7 @@ class createAccount : AppCompatActivity() {
         return this as Context
     }
 
-    fun askForAccountCreation(username: String, password: String) {
+    fun askForAccountCreation(username: String, password: String, server_location: String) {
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
@@ -48,7 +50,7 @@ class createAccount : AppCompatActivity() {
             .build()
 
         val request: Request = Request.Builder()
-            .url("http://10.29.125.210:8080/createUser")
+            .url(server_location.plus("/createUser"))
             .post(formBody)
             .build()
 
@@ -63,6 +65,7 @@ class createAccount : AppCompatActivity() {
                         Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
                     } else {
                         val intent = Intent(getContext(), Home::class.java)
+                        intent.putExtra("server_location", server_location)
                         intent.putExtra("username", username)
                         intent.putExtra("token", account.token)
                         startActivity(intent)
