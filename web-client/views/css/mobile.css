@@ -1,0 +1,12 @@
+body {
+    font-family: 'Inter UI', sans-serif;
+}
+.page {
+    background: #1b1b1b;
+    display: flex;
+    flex-direction: column;
+    height: calc(100%);
+    position: absolute;
+    place-content: center;
+    width: calc(100%);
+}
