@@ -16,7 +16,6 @@ class Start : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
-
         buttonLogin.setOnClickListener {
             if (editTextUsername.length() == 0) {
                 Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show()
@@ -24,14 +23,12 @@ class Start : AppCompatActivity() {
                 Toast.makeText(this, "Please enter a password", Toast.LENGTH_SHORT).show()
             } else {
                 askForLogin(editTextUsername.getText().toString(), editTextPassword.getText().toString())
-                println("slap her")
             }
-//            val intent = Intent(this, Home::class.java)
-//            startActivity(intent)
         }
 
         buttonCreateAccount.setOnClickListener {
             val intent = Intent(this, createAccount::class.java)
+            intent.putExtra("server_location", editTextServerLocation.getText().toString())
             startActivity(intent)
         }
     }
@@ -41,6 +38,7 @@ class Start : AppCompatActivity() {
     }
 
     fun askForLogin(username: String, password: String) {
+        val serverLocation = editTextServerLocation.getText().toString()
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
@@ -49,7 +47,7 @@ class Start : AppCompatActivity() {
             .build()
 
         val request: Request = Request.Builder()
-            .url("http://10.29.125.210:8080/connectUser")
+            .url(serverLocation.plus("/connectUser"))
             .post(formBody)
             .build()
 
@@ -66,6 +64,7 @@ class Start : AppCompatActivity() {
                         val intent = Intent(getContext(), Home::class.java)
                         intent.putExtra("username", username)
                         intent.putExtra("token", account.token)
+                        intent.putExtra("server_location", serverLocation)
                         startActivity(intent)
                     }
                 }

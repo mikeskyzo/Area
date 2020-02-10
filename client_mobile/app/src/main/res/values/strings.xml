@@ -6,4 +6,6 @@
     <string name="log_in">Log in</string>
     <string name="create_account">Create an account</string>
     <string name="home">Home</string>
+    <string name="server_location">Server location</string>
+    <string name="server_addr">https://areacoon-api.localtunnel.me</string>
 </resources>
