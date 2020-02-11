@@ -10,6 +10,7 @@ var routes = require('./routes/routes');
 var webhooks = require('./routes/webhooks');
 
 var logger = require('morgan');
+var process = require('process')
 
 var utils = require('./src/utils')
 var mongoDb = require('./src/manageDb')
@@ -50,8 +51,7 @@ var server = app.listen(8080, function (req, res) {
 })
 
 process.on('SIGINT', function() {
-    tunnel.close();
-    server.close();
+    global.terminateServer();
 });
 
 const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
@@ -65,5 +65,18 @@ const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
 .catch( function (err) {
     console.log(err);
 })
+
+global.terminateServer = function (err)
+{
+    console.log('Shutting down the server');
+    if (err)
+        console.log(err);
+    if (tunnel && tunnel.close)
+        tunnel.close();
+    server.close();
+    if (global.clientDb)
+        global.clientDb.close();
+    process.exit(84);
+}
 
 module.exports = app;
