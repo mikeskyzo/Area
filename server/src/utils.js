@@ -15,13 +15,15 @@ global.service.slack = 'Slack'
 
 
 var Discord = require('../services/discord')
-var github = require('../services/github')
+var Github = require('../services/github')
 var Trello = require('../services/trello')
+var Slack = require('../services/slack')
 
 // Map of the verification of tokens
-global.ActionTokenCheckMap = new Map();
-global.ActionTokenCheckMap.set(global.service.Github, github.CheckToken)
-global.ActionTokenCheckMap.set(global.service.Trello, Trello.CheckToken)
+global.ServiceTokenCheckMap = new Map();
+global.ServiceTokenCheckMap.set(global.service.Github, Github.CheckToken)
+global.ServiceTokenCheckMap.set(global.service.Trello, Trello.CheckToken)
+global.ServiceTokenCheckMap.set(global.service.slack, Slack.CheckToken)
 
 
 // Action name
@@ -30,30 +32,32 @@ global.Action.github_new_push = 'github_new_push'
 
 // Map Action creation Function
 global.ActionMap = new Map();
-global.ActionMap.set(global.Action.github_new_push, github.createWebhookPushOnRepo)
+global.ActionMap.set(global.Action.github_new_push, Github.createWebhookPushOnRepo)
 
 // Map of formating the result of the webhooks
 global.ActionFormatResultMap = new Map();
-global.ActionFormatResultMap.set(global.Action.github_new_push, github.FormatWebhookPushOnRepo)
+global.ActionFormatResultMap.set(global.Action.github_new_push, Github.FormatWebhookPushOnRepo)
 
 // Map for the deletion of the webhooks
 global.ActionDeleteWebhookMap = new Map();
-global.ActionDeleteWebhookMap.set(global.Action.github_new_push, github.deleteWebhook)
+global.ActionDeleteWebhookMap.set(global.Action.github_new_push, Github.deleteWebhook)
 
 
 // Reaction name
 global.Reaction = new Object();
 global.Reaction.discord_send_message = 'discord_send_message'
-global.Reaction.discord_add_reaction = 'discord_message_reaction'
+global.Reaction.slack_send_message = 'slack_send_message'
 global.Reaction.reddit_new_post = 'reddit_new_post'
 
 // Map Reaction Function
 global.ReactionMap = new Map();
 global.ReactionMap.set(global.Reaction.discord_send_message, Discord.send_message)
+global.ReactionMap.set(global.Reaction.slack_send_message, Slack.send_message)
 
 // Map of the function to add the argument in Db and check if there are correct
 global.ReactionCheckArgsMap = new Map();
 global.ReactionCheckArgsMap.set(global.Reaction.discord_send_message, Discord.send_message_check_args)
+global.ReactionCheckArgsMap.set(global.Reaction.slack_send_message, Slack.send_message_check_args)
 
 global.secret = 'secret';
 
@@ -89,6 +93,7 @@ var jwt = require('jsonwebtoken');
 
 exports.verifyToken = function(req, res, next)
 {
+    if (!req.headers.authorization)  return res.status(401).send({ success: false, message: 'No token provided.' });
 	var token = req.headers.authorization.split(' ')[1];
 	if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
 

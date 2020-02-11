@@ -1,7 +1,7 @@
 exports.newAuth = function (req, res)
 {
-	if (global.ActionTokenCheckMap.get(req.body.service))
-		global.ActionTokenCheckMap.get(req.body.service)(req, res);
+	if (global.ServiceTokenCheckMap.get(req.body.service))
+		global.ServiceTokenCheckMap.get(req.body.service)(req, res);
 	else
 		global.responseError(res, 401, 'Service unknown')
 };
@@ -20,6 +20,8 @@ exports.getServices = function (req, res)
 		var json = new Object();
 		json.Discord = false;
 		json.Github = false;
+		json.Slack = false;
+		json.Trello = false;
 
 		var i = 0;
 		while (i < result.length) {
@@ -32,6 +34,10 @@ exports.getServices = function (req, res)
 				json.Discord = true;
 			if (tk.service == global.service.Github)
 				json.Github = true;
+			if (tk.service == global.service.Slack)
+				json.Slack = true;
+			if (tk.service == global.service.Trello)
+				json.Trello = true;
 			i++;
 		}
 		res.json(json);

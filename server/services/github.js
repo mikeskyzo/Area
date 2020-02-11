@@ -78,6 +78,7 @@ exports.deleteWebhook = async function (area, req, res)
 		global.responseError(res, 500, 'err : ' + error)
 	});
 }
+
 exports.FormatWebhookPushOnRepo = function (req, res, area, next)
 {
 	if (area.message) {
@@ -109,7 +110,7 @@ exports.CheckToken = function (req, res)
 			global.saveInDb(global.CollectionToken, json, req, res, 'Token saved');
 			return;
 		}
-		throw 'Token not valid : ' + response.statusText
+		global.responseError(res, 401, 'Token not valid : ' + response.statusText);
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, error)
