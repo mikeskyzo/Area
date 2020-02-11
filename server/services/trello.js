@@ -2,12 +2,10 @@ const fetch = require('node-fetch');
 
 //https://trello.com/app-key
 
-const callback = "https://areacoon-api.localtunnel.me/test/";
 const defaultAPIToken = "c8887634117393563544827e99aa9f686075145c59d04ced3d9e9de63193ce4b";
 const defaultAPIKey = "72a7e8b763bbbb4e1a3ba4ff68c7de00";
 const defaultIDModel = "5e1448b8dedfc220293e78d8";
 const defaultIDWebhook = "5e4283e30c5aef816f8e53d3";
-const tmpCallback = "https://weak-treefrog-2.localtunnel.me/test";
 
 exports.createNewWebhook = async function (req, res, json, next) {
 	if (!req.body.APIToken || req.body.APIToken.trim() == "") {
@@ -24,7 +22,7 @@ exports.createNewWebhook = async function (req, res, json, next) {
 	}
 	json.idModel = req.body.idModel;
 
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Github});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Github});
 	if (!token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
@@ -37,6 +35,7 @@ exports.createNewWebhook = async function (req, res, json, next) {
 		global.responseError(res, 401, "No idModel provided");
 		return;
 	}
+	const callback = `${global.url}/webhooks/${json.area_id}`;
 	const url = `https://api.trello.com/1/webhooks/?idModel=${token.IDModel}&description=WebhookAREACOON&callbackURL=${callback}&key=${token.APIKey}&token=${token.APIToken}`;
 	fetch(url, {
 		method: "POST"
@@ -60,7 +59,7 @@ exports.deleteWebhook = async function (area, req, res) {
 		global.responseError(res, 401, "The area has no webhook id");
 		return;
 	}
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+	let token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
 	if (!token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
@@ -73,7 +72,7 @@ exports.deleteWebhook = async function (area, req, res) {
 		global.responseError(res, 401, "No idModel provided");
 		return;
 	}
-	var url = `https://api.trello.com/1/webhooks/${area.webhook_id}?key=${defaultAPIKey}&token=${defaultAPIToken}`;
+	const url = `https://api.trello.com/1/webhooks/${area.webhook_id}?key=${token.APIKey}&token=${token.APIToken}`;
 	fetch(url, {
 		method: "DELETE"
 	})
