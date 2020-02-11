@@ -24,6 +24,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
     companion object {
         var server_location: String? = ""
+        var token: String? = ""
     }
 
     fun getContext(): Context? {
@@ -36,6 +37,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
         if (intent.getStringExtra("server_location") != null)
             server_location = intent.getStringExtra("server_location")
+        if (intent.getStringExtra("token") != null)
+            token = intent.getStringExtra("token")
         Toast.makeText(this, server_location, Toast.LENGTH_SHORT).show()
 
         toolbar = findViewById(R.id.toolbar)
@@ -105,6 +108,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .build()
 
         println(server_location.plus("/auth/addToken"))
+        println(token)
         println(service)
         println(access_token)
         println(refresh_token)
@@ -112,6 +116,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         val request: Request = Request.Builder()
             .url(server_location.plus("/auth/addToken"))
             .post(formBody)
+            .header("Authorization", "token ".plus(token.toString()))
             .build()
 
         client.newCall(request).enqueue(object: Callback {
