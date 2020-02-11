@@ -1,6 +1,8 @@
 package com.example.client_mobile
 
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -10,6 +12,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.GsonBuilder
+import okhttp3.*
+import java.io.IOException
 
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -17,13 +22,20 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
 
+    companion object {
+        var server_location: String? = ""
+    }
+
+    fun getContext(): Context? {
+        return this as Context
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val server_location = intent.getStringExtra("server_location")
-        val username = intent.getStringExtra("username")
-        val token = intent.getStringExtra("token")
+        if (intent.getStringExtra("server_location") != null)
+            server_location = intent.getStringExtra("server_location")
         Toast.makeText(this, server_location, Toast.LENGTH_SHORT).show()
 
         toolbar = findViewById(R.id.toolbar)
@@ -38,6 +50,89 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
+    }
+
+    override fun onResume() {
+        val uri = intent.data
+
+        if (uri !== null) {
+            Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
+
+            val regex = Regex("(?<=code=).*\$")
+            val result: MatchResult? = regex.find(uri.toString())
+            val code = result?.value!!
+            val url = "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(code)
+
+            val client = OkHttpClient()
+
+            val formBody: RequestBody = FormBody.Builder()
+                .build()
+
+            val request: Request = Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build()
+
+            client.newCall(request).enqueue(object: Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body?.string()
+                    val delimiter1 = "access_token="
+                    val delimiter2 = "&scope"
+
+                    val access_token = body.toString().split(delimiter1, delimiter2)[1]
+                    addToken("Github", access_token)
+
+                }
+                override fun onFailure(call: Call, e: IOException) {
+                    println("Failed to execute request")
+                    println(e)
+                }
+            })
+
+
+        }
+        super.onResume()
+    }
+
+    fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
+        val client = OkHttpClient()
+
+        val formBody: RequestBody = FormBody.Builder()
+            .add("service", service)
+            .add("access_token", access_token)
+            .add("refresh_token", refresh_token)
+            .add("expires_in", expires_in)
+            .build()
+
+        println(server_location.plus("/auth/addToken"))
+        println(service)
+        println(access_token)
+        println(refresh_token)
+        println(expires_in)
+        val request: Request = Request.Builder()
+            .url(server_location.plus("/auth/addToken"))
+            .post(formBody)
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body == "404") {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    runOnUiThread {
+                        println(body)
+                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -58,6 +153,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 val intent = Intent(this, Start::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_github -> {
+                val openURL = Intent(android.content.Intent.ACTION_VIEW)
+                openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scop=admin%20repo_hook")
+                startActivity(openURL)
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
