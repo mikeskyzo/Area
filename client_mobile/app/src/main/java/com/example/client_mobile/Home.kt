@@ -22,6 +22,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
 
+    companion object {
+        var server_location: String? = ""
+    }
+
     fun getContext(): Context? {
         return this as Context
     }
@@ -30,9 +34,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val server_location = intent.getStringExtra("server_location")
-        val username = intent.getStringExtra("username")
-        val token = intent.getStringExtra("token")
+        server_location = intent.getStringExtra("server_location")
         Toast.makeText(this, server_location, Toast.LENGTH_SHORT).show()
 
         toolbar = findViewById(R.id.toolbar)
@@ -91,6 +93,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
         }
         super.onResume()
+    }
+
+    fun addToken() {
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
