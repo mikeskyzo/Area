@@ -16,10 +16,12 @@ global.service.slack = 'Slack'
 
 var Discord = require('../services/discord')
 var github = require('../services/github')
+var Trello = require('../services/trello')
 
 // Map of the verification of tokens
 global.ActionTokenCheckMap = new Map();
 global.ActionTokenCheckMap.set(global.service.Github, github.CheckToken)
+global.ActionTokenCheckMap.set(global.service.Trello, Trello.CheckToken)
 
 
 // Action name
@@ -58,19 +60,19 @@ global.secret = 'secret';
 global.saveInDb = function (collection, json, req, res, success_message){
 
 	global.db.collection(collection).insertOne(json, (err, result) => {
-        if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-            });
-        } else {
-            res.status(201);
-            res.json({
-                success : true,
-                message : success_message,
-            })
-        }
+		if (err) {
+			res.status(401);
+			res.json({
+				success : false,
+				message : err.message
+			});
+		} else {
+			res.status(201);
+			res.json({
+				success : true,
+				message : success_message,
+			})
+		}
 	});
 };
 
@@ -79,65 +81,65 @@ global.responseError = function(res, status, massage) {
 	res.json({
 		success : false,
 		message : massage
-    });
-    return;
+	});
+	return;
 };
 
 var jwt = require('jsonwebtoken');
 
 exports.verifyToken = function(req, res, next)
 {
-    var token = req.headers.authorization.split(' ')[1];
+	var token = req.headers.authorization.split(' ')[1];
 	if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
 
 	jwt.verify(token, global.secret, function(err, decoded) {
-        if (err) {
-		    res.json({ success: false, message: 'Failed to authenticate token.' });
-		    return;
-        }
-        if (decoded.exp > Date.now()){
-		    res.json({ success: false, message: 'Token expired' });
-		    return;
-        }
-        req.body.user_id = decoded.id;
-        DoesUserExist(decoded.id, req, res, next);
+		if (err) {
+			res.json({ success: false, message: 'Failed to authenticate token.' });
+			return;
+		}
+		if (decoded.exp > Date.now()){
+			res.json({ success: false, message: 'Token expired' });
+			return;
+		}
+		req.body.user_id = decoded.id;
+		DoesUserExist(decoded.id, req, res, next);
 	});
 }
 
 global.DoesUserExist = function (user_id, req, res, next) {
-    global.db.collection(global.CollectionUsers).findOne({id : user_id}, (err, result) => {
-        if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-            });
-            return;
-        }
-        if(!result) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : 'User not found'
-            })
-            return;
-        }
-        if (next)
-            next(req, res);
-    });
+	global.db.collection(global.CollectionUsers).findOne({id : user_id}, (err, result) => {
+		if (err) {
+			res.status(401);
+			res.json({
+				success : false,
+				message : err.message
+			});
+			return;
+		}
+		if(!result) {
+			res.status(401);
+			res.json({
+				success : false,
+				message : 'User not found'
+			})
+			return;
+		}
+		if (next)
+			next(req, res);
+	});
 }
 
 global.getToken = function (user_id, service, result, next) {
-    global.db.collection(global.CollectionToken).findOne({id : user_id, service : service}, (err, rslt) => {
-        if (err) return;
-        if(!rslt) return;
-        if (next)
-            next(params, result, rslt);
-    });
+	global.db.collection(global.CollectionToken).findOne({id : user_id, service : service}, (err, rslt) => {
+		if (err) return;
+		if(!rslt) return;
+		if (next)
+			next(params, result, rslt);
+	});
 }
 
 global.findInDbAsync = async function (collection, param) {
-    return db.collection(collection).findOne(param);
+	return db.collection(collection).findOne(param);
 }
 
 global.saveAREA = function (req, res, json)
@@ -155,39 +157,39 @@ global.saveAREA = function (req, res, json)
 				return;
 			}
 			res.status(201);
-            res.json({
-                success : true,
-                message : 'Area updated',
-            });
+			res.json({
+				success : true,
+				message : 'Area updated',
+			});
 		});
 	}
 }
 
 global.deleteInDb = function (collection, params, req, res)
 {
-    global.db.collection(collection).deleteOne(params, function (err, result) {
+	global.db.collection(collection).deleteOne(params, function (err, result) {
 		if (err) {
-            global.responseError(res, 500, err.message)
+			global.responseError(res, 500, err.message)
 			return;
 		}
 		res.status(201);
-        res.json({
-            success : true,
-            message : 'Deleted',
-        });
+		res.json({
+			success : true,
+			message : 'Deleted',
+		});
 		return;
 	});
 }
 
 global.findInDb = function (collection, params, req, res, next)
 {
-    global.db.collection(collection).findOne(params, (err, result) => {
-        if (err) {
-            global.responseError(res, 401, err.message)
-            return;
-        }
-        if (next)
-            next(result, req, res);
-    });
+	global.db.collection(collection).findOne(params, (err, result) => {
+		if (err) {
+			global.responseError(res, 401, err.message)
+			return;
+		}
+		if (next)
+			next(result, req, res);
+	});
 
 }
