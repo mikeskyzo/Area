@@ -34,7 +34,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        server_location = intent.getStringExtra("server_location")
+        if (intent.getStringExtra("server_location") != null)
+            server_location = intent.getStringExtra("server_location")
         Toast.makeText(this, server_location, Toast.LENGTH_SHORT).show()
 
         toolbar = findViewById(R.id.toolbar)
@@ -55,7 +56,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         val uri = intent.data
 
         if (uri !== null) {
-            println(uri)
             Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
 
             val regex = Regex("(?<=code=).*\$")
@@ -80,8 +80,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     val delimiter2 = "&scope"
 
                     val access_token = body.toString().split(delimiter1, delimiter2)[1]
-                    println(body)
-                    println(access_token)
+                    addToken("Github", access_token)
 
                 }
                 override fun onFailure(call: Call, e: IOException) {
@@ -95,8 +94,45 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onResume()
     }
 
-    fun addToken() {
+    fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
+        val client = OkHttpClient()
 
+        val formBody: RequestBody = FormBody.Builder()
+            .add("service", service)
+            .add("access_token", access_token)
+            .add("refresh_token", refresh_token)
+            .add("expires_in", expires_in)
+            .build()
+
+        println(server_location.plus("/auth/addToken"))
+        println(service)
+        println(access_token)
+        println(refresh_token)
+        println(expires_in)
+        val request: Request = Request.Builder()
+            .url(server_location.plus("/auth/addToken"))
+            .post(formBody)
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body == "404") {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    runOnUiThread {
+                        println(body)
+                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
