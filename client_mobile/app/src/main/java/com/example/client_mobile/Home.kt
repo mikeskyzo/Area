@@ -1,6 +1,8 @@
 package com.example.client_mobile
 
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -10,12 +12,19 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.GsonBuilder
+import okhttp3.*
+import java.io.IOException
 
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+
+    fun getContext(): Context? {
+        return this as Context
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +49,50 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         navView.setNavigationItemSelectedListener(this)
     }
 
+    override fun onResume() {
+        val uri = intent.data
+
+        if (uri !== null) {
+            println(uri)
+            Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
+
+            val regex = Regex("(?<=code=).*\$")
+            val result: MatchResult? = regex.find(uri.toString())
+            val code = result?.value!!
+            val url = "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(code)
+
+            val client = OkHttpClient()
+
+            val formBody: RequestBody = FormBody.Builder()
+                .build()
+
+            val request: Request = Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build()
+
+            client.newCall(request).enqueue(object: Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body?.string()
+                    val delimiter1 = "access_token="
+                    val delimiter2 = "&scope"
+
+                    val access_token = body.toString().split(delimiter1, delimiter2)[1]
+                    println(body)
+                    println(access_token)
+
+                }
+                override fun onFailure(call: Call, e: IOException) {
+                    println("Failed to execute request")
+                    println(e)
+                }
+            })
+
+
+        }
+        super.onResume()
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_profile -> {
@@ -58,6 +111,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 val intent = Intent(this, Start::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_github -> {
+                val openURL = Intent(android.content.Intent.ACTION_VIEW)
+                openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scop=admin%20repo_hook")
+                startActivity(openURL)
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
