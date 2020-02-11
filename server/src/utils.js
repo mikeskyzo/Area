@@ -11,6 +11,7 @@ global.service.Discord = 'Discord'
 global.service.Reddit = 'Reddit'
 global.service.Github = 'Github'
 global.service.Trello = 'Trello'
+global.service.slack = 'Slack'
 
 
 var Discord = require('../services/discord')
@@ -88,7 +89,7 @@ var jwt = require('jsonwebtoken');
 
 exports.verifyToken = function(req, res, next)
 {
-	var token = req.headers.access_token;
+	var token = req.headers.authorization.split(' ')[1];
 	if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
 
 	jwt.verify(token, global.secret, function(err, decoded) {
