@@ -97,6 +97,34 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onResume()
     }
 
+    fun getServices() {
+        val client = OkHttpClient()
+        val request: Request = Request.Builder()
+            .url(server_location.plus("/auth/getServices"))
+            .header("Authorization", "token ".plus(token.toString()))
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body == "404") {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    runOnUiThread {
+                        println(body)
+                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
+    }
+
     fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
         val client = OkHttpClient()
 
@@ -107,12 +135,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .add("expires_in", expires_in)
             .build()
 
-        println(server_location.plus("/auth/addToken"))
-        println(token)
-        println(service)
-        println(access_token)
-        println(refresh_token)
-        println(expires_in)
         val request: Request = Request.Builder()
             .url(server_location.plus("/auth/addToken"))
             .post(formBody)
@@ -143,6 +165,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_profile -> {
+                getServices()
                 Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_messages -> {
