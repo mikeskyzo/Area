@@ -57,44 +57,53 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
     override fun onResume() {
         val uri = intent.data
+        val delimiter = "://"
+        val service = uri.toString().split(delimiter)
 
+        if (service[0] == "github") {
+            addTokenGithub(uri)
+        } else {
+            println("pas github")
+        }
+
+        println(uri)
         if (uri !== null) {
             Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
-
-            val regex = Regex("(?<=code=).*\$")
-            val result: MatchResult? = regex.find(uri.toString())
-            val code = result?.value!!
-            val url = "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(code)
-
-            val client = OkHttpClient()
-
-            val formBody: RequestBody = FormBody.Builder()
-                .build()
-
-            val request: Request = Request.Builder()
-                .url(url)
-                .post(formBody)
-                .build()
-
-            client.newCall(request).enqueue(object: Callback {
-                override fun onResponse(call: Call, response: Response) {
-                    val body = response.body?.string()
-                    val delimiter1 = "access_token="
-                    val delimiter2 = "&scope"
-
-                    val access_token = body.toString().split(delimiter1, delimiter2)[1]
-                    addToken("Github", access_token)
-
-                }
-                override fun onFailure(call: Call, e: IOException) {
-                    println("Failed to execute request")
-                    println(e)
-                }
-            })
-
-
         }
         super.onResume()
+    }
+
+    fun addTokenGithub(uri: Uri?) {
+        val regex = Regex("(?<=code=).*\$")
+        val result: MatchResult? = regex.find(uri.toString())
+        val code = result?.value!!
+        val url = "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(code)
+
+        val client = OkHttpClient()
+
+        val formBody: RequestBody = FormBody.Builder()
+            .build()
+
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                val delimiter1 = "access_token="
+                val delimiter2 = "&scope"
+
+                val access_token = body.toString().split(delimiter1, delimiter2)[1]
+                addToken("Github", access_token)
+
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
     }
 
     fun getServices() {
