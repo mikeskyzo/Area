@@ -213,6 +213,7 @@ tmp/
 temp/
 
 ### VisualStudioCode ###
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -285,3 +286,4 @@ node_modules/*
 web-client/node_modules/
 .idea/
 .vs/
+save.js
