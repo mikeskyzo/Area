@@ -1,14 +1,14 @@
 const fetch = require('node-fetch');
 
-exports.send_message = async function (area, req, res)
+exports.send_message = async function (area, res)
 {
-	if (!area.channel_id || !req.body.message) {
+	if (!area.channel_id || !area.message) {
 		global.responseError(res, 401, 'Missing channel ID or a message')
 		return;
 	}
 
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Slack});
-	if (!token.access_token) {
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.service.Slack});
+	if (!token || !token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
@@ -22,10 +22,11 @@ exports.send_message = async function (area, req, res)
 	.then(function (resjson) {
 		if (resjson.ok == false) {
 			console.error('Bad response from slack : ' + resjson.error);
-			exports.status(500).send();
+			res.status(500).send();
 		} else {
 			res.send();
 		}
+		return;
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, 'err : ' + error)
@@ -39,6 +40,7 @@ exports.send_message_check_args = function(req, res, json)
     else if (!req.body.message)
        global.responseError(res, 401, 'Missing a message to send')
     else {
+		// #### TODO : check if channel exist
         json.channel_id = req.body.channel_id;
         json.message = req.body.message;
         global.saveAREA(req, res, json);
