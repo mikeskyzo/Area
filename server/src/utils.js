@@ -11,7 +11,7 @@ global.service.Discord = 'Discord'
 global.service.Reddit = 'Reddit'
 global.service.Github = 'Github'
 global.service.Trello = 'Trello'
-global.service.slack = 'Slack'
+global.service.Slack = 'Slack'
 
 
 var Discord = require('../services/discord')
@@ -23,7 +23,7 @@ var Slack = require('../services/slack')
 global.ServiceTokenCheckMap = new Map();
 global.ServiceTokenCheckMap.set(global.service.Github, Github.CheckToken)
 global.ServiceTokenCheckMap.set(global.service.Trello, Trello.CheckToken)
-global.ServiceTokenCheckMap.set(global.service.slack, Slack.CheckToken)
+global.ServiceTokenCheckMap.set(global.service.Slack, Slack.CheckToken)
 
 
 // Action name
