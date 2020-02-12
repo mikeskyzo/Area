@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.SEND" />
-                <data android:host="truc.truc" android:scheme="hello"/>
+                <data android:host="truc.truc" android:scheme="github"/>
             </intent-filter>
         </activity>
         <activity
