@@ -54,26 +54,26 @@ process.on('SIGINT', function() {
     global.terminateServer();
 });
 
-// const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
-// .then(function (err, tunnel)
-// {
-//     global.url = err.url;
-//     console.log('=================================================');
-//     console.log('Url of you\'r api : ' + global.url);
-//     console.log('=================================================');
-// })
-// .catch( function (err) {
-//     console.log(err);
-// })
-
-const ngrok = require('ngrok');
-
-(async function() {
-    global.url = await ngrok.connect(8080);
+const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
+.then(function (err, tunnel)
+{
+    global.url = err.url;
     console.log('=================================================');
     console.log('Url of you\'r api : ' + global.url);
     console.log('=================================================');
-})();
+})
+.catch( function (err) {
+    console.log(err);
+})
+
+// const ngrok = require('ngrok');
+
+// (async function() {
+//     global.url = await ngrok.connect(8080);
+//     console.log('=================================================');
+//     console.log('Url of you\'r api : ' + global.url);
+//     console.log('=================================================');
+// })();
 
 global.terminateServer = function (err)
 {
