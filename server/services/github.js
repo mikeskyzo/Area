@@ -1,7 +1,16 @@
 const fetch = require('node-fetch');
 
+exports.createWebhookIssueEvent = function (req, res, json, next)
+{
+	createWebhook('issues', req, res, json, next);
+}
 
-exports.createWebhookPushOnRepo = async function (req, res, json, next)
+exports.createWebhookPushOnRepo = function (req, res, json, next)
+{
+	createWebhook('push', req, res, json, next);
+}
+
+async function createWebhook(event, req, res, json, next)
 {
 	if (!req.body.user || req.body.user.trim() == '') {
 		global.responseError(res, 401, 'Github need a username')
@@ -24,7 +33,7 @@ exports.createWebhookPushOnRepo = async function (req, res, json, next)
 		"name": "web",
 		"active": true,
 		"events": [
-		  "push"
+		  event
 		],
 		"config": {
 		  "url": global.url + "/webhooks/" + json.area_id,
@@ -79,8 +88,29 @@ exports.deleteWebhook = async function (area, req, res)
 	});
 }
 
+exports.FormatWebhookIssueEvent = function (req, res, area, next)
+{
+	if (!req.body.action) {
+		res.send();
+		return;
+	}
+	if (area.message) {
+		if (area.message.includes('{event}'))
+			area.message = area.message.replace('{event}', req.body.action)
+		if (area.message.includes('{username}') && req.body.sender && req.body.sender.login)
+			area.message = area.message.replace('{username}', req.body.sender.login)
+		if (area.message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
+			area.message = area.message.replace('{repository_name}', req.body.repository.name)
+	}
+	next(area, res);
+}
+
 exports.FormatWebhookPushOnRepo = function (req, res, area, next)
 {
+	if (req.body.zen) {
+		res.send();
+		return;
+	}
 	if (area.message) {
 		if (area.message.includes('{name}') && req.body.pusher && req.body.pusher.name)
 			area.message = area.message.replace('{name}', req.body.pusher.name)
