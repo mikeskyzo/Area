@@ -24,6 +24,15 @@ exports.sendAbout = function(req, res) {
 							"description": "Create a new board project on github"
 						}
 					]
+				},
+				{
+					"name" : "Slack",
+					"reactions" : [
+						{
+							"name" : "slack_send_message",
+							"description" : "Send a message on the channel"
+						}
+					]
 				}
 			]
 		}
