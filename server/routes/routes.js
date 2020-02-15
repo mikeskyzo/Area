@@ -36,6 +36,10 @@ router.post('/auth/addToken', function(req, res) {
 	utils.verifyToken(req, res, authToken.newAuth);
 });
 
+router.delete('/auth/token', function(req, res) {
+	utils.verifyToken(req, res, authToken.deleteToken);
+});
+
 router.get('/auth/getServices', function(req, res) {
 	utils.verifyToken(req, res, authToken.getServices);
 });
