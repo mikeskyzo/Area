@@ -51,17 +51,19 @@ global.ActionDeleteWebhookMap.set(global.Action.github_issue_event, Github.delet
 global.Reaction = new Object();
 global.Reaction.discord_send_message = 'discord_send_message'
 global.Reaction.slack_send_message = 'slack_send_message'
-global.Reaction.reddit_new_post = 'reddit_new_post'
+global.Reaction.github_create_board = 'github_create_board'
 
 // Map Reaction Function
 global.ReactionMap = new Map();
 global.ReactionMap.set(global.Reaction.discord_send_message, Discord.send_message)
 global.ReactionMap.set(global.Reaction.slack_send_message, Slack.send_message)
+global.ReactionMap.set(global.Reaction.github_create_board, Github.create_board)
 
 // Map of the function to add the argument in Db and check if there are correct
 global.ReactionCheckArgsMap = new Map();
 global.ReactionCheckArgsMap.set(global.Reaction.discord_send_message, Discord.send_message_check_args)
 global.ReactionCheckArgsMap.set(global.Reaction.slack_send_message, Slack.send_message_check_args)
+global.ReactionCheckArgsMap.set(global.Reaction.github_create_board, Github.create_board_check_args)
 
 global.secret = 'secret';
 
