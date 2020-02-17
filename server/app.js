@@ -66,6 +66,7 @@ process.on('SIGINT', function() {
 //     console.log(err);
 // })
 
+const tunnel = null;
 const ngrok = require('ngrok');
 
 (async function() {
