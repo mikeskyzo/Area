@@ -12,12 +12,7 @@ import kotlinx.android.synthetic.main.action_row.view.*
 class MainAdapter(val actionReaction: ActionReaction): RecyclerView.Adapter<CustomViewHolder>() {
 
     override fun getItemCount(): Int {
-        var nb = 0
-        for (service in actionReaction.services) {
-            if (!service.actions.isNullOrEmpty())
-                nb += service.actions.count()
-            println(nb)
-        }
+        val nb = actionReaction.actions.count()
         return nb
     }
 
@@ -29,15 +24,7 @@ class MainAdapter(val actionReaction: ActionReaction): RecyclerView.Adapter<Cust
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
 
-        var actions = mutableListOf<Action>()
-
-        for (service in actionReaction.services) {
-            if (!service.actions.isNullOrEmpty()) {
-                actions.addAll(service.actions)
-            }
-        }
-
-        val action = actions.get(position)
+        val action = actionReaction.actions.get(position)
 
         holder.view.button.text = action.title
     }
