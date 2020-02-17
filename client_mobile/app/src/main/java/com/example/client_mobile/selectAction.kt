@@ -2,7 +2,7 @@ package com.example.client_mobile
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import com.google.gson.GsonBuilder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -24,7 +24,6 @@ class selectAction : AppCompatActivity() {
         }
 
         recyclerView_main.layoutManager = LinearLayoutManager(this)
-        recyclerView_main.adapter = MainAdapter()
         getActionsReactions()
     }
 
@@ -46,7 +45,9 @@ class selectAction : AppCompatActivity() {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
+                    val actionsReactions = GsonBuilder().create().fromJson(body, ActionReaction::class.java)
                     runOnUiThread {
+                        recyclerView_main.adapter = MainAdapter(actionsReactions)
                         println(body)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
@@ -68,4 +69,4 @@ class Reaction(val name: String, val title: String, val description: String, val
 
 class Service(val name: String, val actions: List<Action>, val reactions: List<Reaction>)
 
-class actionReaction(val services: List<Service>)
+class ActionReaction(val services: List<Service>)
