@@ -10,82 +10,23 @@ var authToken = require('./tokens')
 
 var router = express.Router();
 
-router.post('/CreateArea', function(req, res, next) {
+router.post('/CreateArea', function(req, res) {
 	utils.verifyToken(req, res, area.CreateArea);
 });
 
-router.get('/GetArea', function(req, res, next) {
+router.get('/GetArea', function(req, res) {
 	utils.verifyToken(req, res, area.getAreas);
 });
 
-router.get('/getActionsReactions', function(req, res, next) {
-	var json = {
-		services : [
-			{
-				"name" : global.service.Github,
-				"actions" : [
-					{
-						"name" : global.Action.github_new_push,
-						"title" : "Repository push",
-						"description" : "Trigger when someone push on a repo",
-						"params" : [
-							{
-								"name" : "repository",
-								"description" : "Name of the repository"
-							},
-							{
-								"name" : "owner",
-								"description" : "Name of the owner of the repository"
-							}
-						]
-					},
-					{
-						"name" : global.Action.github_issue_event,
-						"title" : "Issue event",
-						"description" : "Trigger when a issue is update or created",
-						"params" : [
-							{
-								"name" : "repository",
-								"description" : "Name of the repository"
-							},
-							{
-								"name" : "owner",
-								"description" : "Name of the owner of the repository"
-							}
-						]
-					}
-				]
-			},
-			{
-				"name" : global.service.Slack,
-				"reactions" : [
-					{
-						"name" : global.Reaction.slack_send_message,
-						"title" : "Send a message",
-						"description" : "Send a message on a slack channel",
-						"params" : [
-							{
-								"name" : "channel_id",
-								"description" : "ID of the channel"
-							},
-							{
-								"name" : "message",
-								"description" : "message to send on the channel"
-							}
-						]
-					}
-				]
-			}
-		]
-	}
-	res.json(json);
+router.get('/getActionsReactions', function(req, res) {
+	about.getActionsReaction(req, res);
 });
 
-router.delete('/DeleteArea', function(req, res, next) {
+router.delete('/DeleteArea', function(req, res) {
 	utils.verifyToken(req, res, area.deleteArea);
 });
 
-router.get('/about.json', function(req, res, next) {
+router.get('/about.json', function(req, res) {
 	about.sendAbout(req, res);
 });
 
