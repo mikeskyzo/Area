@@ -26,7 +26,11 @@ class MainAdapter(val actionReaction: ActionReaction): RecyclerView.Adapter<Cust
 
         val action = actionReaction.actions.get(position)
 
-        holder.view.button.text = action.title
+        holder.view.buttonAction.text = action.title
+        if (action.service == "Github")
+            holder.view.imageViewIcon.setImageResource(R.drawable.ic_twitch)
+        if (action.service == "Slack")
+            holder.view.imageViewIcon.setImageResource(R.drawable.ic_slack)
     }
 
 }
