@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
 //https://trello.com/app-key
 
@@ -9,15 +9,15 @@ const defaultIDWebhook = "5e4283e30c5aef816f8e53d3";
 
 exports.createNewWebhook = async function (req, res, json, next) {
 	if (!req.body.APIToken || req.body.APIToken.trim() == "") {
-		global.responseError(res, 401, 'Trello needs a APIToken')
+		global.responseError(res, 401, "Trello needs a APIToken")
 		return;
 	}
 	if (!req.body.APIKey || req.body.APIKey.trim() == "") {
-		global.responseError(res, 401, 'Trello needs a APIKey')
+		global.responseError(res, 401, "Trello needs a APIKey")
 		return;
 	}
 	if (!req.body.idModel || req.body.idModel.trim() == "") {
-		global.responseError(res, 401, 'Trello needs a idModel')
+		global.responseError(res, 401, "Trello needs a idModel")
 		return;
 	}
 	json.idModel = req.body.idModel;
@@ -111,4 +111,37 @@ exports.CheckToken = function (req, res)
 	.catch(function (error) {
 		global.responseError(res, 500, error)
 	});
+}
+
+exports.FormatWebhookUpdateModel = function (req, res, area, next)
+{
+	if (area.message) {
+		if (area.message.includes("{name}") && req.body.action && req.body.action.memberCreator && req.body.action.memberCreator.username)
+			area.message = area.message.replace("{name}", req.body.action.memberCreator.username)
+		if (req.body.type && area.message.includes("{event}")) {
+			if (req.body.type === "updateBoard")
+				area.message = area.message.replace("{event}", `updated board ${req.body.model.name}`)
+			if (req.body.type === "updateCard")
+				area.message = area.message.replace("{event}", `updated card ${req.body.model.name}`)
+			if (req.body.type === "updateLabel")
+				area.message = area.message.replace("{event}", `updated label ${req.body.model.name}`)
+			if (req.body.type === "updateCheckItem")
+				area.message = area.message.replace("{event}", `updated check item ${req.body.model.name}`)
+			if (req.body.type === "updateChecklist")
+				area.message = area.message.replace("{event}", `updated check list ${req.body.model.name}`)
+			if (req.body.type === "updateComment")
+				area.message = area.message.replace("{event}", `updated comment ${req.body.model.name}`)
+			if (req.body.type === "createCard")
+				area.message = area.message.replace("{event}", `created card ${req.body.model.name}`)
+			if (req.body.type === "createLabel")
+				area.message = area.message.replace("{event}", `created label ${req.body.model.name}`)
+			if (req.body.type === "createdCheckItem")
+				area.message = area.message.replace("{event}", `created check item ${req.body.model.name}`)
+			if (req.body.type === "commentCard")
+				area.message = area.message.replace("{event}", `commented card ${req.body.model.name}`)
+		} else
+			res.send();
+	}
+	console.log("Area.message : " + area.message);
+	next(area, res);
 }

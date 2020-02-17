@@ -29,21 +29,25 @@ global.ServiceTokenCheckMap.set(global.service.Slack, Slack.CheckToken)
 // Action name
 global.Action = new Object();
 global.Action.github_new_push = 'github_new_push'
+global.Action.trello_new_update = 'trello_new_update'
 global.Action.github_issue_event = 'github_issue_event'
 
 // Map Action creation Function
 global.ActionMap = new Map();
 global.ActionMap.set(global.Action.github_new_push, Github.createWebhookPushOnRepo)
+global.ActionMap.set(global.Action.trello_new_update, Trello.createNewWebhook)
 global.ActionMap.set(global.Action.github_issue_event, Github.createWebhookIssueEvent)
 
 // Map of formating the result of the webhooks
 global.ActionFormatResultMap = new Map();
 global.ActionFormatResultMap.set(global.Action.github_new_push, Github.FormatWebhookPushOnRepo)
+global.ActionFormatResultMap.set(global.Action.trello_new_update, Trello.FormatWebhookUpdateModel)
 global.ActionFormatResultMap.set(global.Action.github_issue_event, Github.FormatWebhookIssueEvent)
 
 // Map for the deletion of the webhooks
 global.ActionDeleteWebhookMap = new Map();
 global.ActionDeleteWebhookMap.set(global.Action.github_new_push, Github.deleteWebhook)
+global.ActionDeleteWebhookMap.set(global.Action.trello_new_update, Trello.deleteWebhook)
 global.ActionDeleteWebhookMap.set(global.Action.github_issue_event, Github.deleteWebhook)
 
 
