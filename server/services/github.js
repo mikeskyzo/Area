@@ -25,7 +25,7 @@ async function createWebhook(event, req, res, json, next)
 	const url = 'https://api.github.com/repos/' + req.body.user + '/' + req.body.repository + '/hooks';
 
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Github});
-	if (!token.access_token) {
+	if (!token || !token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
@@ -144,5 +144,67 @@ exports.CheckToken = function (req, res)
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, error)
+	});
+}
+
+exports.create_board_check_args = function(req, res, json)
+{
+    if (!req.body.owner)
+        global.responseError(res, 401, 'Missing the owner')
+    else if (!req.body.repo)
+       global.responseError(res, 401, 'Missing the repository')
+   else if (!req.body.title)
+       global.responseError(res, 401, 'Missing the title')
+   else if (!req.body.body)
+       global.responseError(res, 401, 'Missing the body')
+    else {
+		// #### TODO : check if le project exist and we have the right to create a project on it
+        json.owner = req.body.owner;
+        json.repo = req.body.repo;
+        json.title = req.body.title;
+        json.body = req.body.body;
+        global.saveAREA(req, res, json);
+    }
+}
+
+exports.create_board = async function (area, res)
+{
+	if (!area.owner || !area.repo || !area.title || !area.body) {
+		global.responseError(res, 401, 'Missing something');
+		return;
+	}
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.service.Github});
+	if (!token || !token.access_token) {
+		global.responseError(res, 401, 'No access token provide');
+		return;
+	}
+
+	var url =  'https://api.github.com/repos/' + area.user + '/' + area.repository + '/projects';
+	const body = {
+		"name" : area.title,
+		"body" : area.body
+	}
+
+	fetch(url, {
+		'method': 'POST',
+		'headers' : {'Authorization' : 'token ' + token.access_token,
+						'Accept' : 'application/vnd.github.inertia-preview+json',
+						'Content-Type' : 'application/x-www-form-urlencoded'
+					},
+		'body' : JSON.stringify(body),
+	})
+	.then(function (response) {
+		if (response.status >= 300) {
+			return response.json();
+		}
+		return ;
+	})
+	.then(function (resjson){
+		if (resjson)
+			console.error(resjson);
+		res.send();
+	})
+	.catch(function (error) {
+		global.responseError(res, 500, 'err : ' + error)
 	});
 }

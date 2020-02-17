@@ -43,3 +43,12 @@ exports.getServices = function (req, res)
 		res.json(json);
     })
 };
+
+exports.deleteToken = function (req, res)
+{
+	if (!req.body.service) {
+		responseError(res, 401, 'You need to specify a service');
+		return ;
+	}
+	global.deleteInDb(global.CollectionToken, {service : req.body.service, user_id : req.body.user_id}, req, res);
+}

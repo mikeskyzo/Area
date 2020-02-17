@@ -28,7 +28,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 
     fun getContext(): Context? {
-        return this as Context
+        return this
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,11 +62,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
         if (service[0] == "github") {
             addTokenGithub(uri)
-        } else {
-            println("pas github")
+        } else if (service[0] == "slack") {
+            addTokenSlack(uri)
         }
 
-        println(uri)
         if (uri !== null) {
             Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
         }
@@ -97,6 +96,37 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
                 val access_token = body.toString().split(delimiter1, delimiter2)[1]
                 addToken("Github", access_token)
+
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
+    }
+
+    fun addTokenSlack(uri : Uri?) {
+        val tab = uri.toString().split("code=", "&state=")
+        val code = tab[1]
+        val url = "https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&redirect_uri=slack://truc.truc&client_secret=248197e37352e5aa521b969a3cbb8a91&code=".plus(code)
+        val client = OkHttpClient()
+
+        val formBody: RequestBody = FormBody.Builder()
+            .build()
+
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(formBody)
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                val delimiter1 = "access_token\":\""
+                val delimiter2 = "\",\"token_type"
+
+                val access_token = body.toString().split(delimiter1, delimiter2)[1]
+                addToken("Slack", access_token)
 
             }
             override fun onFailure(call: Call, e: IOException) {
@@ -159,6 +189,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     runOnUiThread {
+                        println("addToken")
                         println(body)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
@@ -194,6 +225,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             R.id.nav_github -> {
                 val openURL = Intent(android.content.Intent.ACTION_VIEW)
                 openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scop=admin%20repo_hook")
+                startActivity(openURL)
+            }
+            R.id.nav_slack -> {
+                val openURL = Intent(android.content.Intent.ACTION_VIEW)
+                openURL.data = Uri.parse("https://slack.com/oauth/v2/authorize?client_id=933637704274.945976210260&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&redirect_uri=slack://truc.truc")
                 startActivity(openURL)
             }
         }

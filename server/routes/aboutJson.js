@@ -7,21 +7,30 @@ exports.sendAbout = function(req, res) {
 			"current_time": Date.now() ,
 			"services": [
 				{
-					"name": "facebook",
+					"name": "Github",
 					"actions": [
 						{
-							"name ": "new_message_in_group",
-							"description ": "A new message is posted in the group"
+							"name ": "github_new_push",
+							"description ": "A new push on a repository"
 						},
 						{
-							"name": "new_message_inbox",
-							"description": "A new private message is received by the user"
+							"name": "github_issue_event",
+							"description": "A issue a change of stat on a repository"
 						}
 					],
 					"reactions": [
 						{
-							"name": "like_message" ,
-							"description": "The user likes a message"
+							"name": "github_create_board" ,
+							"description": "Create a new board project on github"
+						}
+					]
+				},
+				{
+					"name" : "Slack",
+					"reactions" : [
+						{
+							"name" : "slack_send_message",
+							"description" : "Send a message on the channel"
 						}
 					]
 				}
