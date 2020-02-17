@@ -46,42 +46,44 @@ app.route('/test').get(function(req, res) {
     })
 });
 
-var server = app.listen(8080, function (req, res) {
-    console.log("server listen on 8080");
+const ngrok = require('ngrok');
+
+var server = app.listen(8080, function () {
+    console.log("Server is up !");
+    (async function() {
+        global.url = await ngrok.connect(8080);
+        console.log('=================================================');
+        console.log('Url of you\'r api : ' + global.url);
+        console.log('=================================================');
+    })();
+}).on('error', function (err){
+    console.error("something broke : ");
+    console.error(err);
 })
 
 process.on('SIGINT', function() {
     global.terminateServer();
 });
 
-const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
-.then(function (err, tunnel)
-{
-    global.url = err.url;
-    console.log('=================================================');
-    console.log('Url of you\'r api : ' + global.url);
-    console.log('=================================================');
-})
-.catch( function (err) {
-    console.log(err);
-})
-
-// const ngrok = require('ngrok');
-
-// (async function() {
-//     global.url = await ngrok.connect(8080);
+// const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
+// .then(function (err, tunnel)
+// {
+//     global.url = err.url;
 //     console.log('=================================================');
 //     console.log('Url of you\'r api : ' + global.url);
 //     console.log('=================================================');
-// })();
+// })
+// .catch( function (err) {
+//     console.log(err);
+// })
 
 global.terminateServer = function (err)
 {
     console.log('Shutting down the server');
     if (err)
         console.log(err);
-    if (tunnel && tunnel.close)
-        tunnel.close();
+    if (ngrok)
+        ngrok.disconnect();
     server.close();
     if (global.clientDb)
         global.clientDb.close();
