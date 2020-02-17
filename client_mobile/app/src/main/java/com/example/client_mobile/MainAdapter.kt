@@ -28,9 +28,17 @@ class MainAdapter(val actionReaction: ActionReaction): RecyclerView.Adapter<Cust
 
         holder.view.buttonAction.text = action.title
         if (action.service == "Github")
-            holder.view.imageViewIcon.setImageResource(R.drawable.ic_twitch)
+            holder.view.imageViewIcon.setImageResource(R.drawable.ic_github)
         if (action.service == "Slack")
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_slack)
+        if (action.service == "Twitch")
+            holder.view.imageViewIcon.setImageResource(R.drawable.ic_twitch)
+        if (action.service == "Reddit")
+            holder.view.imageViewIcon.setImageResource(R.drawable.ic_reddit)
+        if (action.service == "Discord")
+            holder.view.imageViewIcon.setImageResource(R.drawable.ic_discord)
+        if (action.service == "Trello")
+            holder.view.imageViewIcon.setImageResource(R.drawable.ic_trello)
     }
 
 }
