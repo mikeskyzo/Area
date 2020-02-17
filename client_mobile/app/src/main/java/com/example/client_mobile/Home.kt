@@ -209,7 +209,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_messages -> {
-                Toast.makeText(this, "Actions clicked", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, selectAction::class.java)
+                startActivity(intent)
             }
             R.id.nav_friends -> {
                 Toast.makeText(this, "Reactions clicked", Toast.LENGTH_SHORT).show()
