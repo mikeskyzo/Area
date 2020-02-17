@@ -2,6 +2,7 @@ package com.example.client_mobile
 
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,8 @@ class Start : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
         buttonLogin.setOnClickListener {
+            MediaPlayer.create(this, R.raw.gnome).start()
+
             if (editTextUsername.length() == 0) {
                 Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show()
             } else if (editTextPassword.length() == 0) {
