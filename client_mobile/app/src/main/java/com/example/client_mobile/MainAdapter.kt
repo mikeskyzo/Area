@@ -4,12 +4,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.client_mobile.Action
+import com.example.client_mobile.ActionReaction
 import com.example.client_mobile.R
+import kotlinx.android.synthetic.main.action_row.view.*
 
-class MainAdapter: RecyclerView.Adapter<CustomViewHolder>() {
+class MainAdapter(val actionReaction: ActionReaction): RecyclerView.Adapter<CustomViewHolder>() {
 
     override fun getItemCount(): Int {
-        return 3
+        var nb = 0
+        for (service in actionReaction.services) {
+            if (!service.actions.isNullOrEmpty())
+                nb += service.actions.count()
+            println(nb)
+        }
+        return nb
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -20,6 +29,17 @@ class MainAdapter: RecyclerView.Adapter<CustomViewHolder>() {
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
 
+        var actions = mutableListOf<Action>()
+
+        for (service in actionReaction.services) {
+            if (!service.actions.isNullOrEmpty()) {
+                actions.addAll(service.actions)
+            }
+        }
+
+        val action = actions.get(position)
+
+        holder.view.button.text = action.title
     }
 
 }
