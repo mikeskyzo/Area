@@ -10,25 +10,23 @@ var authToken = require('./tokens')
 
 var router = express.Router();
 
-router.post('/CreateArea', function(req, res, next) {
+router.post('/CreateArea', function(req, res) {
 	utils.verifyToken(req, res, area.CreateArea);
 });
 
-router.get('/GetArea', function(req, res, next) {
+router.get('/GetArea', function(req, res) {
 	utils.verifyToken(req, res, area.getAreas);
 });
 
-router.post('/UpdateArea', function(req, res, next) {
-	res.send('This route id deprecated');
-	// This will create a new webhook without delete the actual
-	// utils.verifyToken(req, res, area.updateArea);
+router.get('/getActionsReactions', function(req, res) {
+	about.getActionsReaction(req, res);
 });
 
-router.delete('/DeleteArea', function(req, res, next) {
+router.delete('/DeleteArea', function(req, res) {
 	utils.verifyToken(req, res, area.deleteArea);
 });
 
-router.get('/about.json', function(req, res, next) {
+router.get('/about.json', function(req, res) {
 	about.sendAbout(req, res);
 });
 
