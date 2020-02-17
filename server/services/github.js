@@ -169,7 +169,6 @@ exports.create_board_check_args = function(req, res, json)
 
 exports.create_board = async function (area, res)
 {
-	console.log('=========================');
 	if (!area.owner || !area.repo || !area.title || !area.body) {
 		global.responseError(res, 401, 'Missing something');
 		return;
