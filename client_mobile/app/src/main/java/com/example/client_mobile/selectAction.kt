@@ -63,10 +63,9 @@ class selectAction : AppCompatActivity() {
 
 class Param(val name: String, val description: String)
 
-class Action(val name: String, val title: String, val description: String, val params: List<Param>  )
+class Action(val name: String, val service: String, val title: String, val description: String, val params: List<Param>  )
 
-class Reaction(val name: String, val title: String, val description: String, val params: List<Param>  )
+class Reaction(val name: String, val service: String, val title: String, val description: String, val params: List<Param>  )
 
-class Service(val name: String, val actions: List<Action>, val reactions: List<Reaction>)
 
-class ActionReaction(val services: List<Service>)
+class ActionReaction(val actions: List<Action>, val reactions: List<Reaction>)
