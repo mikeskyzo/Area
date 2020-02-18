@@ -14,9 +14,17 @@ import java.io.IOException
 
 class selectAction : AppCompatActivity() {
 
+    companion object {
+        var token: String? = ""
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_action)
+
+        if (intent.getStringExtra("token") != null)
+            token = intent.getStringExtra("token")
+        println(token)
 
         imageButtonBack.setOnClickListener {
             val intent = Intent(this, Home::class.java)
@@ -35,6 +43,7 @@ class selectAction : AppCompatActivity() {
         val client = OkHttpClient()
         val request: Request = Request.Builder()
             .url(Home.server_location.plus("/getActionsReactions"))
+            .header("Authorization", "token ".plus(token.toString()))
             .build()
 
         client.newCall(request).enqueue(object: Callback {
