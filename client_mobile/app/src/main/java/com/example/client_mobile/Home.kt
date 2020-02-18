@@ -187,6 +187,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     runOnUiThread {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
+                } else if (body == "409") {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     runOnUiThread {
                         println("addToken")
