@@ -19,7 +19,7 @@ router.get('/GetArea', function(req, res) {
 });
 
 router.get('/getActionsReactions', function(req, res) {
-	about.getActionsReaction(req, res);
+	utils.verifyToken(req, res, about.getActionsReaction);
 });
 
 router.delete('/DeleteArea', function(req, res) {
