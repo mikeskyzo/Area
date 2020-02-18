@@ -12,7 +12,7 @@ exports.createWebhookPushOnRepo = function (req, res, json, next)
 
 async function createWebhook(event, req, res, json, next)
 {
-	if (!req.body.user || req.body.user.trim() == '') {
+	if (!req.body.username || req.body.username.trim() == '') {
 		global.responseError(res, 401, 'Github need a username')
 		return;
 	}
@@ -21,8 +21,8 @@ async function createWebhook(event, req, res, json, next)
 		return;
 	}
 	json.repository = req.body.repository;
-	json.user = req.body.user;
-	const url = 'https://api.github.com/repos/' + req.body.user + '/' + req.body.repository + '/hooks';
+	json.username = req.body.username;
+	const url = 'https://api.github.com/repos/' + req.body.username + '/' + req.body.repository + '/hooks';
 
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Github});
 	if (!token || !token.access_token) {
@@ -160,7 +160,7 @@ exports.create_board_check_args = function(req, res, json)
     else {
 		// #### TODO : check if le project exist and we have the right to create a project on it
         json.owner = req.body.owner;
-        json.repo = req.body.repo;
+        json.repository = req.body.repository;
         json.title = req.body.title;
         json.body = req.body.body;
         global.saveAREA(req, res, json);
@@ -169,7 +169,7 @@ exports.create_board_check_args = function(req, res, json)
 
 exports.create_board = async function (area, res)
 {
-	if (!area.owner || !area.repo || !area.title || !area.body) {
+	if (!area.owner || !area.repository || !area.title || !area.body) {
 		global.responseError(res, 401, 'Missing something');
 		return;
 	}
