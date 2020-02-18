@@ -1,29 +1,33 @@
 package com.example.epicture
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.client_mobile.ActionReaction
 import com.example.client_mobile.R
+import com.example.client_mobile.selectParameter
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.action_row.view.*
 
-class MainAdapter(val actionReaction: ActionReaction): RecyclerView.Adapter<CustomViewHolder>() {
+class MainAdapter(val actionReaction: ActionReaction, val context: Context?): RecyclerView.Adapter<CustomViewHolderMain>() {
 
     override fun getItemCount(): Int {
         val nb = actionReaction.actions.count()
         return nb
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderMain {
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.action_row, parent, false)
-        return CustomViewHolder(cellForRow)
+        return CustomViewHolderMain(cellForRow)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CustomViewHolderMain, position: Int) {
 
         val action = actionReaction.actions.get(position)
 
@@ -45,10 +49,14 @@ class MainAdapter(val actionReaction: ActionReaction): RecyclerView.Adapter<Cust
             for (element in action.params) {
                 println(element.name)
             }
+            val intent = Intent(context, selectParameter::class.java)
+            val arrayAsString: String = Gson().toJson(action.params)
+            intent.putExtra("params", arrayAsString)
+            context?.startActivity(intent)
         }
     }
 
 }
 
-class CustomViewHolder(val view: View): RecyclerView.ViewHolder(view) {
+class CustomViewHolderMain(val view: View): RecyclerView.ViewHolder(view) {
 }

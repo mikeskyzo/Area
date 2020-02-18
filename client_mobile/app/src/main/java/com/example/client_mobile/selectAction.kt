@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.action_row.*
 import kotlinx.android.synthetic.main.activity_select_action.*
 import okhttp3.*
 import java.io.IOException
+import java.io.Serializable
 
 class selectAction : AppCompatActivity() {
 
@@ -57,7 +58,7 @@ class selectAction : AppCompatActivity() {
                 } else {
                     val actionsReactions = GsonBuilder().create().fromJson(body, ActionReaction::class.java)
                     runOnUiThread {
-                        recyclerView_main.adapter = MainAdapter(actionsReactions)
+                        recyclerView_main.adapter = MainAdapter(actionsReactions, getContext())
                         println(body)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
@@ -71,11 +72,11 @@ class selectAction : AppCompatActivity() {
     }
 }
 
-class Param(val name: String, val description: String)
+class Param(val name: String, val description: String) : Serializable
 
-class Action(val name: String, val service: String, val title: String, val description: String, val params: List<Param>  )
+class Action(val name: String, val service: String, val title: String, val description: String, val params: List<Param>) : Serializable
 
-class Reaction(val name: String, val service: String, val title: String, val description: String, val params: List<Param>  )
+class Reaction(val name: String, val service: String, val title: String, val description: String, val params: List<Param> ) : Serializable
 
 
-class ActionReaction(val actions: List<Action>, val reactions: List<Reaction>)
+class ActionReaction(val actions: List<Action>, val reactions: List<Reaction>) : Serializable
