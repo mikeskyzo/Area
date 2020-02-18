@@ -37,7 +37,7 @@ class Start : AppCompatActivity() {
     }
 
     fun getContext(): Context? {
-        return this as Context
+        return this
     }
 
     fun askForLogin(username: String, password: String) {
