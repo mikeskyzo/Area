@@ -17,6 +17,10 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
         <activity
+            android:name=".selectParameter"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        </activity>
+        <activity
             android:name=".Home"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
