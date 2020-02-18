@@ -157,6 +157,10 @@ global.findInDbAsync = async function (collection, param) {
 	return db.collection(collection).findOne(param);
 }
 
+global.findSomeInDbAsync = async function (collection, param) {
+	return db.collection(collection).find(param).toArray();
+}
+
 global.saveAREA = function (req, res, json)
 {
 	if (global.new_area)

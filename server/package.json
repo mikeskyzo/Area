@@ -16,6 +16,7 @@
     "node-fetch": "2.6.0",
     "uniqid": "5.2.0",
     "localtunnel": "2.0.0",
-    "ngrok": "3.2.7"
+    "ngrok": "3.2.7",
+    "merge-json": "0.1.0-b.3"
   }
 }
