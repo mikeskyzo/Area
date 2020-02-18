@@ -210,6 +210,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             }
             R.id.nav_messages -> {
                 val intent = Intent(this, selectAction::class.java)
+                intent.putExtra("token", token)
                 startActivity(intent)
             }
             R.id.nav_friends -> {
