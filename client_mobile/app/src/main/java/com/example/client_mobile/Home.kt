@@ -12,7 +12,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.google.gson.GsonBuilder
 import okhttp3.*
 import java.io.IOException
 

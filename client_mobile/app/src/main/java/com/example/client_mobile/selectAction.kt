@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epicture.MainAdapter
+import kotlinx.android.synthetic.main.action_row.*
 import kotlinx.android.synthetic.main.activity_select_action.*
 import okhttp3.*
 import java.io.IOException
