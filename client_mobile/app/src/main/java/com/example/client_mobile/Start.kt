@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.activity_select_action.*
 import kotlinx.android.synthetic.main.activity_start.*
 import kotlinx.android.synthetic.main.activity_start.loadingPanel
 import okhttp3.*
@@ -63,6 +62,7 @@ class Start : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 if (body == "404") {
+                    loadingPanel.visibility = View.GONE
                     runOnUiThread {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
@@ -70,10 +70,10 @@ class Start : AppCompatActivity() {
                     runOnUiThread {
                         val code = response.code
                         val account = GsonBuilder().create().fromJson(body, Account::class.java)
+                        loadingPanel.visibility = View.GONE
                         if (code >= 400) {
                             Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
                         } else {
-                            loadingPanel.visibility = View.GONE
                             val intent = Intent(getContext(), Home::class.java)
                             intent.putExtra("username", username)
                             intent.putExtra("token", account.token)
