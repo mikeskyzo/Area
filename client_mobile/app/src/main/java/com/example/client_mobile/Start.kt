@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_select_action.*
 import kotlinx.android.synthetic.main.activity_start.*
+import kotlinx.android.synthetic.main.activity_start.loadingPanel
 import okhttp3.*
 import java.io.IOException
 
@@ -17,6 +20,7 @@ class Start : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
+        loadingPanel.visibility = View.GONE
         buttonLogin.setOnClickListener {
             MediaPlayer.create(this, R.raw.gnome).start()
 
@@ -54,6 +58,7 @@ class Start : AppCompatActivity() {
             .post(formBody)
             .build()
 
+        loadingPanel.visibility = View.VISIBLE
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
@@ -68,6 +73,7 @@ class Start : AppCompatActivity() {
                         if (code >= 400) {
                             Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
                         } else {
+                            loadingPanel.visibility = View.GONE
                             val intent = Intent(getContext(), Home::class.java)
                             intent.putExtra("username", username)
                             intent.putExtra("token", account.token)
