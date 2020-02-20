@@ -5,6 +5,7 @@ import android.content.Intent
 import com.google.gson.GsonBuilder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epicture.MainAdapter
@@ -58,9 +59,10 @@ class selectAction : AppCompatActivity() {
                 } else {
                     val actionsReactions = GsonBuilder().create().fromJson(body, ActionReaction::class.java)
                     runOnUiThread {
+                        loadingPanel.visibility = View.GONE
                         recyclerView_main.adapter = MainAdapter(actionsReactions, getContext())
                         println(body)
-                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

@@ -35,7 +35,7 @@ class selectParameter : AppCompatActivity() {
         println(token)
 
         imageButtonBack.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(this, selectAction::class.java)
             startActivity(intent)
         }
 
