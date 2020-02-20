@@ -3,10 +3,15 @@ package com.example.client_mobile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_create_account.*
+import kotlinx.android.synthetic.main.activity_create_account.buttonCreateAccount
+import kotlinx.android.synthetic.main.activity_create_account.editTextPassword
+import kotlinx.android.synthetic.main.activity_create_account.editTextUsername
+import kotlinx.android.synthetic.main.activity_create_account.loadingPanel
 import okhttp3.*
 import java.io.IOException
 
@@ -16,6 +21,7 @@ class createAccount : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
+        loadingPanel.visibility = View.GONE
 
         val server_location = intent.getStringExtra("server_location")
 
@@ -54,10 +60,12 @@ class createAccount : AppCompatActivity() {
             .post(formBody)
             .build()
 
+        loadingPanel.visibility = View.VISIBLE
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 if (body == "404") {
+                    loadingPanel.visibility = View.GONE
                     runOnUiThread {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
@@ -65,13 +73,13 @@ class createAccount : AppCompatActivity() {
                     runOnUiThread {
                         val code = response.code
                         val account = GsonBuilder().create().fromJson(body, Account::class.java)
+                        loadingPanel.visibility = View.GONE
                         if (code >= 400) {
                             Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
                         } else {
-                            val intent = Intent(getContext(), Home::class.java)
+                            val intent = Intent(getContext(), Start::class.java)
                             intent.putExtra("server_location", server_location)
-                            intent.putExtra("username", username)
-                            intent.putExtra("token", account.token)
+                            Toast.makeText(getContext(), "Account successfully created", Toast.LENGTH_SHORT).show()
                             startActivity(intent)
                         }
                     }
