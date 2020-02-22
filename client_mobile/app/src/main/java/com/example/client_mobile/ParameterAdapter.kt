@@ -12,7 +12,7 @@ import com.example.client_mobile.R
 import kotlinx.android.synthetic.main.action_row.view.*
 import kotlinx.android.synthetic.main.parameter_row.view.*
 
-class ParameterAdapter(val params: Array<Param>): RecyclerView.Adapter<CustomViewHolderParam>() {
+class ParameterAdapter(val params: Array<Param>, val actionName: String): RecyclerView.Adapter<CustomViewHolderParam>() {
 
     override fun getItemCount(): Int {
         val nb = params.count()
@@ -22,6 +22,7 @@ class ParameterAdapter(val params: Array<Param>): RecyclerView.Adapter<CustomVie
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderParam {
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.parameter_row, parent, false)
+        //println(actionName)
         return CustomViewHolderParam(cellForRow)
     }
 

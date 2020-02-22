@@ -14,7 +14,7 @@ import com.example.client_mobile.selectParameter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.action_row.view.*
 
-class MainAdapter(val actionReaction: ActionReaction, val context: Context?): RecyclerView.Adapter<CustomViewHolderMain>() {
+class MainAdapter(val actionReaction: ActionReaction, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderMain>() {
 
     override fun getItemCount(): Int {
         val nb = actionReaction.actions.count()
@@ -46,12 +46,14 @@ class MainAdapter(val actionReaction: ActionReaction, val context: Context?): Re
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_trello)
         holder.view.buttonAction.setOnClickListener {
             Toast.makeText(holder.view.context, holder.view.buttonAction.text.toString(), Toast.LENGTH_SHORT).show()
-            for (element in action.params) {
+/*            for (element in action.params) {
                 println(element.name)
-            }
+            }*/
             val intent = Intent(context, selectParameter::class.java)
             val arrayAsString: String = Gson().toJson(action.params)
             intent.putExtra("params", arrayAsString)
+            intent.putExtra("action", action)
+            intent.putExtra("token", token)
             context?.startActivity(intent)
         }
     }

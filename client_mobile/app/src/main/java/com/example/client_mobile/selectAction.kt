@@ -27,7 +27,6 @@ class selectAction : AppCompatActivity() {
 
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
-        println(token)
 
         imageButtonBack.setOnClickListener {
             val intent = Intent(this, Home::class.java)
@@ -60,7 +59,7 @@ class selectAction : AppCompatActivity() {
                     val actionsReactions = GsonBuilder().create().fromJson(body, ActionReaction::class.java)
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
-                        recyclerView_main.adapter = MainAdapter(actionsReactions, getContext())
+                        recyclerView_main.adapter = MainAdapter(actionsReactions, getContext(), token)
                         println(body)
                         //Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
