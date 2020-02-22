@@ -4,12 +4,6 @@ exports.newAuth = async function (req, res)
 		global.responseError(res, 401, 'Missing service');
 		return;
 	}
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service})
-	if (token)
-	{
-		global.responseError(res, 409, "You have already a token saved for " + req.body.service);
-		return;
-	}
 	if (global.ServiceTokenCheckMap.get(req.body.service))
 		global.ServiceTokenCheckMap.get(req.body.service)(req, res);
 	else
@@ -27,27 +21,15 @@ exports.getServices = function (req, res)
 			});
 			return;
 		}
-		var json = new Object();
-		json.Discord = false;
-		json.Github = false;
-		json.Slack = false;
-		json.Trello = false;
-
-		var i = 0;
+		let json = {};
+		let i = 0;
 		while (i < result.length) {
 			var tk = result[i];
 			if (!tk.service) {
 				i++;
 				continue;
 			}
-			if (tk.service == global.service.Discord)
-				json.Discord = true;
-			if (tk.service == global.service.Github)
-				json.Github = true;
-			if (tk.service == global.service.Slack)
-				json.Slack = true;
-			if (tk.service == global.service.Trello)
-				json.Trello = true;
+			json[tk.service] = true
 			i++;
 		}
 		res.json(json);

@@ -1,0 +1,134 @@
+{
+	"services" : [
+		{
+			"name" : "Github",
+			"check_token_function" : "check_token",
+			"actions" : [
+				{
+					"name" : "github_new_push",
+					"title" : "Repository push",
+					"description" : "Trigger when someone push on a repo",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookPushOnRepo"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookPushOnRepo"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_issue_event",
+					"title" : "Repository issue event",
+					"description" : "Trigger when a issue is update or created",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookIssueEvent"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookIssueEvent"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				}
+			],
+			"reactions" : [
+				{
+					"name" : "github_create_board",
+					"title" : "Create a board",
+					"description" : "Create a board on a specific repository",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "create_board"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "create_board_check_args"
+						}
+					],
+					"params" : [
+						{
+							"name" : "owner",
+							"description" : "Owner of the repository"
+						},
+						{
+							"name" : "repo",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "title",
+							"description" : "The title of you'r new board"
+						},
+						{
+							"name" : "body",
+							"description" : "The description of the board"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name" : "Slack",
+			"check_token_function" : "check_token",
+			"reactions" : [
+				{
+					"name" : "slack_send_message",
+					"title" : "Send a message",
+					"description" : "Send a message on a slack channel",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "send_message"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "send_message_check_args"
+						}
+					],
+					"params" : [
+						{
+							"name" : "channel_id",
+							"description" : "ID of the channel"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				}
+			]
+		}
+	]
+}

@@ -24,7 +24,7 @@ async function createWebhook(event, req, res, json, next)
 	json.username = req.body.username;
 	const url = 'https://api.github.com/repos/' + req.body.username + '/' + req.body.repository + '/hooks';
 
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Github});
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Github});
 	if (!token || !token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
@@ -67,7 +67,7 @@ exports.deleteWebhook = async function (area, req, res)
 		return;
 	}
 
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Github});
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Github});
 	if (!token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
@@ -120,10 +120,16 @@ exports.FormatWebhookPushOnRepo = function (req, res, area, next)
 	next(area, res);
 }
 
-exports.CheckToken = function (req, res)
+exports.check_token = async function (req, res)
 {
 	if (!req.body.access_token) {
 		global.responseError(res, 401, 'Need a access token');
+		return;
+	}
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service})
+	if (token)
+	{
+		global.responseError(res, 409, "You have already a token saved for " + req.body.service);
 		return;
 	}
 	fetch('https://api.github.com/user', {
@@ -134,7 +140,7 @@ exports.CheckToken = function (req, res)
 		if (response.status == 200) {
 			var json = {
 				user_id : req.body.user_id,
-				service : global.service.Github,
+				service : global.Services.Github,
 				access_token : req.body.access_token
 			}
 			global.saveInDb(global.CollectionToken, json, req, res, 'Token saved');
@@ -173,7 +179,7 @@ exports.create_board = async function (area, res)
 		global.responseError(res, 401, 'Missing something');
 		return;
 	}
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.service.Github});
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Github});
 	if (!token || !token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
