@@ -3,14 +3,15 @@ package com.example.client_mobile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.epicture.CustomViewHolderParam
 import com.example.epicture.ParameterAdapter
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_select_action.imageButtonBack
 import kotlinx.android.synthetic.main.activity_select_parameter.*
+import kotlinx.android.synthetic.main.parameter_row.view.*
 
 
 class selectParameter : AppCompatActivity() {
@@ -41,6 +42,22 @@ class selectParameter : AppCompatActivity() {
             val listParam = Gson().fromJson(paramsAsString, Array<Param>::class.java)
             recyclerView_param.adapter = ParameterAdapter(listParam, action.name)
         }
+
+        buttonCreateReaction.setOnClickListener {
+            val list = ArrayList<String>()
+            //gets all editText
+            for (i in 0 until (recyclerView_param.adapter as ParameterAdapter).itemCount) {
+                val holder: CustomViewHolderParam = recyclerView_param.findViewHolderForAdapterPosition(i) as CustomViewHolderParam
+                list.add(holder.view.editTextParameter.text.toString())
+//                println(holder.view.editTextParameter.text.toString())
+            }
+            println(list)
+            //val intent = Intent(this, selectReaction::class.java)
+            //intent.putExtra("token", token)
+            //intent.putExtra("actionName", action.name)
+            //startActivity(intent)
+        }
+
         println("start")
         println(action.name)
         println(token)
