@@ -25,6 +25,6 @@ class selectReaction: AppCompatActivity() {
             println(action.params[i].name)
             println(action.params[i].value)
         }
-        recyclerView_main.layoutManager = LinearLayoutManager(this)
+        recyclerView_action.layoutManager = LinearLayoutManager(this)
     }
 }
