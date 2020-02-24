@@ -10,50 +10,50 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.action_row.view.*
 
-class ActionAdapter(val allActions: Actions, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderAction>() {
+class ReactionAdapter(val allReactions: Reactions, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderReaction>() {
 
     override fun getItemCount(): Int {
-        val nb = allActions.actions.count()
+        val nb = allReactions.reactions.count()
         return nb
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderAction {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderReaction {
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.action_row, parent, false)
-        return CustomViewHolderAction(cellForRow)
+        return CustomViewHolderReaction(cellForRow)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolderAction, position: Int) {
+    override fun onBindViewHolder(holder: CustomViewHolderReaction, position: Int) {
 
-        val action = allActions.actions.get(position)
+        val reaction = allReactions.reactions.get(position)
 
-        holder.view.buttonAction.text = action.title
-        if (action.service == "Github")
+        holder.view.buttonAction.text = reaction.title
+        if (reaction.service == "Github")
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_github)
-        if (action.service == "Slack")
+        if (reaction.service == "Slack")
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_slack)
-        if (action.service == "Twitch")
+        if (reaction.service == "Twitch")
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_twitch)
-        if (action.service == "Reddit")
+        if (reaction.service == "Reddit")
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_reddit)
-        if (action.service == "Discord")
+        if (reaction.service == "Discord")
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_discord)
-        if (action.service == "Trello")
+        if (reaction.service == "Trello")
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_trello)
         holder.view.buttonAction.setOnClickListener {
             Toast.makeText(holder.view.context, holder.view.buttonAction.text.toString(), Toast.LENGTH_SHORT).show()
-/*            for (element in action.params) {
+/*            for (element in reaction.params) {
                 println(element.name)
             }*/
             val intent = Intent(context, selectParameter::class.java)
-            val arrayAsString: String = Gson().toJson(action.params)
+            val arrayAsString: String = Gson().toJson(reaction.params)
             intent.putExtra("params", arrayAsString)
-            intent.putExtra("action", action)
+            intent.putExtra("reaction", reaction)
             intent.putExtra("token", token)
             context?.startActivity(intent)
         }
     }
 }
 
-class CustomViewHolderAction(val view: View): RecyclerView.ViewHolder(view) {
+class CustomViewHolderReaction(val view: View): RecyclerView.ViewHolder(view) {
 }
