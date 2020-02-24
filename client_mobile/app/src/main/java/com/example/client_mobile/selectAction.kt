@@ -73,7 +73,7 @@ class selectAction : AppCompatActivity() {
     }
 }
 
-class Param(val name: String, val description: String) : Serializable
+class Param(val name: String, val description: String, var value: String) : Serializable
 
 class Action(val name: String, val service: String, val title: String, val description: String, val params: List<Param>) : Serializable
 
