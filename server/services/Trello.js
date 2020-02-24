@@ -7,22 +7,14 @@ const defaultAPIKey = "72a7e8b763bbbb4e1a3ba4ff68c7de00";
 const defaultIDModel = "5e1448b8dedfc220293e78d8";
 const defaultIDWebhook = "5e4283e30c5aef816f8e53d3";
 
-exports.createNewWebhook = async function (req, res, json, next) {
-	if (!req.body.APIToken || req.body.APIToken.trim() == "") {
-		global.responseError(res, 401, "Trello needs a APIToken")
-		return;
-	}
-	if (!req.body.APIKey || req.body.APIKey.trim() == "") {
-		global.responseError(res, 401, "Trello needs a APIKey")
-		return;
-	}
-	if (!req.body.idModel || req.body.idModel.trim() == "") {
+exports.createNewWebhook = async function (res, json, next) {
+	if (!json.action.idModel || json.action.idModel.trim() == "") {
 		global.responseError(res, 401, "Trello needs a idModel")
 		return;
 	}
 	json.idModel = req.body.idModel;
 
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Github});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
 	if (!token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
@@ -31,12 +23,8 @@ exports.createNewWebhook = async function (req, res, json, next) {
 		global.responseError(res, 401, "No APIKey provided");
 		return;
 	}
-	if (!token.idModel) {
-		global.responseError(res, 401, "No idModel provided");
-		return;
-	}
 	const callback = `${global.url}/webhooks/${json.area_id}`;
-	const url = `https://api.trello.com/1/webhooks/?idModel=${token.IDModel}&description=WebhookAREACOON&callbackURL=${callback}&key=${token.APIKey}&token=${token.APIToken}`;
+	const url = `https://api.trello.com/1/webhooks/?idModel=${json.action.IDModel}&description=WebhookAREACOON&callbackURL=${callback}&key=${token.APIKey}&token=${token.APIToken}`;
 	fetch(url, {
 		method: "POST"
 	})
@@ -66,10 +54,6 @@ exports.deleteWebhook = async function (area, req, res) {
 	}
 	if (!token.APIKey) {
 		global.responseError(res, 401, "No APIKey provided");
-		return;
-	}
-	if (!token.idModel) {
-		global.responseError(res, 401, "No idModel provided");
 		return;
 	}
 	const url = `https://api.trello.com/1/webhooks/${area.webhook_id}?key=${token.APIKey}&token=${token.APIToken}`;
@@ -144,4 +128,40 @@ exports.FormatWebhookUpdateModel = function (req, res, area, next)
 	}
 	console.log("Area.message : " + area.message);
 	next(area, res);
+}
+
+exports.trelloCreateCard = async function (area, res)
+{
+	if (!area.reaction.IDList || !area.reaction.name || !area.reaction.description) {
+		global.responseError(res, 401, 'Missing list ID, a name or a description')
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+	if (!token.APIToken) {
+		global.responseError(res, 401, "No APIToken provided");
+		return;
+	}
+	if (!token.APIKey) {
+		global.responseError(res, 401, "No APIKey provided");
+		return;
+	}
+	const url = `https://api.trello.com/1/cards?name=${area.reaction.name}&desc=${area.reaction.description}&pos=bottom&idList=${area.reaction.IDList}&key=${token.APIKey}&token=${token.APIToken}`;
+	fetch(url, {
+  		method: "POST"
+	})
+	.then(function (response) {
+		return response.json();
+	})
+	.then(function (resjson) {
+		if (resjson.ok == false) {
+			console.error(`Bad response from Trello : ${resjson.error}`);
+			res.status(500).send();
+		} else {
+			res.send();
+		}
+		return;
+	})
+	.catch(function (error) {
+		global.responseError(res, 500, `err : ${error}`)
+	});
 }

@@ -163,6 +163,37 @@
 						}
 					]
 				}
+			],
+			"reactions" : [
+				{
+					"name" : "trelloCreateCard",
+					"title" : "Create card",
+					"description" : "Create a Trello's card.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "trelloCreateCard"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "send_message_check_args"
+						}
+					],
+					"params" : [
+						{
+							"name" : "IDList",
+							"description" : "ID of the list to add the card"
+						},
+						{
+							"name" : "name",
+							"description" : "Name of the card to add"
+						},
+						{
+							"name" : "description",
+							"description" : "Description of the card to add"
+						}
+					]
+				}
 			]
 		}
 	]
