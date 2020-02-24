@@ -135,7 +135,7 @@
 			"check_token_function" : "CheckToken",
 			"actions" : [
 				{
-					"name" : "create_new_webhook",
+					"name" : "create_new_webhook_trello",
 					"title" : "Repository push",
 					"description" : "Trigger when someone push on a repo",
 					"functions" : [
