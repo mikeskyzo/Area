@@ -6,7 +6,7 @@ const prod_db = 'mongodb://db:27017/Db_Area'
 exports.initDb = function () {
 	try {
 		MongoClient.connect(prod_db, (err, client) => {
-			if (err) return global.terminateServer('A error occured');
+			if (err) return global.terminateServer(err);
 			global.clientDb = client;
 			global.db  = client.db('Area51');
 			create_Collection(global.CollectionToken);
