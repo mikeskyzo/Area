@@ -78,7 +78,6 @@ class Action(val name: String, val service: String, val title: String, val descr
 
 class Reaction(val name: String, val service: String, val title: String, val description: String, val params: List<Param> ) : Serializable
 
-
 class Actions(val actions: List<Action>) : Serializable
 
 class Reactions(val reactions: List<Reaction>): Serializable
