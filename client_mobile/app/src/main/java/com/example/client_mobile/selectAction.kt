@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.epicture.MainAdapter
 import kotlinx.android.synthetic.main.action_row.*
 import kotlinx.android.synthetic.main.activity_select_action.*
 import okhttp3.*
@@ -59,7 +58,7 @@ class selectAction : AppCompatActivity() {
                     val allActions = GsonBuilder().create().fromJson(body, Actions::class.java)
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
-                        recyclerView_action.adapter = MainAdapter(allActions, getContext(), token)
+                        recyclerView_action.adapter = ActionAdapter(allActions, getContext(), token)
                         println(body)
                         //Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
