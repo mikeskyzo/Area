@@ -133,19 +133,23 @@
 		{
 			"name" : "Trello",
 			"check_token_function" : "CheckToken",
-			"reactions" : [
+			"actions" : [
 				{
-					"name" : "FormatWebhookUpdateModel",
-					"title" : "Check types of actions",
-					"description" : "Check each types of actions we want to look at.",
+					"name" : "github_new_push",
+					"title" : "Repository push",
+					"description" : "Trigger when someone push on a repo",
 					"functions" : [
 						{
-							"type" : "execute_reaction",
-							"name" : "send_message"
+							"type" : "create_action",
+							"name" : "createNewWebhook"
 						},
 						{
-							"type" : "verify_arguments",
-							"name" : "send_message_check_args"
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
 						}
 					],
 					"params" : [
