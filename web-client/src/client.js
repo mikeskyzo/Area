@@ -21,7 +21,14 @@ app.get('/', function(req, res) {
     if (!access_tokenCookie)
         res.redirect('/register');
     else
-        res.redirect('dashboard');
+        res.redirect('/dashboard');
+});
+
+app.get('/disconnect', function (req, res) {
+    console.log(req.cookies.access_token);
+    res.clearCookie('access_token');
+    console.log(req.cookies.access_token);
+    res.redirect('/login');
 });
 
 app.get('/home', function (req, res) {
