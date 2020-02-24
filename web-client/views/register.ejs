@@ -13,12 +13,16 @@
 <div class="page">
     <div class="container">
         <div class="right black">
-            <form class="form" method="POST" action="/client/login">
+            <form class="form" method="POST" action="/client/register">
+                <label for="email" class="orange-text">Email address</label>
+                <input type="text" name="emailRegister" class="white-text" required>
                 <label for="user" class="orange-text">Username</label>
-                <input type="text" id="user" name="usernameLogin" class="white-text" required>
+                <input type="text" id="user" name="usernameRegister" class="white-text" required>
                 <label for="password" class="orange-text">Password</label>
-                <input type="password" id="password" name="passwordLogin" class="white-text" required>
-                <input class="btn orange" type="submit" style="margin-top:25px; color:black;" value="Login">
+                <input type="password" id="password" name="passwordRegister" class="white-text" required>
+                <label for="serverAddress" class="orange-text">Server address</label>
+                <input type="text" name="serverRegister" class="white-text" required>
+                <input class="btn orange" type="submit" style="margin-top:25px; color:black;" value="register">
             </form>
         </div>
         <div class="left orange">
