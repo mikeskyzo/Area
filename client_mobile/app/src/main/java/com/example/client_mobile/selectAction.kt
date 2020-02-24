@@ -34,17 +34,17 @@ class selectAction : AppCompatActivity() {
         }
 
         recyclerView_main.layoutManager = LinearLayoutManager(this)
-        getActionsReactions()
+        getActions()
     }
 
     fun getContext(): Context? {
         return this
     }
 
-    fun getActionsReactions() {
+    fun getActions() {
         val client = OkHttpClient()
         val request: Request = Request.Builder()
-            .url(Home.server_location.plus("/getActionsReactions"))
+            .url(Home.server_location.plus("/getActions"))
             .header("Authorization", "token ".plus(token.toString()))
             .build()
 
@@ -56,10 +56,10 @@ class selectAction : AppCompatActivity() {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    val actionsReactions = GsonBuilder().create().fromJson(body, ActionReaction::class.java)
+                    val allActions = GsonBuilder().create().fromJson(body, Actions::class.java)
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
-                        recyclerView_main.adapter = MainAdapter(actionsReactions, getContext(), token)
+                        recyclerView_main.adapter = MainAdapter(allActions, getContext(), token)
                         println(body)
                         //Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
@@ -80,4 +80,6 @@ class Action(val name: String, val service: String, val title: String, val descr
 class Reaction(val name: String, val service: String, val title: String, val description: String, val params: List<Param> ) : Serializable
 
 
-class ActionReaction(val actions: List<Action>, val reactions: List<Reaction>) : Serializable
+class Actions(val actions: List<Action>) : Serializable
+
+class Reactions(val reactions: List<Reaction>): Serializable

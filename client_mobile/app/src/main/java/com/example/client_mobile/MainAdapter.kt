@@ -6,18 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.client_mobile.ActionReaction
+import com.example.client_mobile.Actions
 import com.example.client_mobile.R
 import com.example.client_mobile.selectParameter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.action_row.view.*
 
-class MainAdapter(val actionReaction: ActionReaction, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderMain>() {
+class MainAdapter(val allActions: Actions, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderMain>() {
 
     override fun getItemCount(): Int {
-        val nb = actionReaction.actions.count()
+        val nb = allActions.actions.count()
         return nb
     }
 
@@ -29,7 +28,7 @@ class MainAdapter(val actionReaction: ActionReaction, val context: Context?, val
 
     override fun onBindViewHolder(holder: CustomViewHolderMain, position: Int) {
 
-        val action = actionReaction.actions.get(position)
+        val action = allActions.actions.get(position)
 
         holder.view.buttonAction.text = action.title
         if (action.service == "Github")
