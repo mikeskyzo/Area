@@ -40,7 +40,7 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(login, req, res, js
         global.responseError(res, 401, 'error');
 };
 
-exports.Twitch_Delete_Webhook_NewSubscriber = function(login)
+exports.Twitch_Delete_Webhook_NewSubscriber = async function(login)
 {
     let user_id = Twitch_UserId(login);
     let myInit = { method: 'POST',
@@ -61,7 +61,7 @@ exports.Twitch_Delete_Webhook_NewSubscriber = function(login)
         global.responseError(res, 401, 'error');
 };
 
-exports.Twitch_Create_Webhook_StreamChangeState = function(login)
+exports.Twitch_Create_Webhook_StreamChangeState = async function(login)
 {
     let user_id = Twitch_UserId(login);
     let myInit = { method: 'POST',
@@ -81,7 +81,7 @@ exports.Twitch_Create_Webhook_StreamChangeState = function(login)
         global.responseError(res, 401, 'error');
 };
 
-exports.Twitch_Delete_Webhook_StreamChangeState = function(login)
+exports.Twitch_Delete_Webhook_StreamChangeState = async function(login)
 {
     let user_id = Twitch_UserId(login);
     let myInit = { method: 'POST',
