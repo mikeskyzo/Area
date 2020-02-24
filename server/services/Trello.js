@@ -75,7 +75,7 @@ exports.deleteWebhook = async function (area, req, res) {
 	const url = `https://api.trello.com/1/webhooks/${area.webhook_id}?key=${token.APIKey}&token=${token.APIToken}`;
 	fetch(url, {
 		method: "DELETE"
-	})
+	});
 }
 
 exports.CheckToken = function (req, res)
