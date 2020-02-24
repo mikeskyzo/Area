@@ -136,7 +136,7 @@
 			"actions" : [
 				{
 					"name" : "create_new_webhook_trello",
-					"title" : "Repository push",
+					"title" : "Create Trello's webhook",
 					"description" : "Trigger when someone push on a repo",
 					"functions" : [
 						{
