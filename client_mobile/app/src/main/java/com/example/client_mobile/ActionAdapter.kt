@@ -1,4 +1,4 @@
-package com.example.epicture
+package com.example.client_mobile
 
 import android.content.Context
 import android.content.Intent
@@ -7,9 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.client_mobile.Actions
-import com.example.client_mobile.R
-import com.example.client_mobile.selectParameter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.action_row.view.*
 
@@ -56,7 +53,6 @@ class MainAdapter(val allActions: Actions, val context: Context?, val token: Str
             context?.startActivity(intent)
         }
     }
-
 }
 
 class CustomViewHolderMain(val view: View): RecyclerView.ViewHolder(view) {
