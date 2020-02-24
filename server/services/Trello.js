@@ -120,25 +120,25 @@ exports.FormatWebhookUpdateModel = function (req, res, area, next)
 			area.message = area.message.replace("{name}", req.body.action.memberCreator.username)
 		if (req.body.type && area.message.includes("{event}")) {
 			if (req.body.type === "updateBoard")
-				area.message = area.message.replace("{event}", `updated board ${req.body.model.name}`)
+				area.message = area.message.replace("{event}", `updated board in ${req.body.model.name}`);
 			if (req.body.type === "updateCard")
-				area.message = area.message.replace("{event}", `updated card ${req.body.model.name}`)
-			if (req.body.type === "updateLabel")
-				area.message = area.message.replace("{event}", `updated label ${req.body.model.name}`)
-			if (req.body.type === "updateCheckItem")
-				area.message = area.message.replace("{event}", `updated check item ${req.body.model.name}`)
+				area.message = area.message.replace("{event}", `updated card in ${req.body.model.name}`);
+			if (req.body.type === "updateList")
+				area.message = area.message.replace("{event}", `updated list in ${req.body.model.name}`);
 			if (req.body.type === "updateChecklist")
-				area.message = area.message.replace("{event}", `updated check list ${req.body.model.name}`)
-			if (req.body.type === "updateComment")
-				area.message = area.message.replace("{event}", `updated comment ${req.body.model.name}`)
+				area.message = area.message.replace("{event}", `updated checklist in ${req.body.model.name}`);
+			if (req.body.type === "updateMember")
+				area.message = area.message.replace("{event}", `updated member in ${req.body.model.name}`);
 			if (req.body.type === "createCard")
-				area.message = area.message.replace("{event}", `created card ${req.body.model.name}`)
-			if (req.body.type === "createLabel")
-				area.message = area.message.replace("{event}", `created label ${req.body.model.name}`)
-			if (req.body.type === "createdCheckItem")
-				area.message = area.message.replace("{event}", `created check item ${req.body.model.name}`)
+				area.message = area.message.replace("{event}", `created card in ${req.body.model.name}`);
+			if (req.body.type === "createlist")
+				area.message = area.message.replace("{event}", `created list in ${req.body.model.name}`);
 			if (req.body.type === "commentCard")
-				area.message = area.message.replace("{event}", `commented card ${req.body.model.name}`)
+				area.message = area.message.replace("{event}", `new comment card in ${req.body.model.name}`);
+			if (req.body.type === "deleteCard")
+				area.message = area.message.replace("{event}", `deleted card in ${req.body.model.name}`);
+			if (req.body.type === "removeChecklistFromCard")
+				area.message = area.message.replace("{event}", `removed checklist from card in ${req.body.model.name}`);
 		} else
 			res.send();
 	}
