@@ -1,8 +1,20 @@
 var express = require('express');
+var bodyParser = require('body-parser');
+var apiUser = require('./apiCall');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+
 
 var app = express();
-
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({secret: "Dash_secret",
+    resave: false,
+    saveUninitialized: false
+}));
+
 app.get('/', function(req, res) {
     res.redirect('/login');
 });
@@ -25,6 +37,29 @@ app.get('/dashboard', function (req, res) {
 
 app.get('/profil', function (req, res) {
     res.render('profil.ejs');
+});
+
+app.get('/error', function (req, res) {
+    res.render('error.ejs');
+});
+
+app.post('/client/:action', async (req, res) => {
+    if (req.params.action == 'register') {
+        var email = req.body.emailRegister;
+        var username = req.body.usernameRegister;
+        var password = req.body.passwordRegister;
+        var server = req.body.serverRegister;
+
+        apiUser.createUser(email, username, password, server, req, res);
+    } else if (req.params.action == 'login') {
+        var username = req.body.usernameLogin;
+        var password = req.body.passwordLogin;
+        var serverAddress = req.body.serverLogin;
+
+        apiUser.connectUser(username, password, serverAddress, req, res);
+    } else {
+        res.redirect('/error');
+    }
 });
 
 app.get('/mobile', function (req, res) {
