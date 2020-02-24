@@ -129,6 +129,37 @@
 					]
 				}
 			]
+		},
+		{
+			"name" : "Trello",
+			"check_token_function" : "CheckToken",
+			"reactions" : [
+				{
+					"name" : "FormatWebhookUpdateModel",
+					"title" : "Check types of actions",
+					"description" : "Check each types of actions we want to look at.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "send_message"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "send_message_check_args"
+						}
+					],
+					"params" : [
+						{
+							"name" : "modelID",
+							"description" : "ID a Trello's model (board, card, list, etc...)"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				}
+			]
 		}
 	]
 }
