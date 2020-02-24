@@ -49,29 +49,15 @@ class selectParameter : AppCompatActivity() {
             for (i in 0 until (recyclerView_param.adapter as ParameterAdapter).itemCount) {
                 val holder: CustomViewHolderParam = recyclerView_param.findViewHolderForAdapterPosition(i) as CustomViewHolderParam
                 list.add(holder.view.editTextParameter.text.toString())
-//                println(holder.view.editTextParameter.text.toString())
             }
-
-            println(action.name)
-            println(action.description)
-            println(action.service)
-            println(action.title)
             for (i in 0 until list.size) {
                 action.params[i].value = list[i]
-                println(action.params[i].name)
-                println(action.params[i].description)
-                println(action.params[i].value)
             }
-            println(list)
-            //val intent = Intent(this, selectReaction::class.java)
-            //intent.putExtra("token", token)
-            //intent.putExtra("actionName", action.name)
-            //startActivity(intent)
+            val intent = Intent(this, selectReaction::class.java)
+            intent.putExtra("token", token)
+            intent.putExtra("action", action)
+            startActivity(intent)
         }
-
-        println("start")
-        println(action.name)
-        println(token)
     }
 
     fun getContext(): Context? {
