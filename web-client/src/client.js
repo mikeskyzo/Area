@@ -16,7 +16,12 @@ app.use(session({secret: "Dash_secret",
 }));
 
 app.get('/', function(req, res) {
-    res.redirect('/login');
+    var access_tokenCookie = req.cookies.access_token;
+
+    if (!access_tokenCookie)
+        res.redirect('/register');
+    else
+        res.redirect('dashboard');
 });
 
 app.get('/home', function (req, res) {
