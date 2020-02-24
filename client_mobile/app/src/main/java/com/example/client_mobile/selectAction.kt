@@ -33,7 +33,7 @@ class selectAction : AppCompatActivity() {
             startActivity(intent)
         }
 
-        recyclerView_main.layoutManager = LinearLayoutManager(this)
+        recyclerView_action.layoutManager = LinearLayoutManager(this)
         getActions()
     }
 
@@ -59,7 +59,7 @@ class selectAction : AppCompatActivity() {
                     val allActions = GsonBuilder().create().fromJson(body, Actions::class.java)
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
-                        recyclerView_main.adapter = MainAdapter(allActions, getContext(), token)
+                        recyclerView_action.adapter = MainAdapter(allActions, getContext(), token)
                         println(body)
                         //Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
