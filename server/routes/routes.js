@@ -18,8 +18,12 @@ router.get('/GetArea', function(req, res) {
 	utils.verifyToken(req, res, area.getAreas);
 });
 
-router.get('/getActionsReactions', function(req, res) {
-	utils.verifyToken(req, res, about.getActionsReaction);
+router.get('/getActions', function(req, res) {
+	utils.verifyToken(req, res, about.getActions);
+});
+
+router.get('/getReactions', function(req, res) {
+	utils.verifyToken(req, res, about.getReactions);
 });
 
 router.delete('/DeleteArea', function(req, res) {
