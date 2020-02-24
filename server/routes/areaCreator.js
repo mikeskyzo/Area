@@ -25,21 +25,31 @@ function checkAndSaveAREA(area_id, req, res)
         });
 		return;
 	}
+
 	var json = new Object();
 	json.area_id = area_id;
 	json.user_id = req.body.user_id;
-	json.action = req.body.action;
-	json.reaction = req.body.reaction;
+	json.action = formatObject(req.body.action);
+	json.reaction = formatObject(req.body.reaction);
 
-	if (!global.ReactionCheckArgsMap.get(json.reaction)) {
+	if (!global.ReactionCheckArgsMap.get(json.reaction.name)) {
 		responseError(res, 401, 'Reaction not found');
 		return;
 	}
-	if (global.ActionMap.get(json.action)) {
-		global.ActionMap.get(json.action)(req, res, json, global.ReactionCheckArgsMap.get(json.reaction));
+	if (global.ActionMap.get(json.action.name)) {
+		global.ActionMap.get(json.action.name)(res, json, global.ReactionCheckArgsMap.get(json.reaction.name));
 		return;
 	}
 	responseError(res, 401, 'Action not found');
+}
+
+function formatObject(obj)
+{
+	let json = {};
+	json.name = obj.name;
+	for (nb in obj.params)
+		json[obj.params[nb].name] = obj.params[nb].value;
+	return json;
 }
 
 exports.getAreas = function (req, res)
@@ -67,8 +77,8 @@ function redirectToAreaDelete(result, req, res)
 		global.responseError(res, 401, 'Area not found');
 		return;
 	}
-	if (global.ActionDeleteWebhookMap.get(result.action))
-		global.ActionDeleteWebhookMap.get(result.action)(result, req, res)
+	if (global.ActionDeleteWebhookMap.get(result.action.name))
+		global.ActionDeleteWebhookMap.get(result.action.name)(result, req, res)
 	else
 		responseError(res, 500, 'Error, Service not found, please contact Mike')
 }

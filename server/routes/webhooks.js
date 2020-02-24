@@ -13,12 +13,12 @@ function redirectToArea(area, req, res)
 		global.responseError(res, 401, 'Area not is not existing')
 		return;
 	}
-	if (!global.ReactionMap.get(area.reaction)) {
+	if (!global.ReactionMap.get(area.reaction.name)) {
 		global.responseError(res, 500, 'Reaction not found')
 		return;
 	}
-	if (global.ActionFormatResultMap.get(area.action)) {
-		global.ActionFormatResultMap.get(area.action)(req, res, area, global.ReactionMap.get(area.reaction));
+	if (global.ActionFormatResultMap.get(area.action.name)) {
+		global.ActionFormatResultMap.get(area.action.name)(req, res, area, global.ReactionMap.get(area.reaction.name));
 		return;
 	}
 	global.responseError(res, 500, 'Action not found')

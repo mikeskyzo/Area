@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 exports.send_message = async function (area, res)
 {
-	if (!area.channel_id || !area.message) {
+	if (!area.reaction.channel_id || !area.reaction.message) {
 		global.responseError(res, 401, 'Missing channel ID or a message')
 		return;
 	}
@@ -12,7 +12,7 @@ exports.send_message = async function (area, res)
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
-	var url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + area.channel_id + '&text=' + area.message;
+	var url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + area.reaction.channel_id + '&text=' + area.reaction.message;
 	fetch(url, {
 		'method': 'POST',
 	})
@@ -33,17 +33,15 @@ exports.send_message = async function (area, res)
 	});
 }
 
-exports.send_message_check_args = function(req, res, json)
+exports.send_message_check_args = function(res, json)
 {
-    if (!req.body.channel_id)
+    if (!json.reaction.channel_id)
         global.responseError(res, 401, 'Missing channel ID')
-    else if (!req.body.message)
+    else if (!json.reaction.message)
        global.responseError(res, 401, 'Missing a message to send')
     else {
 		// #### TODO : check if channel exist
-        json.channel_id = req.body.channel_id;
-        json.message = req.body.message;
-        global.saveAREA(req, res, json);
+        global.saveAREA(res, json);
     }
 }
 
@@ -75,7 +73,7 @@ exports.check_token = async function (req, res)
 		if (resjson.ok == false) {
 			global.responseError(res, 401, 'Token is invalid : ' + resjson.error)
 		} else {
-			global.saveInDb(global.CollectionToken, json, req, res, 'Token Slack saved for ' + resjson.user  + ' on ' + resjson.team);
+			global.saveInDb(global.CollectionToken, json, res, 'Token Slack saved for ' + resjson.user  + ' on ' + resjson.team);
 		}
 	})
 	.catch(function (error) {
