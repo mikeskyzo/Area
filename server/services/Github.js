@@ -131,7 +131,7 @@ exports.check_token = async function (req, res)
 	console.log(token);
 	if (token)
 	{
-		global.responseError(res, 409, "You have already a token saved for " + req.body.service);
+		global.responseError(res, 200, "You have already a token saved for " + req.body.service);
 		return;
 	}
 	fetch('https://api.github.com/user', {
@@ -155,7 +155,7 @@ exports.check_token = async function (req, res)
 	});
 }
 
-exports.create_board_check_args = function(res, reactionsParams, json)
+exports.create_board_check_args = function(res, json)
 {
     if (!reactionsParams.owner)
         global.responseError(res, 401, 'Missing the owner')
