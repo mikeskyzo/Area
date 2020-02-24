@@ -51,6 +51,17 @@ class selectParameter : AppCompatActivity() {
                 list.add(holder.view.editTextParameter.text.toString())
 //                println(holder.view.editTextParameter.text.toString())
             }
+
+            println(action.name)
+            println(action.description)
+            println(action.service)
+            println(action.title)
+            for (i in 0 until list.size) {
+                action.params[i].value = list[i]
+                println(action.params[i].name)
+                println(action.params[i].description)
+                println(action.params[i].value)
+            }
             println(list)
             //val intent = Intent(this, selectReaction::class.java)
             //intent.putExtra("token", token)
