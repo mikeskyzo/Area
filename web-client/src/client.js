@@ -46,5 +46,12 @@ app.get('/client.apk', function (req, res) {
     });
 });
 
+// Authorizations
+app.get('/authorizations/reddit', function(req, res) {
+    console.log(req.data);
+    res.render('profil.ejs');
+    //res.redirect('/profil');
+});
+
 app.listen(8081);
 app.on('listening', ()=>{});

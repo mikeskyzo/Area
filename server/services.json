@@ -129,6 +129,41 @@
 					]
 				}
 			]
+		},
+		{
+			"name" : "Trello",
+			"check_token_function" : "CheckToken",
+			"actions" : [
+				{
+					"name" : "github_new_push",
+					"title" : "Repository push",
+					"description" : "Trigger when someone push on a repo",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "modelID",
+							"description" : "ID a Trello's model (board, card, list, etc...)"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				}
+			]
 		}
 	]
 }
