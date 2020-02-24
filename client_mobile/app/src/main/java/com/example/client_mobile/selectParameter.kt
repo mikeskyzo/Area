@@ -69,6 +69,9 @@ class selectParameter : AppCompatActivity() {
                     action.params[i].value = list[i]
                 }
                 intent.putExtra("action", action)
+                val intent = Intent(this, selectReaction::class.java)
+                intent.putExtra("token", token)
+                startActivity(intent)
             }
             if (intent.getSerializableExtra("reaction") != null) {
                 Toast.makeText(getContext(), "send request", Toast.LENGTH_SHORT).show()
@@ -80,9 +83,6 @@ class selectParameter : AppCompatActivity() {
                 println(action.name)
                 println(reaction.name)
             }
-/*            val intent = Intent(this, selectReaction::class.java)
-            intent.putExtra("token", token)
-            startActivity(intent)*/
         }
     }
 
@@ -107,11 +107,13 @@ class selectParameter : AppCompatActivity() {
             .add("reaction", Gson().toJson(reaction))
             .build()*/
 
+        println("BODY IS")
+        println(myBody)
         val request: Request = Request.Builder()
             .url(Home.server_location.plus("/CreateArea"))
             .header("Authorization", "token ".plus(token.toString()))
             .header("Content-Type", "application/json")
-            .post(geh)
+            .post(sex)
             .build()
 
         client.newCall(request).enqueue(object: Callback {
@@ -119,6 +121,7 @@ class selectParameter : AppCompatActivity() {
                 val body = response.body?.string()
                 println("RESP:")
                 println(body)
+                println()
                 println(sex)
                 println("END")
                 if (body == "404") {
@@ -129,12 +132,14 @@ class selectParameter : AppCompatActivity() {
                 } else {
                     runOnUiThread {
                         val code = response.code
+                        println("code:")
+                        println(code)
 //                        loadingPanel.visibility = View.GONE
                         if (code >= 400) {
                             Toast.makeText(getContext(), response.message, Toast.LENGTH_SHORT).show()
                         } else {
-/*                            val intent = Intent(getContext(), Home::class.java)
-                            startActivity(intent)*/
+                            val intent = Intent(getContext(), Start::class.java)
+                            startActivity(intent)
                         }
                     }
                 }
