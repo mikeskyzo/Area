@@ -41,10 +41,6 @@ class ReactionAdapter(val allReactions: Reactions, val context: Context?, val to
         if (reaction.service == "Trello")
             holder.view.imageViewIcon.setImageResource(R.drawable.ic_trello)
         holder.view.buttonAction.setOnClickListener {
-            Toast.makeText(holder.view.context, holder.view.buttonAction.text.toString(), Toast.LENGTH_SHORT).show()
-/*            for (element in reaction.params) {
-                println(element.name)
-            }*/
             val intent = Intent(context, selectParameter::class.java)
             val arrayAsString: String = Gson().toJson(reaction.params)
             intent.putExtra("params", arrayAsString)
