@@ -130,6 +130,44 @@ exports.FormatWebhookUpdateModel = function (req, res, area, next)
 	next(area, res);
 }
 
+exports.checkArgsCreateCard = async function (res, json)
+{
+	if (!json.reaction.IDBoard)
+		global.responseError(res, 401, "Missing board ID")
+	else if (!json.reaction.name)
+		global.responseError(res, 401, "Missing name")
+	else if (!json.reaction.description)
+		global.responseError(res, 401, "Missing description")
+	else {
+		const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+		if (!token.APIToken) {
+			global.responseError(res, 401, "No APIToken provided");
+			return;
+		}
+		if (!token.APIKey) {
+			global.responseError(res, 401, "No APIKey provided");
+			return;
+		}
+		fetch(`https://api.trello.com/1/lists/${json.reaction.IDBoard}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (resjson) {
+			if (resjson.ok == false) {
+				console.error(`Bad response from Trello : ${resjson.error}`);
+				res.status(500).send();
+			} else {
+				res.send();
+			}
+			return;
+		})
+		.catch(function (error) {
+			global.responseError(res, 500, `err : ${error}`)
+		});
+		global.saveAREA(res, json);
+	}
+}
+
 exports.trelloCreateCard = async function (area, res)
 {
 	if (!area.reaction.IDList || !area.reaction.name || !area.reaction.description) {
@@ -146,6 +184,162 @@ exports.trelloCreateCard = async function (area, res)
 		return;
 	}
 	const url = `https://api.trello.com/1/cards?name=${area.reaction.name}&desc=${area.reaction.description}&pos=bottom&idList=${area.reaction.IDList}&key=${token.APIKey}&token=${token.APIToken}`;
+	fetch(url, {
+  		method: "POST"
+	})
+	.then(function (response) {
+		return response.json();
+	})
+	.then(function (resjson) {
+		if (resjson.ok == false) {
+			console.error(`Bad response from Trello : ${resjson.error}`);
+			res.status(500).send();
+		} else {
+			res.send();
+		}
+		return;
+	})
+	.catch(function (error) {
+		global.responseError(res, 500, `err : ${error}`)
+	});
+}
+
+exports.checkArgsCreateList = async function (res, json)
+{
+	if (!json.reaction.IDBoard)
+		global.responseError(res, 401, "Missing board ID")
+	else if (!json.reaction.name)
+		global.responseError(res, 401, "Missing name")
+	else {
+		const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+		if (!token.APIToken) {
+			global.responseError(res, 401, "No APIToken provided");
+			return;
+		}
+		if (!token.APIKey) {
+			global.responseError(res, 401, "No APIKey provided");
+			return;
+		}
+		fetch(`https://api.trello.com/1/boards/${json.reaction.IDBoard}?&key=${token.APIKey}&token=${token.APIToken}`)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (resjson) {
+			if (resjson.ok == false) {
+				console.error(`Bad response from Trello : ${resjson.error}`);
+				res.status(500).send();
+			} else {
+				res.send();
+			}
+			return;
+		})
+		.catch(function (error) {
+			global.responseError(res, 500, `err : ${error}`)
+		});
+		global.saveAREA(res, json);
+	}
+}
+
+exports.trelloCreateList = async function (area, res)
+{
+	if (!area.reaction.IDBoard || !area.reaction.name) {
+		global.responseError(res, 401, 'Missing board ID or a name')
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+	if (!token.APIToken) {
+		global.responseError(res, 401, "No APIToken provided");
+		return;
+	}
+	if (!token.APIKey) {
+		global.responseError(res, 401, "No APIKey provided");
+		return;
+	}
+	const url = `https://api.trello.com/1/lists?name=${area.reaction.name}&idBoard=${area.reaction.IDBoard}&pos=bottom&key=${token.APIKey}&token=${token.ApiToken}`;
+	fetch(url, {
+  		method: "POST"
+	})
+	.then(function (response) {
+		return response.json();
+	})
+	.then(function (resjson) {
+		if (resjson.ok == false) {
+			console.error(`Bad response from Trello : ${resjson.error}`);
+			res.status(500).send();
+		} else {
+			res.send();
+		}
+		return;
+	})
+	.catch(function (error) {
+		global.responseError(res, 500, `err : ${error}`)
+	});
+}
+
+exports.checkArgsCreateLabel = async function (res, json)
+{
+	if (!json.reaction.IDBoard)
+		global.responseError(res, 401, "Missing board ID")
+	else if (!json.reaction.name)
+		global.responseError(res, 401, "Missing name")
+	else {
+		const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+		if (!token.APIToken) {
+			global.responseError(res, 401, "No APIToken provided");
+			return;
+		}
+		if (!token.APIKey) {
+			global.responseError(res, 401, "No APIKey provided");
+			return;
+		}
+		fetch(`https://api.trello.com/1/boards/${json.reaction.IDBoard}?fileds=all&key=${token.APIKey}&token=${token.APIToken}`)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (resjson) {
+			if (resjson.ok == false) {
+				console.error(`Bad response from Trello : ${resjson.error}`);
+				res.status(500).send();
+			} else {
+				res.send();
+			}
+			return;
+		})
+		.catch(function (error) {
+			global.responseError(res, 500, `err : ${error}`)
+		});
+		global.saveAREA(res, json);
+	}
+}
+
+const labelColors = ["yellow", "purple", "blue", "red", "green", "orange", "black", "sky", "pink", "lime", "null"];
+
+function isInArray(elem, arr) {
+	for (let i = 0; i < arr.length; i++)
+		if (arr[i] === elem)
+			return (true);
+	return (false);
+}
+
+exports.trelloCreateLabel = async function (area, res)
+{
+	let color = null;
+	if (!area.reaction.IDBoard || !area.reaction.name || !area.reaction.color) {
+		global.responseError(res, 401, 'Missing board ID or a name')
+		return;
+	}
+	if (area.reaction.color && isInArray(area.reaction.color, labelColors))
+		color = area.reaction.color;
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+	if (!token.APIToken) {
+		global.responseError(res, 401, "No APIToken provided");
+		return;
+	}
+	if (!token.APIKey) {
+		global.responseError(res, 401, "No APIKey provided");
+		return;
+	}
+	const url = `https://api.trello.com/1/labels?name=${area.reaction.name}&color=${color}&idBoard=${area.reaction.IDBoard}&key=${token.APIKey}&token=${token.ApiToken}`;
 	fetch(url, {
   		method: "POST"
 	})
