@@ -3,6 +3,7 @@ package com.example.client_mobile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +29,7 @@ class selectParameter : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_parameter)
+        loadingPanel.visibility = View.GONE
 
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
@@ -74,14 +76,11 @@ class selectParameter : AppCompatActivity() {
                 startActivity(intent)
             }
             if (intent.getSerializableExtra("reaction") != null) {
-                Toast.makeText(getContext(), "send request", Toast.LENGTH_SHORT).show()
                 for (i in 0 until list.size) {
                     reaction.params[i].value = list[i]
                 }
                 intent.putExtra("reaction", reaction)
                 createArea()
-                println(action.name)
-                println(reaction.name)
             }
         }
     }
@@ -97,35 +96,20 @@ class selectParameter : AppCompatActivity() {
         val myBody = formatRequest().trimIndent()
         val client = OkHttpClient()
 
-        val sex = myBody.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
-        val geh = "{\"action\" : { \"name\" : \"github_issue_event\"},\"reaction\" : { \"name\" : \"slack_send_message\"}}".toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
-
-
-
-/*        val formBody: RequestBody = FormBody.Builder()
-            .add("action", Gson().toJson(action))
-            .add("reaction", Gson().toJson(reaction))
-            .build()*/
-
-        println("BODY IS")
-        println(myBody)
+        val formBody = myBody.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         val request: Request = Request.Builder()
             .url(Home.server_location.plus("/CreateArea"))
             .header("Authorization", "token ".plus(token.toString()))
             .header("Content-Type", "application/json")
-            .post(sex)
+            .post(formBody)
             .build()
 
+        loadingPanel.visibility = View.VISIBLE
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                println("RESP:")
-                println(body)
-                println()
-                println(sex)
-                println("END")
                 if (body == "404") {
-//                    loadingPanel.visibility = View.GONE
+                    loadingPanel.visibility = View.GONE
                     runOnUiThread {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
@@ -134,11 +118,16 @@ class selectParameter : AppCompatActivity() {
                         val code = response.code
                         println("code:")
                         println(code)
-//                        loadingPanel.visibility = View.GONE
+                        loadingPanel.visibility = View.GONE
                         if (code >= 400) {
-                            Toast.makeText(getContext(), response.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), selectAction::class.java)
+                            intent.putExtra("token", token)
+                            startActivity(intent)
                         } else {
-                            val intent = Intent(getContext(), Start::class.java)
+                            Toast.makeText(getContext(), "Area successfully created", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Home::class.java)
+                            intent.putExtra("token", token)
                             startActivity(intent)
                         }
                     }

@@ -44,8 +44,11 @@
     </div>
 
     <div id="buttonOAuth">
-        <a href="https://www.reddit.com/api/v1/authorize?client_id=xxa4cp-hsWE_iA&redirect_uri=http://localhost:8081/authorizations/reddit&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=temporary&state=caca"
-           id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Reddit</b></a><br>
+        <a href="https://www.reddit.com/api/v1/authorize?client_id=xxa4cp-hsWE_iA&redirect_uri=http://localhost:8081/authorizations/reddit&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=temporary&state=none"
+           id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Reddit</b></a>
+        <!--<button type="button" id="authenticate-reddit">Reddit</button>-->
+        <!--<a id="authenticate-reddit" class="center waves-effect waves-light orange btn"><b>Reddit</b></a>-->
+        <br>
         <a href="#" id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Service 2</b></a><br>
         <a href="#" id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Service 3</b></a><br>
         <a href="#" id="btnOAuth" class="center waves-effect waves-light orange btn"><b>Service 4</b></a>
@@ -53,6 +56,8 @@
 
 </div>
 
+<!--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+<!--<script src="services/RedditApi.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 
