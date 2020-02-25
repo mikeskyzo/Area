@@ -26,7 +26,6 @@ function checkAndSaveAREA(area_id, req, res)
 		return;
 	}
 
-    console.log(req.body);
 	var json = new Object();
 	json.area_id = area_id;
 	json.user_id = req.body.user_id;
