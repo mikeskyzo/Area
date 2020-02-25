@@ -97,6 +97,10 @@ global.findSomeInDbAsync = async function (collection, param) {
 	return db.collection(collection).find(param).toArray();
 }
 
+global.deleteInDbAsync = async function (collection, param) {
+	return db.collection(collection).deleteOne(param);
+}
+
 global.saveAREA = function (res, json)
 {
 	if (global.new_area)
