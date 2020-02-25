@@ -209,16 +209,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 getServices()
                 Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_messages -> {
+            R.id.nav_create_area -> {
                 val intent = Intent(this, selectAction::class.java)
                 intent.putExtra("token", token)
                 startActivity(intent)
-            }
-            R.id.nav_friends -> {
-                Toast.makeText(this, "Reactions clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_update -> {
-                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
