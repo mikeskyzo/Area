@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import okhttp3.*
 import java.io.IOException
+import java.io.Serializable
 
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,7 +39,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             server_location = intent.getStringExtra("server_location")
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
-        Toast.makeText(this, server_location, Toast.LENGTH_SHORT).show()
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -151,7 +151,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     runOnUiThread {
-                        println(body)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -211,16 +210,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 getServices()
                 Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_messages -> {
+            R.id.nav_create_area -> {
                 val intent = Intent(this, selectAction::class.java)
                 intent.putExtra("token", token)
                 startActivity(intent)
-            }
-            R.id.nav_friends -> {
-                Toast.makeText(this, "Reactions clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_update -> {
-                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
@@ -229,7 +222,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             }
             R.id.nav_github -> {
                 val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scop=admin%20repo_hook")
+                openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scope=admin:repo_hook")
                 startActivity(openURL)
             }
             R.id.nav_slack -> {
@@ -242,3 +235,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         return true
     }
 }
+
+class Area(val id: String, val name: String, val color: String) : Serializable
+
+class Areas(val areas: List<Area>) : Serializable

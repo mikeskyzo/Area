@@ -63,8 +63,6 @@ class selectReaction: AppCompatActivity() {
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
                         recyclerView_action.adapter = ReactionAdapter(allReactions, getContext(), token)
-                        println(body)
-                        //Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
