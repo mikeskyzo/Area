@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 
-class AreaAdapter(val areas: Array<Area>): RecyclerView.Adapter<CustomViewHolderArea>() {
+class AreaAdapter(val areas: List<String>): RecyclerView.Adapter<CustomViewHolderArea>() {
     override fun getItemCount(): Int {
         val nb = areas.count()
         return nb
