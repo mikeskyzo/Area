@@ -35,6 +35,7 @@ services:
             - "8081:8081"
         container_name: client_web_area
         volumes:
+            - ./web-client:/web-client/
             - clients:/web-client/public/app/:ro
         links:
             - server:server
