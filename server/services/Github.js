@@ -131,12 +131,8 @@ exports.check_token = async function (req, res)
 		return;
 	}
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service})
-	console.log(token);
 	if (token)
-	{
-		global.responseError(res, 200, "You have already a token saved for " + req.body.service);
-		return;
-	}
+		global.deleteInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service});
 	fetch('https://api.github.com/user', {
 		'method': 'GET',
 		'headers' : {'Authorization' : 'token ' + req.body.access_token},
