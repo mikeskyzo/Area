@@ -51,7 +51,7 @@ async function createWebhook(event, res, json, next)
 		return null;
 	})
 	.then(function (resJson) {
-		if (json) {
+		if (resJson) {
 			json.action.webhook_id = resJson.id;
 			next(res, json);
 		}
