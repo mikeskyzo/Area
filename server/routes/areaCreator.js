@@ -29,13 +29,14 @@ function checkAndSaveAREA(area_id, req, res)
 	var json = new Object();
 	json.area_id = area_id;
 	json.user_id = req.body.user_id;
-	json.action = formatObject(req.body.action);
-	json.reaction = formatObject(req.body.reaction);
 
 	if (!req.body.area_name)
 		json.area_name = 'Raccoon area'
 	else
 		json.area_name = req.body.area_name
+
+	json.action = formatObject(req.body.action);
+	json.reaction = formatObject(req.body.reaction);
 
 	if (!global.ReactionCheckArgsMap.get(json.reaction.name)) {
 		responseError(res, 401, 'Reaction not found');
@@ -55,17 +56,6 @@ function formatObject(obj)
 	for (nb in obj.params)
 		json[obj.params[nb].name] = obj.params[nb].value;
 	return json;
-}
-
-exports.getAreas = function (req, res)
-{
-    global.db.collection(global.CollectionArea).find({user_id : req.body.user_id}).toArray(function (err, result) {
-        if (err) {
-            global.responseError(res, 401, err.message)
-			return;
-		}
-		res.json(result);
-    });
 }
 
 exports.deleteArea = function (req, res) {
