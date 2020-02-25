@@ -47,11 +47,14 @@ async function createWebhook(event, res, json, next)
 	.then(function (response) {
 		if (response.status == 201)
 			return response.json();
-		throw 'Failed to create webhook : ' + response.statusText
+		global.responseError(res, 401, 'failed to cre\te webhook : ' + response.statusText);
+		return null;
 	})
-	.then(function (resJson){
-		json.action.webhook_id = resJson.id;
-		next(res, json);
+	.then(function (resJson) {
+		if (json) {
+			json.action.webhook_id = resJson.id;
+			next(res, json);
+		}
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, error)
