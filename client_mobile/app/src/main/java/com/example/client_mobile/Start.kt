@@ -78,8 +78,6 @@ class Start : AppCompatActivity() {
                             intent.putExtra("username", username)
                             intent.putExtra("token", account.token)
                             intent.putExtra("server_location", serverLocation)
-                            println("start")
-                            println(account.token)
                             startActivity(intent)
                         }
                     }
