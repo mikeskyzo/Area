@@ -59,8 +59,6 @@ class selectAction : AppCompatActivity() {
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
                         recyclerView_action.adapter = ActionAdapter(allActions, getContext(), token)
-                        println(body)
-                        //Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

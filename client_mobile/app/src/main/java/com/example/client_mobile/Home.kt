@@ -38,7 +38,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             server_location = intent.getStringExtra("server_location")
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
-        Toast.makeText(this, server_location, Toast.LENGTH_SHORT).show()
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -151,7 +150,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     runOnUiThread {
-                        println(body)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
