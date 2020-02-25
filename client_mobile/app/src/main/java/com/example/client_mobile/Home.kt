@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import okhttp3.*
 import java.io.IOException
+import java.io.Serializable
 
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -234,3 +235,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         return true
     }
 }
+
+class Area(val id: String, val name: String, val color: String) : Serializable
+
+class Areas(val areas: List<Area>) : Serializable
