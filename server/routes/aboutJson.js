@@ -58,12 +58,12 @@ exports.getActions = async function (req, res)
 	};
 	var services = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id});
 	services.forEach(element => {
+		var serv = getService(element.service);
 		if (!serv) {
 			console.error("Unknown service : ");
 			console.log(element);
 		}
 		else {
-			var serv = getService(element.service);
 			var actions = serv.actions;
 			for (nb in actions){
 				delete actions[nb].functions;
