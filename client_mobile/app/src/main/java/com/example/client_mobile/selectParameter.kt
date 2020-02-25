@@ -76,14 +76,11 @@ class selectParameter : AppCompatActivity() {
                 startActivity(intent)
             }
             if (intent.getSerializableExtra("reaction") != null) {
-                Toast.makeText(getContext(), "send request", Toast.LENGTH_SHORT).show()
                 for (i in 0 until list.size) {
                     reaction.params[i].value = list[i]
                 }
                 intent.putExtra("reaction", reaction)
                 createArea()
-                println(action.name)
-                println(reaction.name)
             }
         }
     }
@@ -111,7 +108,6 @@ class selectParameter : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                println(formBody)
                 if (body == "404") {
                     loadingPanel.visibility = View.GONE
                     runOnUiThread {
@@ -124,8 +120,12 @@ class selectParameter : AppCompatActivity() {
                         println(code)
                         loadingPanel.visibility = View.GONE
                         if (code >= 400) {
-                            Toast.makeText(getContext(), response.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), selectAction::class.java)
+                            intent.putExtra("token", token)
+                            startActivity(intent)
                         } else {
+                            Toast.makeText(getContext(), "Area successfully created", Toast.LENGTH_SHORT).show()
                             val intent = Intent(getContext(), Home::class.java)
                             intent.putExtra("token", token)
                             startActivity(intent)
