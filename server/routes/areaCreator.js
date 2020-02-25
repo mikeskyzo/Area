@@ -32,6 +32,11 @@ function checkAndSaveAREA(area_id, req, res)
 	json.action = formatObject(req.body.action);
 	json.reaction = formatObject(req.body.reaction);
 
+	if (!req.body.area_name)
+		json.area_name = 'Raccoon area'
+	else
+		json.area_name = req.body.area_name
+
 	if (!global.ReactionCheckArgsMap.get(json.reaction.name)) {
 		responseError(res, 401, 'Reaction not found');
 		return;
