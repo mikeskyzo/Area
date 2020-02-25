@@ -7,6 +7,9 @@ exports.getAreas = function (req, res)
             global.responseError(res, 401, err.message)
 			return;
 		}
+		result.forEach(element => {
+			delete element._id;
+		});
 		res.json(result);
     });
 }
@@ -28,7 +31,7 @@ exports.getNameAreas = function (req, res)
 				element = null;
 			}
 		});
-		res.json(result);
+		res.json({areas : result});
     });
 }
 
