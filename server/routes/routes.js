@@ -2,7 +2,8 @@ var express = require('express');
 var uniqid = require('uniqid');
 var jwt = require('jsonwebtoken');
 
-var utils = require('../src/utils')
+var utils = require('../src/utils');
+var getArea = require('../src/GetArea');
 
 var area = require('./areaCreator')
 var about = require('./aboutJson');
@@ -14,8 +15,16 @@ router.post('/CreateArea', function(req, res) {
 	utils.verifyToken(req, res, area.CreateArea);
 });
 
-router.get('/GetArea', function(req, res) {
-	utils.verifyToken(req, res, area.getAreas);
+router.get('/GetArea/:AreaId', function(req, res) {
+	utils.verifyToken(req, res, getArea.getArea);
+});
+
+router.get('/GetAreas', function(req, res) {
+	utils.verifyToken(req, res, getArea.getAreas);
+});
+
+router.get('/GetAreas/name', function(req, res) {
+	utils.verifyToken(req, res, getArea.getNameAreas);
 });
 
 router.get('/getActions', function(req, res) {
