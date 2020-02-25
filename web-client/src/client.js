@@ -25,9 +25,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/disconnect', function (req, res) {
-    console.log(req.cookies.access_token);
     res.clearCookie('access_token');
-    console.log(req.cookies.access_token);
     res.redirect('/login');
 });
 
