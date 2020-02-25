@@ -3,20 +3,22 @@ package com.example.client_mobile
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
 import java.io.IOException
 import java.io.Serializable
+
 
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -76,8 +78,34 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 
     fun getAreas() {
-        var tab = listOf("cul", "bite", "sexe", "sexe", "sexe", "sexe", "sexe", "sexe", "sexe")
-        recyclerView_areas.adapter = AreaAdapter(tab)
+        val client = OkHttpClient()
+        val request: Request = Request.Builder()
+            .url(server_location.plus("/getAreas/name"))
+            .header("Authorization", "token ".plus(token.toString()))
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body == "404") {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    println("GOOD")
+                    println(body)
+                    val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
+                    runOnUiThread {
+//                        loadingPanel.visibility = View.GONE
+                        recyclerView_areas.adapter = AreaAdapter(allAreas)
+                    }
+                }
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
     }
 
     fun addTokenGithub(uri: Uri?) {
@@ -245,6 +273,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 }
 
-class Area(val id: String, val name: String, val color: String) : Serializable
+class Area(val id: String, val action: String, val reaction: String) : Serializable
 
 class Areas(val areas: List<Area>) : Serializable
