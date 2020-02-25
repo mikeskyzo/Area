@@ -6,13 +6,15 @@
     "start": "node src/client.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "ejs": "^3.0.1",
     "axios": "^0.19.0",
     "core-js": "^3.3.2",
-    "cookie-parser": "^1.4.4",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "jsdom": "^16.2.0",
+    "cookie-parser": "^1.4.4"
+  },
+  "devDependencies": {
     "express-session": "^1.17.0",
-    "jquery": "^3.4.1",
-    "jsdom": "^16.2.0"
+    "jquery": "^3.4.1"
   }
 }
