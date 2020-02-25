@@ -25,7 +25,7 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(req, res, login)
         return ;
     }
 
-    let url = `https://api.twitch.tv/helix/webhooks/hub?redirect_url=${global.url}/sex&hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=http://localhost:8080/`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?redirect_url=${global.url}/sex&hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/sex`;
    let resp = await fetch(url, {
        'method': 'POST',
        'headers' : {'Client-ID' : client_id}
