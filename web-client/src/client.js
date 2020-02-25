@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var apiUser = require('./apiCall');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var RedditApi = require('../services/RedditApi');
 
 
 var app = express();
@@ -14,6 +15,11 @@ app.use(session({secret: "Dash_secret",
     resave: false,
     saveUninitialized: false
 }));
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 
 app.get('/', function(req, res) {
     var access_tokenCookie = req.cookies.access_token;
@@ -92,10 +98,12 @@ app.get('/client.apk', function (req, res) {
 });
 
 // Authorizations
-app.get('/authorizations/reddit', function(req, res) {
-    console.log(req.data);
-    res.render('profil.ejs');
-    //res.redirect('/profil');
+app.get('/authorizations/reddit', async function (req, res) {
+    RedditApi.generalSettings.code = req.query.code;
+    var newres = await RedditApi.getAccessToken();
+    RedditApi.generalSettings.authorizationToken = newres.data.access_token;
+    console.log(`Access token: ${RedditApi.generalSettings.authorizationToken}`);
+    res.redirect('/profil');
 });
 
 app.listen(8081);
