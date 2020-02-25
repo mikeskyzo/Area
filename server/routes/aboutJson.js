@@ -35,12 +35,18 @@ exports.getReactions = async function (req, res)
 	var services = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id});
 	services.forEach(element => {
 		var serv = getService(element.service);
-		var reactions = serv.reactions;
-		for (nb in reactions) {
-			delete reactions[nb].functions;
-			reactions[nb].service = element.service;
+		if (!serv) {
+			console.error("Unknown service : ");
+			console.log(element);
 		}
-		mergeJSON.merge(json.reactions, reactions);
+		else {
+			var reactions = serv.reactions;
+			for (nb in reactions) {
+				delete reactions[nb].functions;
+				reactions[nb].service = element.service;
+			}
+			mergeJSON.merge(json.reactions, reactions);
+		}
 	});
 	res.json(json);
 }
@@ -52,13 +58,19 @@ exports.getActions = async function (req, res)
 	};
 	var services = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id});
 	services.forEach(element => {
-		var serv = getService(element.service);
-		var actions = serv.actions;
-		for (nb in actions){
-			delete actions[nb].functions;
-			actions[nb].service = element.service;
+		if (!serv) {
+			console.error("Unknown service : ");
+			console.log(element);
 		}
-		mergeJSON.merge(json.actions, actions);
+		else {
+			var serv = getService(element.service);
+			var actions = serv.actions;
+			for (nb in actions){
+				delete actions[nb].functions;
+				actions[nb].service = element.service;
+			}
+			mergeJSON.merge(json.actions, actions);
+		}
 	});
 	res.json(json);
 }
