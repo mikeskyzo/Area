@@ -11,7 +11,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
 import java.io.IOException
 import java.io.Serializable
@@ -52,6 +54,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
+        recyclerView_areas.layoutManager = LinearLayoutManager(this)
+        getAreas()
     }
 
     override fun onResume() {
@@ -69,6 +73,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
         }
         super.onResume()
+    }
+
+    fun getAreas() {
+        var tab = listOf("cul", "bite", "sexe", "sexe", "sexe", "sexe", "sexe", "sexe", "sexe")
+        recyclerView_areas.adapter = AreaAdapter(tab)
     }
 
     fun addTokenGithub(uri: Uri?) {
