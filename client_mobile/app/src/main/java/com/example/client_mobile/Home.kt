@@ -11,9 +11,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
 import java.io.IOException
+import java.io.Serializable
 
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,7 +41,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             server_location = intent.getStringExtra("server_location")
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
-        Toast.makeText(this, server_location, Toast.LENGTH_SHORT).show()
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -52,6 +54,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
+        recyclerView_areas.layoutManager = LinearLayoutManager(this)
+        getAreas()
     }
 
     override fun onResume() {
@@ -69,6 +73,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
         }
         super.onResume()
+    }
+
+    fun getAreas() {
+        var tab = listOf("cul", "bite", "sexe", "sexe", "sexe", "sexe", "sexe", "sexe", "sexe")
+        recyclerView_areas.adapter = AreaAdapter(tab)
     }
 
     fun addTokenGithub(uri: Uri?) {
@@ -151,7 +160,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     runOnUiThread {
-                        println(body)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -211,16 +219,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 getServices()
                 Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_messages -> {
+            R.id.nav_create_area -> {
                 val intent = Intent(this, selectAction::class.java)
                 intent.putExtra("token", token)
                 startActivity(intent)
-            }
-            R.id.nav_friends -> {
-                Toast.makeText(this, "Reactions clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_update -> {
-                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
@@ -242,3 +244,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         return true
     }
 }
+
+class Area(val id: String, val name: String, val color: String) : Serializable
+
+class Areas(val areas: List<Area>) : Serializable

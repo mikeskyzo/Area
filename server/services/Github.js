@@ -96,7 +96,6 @@ exports.FormatWebhookIssueEvent = function (req, res, area, next)
 		res.send();
 		return;
 	}
-	console.log(area.reaction.message);
 	let message = area.reaction.message;
 	if (message) {
 		if (message.includes('{event}'))
@@ -106,6 +105,7 @@ exports.FormatWebhookIssueEvent = function (req, res, area, next)
 		if (message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
 			message = message.replace('{repository_name}', req.body.repository.name)
 	}
+	area.reaction.message = message
 	next(area, res);
 }
 

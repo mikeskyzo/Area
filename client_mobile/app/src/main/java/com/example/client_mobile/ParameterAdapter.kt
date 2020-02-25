@@ -16,7 +16,6 @@ class ParameterAdapter(val params: Array<Param>, val actionName: String): Recycl
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderParam {
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.parameter_row, parent, false)
-        //println(actionName)
         return CustomViewHolderParam(cellForRow)
     }
 
