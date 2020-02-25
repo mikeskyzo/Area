@@ -31,7 +31,7 @@ exports.getNameAreas = function (req, res)
 				element = null;
 			}
 		});
-		res.json(result);
+		res.json({areas : result});
     });
 }
 
