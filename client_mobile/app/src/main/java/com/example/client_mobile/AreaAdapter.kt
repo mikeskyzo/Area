@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.area_row.view.*
 
 
-class AreaAdapter(val areas: List<String>): RecyclerView.Adapter<CustomViewHolderArea>() {
+class AreaAdapter(val allAreas: Areas): RecyclerView.Adapter<CustomViewHolderArea>() {
     override fun getItemCount(): Int {
-        val nb = areas.count()
+        val nb = allAreas.areas.count()
         return nb
     }
 
@@ -20,8 +21,12 @@ class AreaAdapter(val areas: List<String>): RecyclerView.Adapter<CustomViewHolde
 
     override fun onBindViewHolder(holder: CustomViewHolderArea, position: Int) {
 
-        val param = areas.get(position)
+        val area = allAreas.areas.get(position)
 
+        if (area.action == "Github")
+            holder.view.imageViewIconAction.setImageResource(R.drawable.ic_github)
+        if (area.reaction == "Slack")
+            holder.view.imageViewIconReaction.setImageResource(R.drawable.ic_slack)
 //        holder.view.textViewParameter.setText(param.description)
     }
 }
