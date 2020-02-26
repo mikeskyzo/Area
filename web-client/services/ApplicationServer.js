@@ -56,14 +56,11 @@ exports.createUser = function(email, Uname, Pword, server, req, res) {
 };
 
 exports.setRedditAccessToken = function(req, res, token) {
-	var url = generalSettings.url + '/auth/addToken';
-
 	var axios = require('axios');
 	const ApplicationApi = axios.create({
 		baseURL: generalSettings.url,
 		crossDomain: true
 	});
-	console.log('Sending request to application server...\n');
 	ApplicationApi.post(`/auth/addToken`,
 		{},
 		{
@@ -76,45 +73,8 @@ exports.setRedditAccessToken = function(req, res, token) {
 			}
 		}
 	).then(function(response) {
-		console.log('RESPONSE DATA');
-		console.log(response.data);
-		console.log('RESPONSE STATUS');
-		console.log(response.status);
 		res.redirect('/profil')
 	}).catch(function(error) {
-		//console.log('RESPONSE ERROR');
-		//console.log(error);
 		res.redirect('/error')
 	})
-
-	/*
-	$.ajax({
-		method : "post",
-		data : {'service' : 'Reddit', 'token' : token},
-		headers: {
-			'Authorization': `token ${generalSettings.access_token}`
-		},
-		crossDomain : true,
-		url : url,
-		success : async (data) => {
-			res.redirect('/profil');
-		},
-		error : function (data, status, error) {
-			console.log(error);
-			res.redirect('/error');
-		}
-	});*/
 };
-
-/*
-var axios = require('axios');
-
-/ * General settings * /
-const generalSettings = {
-	// Api
-	serverApi: ``,
-
-	// Session related
-	token: '' // to get in res after calling GET AUTHORIZATION TOKEN
-};
-*/
