@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var ServerApi = require('../services/ApplicationServer');
 var RedditApi = require('../services/RedditApi');
+var GithubApi = require('../services/GithubApi');
 
 
 var app = express();
@@ -98,6 +99,14 @@ app.get('/client.apk', function (req, res) {
 });
 
 // Authorizations
+app.get('/authorizations/github', async function (req, res) {
+    console.log('\n   ====== Github authorization ====== \n');
+    GithubApi.generalSettings.code = req.query.code;
+    var newres = await GithubApi.getAccessToken();
+    GithubApi.generalSettings.authorizationToken = newres.data.access_token;
+    var access_token = newres.data.split('&')[0].split('=')[1];
+    ServerApi.setGithubAccessToken(res, res, access_token);
+});
 app.get('/authorizations/reddit', async function (req, res) {
     RedditApi.generalSettings.code = req.query.code;
     var newres = await RedditApi.getAccessToken();
