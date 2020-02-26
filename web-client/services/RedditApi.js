@@ -50,11 +50,10 @@ module.exports = {
 /* Creating Api methods */
 
 	/* Authorization */
-	authorize:
-		function () {
-			const responseType = 'code';
-			return RedditApi.get(`authorize?client_id=${generalSettings.clientId}&response_type=${responseType}`)
-		},
+	authorize: function () {
+		const responseType = 'code';
+		return RedditApi.get(`authorize?client_id=${generalSettings.clientId}&response_type=${responseType}`)
+	},
 
 	/* Get access token (require to get code first) */
 	// Need Basic Auth =>
