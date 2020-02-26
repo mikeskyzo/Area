@@ -5,6 +5,7 @@ var session = require('express-session');
 var ServerApi = require('../services/ApplicationServer');
 var RedditApi = require('../services/RedditApi');
 var GithubApi = require('../services/GithubApi');
+var SlackApi = require('../services/SlackApi');
 
 
 var app = express();
@@ -103,15 +104,21 @@ app.get('/authorizations/github', async function (req, res) {
     console.log('\n   ====== Github authorization ====== \n');
     GithubApi.generalSettings.code = req.query.code;
     var newres = await GithubApi.getAccessToken();
-    GithubApi.generalSettings.authorizationToken = newres.data.access_token;
-    var access_token = newres.data.split('&')[0].split('=')[1];
-    ServerApi.setGithubAccessToken(res, res, access_token);
+    GithubApi.generalSettings.authorizationToken = newres.data.split('&')[0].split('=')[1];
+    ServerApi.setGithubAccessToken(res, res, GithubApi.generalSettings.authorizationToken);
 });
 app.get('/authorizations/reddit', async function (req, res) {
     RedditApi.generalSettings.code = req.query.code;
     var newres = await RedditApi.getAccessToken();
     RedditApi.generalSettings.authorizationToken = newres.data.access_token;
     ServerApi.setRedditAccessToken(res, res, RedditApi.generalSettings.authorizationToken);
+});
+app.get('/authorizations/slack', async function (req, res) {
+    console.log('\n   ====== Slack authorization ====== \n');
+    SlackApi.generalSettings.code = req.query.code;
+    var newres = await SlackApi.getAccessToken();
+    SlackApi.generalSettings.authorizationToken = newres.data.authed_user.access_token;
+    ServerApi.setSlackAccessToken(res, res, SlackApi.generalSettings.authorizationToken);
 });
 
 app.listen(8081);
