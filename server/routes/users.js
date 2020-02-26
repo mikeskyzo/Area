@@ -1,10 +1,7 @@
-var express = require('express');
-var router = express.Router();
-
 var uniqid = require('uniqid');
 var jwt = require('jsonwebtoken');
 
-router.post('/createUser', function(req, res, next) {
+exports.creatUser = function(req, res) {
     var username = req.body.username;
     var pass = req.body.password;
     if (!username || !pass) {
@@ -42,9 +39,9 @@ router.post('/createUser', function(req, res, next) {
             }
         })
     });
-});
+}
 
-router.post('/connectUser', function(req, res) {
+exports.connectUser = function(req, res) {
     var username = req.body.username;
     var pass = req.body.password;
     if (!username || !pass) {
@@ -83,6 +80,20 @@ router.post('/connectUser', function(req, res) {
             }
         }
     })
-});
+}
 
-module.exports = router;
+exports.changeUsername = async function (req, res)
+{
+    if (!req.body.username)
+        global.responseError(res, 401, 'Missing the new username');
+    else {
+        let result = await global.updateInDbAsync(global.CollectionUsers, {id : req.body.user_id}, { $set: { 'username' : req.body.username}});
+        if (result.modifiedCount === 0)
+            global.responseError(res, 403, 'You can\'t change to the same username');
+        else
+            res.json({
+                success : true,
+                message : 'Username changed'
+            });
+    }
+}
