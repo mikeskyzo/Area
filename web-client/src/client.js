@@ -108,6 +108,7 @@ app.get('/authorizations/github', async function (req, res) {
     ServerApi.setGithubAccessToken(res, res, GithubApi.generalSettings.authorizationToken);
 });
 app.get('/authorizations/reddit', async function (req, res) {
+    console.log('\n   ====== Reddit authorization ====== \n');
     RedditApi.generalSettings.code = req.query.code;
     var newres = await RedditApi.getAccessToken();
     RedditApi.generalSettings.authorizationToken = newres.data.access_token;
