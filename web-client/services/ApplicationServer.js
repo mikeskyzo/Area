@@ -63,13 +63,13 @@ exports.setRedditAccessToken = function(req, res, token) {
 		baseURL: generalSettings.url,
 		crossDomain: true
 	});
-	console.log('Requesting...');
+	console.log('Sending request to application server...\n');
 	ApplicationApi.post(`/auth/addToken`,
 		{},
 		{
 			data: {
 				'service': 'Reddit',
-				'token': token
+				'access_token': token
 			},
 			headers: {
 				Authorization: `token ${generalSettings.access_token}`
@@ -82,8 +82,8 @@ exports.setRedditAccessToken = function(req, res, token) {
 		console.log(response.status);
 		res.redirect('/profil')
 	}).catch(function(error) {
-		console.log('RESPONSE DATA');
-		console.log(error);
+		//console.log('RESPONSE ERROR');
+		//console.log(error);
 		res.redirect('/error')
 	})
 
