@@ -6,17 +6,18 @@
     "start": "node ./app.js"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "cookie-parser": "~1.4.4",
     "discord.js": "11.5.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "8.5.1",
+    "localtunnel": "2.0.0",
+    "merge-json": "0.1.0-b.3",
     "mongodb": "^3.4.1",
     "morgan": "1.9.1",
-    "node-fetch": "2.6.0",
-    "uniqid": "5.2.0",
-    "localtunnel": "2.0.0",
     "ngrok": "3.2.7",
-    "merge-json": "0.1.0-b.3"
+    "node-fetch": "2.6.0",
+    "uniqid": "5.2.0"
   }
 }
