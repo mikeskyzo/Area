@@ -25,7 +25,7 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(req, res, login)
         return ;
     }
     console.log(global.url);
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/caca&hub.lease_seconds=86400`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/caca&hub.lease_seconds=300`;
    let resp = await fetch(url, {
        'method': 'POST',
        'headers' : {'Client-ID' : client_id}
@@ -39,7 +39,7 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(req, res, login)
         global.responseError(res, 401, 'ewwow it not wok owo');
 };
 
-exports.Twitch_Delete_Webhook_NewSubscriber = async function(req, res, json, login)
+exports.Twitch_Delete_Webhook_NewSubscriber = async function(req, res, login)
 {
     var user_id = await Twitch_UserId(login);
     if (user_id === 84) {
@@ -61,7 +61,7 @@ exports.Twitch_Delete_Webhook_NewSubscriber = async function(req, res, json, log
         global.responseError(res, 401, 'ewwow it not wok owo');
 };
 
-exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, json, login)
+exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, login)
 {
     let user_id = Twitch_UserId(login);
 
@@ -81,7 +81,7 @@ exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, json,
         global.responseError(res, 401, 'error');
 };
 
-exports.Twitch_Delete_Webhook_StreamChangeState = async function(req, res, json, login)
+exports.Twitch_Delete_Webhook_StreamChangeState = async function(req, res, login)
 {
     let user_id = Twitch_UserId(login);
     if (user_id == 84) {
