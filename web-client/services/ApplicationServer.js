@@ -103,3 +103,27 @@ exports.setRedditAccessToken = function(req, res, token) {
 		res.redirect('/error')
 	})
 };
+exports.setSlackAccessToken = function(req, res, token) {
+	var axios = require('axios');
+	const ApplicationApi = axios.create({
+		baseURL: generalSettings.url,
+		crossDomain: true
+	});
+	ApplicationApi.post(
+		`/auth/addToken`,
+		{}, {
+			data: {
+				'service': 'Slack',
+				'access_token': token
+			},
+			headers: {
+				Authorization: `token ${generalSettings.access_token}`
+			}
+		}
+	).then(function(response) {
+		res.redirect('/profil')
+	}).catch(function(error) {
+		console.log(error);
+		res.redirect('/error')
+	})
+};
