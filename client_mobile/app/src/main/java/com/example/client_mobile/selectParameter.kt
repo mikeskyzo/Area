@@ -1,5 +1,6 @@
 package com.example.client_mobile
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,6 +27,7 @@ class selectParameter : AppCompatActivity() {
         lateinit var reaction: Reaction
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_parameter)
@@ -54,7 +56,7 @@ class selectParameter : AppCompatActivity() {
                 recyclerView_param.adapter = ParameterAdapter(listParam, action.name)
             }
             if (intent.getSerializableExtra("reaction") != null) {
-                buttonCreateReaction.text = "Create area"
+                buttonCreateReaction.text = "Next"
                 reaction = intent.getSerializableExtra("reaction") as Reaction
                 recyclerView_param.adapter = ParameterAdapter(listParam, reaction.name)
             }
@@ -80,65 +82,14 @@ class selectParameter : AppCompatActivity() {
                 for (i in 0 until list.size) {
                     reaction.params[i].value = list[i]
                 }
-                intent.putExtra("reaction", reaction)
-                createArea()
+                val intent = Intent(this, selectName::class.java)
+                intent.putExtra("token", token)
+                intent.putExtra("action", action)
+                intent.putExtra("reaction", reaction) // à supprimer ?
+                startActivity(intent)
+                //createArea()
             }
         }
-    }
-
-    fun formatRequest(): String {
-        val actionAsString: String = Gson().toJson(action)
-        val reactionAsString: String = Gson().toJson(reaction)
-        val jsonBody = "{\"action\":".plus(actionAsString).plus(",\"reaction\":").plus(reactionAsString).plus("}")
-        return jsonBody
-    }
-
-    fun createArea() {
-        val myBody = formatRequest().trimIndent()
-        val client = OkHttpClient()
-
-        val formBody = myBody.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
-        val request: Request = Request.Builder()
-            .url(Home.server_location.plus("/CreateArea"))
-            .header("Authorization", "token ".plus(token.toString()))
-            .header("Content-Type", "application/json")
-            .post(formBody)
-            .build()
-
-        loadingPanel.visibility = View.VISIBLE
-        client.newCall(request).enqueue(object: Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                if (body == "404") {
-                    loadingPanel.visibility = View.GONE
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        val code = response.code
-                        println("code:")
-                        println(code)
-                        loadingPanel.visibility = View.GONE
-                        if (code >= 400) {
-                            Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
-                            val intent = Intent(getContext(), selectAction::class.java)
-                            intent.putExtra("token", token)
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(getContext(), "Area successfully created", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(getContext(), Home::class.java)
-                            intent.putExtra("token", token)
-                            startActivity(intent)
-                        }
-                    }
-                }
-            }
-            override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute request")
-                println(e)
-            }
-        })
     }
 
     fun getContext(): Context? {
