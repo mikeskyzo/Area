@@ -17,6 +17,10 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
         <activity
+            android:name=".selectName"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        </activity>
+        <activity
             android:name=".selectReaction"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>

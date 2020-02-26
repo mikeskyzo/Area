@@ -15,4 +15,8 @@
     <string name="client_id_slack">933637704274.945976210260</string>
     <string name="client_secret_slack">248197e37352e5aa521b969a3cbb8a91</string>
     <string name="create_reaction">Create a reaction</string>
+    <string name="name">Name</string>
+    <string name="my_area">My area</string>
+    <string name="please_enter_a_name_for_your_area">Please enter a name for your area</string>
+    <string name="create_area">Create area</string>
 </resources>
