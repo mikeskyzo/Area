@@ -15,11 +15,18 @@ import java.io.IOException
 
 
 class Start : AppCompatActivity() {
+    companion object {
+        var server_location: String? = ""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
         loadingPanel.visibility = View.GONE
+        if (intent.getStringExtra("server_location") != null) {
+            server_location = intent.getStringExtra("server_location")
+            editTextServerLocation.setText(server_location)
+        }
         buttonLogin.setOnClickListener {
             MediaPlayer.create(this, R.raw.gnome).start()
 
@@ -27,6 +34,10 @@ class Start : AppCompatActivity() {
                 Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show()
             } else if (editTextPassword.length() == 0) {
                 Toast.makeText(this, "Please enter a password", Toast.LENGTH_SHORT).show()
+            } else if (editTextServerLocation.length() == 0) {
+                Toast.makeText(this, "Please enter a server location", Toast.LENGTH_SHORT).show()
+            } else if (editTextServerLocation.getText().toString().take(8) != "https://") {
+                Toast.makeText(this, "Invalid server location url", Toast.LENGTH_SHORT).show()
             } else {
                 askForLogin(editTextUsername.getText().toString(), editTextPassword.getText().toString())
             }

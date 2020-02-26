@@ -28,8 +28,9 @@ class selectAction : AppCompatActivity() {
             token = intent.getStringExtra("token")
 
         imageButtonBack.setOnClickListener {
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
+            this.onBackPressed()
+//            val intent = Intent(this, Home::class.java)
+//            startActivity(intent)
         }
 
         recyclerView_action.layoutManager = LinearLayoutManager(this)
