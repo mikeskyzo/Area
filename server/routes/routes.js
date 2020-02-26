@@ -11,7 +11,7 @@ var users = require('./users');
 
 var router = express.Router();
 
-router.post('/changeUsername', function(req, res) {
+router.patch('/user/changeUsername', function(req, res) {
 	utils.verifyToken(req, res, users.changeUsername);
 });
 
