@@ -35,6 +35,10 @@ function checkAndSaveAREA(area_id, req, res)
 	else
 		json.area_name = req.body.area_name
 
+	json.color = '#E3FF33'
+	if (req.body.color)
+		json.color = req.body.area_name
+
 	json.action = formatObject(req.body.action);
 	json.reaction = formatObject(req.body.reaction);
 
