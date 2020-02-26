@@ -174,7 +174,7 @@
 				{
 					"name" : "create_new_webhook_trello",
 					"title" : "Create Trello's webhook",
-					"description" : "Trigger when someone push on a repo",
+					"description" : "Trigger when there's an update on a Trello's model.",
 					"functions" : [
 						{
 							"type" : "create_action",
@@ -213,7 +213,7 @@
 						},
 						{
 							"type" : "verify_arguments",
-							"name" : "send_message_check_args"
+							"name" : "checkArgsCreateCard"
 						}
 					],
 					"params" : [
@@ -228,6 +228,60 @@
 						{
 							"name" : "description",
 							"description" : "Description of the card to add"
+						}
+					]
+				},
+				{
+					"name" : "trelloCreateList",
+					"title" : "Create a board",
+					"description" : "Create a Trello's list.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "trelloCreateList"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "checkArgsCreateList"
+						}
+					],
+					"params" : [
+						{
+							"name" : "IDBoard",
+							"description" : "ID of the board to add the card"
+						},
+						{
+							"name" : "name",
+							"description" : "Name of the list to add"
+						}
+					]
+				},
+				{
+					"name" : "trelloCreateLabel",
+					"title" : "Create a Trello's label",
+					"description" : "Create a Trello's label.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "trelloCreateLabel"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "checkArgsCreateLabel"
+						}
+					],
+					"params" : [
+						{
+							"name" : "IDBoard",
+							"description" : "ID of the board to add the label"
+						},
+						{
+							"name" : "name",
+							"description" : "Name of the label to add"
+						},
+						{
+							"name" : "color",
+							"description" : "Optionnal, choose the color of the label null by default"
 						}
 					]
 				}
