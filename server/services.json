@@ -282,10 +282,6 @@
 						{
 							"name" : "name",
 							"description" : "Name of the label to add"
-						},
-						{
-							"name" : "color",
-							"description" : "Optionnal, choose the color of the label null by default"
 						}
 					]
 				}

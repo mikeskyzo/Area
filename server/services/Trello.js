@@ -312,24 +312,15 @@ exports.checkArgsCreateLabel = async function (res, json)
 	}
 }
 
-const labelColors = ["yellow", "purple", "blue", "red", "green", "orange", "black", "sky", "pink", "lime", "null"];
-
-function isInArray(elem, arr) {
-	for (let i = 0; i < arr.length; i++)
-		if (arr[i] === elem)
-			return (true);
-	return (false);
-}
+const labelColors = ["yellow", "purple", "blue", "red", "green", "orange", "black", "sky", "pink", "lime"];
 
 exports.trelloCreateLabel = async function (area, res)
 {
-	let color = null;
-	if (!area.reaction.IDBoard || !area.reaction.name || !area.reaction.color) {
+	if (!area.reaction.IDBoard || !area.reaction.name) {
 		global.responseError(res, 401, 'Missing board ID or a name')
 		return;
 	}
-	if (area.reaction.color && isInArray(area.reaction.color, labelColors))
-		color = area.reaction.color;
+	const color = labelColors[Math.floor(Math.random() * (labelColors.length - 1))];
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
 	if (!token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
