@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/alex_brush</item>
+        <item>@font/amatic_sc_bold</item>
+        <item>@font/arizonia</item>
+        <item>@font/astloch</item>
+        <item>@font/bungee</item>
+        <item>@font/butterfly_kids</item>
+        <item>@font/caesar_dressing</item>
+        <item>@font/cookie</item>
+        <item>@font/croissant_one</item>
+        <item>@font/delius_swash_caps</item>
+        <item>@font/faster_one</item>
+        <item>@font/finger_paint</item>
+        <item>@font/iceberg</item>
+    </array>
+</resources>
