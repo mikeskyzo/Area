@@ -4,7 +4,7 @@ var axios = require('axios');
 const generalSettings = {
 	// Api
 	redditApi: `https://www.reddit.com/api/v1/`,
-	redditAuthApi: `https://oauth.reddit.com/api/v1`,
+	redditAuthApi: `https://oauth.reddit.com/api/v1/`,
 
 	// App related
 	clientId: 'xxa4cp-hsWE_iA',
@@ -57,10 +57,10 @@ module.exports = {
 		},
 
 	/* Get access token (require to get code first) */
+	// Need Basic Auth =>
+	//   username: clientId
+	//   password: clientSecret
 	getAccessToken: async function () {
-		// Need Basic Auth =>
-		//   username: clientId
-		//   password: clientSecret
 		const grantType = 'authorization_code';
 		return await RedditApi.post(`access_token` +
 			`?grant_type=${grantType}` +
@@ -77,9 +77,17 @@ module.exports = {
 	},
 
 	/* Get profile */
+	// Need Header => Authorization: `bearer ${generalSettings.authorizationCode}`
 	getProfile: function () {
-		// Need Header => Authorization: `bearer ${generalSettings.authorizationCode}`
-		return RedditAuthApi.get(`me`)
+		return RedditAuthApi
+			.get(`me`, {
+				headers: {
+					Authorization: `bearer ${generalSettings.authorizationToken}`
+				}
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
 	}
 
 };

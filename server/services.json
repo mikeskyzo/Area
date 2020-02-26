@@ -1,6 +1,43 @@
 {
 	"services" : [
 		{
+			"name" : "Discord",
+			"check_token_function" : "check_token",
+			"reactions" : [
+				{
+					"name" : "discord_send_message",
+					"title" : "Send a message",
+					"description" : "Send a message on a discord channel",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "send_message"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "send_message_check_args"
+						}
+					],
+					"params" : [
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						},
+						{
+							"name" : "username",
+							"description" : "Username of the bot",
+							"optional" : true
+						},
+						{
+							"name" : "avatar",
+							"description" : "Avatar's url of the bot",
+							"optional" : true
+						}
+					]
+				}
+			]
+		},
+		{
 			"name" : "Github",
 			"check_token_function" : "check_token",
 			"actions" : [
@@ -100,6 +137,10 @@
 			]
 		},
 		{
+			"name" : "Reddit",
+			"check_token_function" : "check_token"
+		},
+		{
 			"name" : "Slack",
 			"check_token_function" : "check_token",
 			"reactions" : [
@@ -125,43 +166,6 @@
 						{
 							"name" : "message",
 							"description" : "Message to send on the channel"
-						}
-					]
-				}
-			]
-		},
-		{
-			"name" : "Discord",
-			"check_token_function" : "check_token",
-			"reactions" : [
-				{
-					"name" : "discord_send_message",
-					"title" : "Send a message",
-					"description" : "Send a message on a discord channel",
-					"functions" : [
-						{
-							"type" : "execute_reaction",
-							"name" : "send_message"
-						},
-						{
-							"type" : "verify_arguments",
-							"name" : "send_message_check_args"
-						}
-					],
-					"params" : [
-						{
-							"name" : "message",
-							"description" : "Message to send on the channel"
-						},
-						{
-							"name" : "username",
-							"description" : "Username of the bot",
-							"optional" : true
-						},
-						{
-							"name" : "avatar",
-							"description" : "Avatar's url of the bot",
-							"optional" : true
 						}
 					]
 				}

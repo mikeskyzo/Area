@@ -102,7 +102,9 @@ app.get('/authorizations/reddit', async function (req, res) {
     RedditApi.generalSettings.code = req.query.code;
     var newres = await RedditApi.getAccessToken();
     RedditApi.generalSettings.authorizationToken = newres.data.access_token;
-    console.log(`Access token: ${RedditApi.generalSettings.authorizationToken}`);
+    console.log(`\nAccess token: ${RedditApi.generalSettings.authorizationToken}\n`);
+    var newres2 = await RedditApi.getProfile();
+    console.log(`Client request for profile : ${newres2.status}-${newres2.statusText}\n`);
     ServerApi.setRedditAccessToken(res, res, RedditApi.generalSettings.authorizationToken);
     //res.redirect('/profil');
 });
