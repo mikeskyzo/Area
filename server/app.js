@@ -55,7 +55,7 @@ var server = app.listen(8080, function () {
     (async function() {
         try {
             // global.url = await ngrok.connect({authtoken: token, subdomain: 'GrosSex',}, 8080);
-            global.url = await ngrok.connect({authtoken: token}, 8080);
+            global.url = await ngrok.connect(8080);
             console.log('=================================================');
             console.log('Url of you\'r api : ' + global.url);
             console.log('=================================================');
