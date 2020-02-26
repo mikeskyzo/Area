@@ -48,7 +48,7 @@ exports.send_message_check_args = function(res, json)
 exports.check_token = async function (req, res)
 {
 	if (!req.body.access_token) {
-		global.responseError(res, 401, 'Need a access token for slack');
+		global.responseError(res, 401, 'Need an access token for slack');
 		return;
 	}
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service})
