@@ -90,9 +90,10 @@ exports.changeUsername = async function (req, res)
         let result = await global.updateInDbAsync(global.CollectionUsers, {id : req.body.user_id}, { $set: { 'username' : req.body.username}});
         if (result.modifiedCount === 0)
             global.responseError(res, 403, 'You can\'t change to the same username');
-        res.json({
-            success : true,
-            message : 'Username change'
-        });
+        else
+            res.json({
+                success : true,
+                message : 'Username changed'
+            });
     }
 }
