@@ -97,6 +97,10 @@ global.findSomeInDbAsync = async function (collection, param) {
 	return db.collection(collection).find(param).toArray();
 }
 
+global.updateInDbAsync = async function (collection, query, update) {
+	return db.collection(collection).updateOne(query, update);
+}
+
 global.deleteInDbAsync = async function (collection, param) {
 	return db.collection(collection).deleteOne(param);
 }
