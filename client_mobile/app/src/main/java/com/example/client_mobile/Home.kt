@@ -275,6 +275,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 }
 
-class Area(val id: String, val action: String, val reaction: String) : Serializable
+class Area(val area_id: String, val action: String, val reaction: String) : Serializable
 
 class Areas(val areas: List<Area>) : Serializable
