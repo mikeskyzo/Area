@@ -1,8 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var apiUser = require('./apiCall');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var ServerApi = require('../services/ApplicationServer');
 var RedditApi = require('../services/RedditApi');
 
 
@@ -66,13 +66,13 @@ app.post('/client/:action', async (req, res) => {
         var password = req.body.passwordRegister;
         var server = req.body.serverRegister;
 
-        apiUser.createUser(email, username, password, server, req, res);
+        ServerApi.createUser(email, username, password, server, req, res);
     } else if (req.params.action == 'login') {
         var username = req.body.usernameLogin;
         var password = req.body.passwordLogin;
         var serverAddress = req.body.serverLogin;
 
-        apiUser.connectUser(username, password, serverAddress, req, res);
+        ServerApi.connectUser(username, password, serverAddress, req, res);
     } else {
         res.redirect('/error');
     }
@@ -103,7 +103,8 @@ app.get('/authorizations/reddit', async function (req, res) {
     var newres = await RedditApi.getAccessToken();
     RedditApi.generalSettings.authorizationToken = newres.data.access_token;
     console.log(`Access token: ${RedditApi.generalSettings.authorizationToken}`);
-    res.redirect('/profil');
+    ServerApi.setRedditAccessToken(res, res, RedditApi.generalSettings.authorizationToken);
+    //res.redirect('/profil');
 });
 
 app.listen(8081);
