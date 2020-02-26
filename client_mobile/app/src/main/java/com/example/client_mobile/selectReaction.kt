@@ -21,21 +21,16 @@ class selectReaction: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-/*        imageButtonBack.setOnClickListener {
-            val intent = Intent(this, selectAction::class.java)
-            startActivity(intent)
-        }*/
         setContentView(R.layout.activity_select_action)
+        imageButtonBack.setOnClickListener {
+            this.onBackPressed()
+//            val intent = Intent(this, selectAction::class.java)
+//            startActivity(intent)
+        }
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
         if (intent.getSerializableExtra("action") != null)
             action = intent.getSerializableExtra("action") as Action
-/*        println("select reaction")
-        println(action.name)
-        for (i in action.params.indices) {
-            println(action.params[i].name)
-            println(action.params[i].value)
-        }*/
         recyclerView_action.layoutManager = LinearLayoutManager(this)
         getReactions()
     }
