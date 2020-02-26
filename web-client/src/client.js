@@ -7,7 +7,6 @@ var RedditApi = require('../services/RedditApi');
 var GithubApi = require('../services/GithubApi');
 var SlackApi = require('../services/SlackApi');
 
-
 var app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -77,6 +76,28 @@ app.post('/client/:action', async (req, res) => {
         ServerApi.connectUser(username, password, serverAddress, req, res);
     } else {
         res.redirect('/error');
+    }
+});
+
+app.get('/client/:action', async function (req, res) {
+    if (req.params.action == 'getServerAddress') {
+        res.json({
+            success : true,
+            token : req.cookies.access_token,
+            server : req.cookies.server
+        })
+    } else if (req.params.action == 'getInitAction') {
+        const result = await ServerApi.initGetActions(req, res, req.cookies.server, req.cookies.access_token);
+        res.json({
+            success : true,
+            data : result.data
+        })
+    } else if (req.params.action == 'getInitReaction') {
+        const result = await ServerApi.initGetReactions(req, res, req.cookies.server, req.cookies.access_token);
+        res.json({
+            success: true,
+            data: result.data
+        })
     }
 });
 

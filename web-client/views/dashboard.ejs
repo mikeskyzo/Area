@@ -5,40 +5,47 @@
     <title>Rushboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--<style type="text/css">
-    </style>-->
+    <style type="text/css">
+        <%- include('css/dashboard.css') -%>
+    </style>
 </head>
 
 <body>
-<nav class="black">
-    <div class="nav-wrapper">
-        <a href="#" class="left brand-logo orange-text" style="margin-left: 20px"><b>AREA</b></a>
-        <a href="/disconnect" class="right waves-effect waves-light black-text orange btn" style="margin-right: 20px; margin-top: 14px"><b>Disconnect</b></a>
-        <a href="/profil" class="right waves-effect waves-light black-text orange btn" style="margin-right: 20px; margin-top: 14px"><b>Account</b></a>
-    </div>
-</nav>
+    <nav class="black">
+        <div class="nav-wrapper">
+            <a href="#" class="left brand-logo orange-text" style="margin-left: 20px"><b>AREA</b></a>
+            <a href="/disconnect" class="right waves-effect waves-light black-text orange btn" style="margin-right: 20px; margin-top: 14px"><b>Disconnect</b></a>
+            <a href="/profil" class="right waves-effect waves-light black-text orange btn" style="margin-right: 20px; margin-top: 14px"><b>Account</b></a>
+        </div>
+    </nav>
 
-<div class="row1" style="background: #1b1b1b; min-height: 100vh;">
-    <div class="col 12">
-        <div class="row">
-            <div id="actionCol" class="col s3" style="background: #1b1b1b; min-height: 700px">
-                <div id="action1">
-                    YOOOOO<br>
-                    OOOOOOO<br>
-                    OOOOOOOO<br>
-                    OOOO
+    <div class="row flex">
+        <div id="actionCol" class="col s3 full-width" style="background: #1b1b1b;">
+
+
+            <div id="action-list">
+                <div id="invisible-box" style="width: content-box">
+
                 </div>
             </div>
-            <div id="statusCol" class="col s6" style="background: #363636; min-height: 700px">
-                ICI LE STATUTS
-            </div>
-            <div id="reactionCol" class="col s3" style="background: #1b1b1b;min-height: 700px">
+
+
+        </div>
+
+        <div id="statusCol" class="col s6 full-width" style="background: #363636;">
+        </div>
+
+        <div id="reactionCol" class="col s3 full-width" style="background: #1b1b1b;">
+            <div id="reaction-list">
                 ICI LES REACTIONS
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script type="text/javascript">
+        <%- include('../src/dashboard.js'); -%>
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
