@@ -1,15 +1,27 @@
-var express = require('express');
-var uniqid = require('uniqid');
-var jwt = require('jsonwebtoken');
+const express = require('express');
 
-var utils = require('../src/utils');
-var getArea = require('../src/GetArea');
+const utils = require('../src/utils');
+const getArea = require('../src/GetArea');
 
-var area = require('./areaCreator')
-var about = require('./aboutJson');
-var authToken = require('./tokens')
+const area = require('./areaCreator');
+const about = require('./aboutJson');
+const authToken = require('./tokens');
+
+var users = require('./users');
 
 var router = express.Router();
+
+router.post('/changeUsername', function(req, res) {
+	utils.verifyToken(req, res, users.changeUsername);
+});
+
+router.post('/connectUser', function(req, res) {
+	users.connectUser(req, res);
+});
+
+router.post('/createUser', function(req, res) {
+	users.creatUser(req, res);
+});
 
 router.post('/CreateArea', function(req, res) {
 	utils.verifyToken(req, res, area.CreateArea);
