@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        loadingPanel.visibility = View.VISIBLE
         if (intent.getStringExtra("server_location") != null)
             server_location = intent.getStringExtra("server_location")
         if (intent.getStringExtra("token") != null)
@@ -83,7 +85,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .url(server_location.plus("/getAreas/name"))
             .header("Authorization", "token ".plus(token.toString()))
             .build()
-
+        loadingPanel.visibility = View.VISIBLE
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
@@ -96,7 +98,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     println(body)
                     val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
                     runOnUiThread {
-//                        loadingPanel.visibility = View.GONE
+                        loadingPanel.visibility = View.GONE
                         recyclerView_areas.adapter = AreaAdapter(allAreas)
                     }
                 }

@@ -69,11 +69,11 @@ class Start : AppCompatActivity() {
                 } else {
                     runOnUiThread {
                         val code = response.code
-                        val account = GsonBuilder().create().fromJson(body, Account::class.java)
                         loadingPanel.visibility = View.GONE
                         if (code >= 400) {
-                            Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                         } else {
+                            val account = GsonBuilder().create().fromJson(body, Account::class.java)
                             val intent = Intent(getContext(), Home::class.java)
                             intent.putExtra("username", username)
                             intent.putExtra("token", account.token)
@@ -86,6 +86,12 @@ class Start : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
+                if (e.toString() == "java.net.SocketTimeoutException: timeout") {
+                    runOnUiThread {
+                        loadingPanel.visibility = View.GONE
+                        Toast.makeText(getContext(), "Timeout, server didn't respond", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         })
     }
