@@ -29,7 +29,7 @@ exports.creatUser = function(req, res) {
             } else {
                 res.status(201);
                 var token = jwt.sign({ id: id }, global.secret, {
-                    expiresIn: '1h'
+                    expiresIn: '1y'
                 });
                 res.json({
                     success : true,
@@ -41,7 +41,7 @@ exports.creatUser = function(req, res) {
     });
 }
 
-exports.connectUser = function(req, res) {
+exports.connectUser = async function(req, res) {
     var username = req.body.username;
     var pass = req.body.password;
     if (!username || !pass) {
@@ -85,7 +85,7 @@ exports.connectUser = function(req, res) {
 exports.changeUsername = async function (req, res)
 {
     if (!req.body.username)
-        global.responseError(res, 401, 'Missing the new username');
+        global.responseError(res, 403, 'Missing the new username');
     else {
         let result = await global.updateInDbAsync(global.CollectionUsers, {id : req.body.user_id}, { $set: { 'username' : req.body.username}});
         if (result.modifiedCount === 0)
@@ -94,6 +94,29 @@ exports.changeUsername = async function (req, res)
             res.json({
                 success : true,
                 message : 'Username changed'
+            });
+    }
+}
+
+exports.changePassword = async function (req, res)
+{
+    if (!req.body.new_password)
+        global.responseError(res, 403, 'Missing the new password');
+    else if (!req.body.password)
+        global.responseError(res, 403, 'Missing the password');
+    else {
+        let pass = await global.findInDbAsync(global.CollectionUsers, {id : req.body.user_id, pass : req.body.password});
+        if (!pass) {
+            global.responseError(res, 403, 'Wrong password');
+            return;
+        }
+        let result = await global.updateInDbAsync(global.CollectionUsers, {id : req.body.user_id, pass : req.body.password}, { $set: { pass : req.body.new_password}});
+        if (result.modifiedCount === 0)
+            global.responseError(res, 403, 'You can\'t change to the same password');
+        else
+            res.json({
+                success : true,
+                message : 'password changed'
             });
     }
 }
