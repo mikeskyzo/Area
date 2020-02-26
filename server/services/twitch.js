@@ -25,15 +25,16 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(req, res, login)
         return ;
     }
     console.log(global.url);
-    let url = `https://api.twitch.tv/helix/webhooks/hub?redirect_url=${global.url}/sex&hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/caca&hub.lease_seconds=86400`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/caca&hub.lease_seconds=86400`;
    let resp = await fetch(url, {
        'method': 'POST',
        'headers' : {'Client-ID' : client_id}
    });
 
-   if (resp.status == 202)
-       return(0);
-     //  next(req, res, json);
+   if (resp.status == 202) {
+       return (0);
+       //  next(req, res, json);
+   }
     else
         global.responseError(res, 401, 'ewwow it not wok owo');
 };
