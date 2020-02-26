@@ -70,7 +70,7 @@ exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, login
         return (0);
     }
 
-    let url = `https://api.twitch.tv/helix/webhooks/hub?redirect_url=${global.url}/sex&hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=subscribe&hub.callback=http://localhost:8080/`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?redirect_url=${global.url}/sex&hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/caca&hub.lease_seconds=300`;
     let resp = await fetch(url,  {
         'method': 'POST',
         'headers' : {'client_id' : client_id}
@@ -89,7 +89,7 @@ exports.Twitch_Delete_Webhook_StreamChangeState = async function(req, res, login
         return (0);
     }
 
-    let url = `https://api.twitch.tv/helix/webhooks/hub?redirect_url=${global.url}/sex&hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=unsubscribe&hub.callback=http://localhost:8080/`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?redirect_url=${global.url}/sex&hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/caca&hub.lease_seconds=300`;
     let resp = await fetch(url,  {
         'method': 'POST',
         'headers' : {'client_id' : client_id}
