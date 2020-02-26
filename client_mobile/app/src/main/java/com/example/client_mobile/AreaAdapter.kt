@@ -25,7 +25,38 @@ class AreaAdapter(val allAreas: Areas): RecyclerView.Adapter<CustomViewHolderAre
 
         val area = allAreas.areas.get(position)
 
-        //holder.view.cardView.setCardBackgroundColor(Color.parseColor("#EAEDED"))
+        holder.view.textView_name.setText(area.area_name)
+        if (area.color == "orange") {
+            holder.view.textView_name.setBackgroundColor(Color.parseColor("#ff9800"))
+            holder.view.imageViewIconAction.setColorFilter(Color.parseColor("#ff9800"))
+            holder.view.imageViewIconReaction.setColorFilter(Color.parseColor("#ff9800"))
+        }
+        if (area.color == "red") {
+            holder.view.textView_name.setBackgroundColor(Color.parseColor("#e31c0e"))
+            holder.view.imageViewIconAction.setColorFilter(Color.parseColor("#e31c0e"))
+            holder.view.imageViewIconReaction.setColorFilter(Color.parseColor("#e31c0e"))
+        }
+        if (area.color == "blue") {
+            holder.view.textView_name.setBackgroundColor(Color.parseColor("#0e75e3"))
+            holder.view.imageViewIconAction.setColorFilter(Color.parseColor("#0e75e3"))
+            holder.view.imageViewIconReaction.setColorFilter(Color.parseColor("#0e75e3"))
+        }
+        if (area.color == "green") {
+            holder.view.textView_name.setBackgroundColor(Color.parseColor("#0ee320"))
+            holder.view.imageViewIconAction.setColorFilter(Color.parseColor("#0ee320"))
+            holder.view.imageViewIconReaction.setColorFilter(Color.parseColor("#0ee320"))
+        }
+        if (area.color == "yellow") {
+            holder.view.textView_name.setBackgroundColor(Color.parseColor("#e3dc0e"))
+            holder.view.imageViewIconAction.setColorFilter(Color.parseColor("#e3dc0e"))
+            holder.view.imageViewIconReaction.setColorFilter(Color.parseColor("#e3dc0e"))
+        }
+        if (area.color == "pink") {
+            holder.view.textView_name.setBackgroundColor(Color.parseColor("#f76dec"))
+            holder.view.imageViewIconAction.setColorFilter(Color.parseColor("#f76dec"))
+            holder.view.imageViewIconReaction.setColorFilter(Color.parseColor("#f76dec"))
+        }
+
         holder.view.buttonDetails.setOnClickListener {
             println(area.area_id)
             Toast.makeText(holder.view.context, area.area_id, Toast.LENGTH_SHORT).show()

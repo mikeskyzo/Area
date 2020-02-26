@@ -256,6 +256,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
+                intent.putExtra("server_location", server_location)
                 startActivity(intent)
                 Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
             }
@@ -275,6 +276,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 }
 
-class Area(val area_id: String, val action: String, val reaction: String) : Serializable
+class Area(val area_id: String, val action: String, val reaction: String, val area_name: String, val color: String) : Serializable
 
 class Areas(val areas: List<Area>) : Serializable
