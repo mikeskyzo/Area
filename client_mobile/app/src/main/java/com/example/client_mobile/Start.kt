@@ -86,7 +86,7 @@ class Start : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
-                if (e.toString() == "java.net.SocketTimeoutException: timeout") {
+                if (e.toString() == "java.net.SocketTimeoutException: timeout" || e.toString() == "java.net.SocketTimeoutException: SSL handshake timed out") {
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
                         Toast.makeText(getContext(), "Timeout, server didn't respond", Toast.LENGTH_SHORT).show()
