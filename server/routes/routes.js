@@ -15,6 +15,10 @@ router.patch('/user/changeUsername', function(req, res) {
 	utils.verifyToken(req, res, users.changeUsername);
 });
 
+router.patch('/user/changePassword', function(req, res) {
+	utils.verifyToken(req, res, users.changePassword);
+});
+
 router.post('/connectUser', function(req, res) {
 	users.connectUser(req, res);
 });
