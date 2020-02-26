@@ -1,5 +1,6 @@
 package com.example.client_mobile
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ class AreaAdapter(val allAreas: Areas): RecyclerView.Adapter<CustomViewHolderAre
 
         val area = allAreas.areas.get(position)
 
+        //holder.view.cardView.setCardBackgroundColor(Color.parseColor("#EAEDED"))
         holder.view.buttonDetails.setOnClickListener {
             println(area.area_id)
             Toast.makeText(holder.view.context, area.area_id, Toast.LENGTH_SHORT).show()
