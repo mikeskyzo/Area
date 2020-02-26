@@ -47,7 +47,6 @@ module.exports = {
 
 	generalSettings: generalSettings,
 
-
 /* Creating Api methods */
 
 	/* Authorization */
