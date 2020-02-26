@@ -11,6 +11,13 @@ generalSettings = {
 	access_token: 'undefined2'
 };
 
+// Initializing
+var axios = require('axios');
+const ApplicationApi = axios.create({
+	baseURL: generalSettings.url,
+	crossDomain: true
+});
+
 exports.connectUser = function(username, password, server, req, res) {
 	var url = server + '/connectUser';
 
@@ -24,7 +31,6 @@ exports.connectUser = function(username, password, server, req, res) {
 			generalSettings.access_token = data.token;
 			res.cookie('server', server);
 			generalSettings.url = server;
-			console.log(generalSettings);
 			res.redirect('/dashboard');
 		},
 		error : function (data, status, error) {
@@ -57,11 +63,8 @@ exports.createUser = function(email, Uname, Pword, server, req, res) {
 
 // Authorizations
 exports.setGithubAccessToken = function(req, res, token) {
-	var axios = require('axios');
-	const ApplicationApi = axios.create({
-		baseURL: generalSettings.url,
-		crossDomain: true
-	});
+	ApplicationApi.baseURL = generalSettings.url;
+	ApplicationApi.defaults.baseURL = generalSettings.url;
 	ApplicationApi.post(
 		`/auth/addToken`,
 		{}, {
@@ -76,16 +79,13 @@ exports.setGithubAccessToken = function(req, res, token) {
 	).then(function(response) {
 		res.redirect('/profil')
 	}).catch(function(error) {
-		//console.log(error);
+		console.log(error);
 		res.redirect('/error')
 	})
 };
 exports.setRedditAccessToken = function(req, res, token) {
-	var axios = require('axios');
-	const ApplicationApi = axios.create({
-		baseURL: generalSettings.url,
-		crossDomain: true
-	});
+	ApplicationApi.baseURL = generalSettings.url;
+	ApplicationApi.defaults.baseURL = generalSettings.url;
 	ApplicationApi.post(`/auth/addToken`,
 		{},
 		{
@@ -100,15 +100,13 @@ exports.setRedditAccessToken = function(req, res, token) {
 	).then(function(response) {
 		res.redirect('/profil')
 	}).catch(function(error) {
+		console.log(error);
 		res.redirect('/error')
 	})
 };
 exports.setSlackAccessToken = function(req, res, token) {
-	var axios = require('axios');
-	const ApplicationApi = axios.create({
-		baseURL: generalSettings.url,
-		crossDomain: true
-	});
+	ApplicationApi.baseURL = generalSettings.url;
+	ApplicationApi.defaults.baseURL = generalSettings.url;
 	ApplicationApi.post(
 		`/auth/addToken`,
 		{}, {
