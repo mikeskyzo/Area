@@ -11,14 +11,12 @@ global.saveInDb = function (collection, json, res, success_message){
 
 	global.db.collection(collection).insertOne(json, (err, result) => {
 		if (err) {
-			console.log(`STATUS : 401`);
 			res.status(401);
 			res.json({
 				success : false,
 				message : err.message
 			});
 		} else {
-			console.log(`STATUS : 201`);
 			res.status(201);
 			res.json({
 				success : true,

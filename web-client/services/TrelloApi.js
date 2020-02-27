@@ -50,22 +50,18 @@ module.exports = {
 	},
 
 	getAccessToken: function (req, res) {
-		console.log('Starting function...');
 		const query = url.parse(req.url, true).query;
 		const token = query.oauth_token;
 		const tokenSecret = oauthSecrets[token];
 		const verifier = query.oauth_verifier;
 
-		console.log('Starting Oauth call...');
 		oauth.getOAuthAccessToken(
 			token, tokenSecret, verifier,
 			function(error, accessToken, accessTokenSecret, results) {
-				console.log('Starting to get access token...');
 				oauth.getProtectedResource(
 					"https://api.trello.com/1/members/me",
 					"GET", accessToken, accessTokenSecret,
 					function(error, data, response) {
-						console.log('Starting to get secret...');
 						generalSettings.authorizationToken = accessToken;
 						generalSettings.secretAuthorizationToken = accessTokenSecret;
 						res.redirect('/authorizations/trello/post-steps');

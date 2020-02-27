@@ -67,7 +67,6 @@ exports.CheckToken = function (req, res)
 		global.responseError(res, 401, "Trello needs a APIKey");
 		return;
 	}
-	console.log('Passed requirements');
 
 	fetch(`https://api.trello.com/1/members/me/?key=${req.body.APIKey}&token=${req.body.APIToken}`)
 	.then(function (response) {
@@ -78,20 +77,12 @@ exports.CheckToken = function (req, res)
 				APIToken : req.body.APIToken,
 				APIKey : req.body.APIKey
 			};
-			console.log(`\n` +
-				`\t\t+----------------------------------+\n` +
-				`\t\t| It's all good, I'm gonna save it |\n` +
-				`\t\t+----------------------------------+\n` +
-				`\n`);
-			global.saveInDb(global.CollectionToken, json, req, res, "Token saved");
+			global.saveInDb(global.CollectionToken, json, res, "Token saved");
 			return;
 		}
 		throw `Token not valid : ${response.statusText}`;
 	})
 	.catch(function (error) {
-		console.log('\n   ==============1============\n');
-		console.log(error);
-		console.log('\n   ==============2============\n');
 		global.responseError(res, 500, error)
 	});
 };
