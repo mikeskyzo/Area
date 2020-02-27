@@ -72,11 +72,6 @@ exports.CheckToken = function (req, res)
 		global.responseError(res, 401, "Trello needs a APIKey")
 		return;
 	}
-	if (!req.body.idModel || req.body.idModel.trim() == "") {
-		global.responseError(res, 401, "Trello needs a idModel")
-		return;
-	}
-
 	fetch(`https://api.trello.com/1/members/me/?key=${req.body.APIKey}&token=${req.body.APIToken}`)
 	.then(function (response) {
 		if (response.status == 200) {
