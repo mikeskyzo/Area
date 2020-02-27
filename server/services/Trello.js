@@ -72,20 +72,14 @@ exports.CheckToken = function (req, res)
 		global.responseError(res, 401, "Trello needs a APIKey")
 		return;
 	}
-	if (!req.body.idModel || req.body.idModel.trim() == "") {
-		global.responseError(res, 401, "Trello needs a idModel")
-		return;
-	}
-
 	fetch(`https://api.trello.com/1/members/me/?key=${req.body.APIKey}&token=${req.body.APIToken}`)
 	.then(function (response) {
 		if (response.status == 200) {
-			var json = {
+			let json = {
 				user_id : req.body.user_id,
 				service : global.service.Trello,
 				APIToken : req.body.APIToken,
-				APIKey : req.body.APIKey,
-				idModel : req.body.idModel,
+				APIKey : req.body.APIKey
 			}
 			global.saveInDb(global.CollectionToken, json, req, res, "Token saved");
 			return;
