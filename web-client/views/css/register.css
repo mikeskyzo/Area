@@ -32,7 +32,7 @@ body {
     }
 }
 
-.right {
+.left {
     background: white;
     height: calc(100% - 40px);
     top: 20px;
@@ -40,7 +40,7 @@ body {
     width: 50%;
 }
 @media (max-width: 767px) {
-    .right {
+    .left {
         height: 100%;
         left: 20px;
         width: calc(100% - 40px);
@@ -59,15 +59,16 @@ body {
     margin: 50px 40px 40px;
 }
 
-.left {
+.right {
     background: #474A59;
     box-shadow: 0px 0px 40px 16px rgba(0,0,0,0.22);
     color: #F1F1F2;
     position: relative;
     width: 50%;
+    height: 145%;
 }
 @media (max-width: 767px) {
-    .left {
+    .right {
         flex-shrink: 0;
         height: 100%;
         width: 100%;
@@ -75,7 +76,10 @@ body {
     }
 }
 .form {
-    margin: 40px;
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-left: 40px;
+    margin-bottom: 20px;
     position: absolute;
 }
 label {
@@ -83,7 +87,7 @@ label {
     display: block;
     font-size: 14px;
     height: 16px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 5px;
 }
 input {
