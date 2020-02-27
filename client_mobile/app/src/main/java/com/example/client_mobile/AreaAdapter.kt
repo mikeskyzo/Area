@@ -1,15 +1,18 @@
 package com.example.client_mobile
 
+import android.content.Intent
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.area_row.view.*
 
 
-class AreaAdapter(val allAreas: Areas): RecyclerView.Adapter<CustomViewHolderArea>() {
+class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderArea>() {
     override fun getItemCount(): Int {
         val nb = allAreas.areas.count()
         return nb
@@ -58,6 +61,10 @@ class AreaAdapter(val allAreas: Areas): RecyclerView.Adapter<CustomViewHolderAre
         }
 
         holder.view.buttonDetails.setOnClickListener {
+            val intent = Intent(context, DetailsArea::class.java)
+            intent.putExtra("token", token)
+            intent.putExtra("area_id", area.area_id)
+            context?.startActivity(intent)
             println(area.area_id)
             Toast.makeText(holder.view.context, area.area_id, Toast.LENGTH_SHORT).show()
         }
