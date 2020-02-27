@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 //https://trello.com/app-key
 
 exports.createNewWebhook = async function (res, json, next) {
-	if (!json.action.idModel || json.action.idModel.trim() == "") {
+	if (!json.action.idModel || json.action.idModel.trim() === "") {
 		global.responseError(res, 401, "Trello needs a idModel")
 		return;
 	}
@@ -24,7 +24,7 @@ exports.createNewWebhook = async function (res, json, next) {
 		method: "POST"
 	})
 	.then(function (response) {
-		if (response.status == 201)
+		if (response.status === 201)
 			return response.json();
 		throw `Failed to create webhook : ${response.statusText}`
 	})
@@ -362,7 +362,7 @@ exports.checkArgsCreateBoard = async function (res, json)
 			return response.json();
 		})
 		.then(function (resjson) {
-			if (resjson.ok == false) {
+			if (resjson.ok === false) {
 				console.error(`Bad response from Trello : ${resjson.error}`);
 				res.status(500).send();
 			} else {
@@ -403,7 +403,7 @@ exports.trelloCreateLabel = async function (area, res)
 		return response.json();
 	})
 	.then(function (resjson) {
-		if (resjson.ok == false) {
+		if (resjson.ok === false) {
 			console.error(`Bad response from Trello : ${resjson.error}`);
 			res.status(500).send();
 		} else {
