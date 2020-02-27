@@ -37,6 +37,7 @@ app.get('/', function(req, res) {
 
 app.get('/disconnect', function (req, res) {
 	res.clearCookie('access_token');
+	res.clearCookie('redditConnect');
 	res.redirect('/login');
 });
 
@@ -101,6 +102,26 @@ app.get('/client/:action', async function (req, res) {
 		res.json({
 			success: true,
 			data: result.data
+		})
+	} else if (req.params.action == 'getGithubLoginStatus') {
+		res.json({
+			success : true,
+			service : req.cookies.githubConnect
+		})
+	} else if (req.params.action == 'getRedditLoginStatus') {
+		res.json({
+			success : true,
+			service : req.cookies.redditConnect
+		})
+	} else if (req.params.action == 'getSlackLoginStatus') {
+		res.json({
+			success : true,
+			service : req.cookies.slackConnect
+		})
+	} else if (req.params.action == 'getTrelloLoginStatus') {
+		res.json({
+			success : true,
+			service : req.cookies.trelloConnect
 		})
 	}
 });
