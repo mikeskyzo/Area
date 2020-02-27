@@ -244,8 +244,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_profile -> {
-                getServices()
-                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Settings::class.java)
+                intent.putExtra("token", token)
+                intent.putExtra("server_location", server_location)
+                startActivity(intent)
+//                getServices()
+//                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_create_area -> {
                 val intent = Intent(this, selectAction::class.java)
