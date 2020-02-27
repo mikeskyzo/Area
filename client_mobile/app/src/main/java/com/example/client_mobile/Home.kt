@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -71,6 +72,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             addTokenGithub(uri)
         } else if (service[0] == "slack") {
             addTokenSlack(uri)
+        } else if (service[0] == "reddit") {
+            addTokenReddit(uri)
         }
 
         if (uri !== null) {
@@ -133,6 +136,42 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 val access_token = body.toString().split(delimiter1, delimiter2)[1]
                 addToken("Github", access_token)
 
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
+    }
+
+    fun addTokenReddit(uri: Uri?) {
+        val regex = Regex("(?<=code=).*\$")
+        val result: MatchResult? = regex.find(uri.toString())
+        val code = result?.value!!
+
+
+        val authString: String = "YRYKkBFVxzy12Q:"
+        val encodedAuthString: String = Base64.encodeToString(authString.toByteArray(), Base64.NO_WRAP)
+
+        val url = "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=".plus(code).plus("&redirect_uri=").plus("reddit://truc.truc")
+
+        val client = OkHttpClient()
+
+        val formBody: RequestBody = FormBody.Builder()
+            .build()
+
+        val request: Request = Request.Builder()
+            .url(url)
+            .header("User-Agent", "Sample App")
+            .header("Authorization", "Basic ".plus(encodedAuthString))
+            .post(formBody)
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                val access_token = GsonBuilder().create().fromJson(body, AccessToken::class.java).access_token
+                addToken("Reddit", access_token)
             }
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
@@ -272,6 +311,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 openURL.data = Uri.parse("https://slack.com/oauth/v2/authorize?client_id=933637704274.945976210260&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&redirect_uri=slack://truc.truc")
                 startActivity(openURL)
             }
+            R.id.nav_reddit -> {
+                val openURL = Intent(android.content.Intent.ACTION_VIEW)
+                openURL.data = Uri.parse("https://www.reddit.com/api/v1/authorize?client_id=YRYKkBFVxzy12Q&redirect_uri=reddit://truc.truc&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=permanent&state=NONE")
+                startActivity(openURL)
+            }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -281,3 +325,5 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 class Area(val area_id: String, val action: String, val reaction: String, val area_name: String, val color: String) : Serializable
 
 class Areas(val areas: List<Area>) : Serializable
+
+class AccessToken(val access_token: String)
