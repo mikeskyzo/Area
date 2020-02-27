@@ -94,12 +94,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    println("GOOD")
-                    println(body)
                     val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
-                        recyclerView_areas.adapter = AreaAdapter(allAreas)
+                        recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token)
                     }
                 }
             }
