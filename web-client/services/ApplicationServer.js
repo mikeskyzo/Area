@@ -153,7 +153,7 @@ exports.setSlackAccessToken = function(req, res, token) {
 		res.redirect('/error')
 	})
 };
-exports.setTrelloAccessToken = function(req, res, token, secretToken) {
+exports.setTrelloAccessToken = function(req, res, apiToken, apiKey) {
 	ApplicationApi.baseURL = generalSettings.url;
 	ApplicationApi.defaults.baseURL = generalSettings.url;
 	ApplicationApi.post(
@@ -161,8 +161,8 @@ exports.setTrelloAccessToken = function(req, res, token, secretToken) {
 		{}, {
 			data: {
 				'service': 'Trello',
-				'APIToken': token,
-				'APIKey': secretToken
+				'APIToken': apiToken,
+				'APIKey': apiKey
 			},
 			headers: {
 				Authorization: `token ${generalSettings.access_token}`
