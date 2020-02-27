@@ -105,9 +105,11 @@ exports.setGithubAccessToken = function(req, res, token) {
 			}
 		}
 	).then(function(response) {
+		res.cookie('githubConnect', true);
 		res.redirect('/profil')
 	}).catch(function(error) {
 		console.log(error);
+		res.cookie('githubConnect', false);
 		res.redirect('/error')
 	})
 };
@@ -126,9 +128,11 @@ exports.setRedditAccessToken = function(req, res, token) {
 			}
 		}
 	).then(function(response) {
+		res.cookie('redditConnect', true);
 		res.redirect('/profil')
 	}).catch(function(error) {
 		console.log(error);
+		res.cookie('redditConnect', false);
 		res.redirect('/error')
 	})
 };
@@ -147,9 +151,11 @@ exports.setSlackAccessToken = function(req, res, token) {
 			}
 		}
 	).then(function(response) {
+		res.cookie('slackConnect', true);
 		res.redirect('/profil')
 	}).catch(function(error) {
 		console.log(error);
+		res.cookie('slackConnect', true);
 		res.redirect('/error')
 	})
 };
@@ -169,9 +175,11 @@ exports.setTrelloAccessToken = function(req, res, apiToken, apiKey) {
 			}
 		}
 	).then(function(response) {
+		res.cookie('trelloConnect', true);
 		res.redirect('/profil')
 	}).catch(function(error) {
 		//console.log(error);
+		res.cookie('trelloConnect', true);
 		res.redirect('/error')
 	})
 };
