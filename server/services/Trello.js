@@ -60,13 +60,15 @@ exports.deleteWebhook = async function (area, req, res) {
 exports.CheckToken = function (req, res)
 {
 	if (!req.body.APIToken || req.body.APIToken.trim() === "") {
-		global.responseError(res, 401, "Trello needs a APIToken")
+		global.responseError(res, 401, "Trello needs a APIToken");
 		return;
 	}
 	if (!req.body.APIKey || req.body.APIKey.trim() === "") {
-		global.responseError(res, 401, "Trello needs a APIKey")
+		global.responseError(res, 401, "Trello needs a APIKey");
 		return;
 	}
+	console.log('Passed requirements');
+
 	fetch(`https://api.trello.com/1/members/me/?key=${req.body.APIKey}&token=${req.body.APIToken}`)
 	.then(function (response) {
 		if (response.status === 200) {
@@ -75,16 +77,24 @@ exports.CheckToken = function (req, res)
 				service : global.service.Trello,
 				APIToken : req.body.APIToken,
 				APIKey : req.body.APIKey
-			}
+			};
+			console.log(`\n` +
+				`\t\t+----------------------------------+\n` +
+				`\t\t| It's all good, I'm gonna save it |\n` +
+				`\t\t+----------------------------------+\n` +
+				`\n`);
 			global.saveInDb(global.CollectionToken, json, req, res, "Token saved");
 			return;
 		}
 		throw `Token not valid : ${response.statusText}`;
 	})
 	.catch(function (error) {
+		console.log('\n   ==============1============\n');
+		console.log(error);
+		console.log('\n   ==============2============\n');
 		global.responseError(res, 500, error)
 	});
-}
+};
 
 exports.FormatWebhookUpdateModel = function (req, res, area, next)
 {
