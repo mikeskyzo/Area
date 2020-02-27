@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 //https://trello.com/app-key
 
 exports.createNewWebhook = async function (res, json, next) {
-	if (!json.action.idModel || json.action.idModel.trim() == "") {
+	if (!json.action.idModel || json.action.idModel.trim() === "") {
 		global.responseError(res, 401, "Trello needs a idModel")
 		return;
 	}
@@ -24,7 +24,7 @@ exports.createNewWebhook = async function (res, json, next) {
 		method: "POST"
 	})
 	.then(function (response) {
-		if (response.status == 201)
+		if (response.status === 201)
 			return response.json();
 		throw `Failed to create webhook : ${response.statusText}`
 	})
@@ -59,17 +59,17 @@ exports.deleteWebhook = async function (area, req, res) {
 
 exports.CheckToken = function (req, res)
 {
-	if (!req.body.APIToken || req.body.APIToken.trim() == "") {
+	if (!req.body.APIToken || req.body.APIToken.trim() === "") {
 		global.responseError(res, 401, "Trello needs a APIToken")
 		return;
 	}
-	if (!req.body.APIKey || req.body.APIKey.trim() == "") {
+	if (!req.body.APIKey || req.body.APIKey.trim() === "") {
 		global.responseError(res, 401, "Trello needs a APIKey")
 		return;
 	}
 	fetch(`https://api.trello.com/1/members/me/?key=${req.body.APIKey}&token=${req.body.APIToken}`)
 	.then(function (response) {
-		if (response.status == 200) {
+		if (response.status === 200) {
 			let json = {
 				user_id : req.body.user_id,
 				service : global.service.Trello,
@@ -361,7 +361,7 @@ exports.checkArgsCreateBoard = async function (res, json)
 			return response.json();
 		})
 		.then(function (resjson) {
-			if (resjson.ok == false) {
+			if (resjson.ok === false) {
 				console.error(`Bad response from Trello : ${resjson.error}`);
 				res.status(500).send();
 			} else {
@@ -402,7 +402,7 @@ exports.trelloCreateLabel = async function (area, res)
 		return response.json();
 	})
 	.then(function (resjson) {
-		if (resjson.ok == false) {
+		if (resjson.ok === false) {
 			console.error(`Bad response from Trello : ${resjson.error}`);
 			res.status(500).send();
 		} else {
