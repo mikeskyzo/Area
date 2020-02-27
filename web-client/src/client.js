@@ -6,6 +6,7 @@ var ServerApi = require('../services/ApplicationServer');
 var RedditApi = require('../services/RedditApi');
 var GithubApi = require('../services/GithubApi');
 var SlackApi = require('../services/SlackApi');
+var TrelloApi = require('../services/TrelloApi');
 
 
 var app = express();
@@ -105,21 +106,34 @@ app.get('/authorizations/github', async function (req, res) {
     GithubApi.generalSettings.code = req.query.code;
     var newres = await GithubApi.getAccessToken();
     GithubApi.generalSettings.authorizationToken = newres.data.split('&')[0].split('=')[1];
-    ServerApi.setGithubAccessToken(res, res, GithubApi.generalSettings.authorizationToken);
+    ServerApi.setGithubAccessToken(req, res, GithubApi.generalSettings.authorizationToken);
 });
 app.get('/authorizations/reddit', async function (req, res) {
     console.log('\n   ====== Reddit authorization ====== \n');
     RedditApi.generalSettings.code = req.query.code;
     var newres = await RedditApi.getAccessToken();
     RedditApi.generalSettings.authorizationToken = newres.data.access_token;
-    ServerApi.setRedditAccessToken(res, res, RedditApi.generalSettings.authorizationToken);
+    ServerApi.setRedditAccessToken(req, res, RedditApi.generalSettings.authorizationToken);
 });
 app.get('/authorizations/slack', async function (req, res) {
     console.log('\n   ====== Slack authorization ====== \n');
     SlackApi.generalSettings.code = req.query.code;
     var newres = await SlackApi.getAccessToken();
     SlackApi.generalSettings.authorizationToken = newres.data.authed_user.access_token;
-    ServerApi.setSlackAccessToken(res, res, SlackApi.generalSettings.authorizationToken);
+    ServerApi.setSlackAccessToken(req, res, SlackApi.generalSettings.authorizationToken);
+});
+app.get('/authorizations/trello/pre-steps', async function (req, res) {
+    console.log('\n   ====== Trello authorization - Part.1 ====== \n');
+    TrelloApi.requestTokenUrl(res);
+});
+app.get('/authorizations/trello', async function (req, res) {
+    console.log('\n   ====== Trello authorization - Part.2 ====== \n');
+    TrelloApi.getAccessToken(req, res);
+    console.log(TrelloApi.generalSettings);
+    ServerApi.setTrelloAccessToken(req, res,
+        TrelloApi.generalSettings.authorizationToken,
+        TrelloApi.generalSettings.secretAuthorizationToken
+    );
 });
 
 app.listen(8081);
