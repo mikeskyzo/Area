@@ -37,7 +37,10 @@ app.get('/', function(req, res) {
 
 app.get('/disconnect', function (req, res) {
 	res.clearCookie('access_token');
+	res.clearCookie('githubConnect');
 	res.clearCookie('redditConnect');
+	res.clearCookie('slackConnect');
+	res.clearCookie('trelloConnect');
 	res.redirect('/login');
 });
 
