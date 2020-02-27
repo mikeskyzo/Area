@@ -163,20 +163,6 @@ app.get('/authorizations/trello/post-steps', async function (req, res) {
 		TrelloApi.generalSettings.authorizationToken,
 		TrelloApi.generalSettings.clientId
 	);
-	/*
-	fetch(`https://api.trello.com/1/members/me/` +
-		`?key=${TrelloApi.generalSettings.clientId}` +
-		`&token=${TrelloApi.generalSettings.authorizationToken}`)
-		.then(function (response) {
-			console.log("\n ==== RESPONSE ====\n");
-			console.log(response);
-		})
-		.catch(function (error) {
-			console.log("\n ==== ERROR ====\n");
-			console.log(error);
-		});
-	res.redirect('/profil');
-	*/
 });
 
 //console.log(TrelloApi.generalSettings);

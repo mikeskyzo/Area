@@ -36,8 +36,8 @@ module.exports = {
 	/* Get access token (require to get code first) */
 	requestTokenUrl: function (res) {
 		oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
-			const scope = 'read';
-			const expiration = '1hour';
+			const scope = 'read,write,account';
+			const expiration = 'never';
 
 			oauthSecrets[token] = tokenSecret;
 			res.redirect(`${generalSettings.trelloApi}/OAuthAuthorizeToken` +
