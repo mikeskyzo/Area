@@ -61,6 +61,34 @@ exports.createUser = function(email, Uname, Pword, server, req, res) {
 	});
 };
 
+exports.initGetActions = function(req, res, server, token) {
+	const ApplicationApi = axios.create({
+		baseURL: server,
+		crossDomain: true
+	});
+	return ApplicationApi.get(`/getActions`,
+		{
+			headers: {
+				Authorization: `token ${token}`
+			}
+		}
+	)
+};
+
+exports.initGetReactions = function(req, res, server, token) {
+	const ApplicationApi = axios.create({
+		baseURL: server,
+		crossDomain: true
+	});
+	return ApplicationApi.get(`/getReactions`,
+		{
+			headers: {
+				Authorization: `token ${token}`
+			}
+		}
+	)
+};
+
 // Authorizations
 exports.setGithubAccessToken = function(req, res, token) {
 	ApplicationApi.baseURL = generalSettings.url;
