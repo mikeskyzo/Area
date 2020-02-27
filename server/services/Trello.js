@@ -2,11 +2,6 @@ const fetch = require("node-fetch");
 
 //https://trello.com/app-key
 
-const defaultAPIToken = "c8887634117393563544827e99aa9f686075145c59d04ced3d9e9de63193ce4b";
-const defaultAPIKey = "72a7e8b763bbbb4e1a3ba4ff68c7de00";
-const defaultIDModel = "5e1448b8dedfc220293e78d8";
-const defaultIDWebhook = "5e4283e30c5aef816f8e53d3";
-
 exports.createNewWebhook = async function (res, json, next) {
 	if (!json.action.idModel || json.action.idModel.trim() == "") {
 		global.responseError(res, 401, "Trello needs a idModel")
@@ -273,9 +268,9 @@ exports.trelloCreateList = async function (area, res)
 exports.checkArgsCreateLabel = async function (res, json)
 {
 	if (!json.reaction.IDBoard)
-		global.responseError(res, 401, "Missing board ID")
+		global.responseError(res, 401, "Missing board ID");
 	else if (!json.reaction.name)
-		global.responseError(res, 401, "Missing name")
+		global.responseError(res, 401, "Missing name");
 	else {
 		const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
 		if (!token.APIToken) {
@@ -300,7 +295,7 @@ exports.checkArgsCreateLabel = async function (res, json)
 			return;
 		})
 		.catch(function (error) {
-			global.responseError(res, 500, `err : ${error}`)
+			global.responseError(res, 500, `err : ${error}`);
 		});
 		global.saveAREA(res, json);
 	}
@@ -311,7 +306,7 @@ const labelColors = ["yellow", "purple", "blue", "red", "green", "orange", "blac
 exports.trelloCreateLabel = async function (area, res)
 {
 	if (!area.reaction.IDBoard || !area.reaction.name) {
-		global.responseError(res, 401, 'Missing board ID or a name')
+		global.responseError(res, 401, 'Missing board ID or a name');
 		return;
 	}
 	const color = labelColors[Math.floor(Math.random() * (labelColors.length - 1))];
@@ -341,6 +336,81 @@ exports.trelloCreateLabel = async function (area, res)
 		return;
 	})
 	.catch(function (error) {
-		global.responseError(res, 500, `err : ${error}`)
+		global.responseError(res, 500, `err : ${error}`);
+	});
+}
+
+exports.checkArgsCreateBoard = async function (res, json)
+{
+	if (!json.reaction.name)
+		global.responseError(res, 401, "Missing name");
+	else if (!json.reaction.description)
+		global.responseError(res, 401, "Missing description");
+	else {
+		const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+		if (!token.APIToken) {
+			global.responseError(res, 401, "No APIToken provided");
+			return;
+		}
+		if (!token.APIKey) {
+			global.responseError(res, 401, "No APIKey provided");
+			return;
+		}
+		fetch(`https://api.trello.com/1/boards/${json.reaction.IDBoard}?fileds=all&key=${token.APIKey}&token=${token.APIToken}`)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (resjson) {
+			if (resjson.ok == false) {
+				console.error(`Bad response from Trello : ${resjson.error}`);
+				res.status(500).send();
+			} else {
+				res.send();
+			}
+			return;
+		})
+		.catch(function (error) {
+			global.responseError(res, 500, `err : ${error}`);
+		});
+		global.saveAREA(res, json);
+	}
+}
+
+const boardColors = ["blue", "orange", "green", "red", "purple", "pink", "lime", "sky", "grey"];
+
+exports.trelloCreateLabel = async function (area, res)
+{
+	if (!area.reaction.name || !area.reaction.description) {
+		global.responseError(res, 401, 'Missing board name or description');
+		return;
+	}
+	const color = boardColors[Math.floor(Math.random() * (boardColors.length - 1))];
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+	if (!token.APIToken) {
+		global.responseError(res, 401, "No APIToken provided");
+		return;
+	}
+	if (!token.APIKey) {
+		global.responseError(res, 401, "No APIKey provided");
+		return;
+	}
+	const url = `https://api.trello.com/1/boards/?name=${area.reaction.name}&defaultLabels=true&defaultLists=true&desc=${area.reaction.description}&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=${color}&prefs_cardAging=regular&key=${token.APIKey}&token=${token.ApiToken}`
+	fetch(url, {
+  		method: "POST"
+	})
+	.then(function (response) {
+		return response.json();
+	})
+	.then(function (resjson) {
+		if (resjson.ok == false) {
+			console.error(`Bad response from Trello : ${resjson.error}`);
+			res.status(500).send();
+		} else {
+			res.send();
+		}
+		return;
+	})
+	.catch(function (error) {
+		global.responseError(res, 500, `err : ${error}`);
 	});
 }

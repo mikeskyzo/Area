@@ -284,6 +284,31 @@
 							"description" : "Name of the label to add"
 						}
 					]
+				},
+				{
+					"name" : "trelloCreateBoard",
+					"title" : "Create a Trello's board",
+					"description" : "Create a Trello's board.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "trelloCreateBoard"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "checkArgsCreateBoard"
+						}
+					],
+					"params" : [
+						{
+							"name" : "name",
+							"description" : "Name of the label to add"
+						},
+						{
+							"name" : "description",
+							"description" : "ID of the board to add the label"
+						}
+					]
 				}
 			]
 		}
