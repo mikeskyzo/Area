@@ -70,5 +70,33 @@ router.delete('/auth/token', function(req, res) {
 router.get('/auth/getServices', function(req, res) {
 	utils.verifyToken(req, res, authToken.getServices);
 });
+router.get('/caca', function(req, res) {
+	//console.log(req.body);
+		console.log(req.query["hub.challenge"]);
+	res.send(req.query["hub.challenge"], 202);
+});
+router.post('/caca', function(req, res) {
+	console.log(req.body);
+	res.send();
+});
+
+router.get('/sex', function(req, res) {
+	console.log(req.body);
+	res.send();
+});
+
+router.post('/sex', function(req, res) {
+	console.log(req.body);
+	res.send();
+});
+var twitch = require ('../services/Twitch');
+
+router.get('/penis', function(req, res) {
+	twitch.Twitch_Create_Webhook_NewSubscriber(req, res,'a_very_good_test');
+	//console.log(req.query["hub.challenge"]);
+
+});
+
+
 
 module.exports = router;
