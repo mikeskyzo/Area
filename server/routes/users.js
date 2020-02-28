@@ -29,7 +29,7 @@ exports.creatUser = function(req, res) {
             } else {
                 res.status(201);
                 var token = jwt.sign({ id: id }, global.secret, {
-                    expiresIn: '1y'
+                    expiresIn: '1h'
                 });
                 res.json({
                     success : true,
