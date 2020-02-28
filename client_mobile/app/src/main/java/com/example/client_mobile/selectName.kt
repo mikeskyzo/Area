@@ -28,6 +28,7 @@ class selectName : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_name)
+        loadingPanel.visibility = View.GONE
 
         if (intent.getSerializableExtra("action") != null)
             action = intent.getSerializableExtra("action") as Action
@@ -88,19 +89,19 @@ class selectName : AppCompatActivity() {
             .post(formBody)
             .build()
 
-        //loadingPanel.visibility = View.VISIBLE
+        loadingPanel.visibility = View.VISIBLE
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 if (body == "404") {
-                    //loadingPanel.visibility = View.GONE
+                    loadingPanel.visibility = View.GONE
                     runOnUiThread {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     runOnUiThread {
                         val code = response.code
-                        //loadingPanel.visibility = View.GONE
+                        loadingPanel.visibility = View.GONE
                         if (code >= 400) {
                             Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(getContext(), selectAction::class.java)
