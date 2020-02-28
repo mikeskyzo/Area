@@ -12,6 +12,34 @@
             android:orientation="vertical" android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <RelativeLayout
+                android:id="@+id/loadingPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="168dp"
+                android:gravity="center_horizontal|center_vertical"
+                app:layout_constraintTop_toBottomOf="@+id/textView_area_name"
+                tools:layout_editor_absoluteX="0dp">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:indeterminateDrawable="@drawable/progress" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/buttonDeleteArea"
+                android:layout_width="170dp"
+                android:layout_height="53dp"
+                android:layout_marginBottom="92dp"
+                android:background="@drawable/rounded_button_red"
+                android:text="@string/delete_this_area"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <ImageButton
                 android:id="@+id/imageButtonBack"
                 android:layout_width="73dp"
@@ -29,9 +57,10 @@
                 android:id="@+id/recyclerView_params_reaction"
                 android:layout_width="181dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="77dp"
+                app:layout_constraintBottom_toTopOf="@+id/buttonDeleteArea"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.143"
+                app:layout_constraintHorizontal_bias="0.313"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_reaction_name"
                 app:layout_constraintVertical_bias="0.0" />
@@ -41,13 +70,12 @@
                 android:layout_width="181dp"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:text="@string/area_name"
                 android:textSize="30sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.08" />
+                app:layout_constraintVertical_bias="0.067" />
 
             <TextView
                 android:id="@+id/textView_service_action"
@@ -55,7 +83,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="156dp"
                 android:gravity="center|start"
-                android:text="@string/service_action"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView_action_name"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +97,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="24dp"
                 android:gravity="center|start"
-                android:text="@string/service_reaction"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.143"
@@ -79,28 +105,26 @@
 
             <TextView
                 android:id="@+id/textView_action_name"
-                android:layout_width="181dp"
-                android:layout_height="50dp"
+                android:layout_width="180dp"
+                android:layout_height="47dp"
                 android:gravity="center|start"
-                android:text="@string/action_name"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.143"
+                app:layout_constraintHorizontal_bias="0.316"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.233" />
+                app:layout_constraintVertical_bias="0.221" />
 
             <TextView
                 android:id="@+id/textView_reaction_name"
                 android:layout_width="181dp"
                 android:layout_height="50dp"
                 android:gravity="center|start"
-                android:text="@string/reaction_name"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.143"
+                app:layout_constraintHorizontal_bias="0.313"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_service_reaction"
                 app:layout_constraintVertical_bias="0.0" />
@@ -110,7 +134,7 @@
                 android:layout_width="181dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.143"
+                app:layout_constraintHorizontal_bias="0.317"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_action_name" />
         </androidx.constraintlayout.widget.ConstraintLayout>
