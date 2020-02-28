@@ -10,7 +10,7 @@ exports.createWebhookPushOnRepo = function (res, json, next)
 	createWebhook('push', res, json, next);
 }
 
-async function createWebhook(event, res, json, next)
+async function createWebhook(event, res, json)
 {
 	let username = global.getParam(json.action.params, 'username');
 	let repository = global.getParam(json.action.params, 'repository');
@@ -50,13 +50,13 @@ async function createWebhook(event, res, json, next)
 	.then(function (response) {
 		if (response.status == 201)
 			return response.json();
-		global.responseError(res, 401, 'failed to cre\te webhook : ' + response.statusText);
+		global.responseError(res, 401, 'failed to create webhook : ' + response.statusText);
 		return null;
 	})
 	.then(function (resJson) {
 		if (resJson) {
 			json.action.webhook_id = resJson.id;
-			next(res, json);
+			global.saveAREA(res, json);
 		}
 	})
 	.catch(function (error) {
