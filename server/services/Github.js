@@ -12,15 +12,18 @@ exports.createWebhookPushOnRepo = function (res, json, next)
 
 async function createWebhook(event, res, json, next)
 {
-	if (!json.action.username || json.action.username.trim() == '') {
+	let username = global.getParam(json.action.params, 'username');
+	let repository = global.getParam(json.action.params, 'repository');
+
+	if (!username || username.trim() == '') {
 		global.responseError(res, 401, 'Github need a username')
 		return;
 	}
-	if (!json.action.repository || json.action.repository.trim() == '') {
+	if (!repository || repository.trim() == '') {
 		global.responseError(res, 401, 'Github need a repository')
 		return;
 	}
-	const url = 'https://api.github.com/repos/' + json.action.username + '/' + json.action.repository + '/hooks';
+	const url = 'https://api.github.com/repos/' + username + '/' + repository + '/hooks';
 
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Github});
 	if (!token || !token.access_token) {
@@ -63,6 +66,9 @@ async function createWebhook(event, res, json, next)
 
 exports.deleteWebhook = async function (area, req, res)
 {
+	let username = global.getParam(area.action.params, 'username');
+	let repository = global.getParam(area.action.params, 'repository');
+
 	if (!area.action.webhook_id) {
 		console.error('The area has no webhook id');
 		global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
@@ -74,7 +80,7 @@ exports.deleteWebhook = async function (area, req, res)
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
-	var url =  'https://api.github.com/repos/' + area.action.username + '/' + area.action.repository + '/hooks/' + area.action.webhook_id;
+	var url =  'https://api.github.com/repos/' + username + '/' + repository + '/hooks/' + area.action.webhook_id;
 	fetch(url, {
 		'method': 'DELETE',
 		'headers' : {'Authorization' : 'token ' + token.access_token}
@@ -92,35 +98,35 @@ exports.deleteWebhook = async function (area, req, res)
 
 exports.FormatWebhookIssueEvent = function (req, res, area, next)
 {
-	if (!req.body.action) {
-		res.send();
-		return;
-	}
-	let message = area.reaction.message;
-	if (message) {
-		if (message.includes('{event}'))
-			message = message.replace('{event}', req.body.action)
-		if (message.includes('{username}') && req.body.sender && req.body.sender.login)
-			message = message.replace('{username}', req.body.sender.login)
-		if (message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
-			message = message.replace('{repository_name}', req.body.repository.name)
-	}
-	area.reaction.message = message
+// 	if (!req.body.action) {
+// 		res.send();
+// 		return;
+// 	}
+// 	let message = area.reaction.message;
+// 	if (message) {
+// 		if (message.includes('{event}'))
+// 			message = message.replace('{event}', req.body.action)
+// 		if (message.includes('{username}') && req.body.sender && req.body.sender.login)
+// 			message = message.replace('{username}', req.body.sender.login)
+// 		if (message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
+// 			message = message.replace('{repository_name}', req.body.repository.name)
+// 	}
+// 	area.reaction.message = message
 	next(area, res);
 }
 
 exports.FormatWebhookPushOnRepo = function (req, res, area, next)
 {
-	if (req.body.zen) {
-		res.send();
-		return;
-	}
-	if (area.reaction.message) {
-		if (area.reaction.message.includes('{name}') && req.body.pusher && req.body.pusher.name)
-			area.reaction.message = area.reaction.message.replace('{name}', req.body.pusher.name)
-		if (area.reaction.message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
-			area.reaction.message = area.reaction.message.replace('{repository_name}', req.body.repository.name)
-	}
+	// if (req.body.zen) {
+	// 	res.send();
+	// 	return;
+	// }
+	// if (area.reaction.message) {
+	// 	if (area.reaction.message.includes('{name}') && req.body.pusher && req.body.pusher.name)
+	// 		area.reaction.message = area.reaction.message.replace('{name}', req.body.pusher.name)
+	// 	if (area.reaction.message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
+	// 		area.reaction.message = area.reaction.message.replace('{repository_name}', req.body.repository.name)
+	// }
 	next(area, res);
 }
 
@@ -156,27 +162,29 @@ exports.check_token = async function (req, res)
 
 exports.create_board_check_args = function(res, json)
 {
-    if (!reactionsParams.owner)
+	let repository = global.getParam(area.action.params, 'repository');
+    if (!global.getParam(area.action.params, 'owner'))
         global.responseError(res, 401, 'Missing the owner')
-    else if (!reactionsParams.repo)
+    else if (!global.getParam(area.action.params, 'repository'))
        global.responseError(res, 401, 'Missing the repository')
-   else if (!reactionsParams.title)
+   else if (!global.getParam(area.action.params, 'title'))
        global.responseError(res, 401, 'Missing the title')
-   else if (!reactionsParams.body)
+   else if (!global.getParam(area.action.params, 'body'))
        global.responseError(res, 401, 'Missing the body')
     else {
 		// #### TODO : check if le project exist and we have the right to create a project on it
-        json.reaction.owner = reactionsParams.owner;
-        json.reaction.repository = reactionsParams.repository;
-        json.reaction.title = reactionsParams.title;
-        json.reaction.body = reactionsParams.body;
         global.saveAREA(res, json);
     }
 }
 
 exports.create_board = async function (area, res)
 {
-	if (!area.reaction.owner || !area.reaction.repository || !area.reaction.title || !area.reaction.body) {
+	let repository = global.getParam(area.reaction.params, 'repository');
+	let owner = global.getParam(area.reaction.params, 'owner');
+	let bodyGit = global.getParam(area.reaction.params, 'body');
+	let title = global.getParam(area.reaction.params, 'title');
+
+	if (!owner || !repository || !title || !bodyGit) {
 		global.responseError(res, 401, 'Missing something');
 		return;
 	}
@@ -186,10 +194,10 @@ exports.create_board = async function (area, res)
 		return;
 	}
 
-	var url =  'https://api.github.com/repos/' + area.reaction.user + '/' + area.reaction.repository + '/projects';
+	var url =  'https://api.github.com/repos/' + owner + '/' + repository + '/projects';
 	const body = {
-		"name" : area.reaction.title,
-		"body" : area.reaction.body
+		"name" : title,
+		"body" : bodyGit
 	}
 
 	fetch(url, {

@@ -2,7 +2,10 @@ const fetch = require('node-fetch');
 
 exports.send_message = async function (area, res)
 {
-	if (!area.reaction.channel_id || !area.reaction.message) {
+	let channel_id = global.getParam(area.reaction.params, 'channel_id');
+	let message = global.getParam(area.reaction.params, 'message');
+
+	if (!channel_id || !message) {
 		global.responseError(res, 401, 'Missing channel ID or a message')
 		return;
 	}
@@ -12,7 +15,7 @@ exports.send_message = async function (area, res)
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
-	var url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + area.reaction.channel_id + '&text=' + area.reaction.message;
+	var url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + channel_id + '&text=' + message;
 	fetch(url, {
 		'method': 'POST',
 	})
@@ -35,9 +38,9 @@ exports.send_message = async function (area, res)
 
 exports.send_message_check_args = function(res, json)
 {
-    if (!json.reaction.channel_id)
+    if (!global.getParam(json.reaction.params, 'channel_id'))
         global.responseError(res, 401, 'Missing channel ID')
-    else if (!json.reaction.message)
+    else if (!global.getParam(json.reaction.params, 'message'))
        global.responseError(res, 401, 'Missing a message to send')
     else {
 		// #### TODO : check if channel exist
