@@ -13,7 +13,6 @@ import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_details_area.*
 import kotlinx.android.synthetic.main.activity_details_area.imageButtonBack
 import kotlinx.android.synthetic.main.activity_details_area.loadingPanel
-import kotlinx.android.synthetic.main.activity_select_parameter.*
 import okhttp3.*
 import java.io.IOException
 
@@ -85,12 +84,12 @@ class DetailsArea : AppCompatActivity() {
         val listParamsAction = Gson().fromJson(paramsActionAsString, Array<Param>::class.java)
         val listParamsReaction = Gson().fromJson(paramsReactionAsString, Array<Param>::class.java)
         textView_area_name.setText(detailedArea.area_name)
-        textView_service_action.setText(detailedArea.action.service)
+        textView_service_action.setText("Action : ".plus(detailedArea.action.service))
         textView_action_name.setText(detailedArea.action.title)
         runOnUiThread{
             recyclerView_params_action.adapter = DetailsActionAdapter(listParamsAction)
         }
-        textView_service_reaction.setText(detailedArea.reaction.service)
+        textView_service_reaction.setText("Reaction : ".plus(detailedArea.reaction.service))
         textView_reaction_name.setText(detailedArea.reaction.title)
         runOnUiThread{
             recyclerView_params_reaction.adapter = DetailsActionAdapter(listParamsReaction)
