@@ -129,6 +129,65 @@
 					]
 				}
 			]
+		},
+		{
+		"name" : "Twitch",
+		"check_token_function" : "NULL",
+		"actions" : [
+			{
+				"name" : "Twitch_new_user",
+				"title" : "new follow from a user",
+				"description" : "Trigger when someone follow a user",
+				"functions" : [
+					{
+						"type" : "create_action",
+						"name" : "Twitch_Create_Webhook_NewSubscriber"
+					},
+					{
+						"type" : "format_result",
+						"name" : "FormatWebhookPushOnRepo"
+					},
+					{
+						"type" : "delete_action",
+						"name" : "Twitch_Delete_Webhook_NewSubscriber"
+					}
+				],
+				"params" : [
+					{
+						"name" : "login",
+						"description" : "login of the twitch user to follow"
+					}
+
+				]
+			},
+			{
+				"name" : "Twitch_streams_change_state",
+				"title" : "Streams goes offline/online",
+				"description" : "Trigger when a twitch channel change states",
+				"functions" : [
+					{
+						"type" : "create_action",
+						"name" : "Twitch_Create_Webhook_StreamChangeState"
+					},
+					{
+						"type" : "format_result",
+						"name" : "FormatWebhookIssueEvent"
+					},
+					{
+						"type" : "delete_action",
+						"name" : "Twitch_Delete_Webhook_StreamChangeState"
+					}
+				],
+				"params" : [
+					{
+						"name" : "login",
+						"description" : "login of the twitch user to follow"
+					}
+				]
+			}
+		],
+		"reactions" : [
+		]
 		}
 	]
 }

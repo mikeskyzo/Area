@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./app.js"
+    "start": "nodemon ./app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -17,6 +17,7 @@
     "uniqid": "5.2.0",
     "localtunnel": "2.0.0",
     "ngrok": "3.2.7",
-    "merge-json": "0.1.0-b.3"
+    "merge-json": "0.1.0-b.3",
+    "nodemon": "^2.0.2"
   }
 }
