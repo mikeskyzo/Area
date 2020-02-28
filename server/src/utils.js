@@ -7,7 +7,7 @@ global.CollectionArea = 'Area'
 
 global.secret = 'secret';
 
-global.saveInDb = function (collection, json, req, res, success_message){
+global.saveInDb = function (collection, json, res, success_message){
 
 	global.db.collection(collection).insertOne(json, (err, result) => {
 		if (err) {
@@ -97,10 +97,18 @@ global.findSomeInDbAsync = async function (collection, param) {
 	return db.collection(collection).find(param).toArray();
 }
 
-global.saveAREA = function (req, res, json)
+global.updateInDbAsync = async function (collection, query, update) {
+	return db.collection(collection).updateOne(query, update);
+}
+
+global.deleteInDbAsync = async function (collection, param) {
+	return db.collection(collection).deleteOne(param);
+}
+
+global.saveAREA = function (res, json)
 {
 	if (global.new_area)
-		global.saveInDb(global.CollectionArea, json, req, res, 'Area created successfully');
+		global.saveInDb(global.CollectionArea, json, res, 'Area created successfully');
 	else {
 		global.db.collection(global.CollectionArea).update({'area_id' : json.area_id, 'user_id' : json.user_id}, json, function(err, result) {
 			if (err){
@@ -146,5 +154,12 @@ global.findInDb = function (collection, params, req, res, next)
 		if (next)
 			next(result, req, res);
 	});
+}
 
+global.getParam = function (params, name)
+{
+	for (nb in params)
+		if (params[nb].name == name)
+			return params[nb].value;
+	return null;
 }

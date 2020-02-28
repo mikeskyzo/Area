@@ -14,5 +14,16 @@
     <string name="client_secret_github">1d1d691af539a19b5dac1270273fa433f3b8ac04</string>
     <string name="client_id_slack">933637704274.945976210260</string>
     <string name="client_secret_slack">248197e37352e5aa521b969a3cbb8a91</string>
+    <string name="client_id_reddit">YRYKkBFVxzy12Q</string>
+    <string name="client_secret_reddit">248197e37352e5aa521b969a3cbb8a91</string>
     <string name="create_reaction">Create a reaction</string>
+    <string name="name">Name</string>
+    <string name="my_area">My area</string>
+    <string name="please_enter_a_name_for_your_area">Please enter a name for your area</string>
+    <string name="create_area">Create area</string>
+    <string name="area_name">Area_name</string>
+    <string name="service_action">Service_action</string>
+    <string name="action_name">Action_name</string>
+    <string name="service_reaction">Service_reaction</string>
+    <string name="reaction_name">Reaction_name</string>
 </resources>

@@ -3,17 +3,26 @@ package com.example.client_mobile
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.result.Result
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
 import java.io.IOException
+import java.io.Serializable
+
 
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,11 +43,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        loadingPanel.visibility = View.VISIBLE
         if (intent.getStringExtra("server_location") != null)
             server_location = intent.getStringExtra("server_location")
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
-        Toast.makeText(this, server_location, Toast.LENGTH_SHORT).show()
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -52,6 +61,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
+        recyclerView_areas.layoutManager = LinearLayoutManager(this)
+        getAreas()
     }
 
     override fun onResume() {
@@ -63,12 +74,45 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             addTokenGithub(uri)
         } else if (service[0] == "slack") {
             addTokenSlack(uri)
+        } else if (service[0] == "reddit") {
+            addTokenReddit(uri)
+        } else if (service[0] == "trello") {
+            addTokenTrello(uri)
         }
 
         if (uri !== null) {
             Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
         }
         super.onResume()
+    }
+
+    fun getAreas() {
+        val client = OkHttpClient()
+        val request: Request = Request.Builder()
+            .url(server_location.plus("/getAreas/name"))
+            .header("Authorization", "token ".plus(token.toString()))
+            .build()
+        loadingPanel.visibility = View.VISIBLE
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body == "404") {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
+                    runOnUiThread {
+                        loadingPanel.visibility = View.GONE
+                        recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token)
+                    }
+                }
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
     }
 
     fun addTokenGithub(uri: Uri?) {
@@ -102,6 +146,46 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 println(e)
             }
         })
+    }
+
+    fun addTokenReddit(uri: Uri?) {
+        val regex = Regex("(?<=code=).*\$")
+        val result: MatchResult? = regex.find(uri.toString())
+        val code = result?.value!!
+
+
+        val authString: String = "YRYKkBFVxzy12Q:"
+        val encodedAuthString: String = Base64.encodeToString(authString.toByteArray(), Base64.NO_WRAP)
+
+        val url = "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=".plus(code).plus("&redirect_uri=").plus("reddit://truc.truc")
+
+        val client = OkHttpClient()
+
+        val formBody: RequestBody = FormBody.Builder()
+            .build()
+
+        val request: Request = Request.Builder()
+            .url(url)
+            .header("User-Agent", "Sample App")
+            .header("Authorization", "Basic ".plus(encodedAuthString))
+            .post(formBody)
+            .build()
+
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                val access_token = GsonBuilder().create().fromJson(body, AccessToken::class.java).access_token
+                addToken("Reddit", access_token)
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
+    }
+
+    fun addTokenTrello(uri: Uri?) {
+        println(uri)
     }
 
     fun addTokenSlack(uri : Uri?) {
@@ -151,7 +235,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     runOnUiThread {
-                        println(body)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -208,28 +291,27 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_profile -> {
-                getServices()
-                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Settings::class.java)
+                intent.putExtra("token", token)
+                intent.putExtra("server_location", server_location)
+                startActivity(intent)
+//                getServices()
+//                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_messages -> {
+            R.id.nav_create_area -> {
                 val intent = Intent(this, selectAction::class.java)
                 intent.putExtra("token", token)
                 startActivity(intent)
             }
-            R.id.nav_friends -> {
-                Toast.makeText(this, "Reactions clicked", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_update -> {
-                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
-            }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
+                intent.putExtra("server_location", server_location)
                 startActivity(intent)
                 Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_github -> {
                 val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scop=admin%20repo_hook")
+                openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scope=admin:repo_hook")
                 startActivity(openURL)
             }
             R.id.nav_slack -> {
@@ -237,8 +319,43 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 openURL.data = Uri.parse("https://slack.com/oauth/v2/authorize?client_id=933637704274.945976210260&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&redirect_uri=slack://truc.truc")
                 startActivity(openURL)
             }
+            R.id.nav_reddit -> {
+                val openURL = Intent(android.content.Intent.ACTION_VIEW)
+                openURL.data = Uri.parse("https://www.reddit.com/api/v1/authorize?client_id=YRYKkBFVxzy12Q&redirect_uri=reddit://truc.truc&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=permanent&state=NONE")
+                startActivity(openURL)
+            }
+            R.id.nav_trello -> {
+                val openURL = Intent(android.content.Intent.ACTION_VIEW)
+                val tokenEndpoint = "https://trello.com/1/OAuthAuthorizeToken?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never\""
+
+                tokenEndpoint.httpPost(listOf(
+                    "grant_type" to "client_credentials",
+                    "client_id" to "cfd14732f1e65ebbfc3521de87b214a1",
+                    "client_secret" to "8efc48c0d75ff42474c06c236c3b85684c534cfab5f7538e026ea35bebd82eb5",
+                    "scope" to "read,write,account"))
+                    .responseString { request, response, result ->
+                        when (result) {
+                            is Result.Success -> {
+                                println(result.value)
+                            }
+                            is Result.Failure -> {
+                                println(result.error)
+                                println("error trello failure")
+                            }
+                        }
+                    }
+                //openURL.data = Uri.parse("https://trello.com/1/OAuthAuthorizeToken?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never")
+                //openURL.data = Uri.parse("https://trello.com/1/connect?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&response_type=token&expiration=never")
+                //startActivity(openURL)
+            }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 }
+
+class Area(val area_id: String, val action: String, val reaction: String, val area_name: String, val color: String) : Serializable
+
+class Areas(val areas: List<Area>) : Serializable
+
+class AccessToken(val access_token: String)

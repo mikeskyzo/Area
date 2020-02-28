@@ -16,6 +16,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/orangeTheme"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -24,7 +26,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Home"
+                    android:text="@string/home"
                     android:textColor="#FFFFFF"
                     style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
             </LinearLayout>
@@ -32,15 +34,23 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
+        android:gravity="center" >
+
+        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="yolo"/>
-    </LinearLayout>
+            android:indeterminateDrawable="@drawable/progress"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_areas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
 </LinearLayout>
