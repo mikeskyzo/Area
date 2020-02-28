@@ -4,6 +4,11 @@ const client_id = '5cfjsk5flx3vkouomr7a26y7usrxmz';
 
 myHeaders.append("client-id", client_id.length.toString());
 
+exports.Twitch_webhook_confirm = function()
+{
+    return(0);
+}
+
 exports.Twitch_UserId = async function(login)
 {
     let url = 'https://api.twitch.tv/helix/users?login=';
