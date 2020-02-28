@@ -1,4 +1,4 @@
-var axios = require('axios');
+const axios = require('axios');
 
 	/* General settings */
 const generalSettings = {
@@ -13,7 +13,8 @@ const generalSettings = {
 
 	// Session related
 	code: '', // To get in redirectUri req after calling GENERATE CODE
-	authorizationToken: '' // to get in res after calling GET AUTHORIZATION TOKEN
+	authorizationToken: '', // to get in res after calling GET AUTHORIZATION TOKEN
+	refreshToken: '' // to get in res after calling GET AUTHORIZATION TOKEN
 };
 
 	/* Initialize axios */
