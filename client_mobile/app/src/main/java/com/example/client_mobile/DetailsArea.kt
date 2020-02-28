@@ -1,6 +1,7 @@
 package com.example.client_mobile
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -44,12 +45,56 @@ class DetailsArea : AppCompatActivity() {
     }
 
     fun deleteArea(token: String?, areaId: String?) {
-        Toast.makeText(this, "Deleting area", Toast.LENGTH_SHORT).show()
+        val client = OkHttpClient()
+
+        val formBody: RequestBody = FormBody.Builder()
+            .add("area_id", areaId.toString())
+            .build()
+
+        val request: Request = Request.Builder()
+            .url(server_location.plus("/DeleteArea"))
+            .header("Authorization", "token ".plus(token.toString()))
+            .delete(formBody)
+            .build()
+
+        loadingPanel.visibility = View.VISIBLE
+        client.newCall(request).enqueue(object: Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body == "404") {
+                    loadingPanel.visibility = View.GONE
+                    runOnUiThread {
+                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    runOnUiThread {
+                        val code = response.code
+                        loadingPanel.visibility = View.GONE
+                        if (code >= 400) {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(getContext(), "Area deleted", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Home::class.java)
+                            intent.putExtra("token", token)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+                if (e.toString() == "java.net.SocketTimeoutException: timeout" || e.toString() == "java.net.SocketTimeoutException: SSL handshake timed out") {
+                    runOnUiThread {
+                        loadingPanel.visibility = View.GONE
+                        Toast.makeText(getContext(), "Timeout, server didn't respond", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
     }
 
     fun getArea() {
-        println("AREA ID:")
-        println(area_id)
         val client = OkHttpClient()
         val request: Request = Request.Builder()
             .url(server_location.plus("/GetArea/").plus(area_id))

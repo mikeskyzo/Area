@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.parameter_row.view.*
 class DetailsActionAdapter(val params: Array<Param>): RecyclerView.Adapter<CustomViewHolderDetailsAction>() {
     override fun getItemCount(): Int {
         val nb = params.count()
-        println(nb)
         return nb
     }
 
@@ -24,7 +23,6 @@ class DetailsActionAdapter(val params: Array<Param>): RecyclerView.Adapter<Custo
 
         val param = params.get(position)
 
-        println("SEXX")
         holder.view.textViewParameter.setText(param.description)
         holder.view.editTextParameter.setText(param.value)
         holder.view.editTextParameter.isEnabled = false
