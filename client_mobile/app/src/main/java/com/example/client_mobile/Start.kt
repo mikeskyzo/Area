@@ -82,7 +82,8 @@ class Start : AppCompatActivity() {
                         val code = response.code
                         loadingPanel.visibility = View.GONE
                         if (code >= 400) {
-                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
+                            Toast.makeText(getContext(), "Error: ".plus(resp.message), Toast.LENGTH_SHORT).show()
                         } else {
                             val account = GsonBuilder().create().fromJson(body, Account::class.java)
                             val intent = Intent(getContext(), Home::class.java)
@@ -107,5 +108,7 @@ class Start : AppCompatActivity() {
         })
     }
 
-    class Account(val success: Boolean, val message: String, val token: String)
 }
+
+class BodyResp(val success: Boolean, val message: String)
+class Account(val success: Boolean, val message: String, val token: String)
