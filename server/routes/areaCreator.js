@@ -42,15 +42,17 @@ function checkAndSaveAREA(area_id, req, res)
 	json.action = req.body.action;
 	json.reaction = req.body.reaction;
 
-	if (!global.ReactionCheckArgsMap.get(json.reaction.name)) {
-		responseError(res, 401, 'Reaction not found');
-		return;
+	if (!global.ReactionCheckArgsMap.get(json.reaction.name))
+		responseError(res, 403, 'Reaction not found');
+	else if (global.ActionMap.get(json.action.name)) {
+		let err = global.ReactionCheckArgsMap.get(json.reaction.name)(json);
+		if (err)
+			global.responseError(res, 403, err);
+		else
+			global.ActionMap.get(json.action.name)(res, json);
 	}
-	if (global.ActionMap.get(json.action.name)) {
-		global.ActionMap.get(json.action.name)(res, json, global.ReactionCheckArgsMap.get(json.reaction.name));
-		return;
-	}
-	responseError(res, 401, 'Action not found');
+	else
+		responseError(res, 403, 'Action not found');
 }
 
 exports.deleteArea = function (req, res) {
