@@ -100,10 +100,6 @@ class selectName : AppCompatActivity() {
                 } else {
                     runOnUiThread {
                         val code = response.code
-                        println("code:")
-                        println(code)
-                        println(body)
-                        println(token.toString())
                         //loadingPanel.visibility = View.GONE
                         if (code >= 400) {
                             Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
@@ -130,3 +126,4 @@ class selectName : AppCompatActivity() {
         return this
     }
 }
+
