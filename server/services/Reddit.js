@@ -80,8 +80,52 @@ exports.Reddit_Submit_Url = async function (req, res, json) {
 	r.getSubreddit('sub').submitLink({
 		title: 'title',
 		url: 'url'
+	}).then(console.log);
+};
+
+exports.Reddit_Submit_post = async function (req, res, json){
+
+	let token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Reddit});
+	if (!token || !token.access_token) {
+		global.responseError(res, 401, 'No access token provide');
+		return;
+	}
+	const r = new snoowrap({
+		userAgent: 'Area_Dashboard++ - Marcoleric',
+		clientId: clientId,
+		clientSecret: clientSecret,
+		refreshToken: token
 	});
-}
+
+	r.submitSelfpost({
+		subredditName: 'sub',
+		title: 'title',
+		text: 'text'
+	}).then(console.log);
+};
+
+exports.Reddit_Submit_post = async function (req, res, json){
+
+	let token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Reddit});
+	if (!token || !token.access_token) {
+		global.responseError(res, 401, 'No access token provide');
+		return;
+	}
+	const r = new snoowrap({
+		userAgent: 'Area_Dashboard++ - Marcoleric',
+		clientId: clientId,
+		clientSecret: clientSecret,
+		refreshToken: token
+	});
+
+	r.createSubreddit({
+		name: 'name',
+		title: 'title',
+		public_description: 'description',
+		description: 'description',
+		type: 'type'
+	}).then(console.log);
+};
 
 
 /* FETCH BACKUP
