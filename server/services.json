@@ -195,8 +195,8 @@
 					],
 					"params" : [
 						{
-							"name" : "modelID",
-							"description" : "ID a Trello's model (board, card, list, etc...)"
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, etc...)"
 						},
 						{
 							"name" : "message",

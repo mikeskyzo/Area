@@ -3,13 +3,14 @@ const fetch = require("node-fetch");
 //https://trello.com/app-key
 
 exports.createNewWebhook = async function (res, json, next) {
-	if (!json.action.idModel || json.action.idModel.trim() === "") {
+	let idModel = global.getParam(json.action.params, "idModel");
+
+	if (!idModel || idModel.trim() === "") {
 		global.responseError(res, 401, "Trello needs a idModel")
 		return;
 	}
-	json.idModel = req.body.idModel;
 
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
 	if (!token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
@@ -19,7 +20,7 @@ exports.createNewWebhook = async function (res, json, next) {
 		return;
 	}
 	const callback = `${global.url}/webhooks/${json.area_id}`;
-	const url = `https://api.trello.com/1/webhooks/?idModel=${json.action.IDModel}&description=WebhookAREACOON&callbackURL=${callback}&key=${token.APIKey}&token=${token.APIToken}`;
+	const url = `https://api.trello.com/1/webhooks/?idModel=${idModel}&description=WebhookAREACOON&callbackURL=${callback}&key=${token.APIKey}&token=${token.APIToken}`;
 	fetch(url, {
 		method: "POST"
 	})
@@ -30,7 +31,7 @@ exports.createNewWebhook = async function (res, json, next) {
 	})
 	.then(function (resJson){
 		json.webhook_id = resJson.id
-		next(req, res, json);
+		next(res, json);
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, error)
