@@ -14,6 +14,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.result.Result
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_main.*
@@ -74,6 +76,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             addTokenSlack(uri)
         } else if (service[0] == "reddit") {
             addTokenReddit(uri)
+        } else if (service[0] == "trello") {
+            addTokenTrello(uri)
         }
 
         if (uri !== null) {
@@ -178,6 +182,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 println(e)
             }
         })
+    }
+
+    fun addTokenTrello(uri: Uri?) {
+        println(uri)
     }
 
     fun addTokenSlack(uri : Uri?) {
@@ -315,6 +323,30 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 val openURL = Intent(android.content.Intent.ACTION_VIEW)
                 openURL.data = Uri.parse("https://www.reddit.com/api/v1/authorize?client_id=YRYKkBFVxzy12Q&redirect_uri=reddit://truc.truc&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=permanent&state=NONE")
                 startActivity(openURL)
+            }
+            R.id.nav_trello -> {
+                val openURL = Intent(android.content.Intent.ACTION_VIEW)
+                val tokenEndpoint = "https://trello.com/1/OAuthAuthorizeToken?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never\""
+
+                tokenEndpoint.httpPost(listOf(
+                    "grant_type" to "client_credentials",
+                    "client_id" to "cfd14732f1e65ebbfc3521de87b214a1",
+                    "client_secret" to "8efc48c0d75ff42474c06c236c3b85684c534cfab5f7538e026ea35bebd82eb5",
+                    "scope" to "read,write,account"))
+                    .responseString { request, response, result ->
+                        when (result) {
+                            is Result.Success -> {
+                                println(result.value)
+                            }
+                            is Result.Failure -> {
+                                println(result.error)
+                                println("error trello failure")
+                            }
+                        }
+                    }
+                //openURL.data = Uri.parse("https://trello.com/1/OAuthAuthorizeToken?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never")
+                //openURL.data = Uri.parse("https://trello.com/1/connect?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&response_type=token&expiration=never")
+                //startActivity(openURL)
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
