@@ -29,7 +29,7 @@ const appInitialization = function () {
 		next();
 	});
 	app.logger = logs.logger;
-	app.logger.logLevel = logLevel;
+	app.logger.setLogLevel(logLevel);
 	routes
 		.enableAllRoutes(app)
 		.then(() => { activateApp(); });
