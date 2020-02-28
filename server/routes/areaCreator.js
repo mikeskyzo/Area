@@ -39,8 +39,10 @@ function checkAndSaveAREA(area_id, req, res)
 	if (req.body.color)
 		json.color = req.body.color
 
-	json.action = formatObject(req.body.action);
-	json.reaction = formatObject(req.body.reaction);
+	// json.action = formatObject(req.body.action);
+	json.action = req.body.action;
+	// json.reaction = formatObject(req.body.reaction);
+	json.reaction = req.body.reaction;
 
 	if (!global.ReactionCheckArgsMap.get(json.reaction.name)) {
 		responseError(res, 401, 'Reaction not found');
@@ -53,14 +55,14 @@ function checkAndSaveAREA(area_id, req, res)
 	responseError(res, 401, 'Action not found');
 }
 
-function formatObject(obj)
-{
-	let json = {};
-	json.name = obj.name;
-	for (nb in obj.params)
-		json[obj.params[nb].name] = obj.params[nb].value;
-	return json;
-}
+// function formatObject(obj)
+// {
+// 	let json = {};
+// 	json.name = obj.name;
+// 	for (nb in obj.params)
+// 		json[obj.params[nb].name] = obj.params[nb].value;
+// 	return json;
+// }
 
 exports.deleteArea = function (req, res) {
 	if (!req.body.area_id || !req.body.user_id) {
