@@ -1,6 +1,10 @@
 var serverAddress = "";
 var accessToken = "";
 
+$(document).ready(function(){
+    $('.tabs').tabs();
+});
+
 document.addEventListener('DOMContentLoaded', function (req, res) {
 
     var actionList = document.getElementById("action-list");
@@ -9,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     async function initArea() {
         const resAction = await initAction();
         const resReaction = await initReaction();
+
+        console.log("result action : ", resAction);
+        console.log("result reaction : ", resReaction);
     }
 
     /*function getServerAddress()  {
