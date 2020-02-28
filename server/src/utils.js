@@ -104,6 +104,9 @@ global.updateInDbAsync = async function (collection, query, update) {
 global.deleteInDbAsync = async function (collection, param) {
 	return db.collection(collection).deleteOne(param);
 }
+global.saveInDbAsync = async function (collection, param) {
+	return db.collection(collection).insertOne(param);
+}
 
 global.saveAREA = function (res, json)
 {
