@@ -37,6 +37,10 @@ app.get('/', function(req, res) {
 
 app.get('/disconnect', function (req, res) {
 	res.clearCookie('access_token');
+	res.clearCookie('githubConnect');
+	res.clearCookie('redditConnect');
+	res.clearCookie('slackConnect');
+	res.clearCookie('trelloConnect');
 	res.redirect('/login');
 });
 
@@ -102,6 +106,26 @@ app.get('/client/:action', async function (req, res) {
 			success: true,
 			data: result.data
 		})
+	} else if (req.params.action == 'getGithubLoginStatus') {
+		res.json({
+			success : true,
+			service : req.cookies.githubConnect
+		})
+	} else if (req.params.action == 'getRedditLoginStatus') {
+		res.json({
+			success : true,
+			service : req.cookies.redditConnect
+		})
+	} else if (req.params.action == 'getSlackLoginStatus') {
+		res.json({
+			success : true,
+			service : req.cookies.slackConnect
+		})
+	} else if (req.params.action == 'getTrelloLoginStatus') {
+		res.json({
+			success : true,
+			service : req.cookies.trelloConnect
+		})
 	}
 });
 
@@ -163,20 +187,6 @@ app.get('/authorizations/trello/post-steps', async function (req, res) {
 		TrelloApi.generalSettings.authorizationToken,
 		TrelloApi.generalSettings.clientId
 	);
-	/*
-	fetch(`https://api.trello.com/1/members/me/` +
-		`?key=${TrelloApi.generalSettings.clientId}` +
-		`&token=${TrelloApi.generalSettings.authorizationToken}`)
-		.then(function (response) {
-			console.log("\n ==== RESPONSE ====\n");
-			console.log(response);
-		})
-		.catch(function (error) {
-			console.log("\n ==== ERROR ====\n");
-			console.log(error);
-		});
-	res.redirect('/profil');
-	*/
 });
 
 //console.log(TrelloApi.generalSettings);

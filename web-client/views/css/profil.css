@@ -30,8 +30,9 @@ input {
     transition: color 300ms;
 }
 
-#btnOAuth {
+.btnOAuth {
     width: 300px;
     margin-top: 35px;
     color: #1b1b1b;
+    font-weight: bold;
 }
