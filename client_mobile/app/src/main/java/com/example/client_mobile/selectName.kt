@@ -53,7 +53,6 @@ class selectName : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 Toast.makeText(getContext(), colors.get(position), Toast.LENGTH_SHORT).show()
             }
-
         }
 
         imageButtonBack.setOnClickListener {
@@ -90,6 +89,7 @@ class selectName : AppCompatActivity() {
             .build()
 
         loadingPanel.visibility = View.VISIBLE
+        Toast.makeText(getContext(), "Creating area...", Toast.LENGTH_SHORT).show()
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
