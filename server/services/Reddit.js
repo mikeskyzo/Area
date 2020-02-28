@@ -66,7 +66,10 @@ exports.check_token = async function (req, res)
 
 exports.Reddit_Submit_Url = async function (req, res, json) {
 
-	let token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Reddit});
+	let token = await global.findInDbAsync(global.refresh_token, {user_id : area.user_id, service : global.Services.Reddit});
+	let sub = await  global.getParam(area.reaction.params, 'subreddit');
+	let title = await  global.getParam(area.reaction.params, 'title');
+	let url = await  global.getParam(area.reaction.params, 'url');
 	if (!token || !token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
@@ -77,15 +80,29 @@ exports.Reddit_Submit_Url = async function (req, res, json) {
 		clientSecret: clientSecret,
 		refreshToken: token
 	});
-	r.getSubreddit('sub').submitLink({
-		title: 'title',
-		url: 'url'
+	r.getSubreddit(sub).submitLink({
+		title: title,
+		url: url
 	}).then(console.log);
+};
+
+exports.Reddit_Submit_Url_CheckArgs = async function (json){
+	if (!global.getParam(json.reaction.params, 'subreddit'))
+		return 'Missing subreddit';
+	else if (!global.getParam(json.reaction.params, 'title'))
+		return 'Missing title';
+	else if (!global.getParam(json.reaction.params, 'url'))
+		return 'Missing url';
+	else
+		return null;
 };
 
 exports.Reddit_Submit_post = async function (req, res, json){
 
-	let token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Reddit});
+	let token = await global.findInDbAsync(global.refresh_token, {user_id : area.user_id, service : global.Services.Reddit});
+	let sub = await  global.getParam(area.reaction.params, 'subreddit');
+	let title = await  global.getParam(area.reaction.params, 'title');
+	let text = await  global.getParam(area.reaction.params, 'text');
 	if (!token || !token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
@@ -98,15 +115,31 @@ exports.Reddit_Submit_post = async function (req, res, json){
 	});
 
 	r.submitSelfpost({
-		subredditName: 'sub',
-		title: 'title',
-		text: 'text'
+		subredditName: sub,
+		title: title,
+		text: text
 	}).then(console.log);
 };
 
-exports.Reddit_Submit_post = async function (req, res, json){
+exports.Reddit_Submit_post_CheckArgs = async function (json){
+	if (!global.getParam(json.reaction.params, 'subreddit'))
+		return 'Missing subreddit';
+	else if (!global.getParam(json.reaction.params, 'title'))
+		return 'Missing title';
+	else if (!global.getParam(json.reaction.params, 'text'))
+		return 'Missing text';
+	else
+		return null;
+};
 
-	let token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Reddit});
+exports.Reddit_create_sub = async function (req, res, json){
+
+	let token = await global.findInDbAsync(global.refresh_token, {user_id : area.user_id, service : global.Services.Reddit});
+	let name = await  global.getParam(area.reaction.params, 'name');
+	let title = await  global.getParam(area.reaction.params, 'title');
+	let description = await  global.getParam(area.reaction.params, 'description');
+	let Pdescription = await  global.getParam(area.reaction.params, 'Pdescription');
+	let type = await  global.getParam(area.reaction.params, 'Type');
 	if (!token || !token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
@@ -119,14 +152,28 @@ exports.Reddit_Submit_post = async function (req, res, json){
 	});
 
 	r.createSubreddit({
-		name: 'name',
-		title: 'title',
-		public_description: 'description',
-		description: 'description',
-		type: 'type'
+		name: name,
+		title: title,
+		public_description: Pdescription,
+		description: description,
+		type: type
 	}).then(console.log);
 };
 
+exports.Reddit_create_sub_CheckArgs = async function (json){
+	if (!global.getParam(json.reaction.params, 'name'))
+		return 'Missing name';
+	else if (!global.getParam(json.reaction.params, 'title'))
+		return 'Missing title';
+	else if (!global.getParam(json.reaction.params, 'description'))
+		return 'Missing description';
+	else if (!global.getParam(json.reaction.params, 'Pdescription'))
+		return 'Missing public description';
+	else if (!global.getParam(json.reaction.params, 'type'))
+		return 'Missing type';
+	else
+		return null;
+};
 
 /* FETCH BACKUP
 fetch(
