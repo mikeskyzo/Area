@@ -154,5 +154,12 @@ global.findInDb = function (collection, params, req, res, next)
 		if (next)
 			next(result, req, res);
 	});
+}
 
+global.getParam = function (params, name)
+{
+	for (nb in params)
+		if (params[nb].name == name)
+			return params[nb].value;
+	return null;
 }
