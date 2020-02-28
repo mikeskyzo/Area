@@ -275,8 +275,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     runOnUiThread {
-                        println("addToken")
-                        println(body)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }

@@ -7,7 +7,7 @@ const logs = require('./logs/logs');
 
 // Settings
 const port = 8081;
-const logLevel = 0;
+const logLevel = 1;
 
 // App construction
 const app = express();
