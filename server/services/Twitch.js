@@ -17,31 +17,29 @@ async function Twitch_UserId (login)
 
 };
 
-exports.Twitch_Create_Webhook_NewSubscriber = async function(req, res, login)
+exports.Twitch_Create_Webhook_NewSubscriber = async function(req, res, json, next)
 {
-    var user_id = await Twitch_UserId(login);
+    var user_id = await Twitch_UserId(json.action.login);
     if (user_id === 84) {
-        global.responseError(res, 401, 'error 84, it is nut the good stuffffff uwu');
+        global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
         return ;
     }
     console.log(global.url);
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/caca&hub.lease_seconds=300`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/caca&hub.lease_seconds=300&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
    let resp = await fetch(url, {
        'method': 'POST',
        'headers' : {'Client-ID' : client_id}
    });
 
-   if (resp.status == 202) {
-       return (0);
-       //  next(req, res, json);
-   }
+   if (resp.status == 202)
+       next(req, res, json);
     else
         global.responseError(res, 401, 'ewwow it not wok owo');
 };
 
-exports.Twitch_Delete_Webhook_NewSubscriber = async function(req, res, login)
+exports.Twitch_Delete_Webhook_NewSubscriber = async function(req, res, json, next)
 {
-    var user_id = await Twitch_UserId(login);
+    var user_id = await Twitch_UserId(json.action.login);
     if (user_id === 84) {
         global.responseError(res, 401, 'error 84, it is nut the good stuffffff uwu');
         return ;
@@ -53,17 +51,15 @@ exports.Twitch_Delete_Webhook_NewSubscriber = async function(req, res, login)
         'headers' : {'Client-ID' : client_id}
     });
 
-    if (resp.status == 202) {
-        return (0);
-        //  next(req, res, json);
-    }
+    if (resp.status == 202)
+        next(req, res, json);
     else
         global.responseError(res, 401, 'ewwow it not wok owo');
 };
 
-exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, login)
+exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, json, next)
 {
-    let user_id = Twitch_UserId(login);
+    let user_id = Twitch_UserId(json.action.login);
 
     if (user_id == 84) {
         global.responseError(res, 401, 'error');
@@ -81,9 +77,9 @@ exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, login
         global.responseError(res, 401, 'error');
 };
 
-exports.Twitch_Delete_Webhook_StreamChangeState = async function(req, res, login)
+exports.Twitch_Delete_Webhook_StreamChangeState = async function(req, res, json, next)
 {
-    let user_id = Twitch_UserId(login);
+    let user_id = Twitch_UserId(json.action.login);
     if (user_id == 84) {
         global.responseError(res, 401, 'error');
         return (0);
