@@ -38,6 +38,10 @@
                 android:icon="@drawable/ic_add_black_24dp"
                 android:title="Create area"/>
             <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help_outline_black_24dp"
+                android:title="Help"/>
+            <item
                 android:id="@+id/nav_profile"
                 android:icon="@drawable/ic_account_circle_orange_24dp"
                 android:title="User profile"/>
