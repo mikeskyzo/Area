@@ -36,16 +36,14 @@ exports.send_message = async function (area, res)
 	});
 }
 
-exports.send_message_check_args = function(res, json)
+exports.send_message_check_args = function(json)
 {
     if (!global.getParam(json.reaction.params, 'channel_id'))
-        global.responseError(res, 401, 'Missing channel ID')
+        return 'Missing channel ID';
     else if (!global.getParam(json.reaction.params, 'message'))
-       global.responseError(res, 401, 'Missing a message to send')
-    else {
-		// #### TODO : check if channel exist
-        global.saveAREA(res, json);
-    }
+		return 'Missing a message to send';
+    else
+		return null;
 }
 
 exports.check_token = async function (req, res)

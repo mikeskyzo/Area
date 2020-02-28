@@ -34,14 +34,14 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(req, res, json, nex
     if (resp.status == 202)
         next(req, res, json);
     else
-        global.responseError(res, 401, 'ewwow it not wok owo');
+        global.responseError(res, 401, 'error, webhook not created, maybe you created too much webhook at once');
 };
 
 exports.Twitch_Delete_Webhook_NewSubscriber = async function(req, res, json, next)
 {
     var user_id = await Twitch_UserId(json.action.login);
     if (user_id === 84) {
-        global.responseError(res, 401, 'error 84, it is nut the good stuffffff uwu');
+        global.responseError(res, 401, 'error 401, User not found');
         return ;
     }
     console.log(global.url);
@@ -54,7 +54,7 @@ exports.Twitch_Delete_Webhook_NewSubscriber = async function(req, res, json, nex
     if (resp.status == 202)
         next(req, res, json);
     else
-        global.responseError(res, 401, 'ewwow it not wok owo');
+        global.responseError(res, 401, 'error, webhook not deleted');
 };
 
 exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, json, next)
@@ -74,7 +74,7 @@ exports.Twitch_Create_Webhook_StreamChangeState = async function(req, res, json,
     if (resp.status == 202)
         next(req, res, json);
     else
-        global.responseError(res, 401, 'error');
+        global.responseError(res, 401, 'error, webhook not created, maybe you created too much webhook at once');
 };
 
 exports.Twitch_Delete_Webhook_StreamChangeState = async function(req, res, json, next)
@@ -93,5 +93,5 @@ exports.Twitch_Delete_Webhook_StreamChangeState = async function(req, res, json,
     if (resp.status == 202)
         next(req, res, json);
     else
-        global.responseError(res, 401, 'error');
+        global.responseError(res, 401, 'error, webhook not deleted');
 };
