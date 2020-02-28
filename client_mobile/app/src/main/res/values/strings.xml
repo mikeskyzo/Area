@@ -26,4 +26,5 @@
     <string name="action_name">Action_name</string>
     <string name="service_reaction">Service_reaction</string>
     <string name="reaction_name">Reaction_name</string>
+    <string name="delete_this_area">Delete this area</string>
 </resources>
