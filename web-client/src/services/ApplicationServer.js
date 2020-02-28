@@ -113,7 +113,7 @@ exports.setGithubAccessToken = function(req, res, token) {
 		res.redirect('/error')
 	})
 };
-exports.setRedditAccessToken = function(req, res, token) {
+exports.setRedditAccessToken = function(app, req, res, accessToken, refreshToken) {
 	ApplicationApi.baseURL = generalSettings.url;
 	ApplicationApi.defaults.baseURL = generalSettings.url;
 	ApplicationApi.post(`/auth/addToken`,
@@ -121,7 +121,8 @@ exports.setRedditAccessToken = function(req, res, token) {
 		{
 			data: {
 				'service': 'Reddit',
-				'access_token': token
+				'access_token': accessToken,
+				'refresh_token': refreshToken
 			},
 			headers: {
 				Authorization: `token ${generalSettings.access_token}`
@@ -129,9 +130,15 @@ exports.setRedditAccessToken = function(req, res, token) {
 		}
 	).then(function(response) {
 		res.cookie('redditConnect', true);
+		app.logger.log(1, `Reddit connected ;)`);
+		app.logger.log(1,'\n   ================================== \n');
 		res.redirect('/profil')
 	}).catch(function(error) {
-		console.log(error);
+		app.logger.log(1, `  An error occured : ${error.code}`);
+		app.logger.log(2, '\t--------------------------');
+		app.logger.log(2, error);
+		app.logger.log(2, '\t--------------------------');
+		app.logger.log(1,'\n   ================================== \n');
 		res.cookie('redditConnect', false);
 		res.redirect('/error')
 	})
