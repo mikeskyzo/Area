@@ -1,6 +1,7 @@
 package com.example.client_mobile
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.client_mobile.Home.Companion.server_location
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_details_area.*
 import okhttp3.*
 import java.io.IOException
 import java.io.Serializable
@@ -28,6 +30,9 @@ class DetailsArea : AppCompatActivity() {
             token = intent.getStringExtra("token")
         if (intent.getStringExtra("area_id") != null)
             area_id = intent.getStringExtra("area_id")
+        imageButtonBack.setOnClickListener {
+            this.onBackPressed()
+        }
         getArea()
     }
 
