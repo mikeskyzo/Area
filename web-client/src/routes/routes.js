@@ -1,4 +1,4 @@
-const ServerApi = require('../../services/ApplicationServer');
+const ServerApi = require('../services/ApplicationServer');
 const githubAuthorizationRoutes = require('./Authorizations/githubAuthorizationRoutes');
 const redditAuthorizationRoutes = require('./Authorizations/redditAuthorizationRoutes');
 const slackAuthorizationRoutes = require('./Authorizations/slackAuthorizationRoutes');

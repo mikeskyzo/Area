@@ -72,7 +72,6 @@ class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?
             holder.view.imageViewIconAction.setImageResource(R.drawable.ic_github)
         if (area.reaction == "Slack")
             holder.view.imageViewIconReaction.setImageResource(R.drawable.ic_slack)
-//        holder.view.textViewParameter.setText(param.description)
     }
 }
 
