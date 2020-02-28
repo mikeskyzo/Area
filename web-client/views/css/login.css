@@ -65,6 +65,7 @@ body {
     color: #F1F1F2;
     position: relative;
     width: 50%;
+    height: 120%;
 }
 @media (max-width: 767px) {
     .right {
@@ -75,7 +76,10 @@ body {
     }
 }
 .form {
-    margin: 40px;
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-left: 40px;
+    margin-bottom: 20px;
     position: absolute;
 }
 label {
@@ -83,7 +87,7 @@ label {
     display: block;
     font-size: 14px;
     height: 16px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 5px;
 }
 input {
