@@ -162,14 +162,13 @@ exports.check_token = async function (req, res)
 
 exports.create_board_check_args = function(res, json)
 {
-	let repository = global.getParam(area.action.params, 'repository');
-    if (!global.getParam(area.action.params, 'owner'))
+    if (!global.getParam(json.reaction.params, 'owner'))
         global.responseError(res, 401, 'Missing the owner')
-    else if (!global.getParam(area.action.params, 'repository'))
+    else if (!global.getParam(json.reaction.params, 'repository'))
        global.responseError(res, 401, 'Missing the repository')
-   else if (!global.getParam(area.action.params, 'title'))
+   else if (!global.getParam(json.reaction.params, 'title'))
        global.responseError(res, 401, 'Missing the title')
-   else if (!global.getParam(area.action.params, 'body'))
+   else if (!global.getParam(json.reaction.params, 'body'))
        global.responseError(res, 401, 'Missing the body')
     else {
 		// #### TODO : check if le project exist and we have the right to create a project on it
@@ -188,13 +187,13 @@ exports.create_board = async function (area, res)
 		global.responseError(res, 401, 'Missing something');
 		return;
 	}
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.reaction.user_id, service : global.Services.Github});
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Github});
 	if (!token || !token.access_token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
-
 	var url =  'https://api.github.com/repos/' + owner + '/' + repository + '/projects';
+	console.log(url)
 	const body = {
 		"name" : title,
 		"body" : bodyGit
@@ -212,6 +211,7 @@ exports.create_board = async function (area, res)
 		if (response.status >= 300) {
 			return response.json();
 		}
+		res.send();
 		return ;
 	})
 	.then(function (resjson){
