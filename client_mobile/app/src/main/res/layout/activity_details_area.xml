@@ -1,110 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/imageButtonBack"
-        android:layout_width="73dp"
-        android:layout_height="63dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_arrow_back_orange_24dp" />
+            <RelativeLayout
+                android:id="@+id/loadingPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="168dp"
+                android:gravity="center_horizontal|center_vertical"
+                app:layout_constraintTop_toBottomOf="@+id/textView_area_name"
+                tools:layout_editor_absoluteX="0dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_params_reaction"
-        android:layout_width="181dp"
-        android:layout_height="95dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_reaction_name"
-        app:layout_constraintVertical_bias="0.0" />
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:indeterminateDrawable="@drawable/progress" />
+            </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView_area_name"
-        android:layout_width="181dp"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:text="@string/area_name"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.104" />
+            <Button
+                android:id="@+id/buttonDeleteArea"
+                android:layout_width="170dp"
+                android:layout_height="53dp"
+                android:layout_marginBottom="92dp"
+                android:background="@drawable/rounded_button_red"
+                android:text="@string/delete_this_area"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textView_service_action"
-        android:layout_width="181dp"
-        android:layout_height="50dp"
-        android:gravity="center|start"
-        android:text="@string/service_action"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_action_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.884" />
+            <ImageButton
+                android:id="@+id/imageButtonBack"
+                android:layout_width="73dp"
+                android:layout_height="63dp"
+                android:background="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_arrow_back_orange_24dp" />
 
-    <TextView
-        android:id="@+id/textView_service_reaction"
-        android:layout_width="181dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center|start"
-        android:text="@string/service_reaction"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_reaction_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
-        app:layout_constraintStart_toStartOf="parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_params_reaction"
+                android:layout_width="181dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="77dp"
+                app:layout_constraintBottom_toTopOf="@+id/buttonDeleteArea"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.313"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_reaction_name"
+                app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/textView_action_name"
-        android:layout_width="181dp"
-        android:layout_height="50dp"
-        android:gravity="center|start"
-        android:text="@string/action_name"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.352" />
+            <TextView
+                android:id="@+id/textView_area_name"
+                android:layout_width="181dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.067" />
 
-    <TextView
-        android:id="@+id/textView_reaction_name"
-        android:layout_width="181dp"
-        android:layout_height="50dp"
-        android:gravity="center|start"
-        android:text="@string/reaction_name"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.738" />
+            <TextView
+                android:id="@+id/textView_service_action"
+                android:layout_width="181dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="156dp"
+                android:gravity="center|start"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/textView_action_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.143"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_params_action"
-        android:layout_width="181dp"
-        android:layout_height="95dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_service_reaction"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.143"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_action_name"
-        app:layout_constraintVertical_bias="0.0" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textView_service_reaction"
+                android:layout_width="181dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center|start"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.143"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerView_params_action" />
+
+            <TextView
+                android:id="@+id/textView_action_name"
+                android:layout_width="180dp"
+                android:layout_height="47dp"
+                android:gravity="center|start"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.316"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.221" />
+
+            <TextView
+                android:id="@+id/textView_reaction_name"
+                android:layout_width="181dp"
+                android:layout_height="50dp"
+                android:gravity="center|start"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.313"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_service_reaction"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_params_action"
+                android:layout_width="181dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.317"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_action_name" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
