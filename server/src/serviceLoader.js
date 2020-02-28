@@ -2,6 +2,7 @@ global.Services = new Object();
 global.ServiceTokenCheckMap = new Map();
 
 global.Action = new Object();
+global.ActionFinishWebhook = new Object();
 global.ActionMap = new Map();
 global.ActionFormatResultMap = new Map();
 global.ActionDeleteWebhookMap = new Map();
@@ -19,7 +20,8 @@ for (service in json.services){
     try {
 		var obj = json.services[service];
         var module = require('../services/' + obj.name);
-        if (!obj.check_token_function in module || !typeof module[obj.check_token_function] === "function")
+
+		if (!obj.check_token_function in module || !typeof module[obj.check_token_function] === "function")
 			throw obj.name +  ' : check_token_function was not found for ' + obj.name;
 		LoadFunction(global.ServiceTokenCheckMap, obj.check_token_function, obj.name, module);
         if (obj.actions) {
@@ -64,7 +66,7 @@ function loadReactions(reaction, module)
 function loadActions(action, module)
 {
 	var functions = action.functions;
-	var create_action, format_result, delete_action;
+	var create_action, format_result, delete_action, finish_webhook;
 
 	for (nb in functions) {
 		var funct = functions[nb];
@@ -74,9 +76,15 @@ function loadActions(action, module)
 			format_result = funct.name
 		if (funct.type == "delete_action")
 			delete_action = funct.name
+		if (funct.type == "confirm_webhook_function")
+			finish_webhook = funct.name
 	}
 	if (!create_action || !format_result || !delete_action)
 		throw 'An action need the function ' + !create_action ? 'create_action' : (!format_result ? 'format_result' : 'delete_action')
+
+	if (finish_webhook)
+		LoadFunction(global.ActionFinishWebhook, finish_webhook, action.name, module);
+
 	LoadFunction(global.ActionMap, create_action, action.name, module);
 	LoadFunction(global.ActionFormatResultMap, format_result, action.name, module);
 	LoadFunction(global.ActionDeleteWebhookMap, delete_action, action.name, module);
