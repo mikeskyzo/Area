@@ -301,6 +301,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 intent.putExtra("token", token)
                 startActivity(intent)
             }
+            R.id.nav_help -> {
+                val intent = Intent(this, Help::class.java)
+                 startActivity(intent)
+            }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
                 intent.putExtra("server_location", server_location)
