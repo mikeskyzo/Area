@@ -64,9 +64,13 @@ exports.check_token = async function (req, res)
 		})
 };
 
-exports.Reddit_Submit_Url = function (req, res, json) {
+exports.Reddit_Submit_Url = async function (req, res, json) {
 
-	let token = check_token(req, res);
+	let token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Reddit});
+	if (!token || !token.access_token) {
+		global.responseError(res, 401, 'No access token provide');
+		return;
+	}
 	const r = new snoowrap({
 		userAgent: 'Area_Dashboard++ - Marcoleric',
 		clientId: clientId,
