@@ -7,25 +7,27 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.parameter_row.view.*
 
 
-class ParameterAdapter(val params: Array<Param>): RecyclerView.Adapter<CustomViewHolderParam>() {
+class DetailsActionAdapter(val params: Array<Param>): RecyclerView.Adapter<CustomViewHolderDetailsAction>() {
     override fun getItemCount(): Int {
         val nb = params.count()
         return nb
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderParam {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderDetailsAction{
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.parameter_row, parent, false)
-        return CustomViewHolderParam(cellForRow)
+        return CustomViewHolderDetailsAction(cellForRow)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolderParam, position: Int) {
+    override fun onBindViewHolder(holder: CustomViewHolderDetailsAction, position: Int) {
 
         val param = params.get(position)
 
         holder.view.textViewParameter.setText(param.description)
+        holder.view.editTextParameter.setText(param.value)
+        holder.view.editTextParameter.isEnabled = false
     }
 }
 
-class CustomViewHolderParam(val view: View): RecyclerView.ViewHolder(view) {
+class CustomViewHolderDetailsAction(val view: View): RecyclerView.ViewHolder(view) {
 }
