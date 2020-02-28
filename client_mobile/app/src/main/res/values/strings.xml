@@ -21,4 +21,9 @@
     <string name="my_area">My area</string>
     <string name="please_enter_a_name_for_your_area">Please enter a name for your area</string>
     <string name="create_area">Create area</string>
+    <string name="area_name">Area_name</string>
+    <string name="service_action">Service_action</string>
+    <string name="action_name">Action_name</string>
+    <string name="service_reaction">Service_reaction</string>
+    <string name="reaction_name">Reaction_name</string>
 </resources>
