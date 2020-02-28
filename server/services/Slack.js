@@ -2,7 +2,10 @@ const fetch = require('node-fetch');
 
 exports.send_message = async function (area, res)
 {
-	if (!area.channel_id || !area.message) {
+	let channel_id = global.getParam(area.reaction.params, 'channel_id');
+	let message = global.getParam(area.reaction.params, 'message');
+
+	if (!channel_id || !message) {
 		global.responseError(res, 401, 'Missing channel ID or a message')
 		return;
 	}
@@ -12,7 +15,7 @@ exports.send_message = async function (area, res)
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
-	var url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + area.channel_id + '&text=' + area.message;
+	var url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + channel_id + '&text=' + message;
 	fetch(url, {
 		'method': 'POST',
 	})
@@ -33,24 +36,22 @@ exports.send_message = async function (area, res)
 	});
 }
 
-exports.send_message_check_args = function(req, res, json)
+exports.send_message_check_args = function(res, json)
 {
-    if (!req.body.channel_id)
+    if (!global.getParam(json.reaction.params, 'channel_id'))
         global.responseError(res, 401, 'Missing channel ID')
-    else if (!req.body.message)
+    else if (!global.getParam(json.reaction.params, 'message'))
        global.responseError(res, 401, 'Missing a message to send')
     else {
 		// #### TODO : check if channel exist
-        json.channel_id = req.body.channel_id;
-        json.message = req.body.message;
-        global.saveAREA(req, res, json);
+        global.saveAREA(res, json);
     }
 }
 
 exports.check_token = async function (req, res)
 {
 	if (!req.body.access_token) {
-		global.responseError(res, 401, 'Need a access token for slack');
+		global.responseError(res, 401, 'Need an access token for slack');
 		return;
 	}
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service})
@@ -75,7 +76,7 @@ exports.check_token = async function (req, res)
 		if (resjson.ok == false) {
 			global.responseError(res, 401, 'Token is invalid : ' + resjson.error)
 		} else {
-			global.saveInDb(global.CollectionToken, json, req, res, 'Token Slack saved for ' + resjson.user  + ' on ' + resjson.team);
+			global.saveInDb(global.CollectionToken, json, res, 'Token Slack saved for ' + resjson.user  + ' on ' + resjson.team);
 		}
 	})
 	.catch(function (error) {

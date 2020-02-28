@@ -5,7 +5,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 const localtunnel = require('localtunnel');
 
-var usersRouter = require('./routes/users');
 var routes = require('./routes/routes');
 var webhooks = require('./routes/webhooks');
 
@@ -23,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use(function(req, res, next) {
@@ -34,7 +33,6 @@ app.use(function(req, res, next) {
 
 require('events').EventEmitter.prototype._maxListeners = 100;
 
-app.use('/', usersRouter);
 app.use('/', routes);
 app.use('/', webhooks);
 
@@ -50,11 +48,13 @@ app.route('/test').get(function(req, res) {
 });
 
 const ngrok = require('ngrok');
+const token = '1XKuDgkqMYnETxr5sEgd6faCkh1_3iQ2dASUNn2DVmr8dbi5R'
 
 var server = app.listen(8080, function () {
     console.log("Server is up !");
     (async function() {
         try {
+            // global.url = await ngrok.connect({authtoken: token, subdomain: 'GrosSex',}, 8080);
             global.url = await ngrok.connect(8080);
             console.log('=================================================');
             console.log('Url of you\'r api : ' + global.url);
