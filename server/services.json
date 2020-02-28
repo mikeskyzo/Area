@@ -99,41 +99,6 @@
 						}
 					]
 				}
-			],
-			"reactions" : [
-				{
-					"name" : "github_create_board",
-					"title" : "Create a board",
-					"description" : "Create a board on a specific repository",
-					"functions" : [
-						{
-							"type" : "execute_reaction",
-							"name" : "create_board"
-						},
-						{
-							"type" : "verify_arguments",
-							"name" : "create_board_check_args"
-						}
-					],
-					"params" : [
-						{
-							"name" : "owner",
-							"description" : "Owner of the repository"
-						},
-						{
-							"name" : "repo",
-							"description" : "Name of the repository"
-						},
-						{
-							"name" : "title",
-							"description" : "The title of you'r new board"
-						},
-						{
-							"name" : "body",
-							"description" : "The description of the board"
-						}
-					]
-				}
 			]
 		},
 		{
