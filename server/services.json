@@ -1,6 +1,43 @@
 {
 	"services" : [
 		{
+			"name" : "Discord",
+			"check_token_function" : "check_token",
+			"reactions" : [
+				{
+					"name" : "discord_send_message",
+					"title" : "Send a message",
+					"description" : "Send a message on a discord channel",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "send_message"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "send_message_check_args"
+						}
+					],
+					"params" : [
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						},
+						{
+							"name" : "username",
+							"description" : "Username of the bot",
+							"optional" : true
+						},
+						{
+							"name" : "avatar",
+							"description" : "Avatar's url of the bot",
+							"optional" : true
+						}
+					]
+				}
+			]
+		},
+		{
 			"name" : "Github",
 			"check_token_function" : "check_token",
 			"actions" : [
@@ -62,42 +99,11 @@
 						}
 					]
 				}
-			],
-			"reactions" : [
-				{
-					"name" : "github_create_board",
-					"title" : "Create a board",
-					"description" : "Create a board on a specific repository",
-					"functions" : [
-						{
-							"type" : "execute_reaction",
-							"name" : "create_board"
-						},
-						{
-							"type" : "verify_arguments",
-							"name" : "create_board_check_args"
-						}
-					],
-					"params" : [
-						{
-							"name" : "owner",
-							"description" : "Owner of the repository"
-						},
-						{
-							"name" : "repo",
-							"description" : "Name of the repository"
-						},
-						{
-							"name" : "title",
-							"description" : "The title of you'r new board"
-						},
-						{
-							"name" : "body",
-							"description" : "The description of the board"
-						}
-					]
-				}
 			]
+		},
+		{
+			"name" : "Reddit",
+			"check_token_function" : "check_token"
 		},
 		{
 			"name" : "Slack",
@@ -125,6 +131,147 @@
 						{
 							"name" : "message",
 							"description" : "Message to send on the channel"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name" : "Trello",
+			"check_token_function" : "CheckToken",
+			"actions" : [
+				{
+					"name" : "create_new_webhook_trello",
+					"title" : "Create Trello's webhook",
+					"description" : "Trigger when there's an update on a Trello's model.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "modelID",
+							"description" : "ID a Trello's model (board, card, list, etc...)"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				}
+			],
+			"reactions" : [
+				{
+					"name" : "trelloCreateCard",
+					"title" : "Create card",
+					"description" : "Create a Trello's card.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "trelloCreateCard"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "checkArgsCreateCard"
+						}
+					],
+					"params" : [
+						{
+							"name" : "IDList",
+							"description" : "ID of the list to add the card"
+						},
+						{
+							"name" : "name",
+							"description" : "Name of the card to add"
+						},
+						{
+							"name" : "description",
+							"description" : "Description of the card to add"
+						}
+					]
+				},
+				{
+					"name" : "trelloCreateList",
+					"title" : "Create a board",
+					"description" : "Create a Trello's list.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "trelloCreateList"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "checkArgsCreateList"
+						}
+					],
+					"params" : [
+						{
+							"name" : "IDBoard",
+							"description" : "ID of the board to add the card"
+						},
+						{
+							"name" : "name",
+							"description" : "Name of the list to add"
+						}
+					]
+				},
+				{
+					"name" : "trelloCreateLabel",
+					"title" : "Create a Trello's label",
+					"description" : "Create a Trello's label.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "trelloCreateLabel"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "checkArgsCreateLabel"
+						}
+					],
+					"params" : [
+						{
+							"name" : "IDBoard",
+							"description" : "ID of the board to add the label"
+						},
+						{
+							"name" : "name",
+							"description" : "Name of the label to add"
+						}
+					]
+				},
+				{
+					"name" : "trelloCreateBoard",
+					"title" : "Create a Trello's board",
+					"description" : "Create a Trello's board.",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "trelloCreateBoard"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "checkArgsCreateBoard"
+						}
+					],
+					"params" : [
+						{
+							"name" : "name",
+							"description" : "Name of the label to add"
+						},
+						{
+							"name" : "description",
+							"description" : "ID of the board to add the label"
 						}
 					]
 				}

@@ -15,11 +15,18 @@ import java.io.IOException
 
 
 class Start : AppCompatActivity() {
+    companion object {
+        var server_location: String? = ""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
         loadingPanel.visibility = View.GONE
+        if (intent.getStringExtra("server_location") != null) {
+            server_location = intent.getStringExtra("server_location")
+            editTextServerLocation.setText(server_location)
+        }
         buttonLogin.setOnClickListener {
             MediaPlayer.create(this, R.raw.gnome).start()
 
@@ -27,6 +34,10 @@ class Start : AppCompatActivity() {
                 Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show()
             } else if (editTextPassword.length() == 0) {
                 Toast.makeText(this, "Please enter a password", Toast.LENGTH_SHORT).show()
+            } else if (editTextServerLocation.length() == 0) {
+                Toast.makeText(this, "Please enter a server location", Toast.LENGTH_SHORT).show()
+            } else if (editTextServerLocation.getText().toString().take(8) != "https://") {
+                Toast.makeText(this, "Invalid server location url", Toast.LENGTH_SHORT).show()
             } else {
                 askForLogin(editTextUsername.getText().toString(), editTextPassword.getText().toString())
             }
@@ -69,17 +80,15 @@ class Start : AppCompatActivity() {
                 } else {
                     runOnUiThread {
                         val code = response.code
-                        val account = GsonBuilder().create().fromJson(body, Account::class.java)
                         loadingPanel.visibility = View.GONE
                         if (code >= 400) {
-                            Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                         } else {
+                            val account = GsonBuilder().create().fromJson(body, Account::class.java)
                             val intent = Intent(getContext(), Home::class.java)
                             intent.putExtra("username", username)
                             intent.putExtra("token", account.token)
                             intent.putExtra("server_location", serverLocation)
-                            println("start")
-                            println(account.token)
                             startActivity(intent)
                         }
                     }
@@ -88,6 +97,12 @@ class Start : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
+                if (e.toString() == "java.net.SocketTimeoutException: timeout" || e.toString() == "java.net.SocketTimeoutException: SSL handshake timed out") {
+                    runOnUiThread {
+                        loadingPanel.visibility = View.GONE
+                        Toast.makeText(getContext(), "Timeout, server didn't respond", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         })
     }

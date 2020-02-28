@@ -1,25 +1,54 @@
-var express = require('express');
-var uniqid = require('uniqid');
-var jwt = require('jsonwebtoken');
+const express = require('express');
 
-var utils = require('../src/utils')
+const utils = require('../src/utils');
+const getArea = require('../src/GetArea');
 
-var area = require('./areaCreator')
-var about = require('./aboutJson');
-var authToken = require('./tokens')
+const area = require('./areaCreator');
+const about = require('./aboutJson');
+const authToken = require('./tokens');
+
+var users = require('./users');
 
 var router = express.Router();
+
+router.patch('/user/changeUsername', function(req, res) {
+	utils.verifyToken(req, res, users.changeUsername);
+});
+
+router.patch('/user/changePassword', function(req, res) {
+	utils.verifyToken(req, res, users.changePassword);
+});
+
+router.post('/connectUser', function(req, res) {
+	users.connectUser(req, res);
+});
+
+router.post('/createUser', function(req, res) {
+	users.creatUser(req, res);
+});
 
 router.post('/CreateArea', function(req, res) {
 	utils.verifyToken(req, res, area.CreateArea);
 });
 
-router.get('/GetArea', function(req, res) {
-	utils.verifyToken(req, res, area.getAreas);
+router.get('/GetArea/:AreaId', function(req, res) {
+	utils.verifyToken(req, res, getArea.getArea);
 });
 
-router.get('/getActionsReactions', function(req, res) {
-	utils.verifyToken(req, res, about.getActionsReaction);
+router.get('/GetAreas', function(req, res) {
+	utils.verifyToken(req, res, getArea.getAreas);
+});
+
+router.get('/GetAreas/name', function(req, res) {
+	utils.verifyToken(req, res, getArea.getNameAreas);
+});
+
+router.get('/getActions', function(req, res) {
+	utils.verifyToken(req, res, about.getActions);
+});
+
+router.get('/getReactions', function(req, res) {
+	utils.verifyToken(req, res, about.getReactions);
 });
 
 router.delete('/DeleteArea', function(req, res) {

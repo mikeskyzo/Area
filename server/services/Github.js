@@ -1,32 +1,33 @@
 const fetch = require('node-fetch');
 
-exports.createWebhookIssueEvent = function (req, res, json, next)
+exports.createWebhookIssueEvent = function (res, json, next)
 {
-	createWebhook('issues', req, res, json, next);
+	createWebhook('issues', res, json, next);
 }
 
-exports.createWebhookPushOnRepo = function (req, res, json, next)
+exports.createWebhookPushOnRepo = function (res, json, next)
 {
-	createWebhook('push', req, res, json, next);
+	createWebhook('push', res, json, next);
 }
 
-async function createWebhook(event, req, res, json, next)
+async function createWebhook(event, res, json, next)
 {
-	if (!req.body.username || req.body.username.trim() == '') {
+	let username = global.getParam(json.action.params, 'username');
+	let repository = global.getParam(json.action.params, 'repository');
+
+	if (!username || username.trim() == '') {
 		global.responseError(res, 401, 'Github need a username')
 		return;
 	}
-	if (!req.body.repository || req.body.repository.trim() == '') {
+	if (!repository || repository.trim() == '') {
 		global.responseError(res, 401, 'Github need a repository')
 		return;
 	}
-	json.repository = req.body.repository;
-	json.username = req.body.username;
-	const url = 'https://api.github.com/repos/' + req.body.username + '/' + req.body.repository + '/hooks';
+	const url = 'https://api.github.com/repos/' + username + '/' + repository + '/hooks';
 
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Github});
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Github});
 	if (!token || !token.access_token) {
-		global.responseError(res, 401, 'No access token provide');
+		global.responseError(res, 401, 'No access token provide for Github');
 		return;
 	}
 	const body = {
@@ -49,11 +50,14 @@ async function createWebhook(event, req, res, json, next)
 	.then(function (response) {
 		if (response.status == 201)
 			return response.json();
-		throw 'Failed to create webhook : ' + response.statusText
+		global.responseError(res, 401, 'failed to cre\te webhook : ' + response.statusText);
+		return null;
 	})
-	.then(function (resJson){
-		json.webhook_id = resJson.id
-		next(req, res, json);
+	.then(function (resJson) {
+		if (resJson) {
+			json.action.webhook_id = resJson.id;
+			next(res, json);
+		}
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, error)
@@ -62,8 +66,12 @@ async function createWebhook(event, req, res, json, next)
 
 exports.deleteWebhook = async function (area, req, res)
 {
-	if (!area.webhook_id) {
-		global.responseError(res, 401, 'The area has no webhook id');
+	let username = global.getParam(area.action.params, 'username');
+	let repository = global.getParam(area.action.params, 'repository');
+
+	if (!area.action.webhook_id) {
+		console.error('The area has no webhook id');
+		global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
 		return;
 	}
 
@@ -72,7 +80,7 @@ exports.deleteWebhook = async function (area, req, res)
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
-	var url =  'https://api.github.com/repos/' + area.user + '/' + area.repository + '/hooks/' + area.webhook_id;
+	var url =  'https://api.github.com/repos/' + username + '/' + repository + '/hooks/' + area.action.webhook_id;
 	fetch(url, {
 		'method': 'DELETE',
 		'headers' : {'Authorization' : 'token ' + token.access_token}
@@ -90,33 +98,35 @@ exports.deleteWebhook = async function (area, req, res)
 
 exports.FormatWebhookIssueEvent = function (req, res, area, next)
 {
-	if (!req.body.action) {
-		res.send();
-		return;
-	}
-	if (area.message) {
-		if (area.message.includes('{event}'))
-			area.message = area.message.replace('{event}', req.body.action)
-		if (area.message.includes('{username}') && req.body.sender && req.body.sender.login)
-			area.message = area.message.replace('{username}', req.body.sender.login)
-		if (area.message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
-			area.message = area.message.replace('{repository_name}', req.body.repository.name)
-	}
+// 	if (!req.body.action) {
+// 		res.send();
+// 		return;
+// 	}
+// 	let message = area.reaction.message;
+// 	if (message) {
+// 		if (message.includes('{event}'))
+// 			message = message.replace('{event}', req.body.action)
+// 		if (message.includes('{username}') && req.body.sender && req.body.sender.login)
+// 			message = message.replace('{username}', req.body.sender.login)
+// 		if (message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
+// 			message = message.replace('{repository_name}', req.body.repository.name)
+// 	}
+// 	area.reaction.message = message
 	next(area, res);
 }
 
 exports.FormatWebhookPushOnRepo = function (req, res, area, next)
 {
-	if (req.body.zen) {
-		res.send();
-		return;
-	}
-	if (area.message) {
-		if (area.message.includes('{name}') && req.body.pusher && req.body.pusher.name)
-			area.message = area.message.replace('{name}', req.body.pusher.name)
-		if (area.message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
-			area.message = area.message.replace('{repository_name}', req.body.repository.name)
-	}
+	// if (req.body.zen) {
+	// 	res.send();
+	// 	return;
+	// }
+	// if (area.reaction.message) {
+	// 	if (area.reaction.message.includes('{name}') && req.body.pusher && req.body.pusher.name)
+	// 		area.reaction.message = area.reaction.message.replace('{name}', req.body.pusher.name)
+	// 	if (area.reaction.message.includes('{repository_name}') && req.body.repository && req.body.repository.name)
+	// 		area.reaction.message = area.reaction.message.replace('{repository_name}', req.body.repository.name)
+	// }
 	next(area, res);
 }
 
@@ -128,10 +138,7 @@ exports.check_token = async function (req, res)
 	}
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service})
 	if (token)
-	{
-		global.responseError(res, 409, "You have already a token saved for " + req.body.service);
-		return;
-	}
+		global.deleteInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service});
 	fetch('https://api.github.com/user', {
 		'method': 'GET',
 		'headers' : {'Authorization' : 'token ' + req.body.access_token},
@@ -143,7 +150,7 @@ exports.check_token = async function (req, res)
 				service : global.Services.Github,
 				access_token : req.body.access_token
 			}
-			global.saveInDb(global.CollectionToken, json, req, res, 'Token saved');
+			global.saveInDb(global.CollectionToken, json, res, 'Token saved');
 			return;
 		}
 		global.responseError(res, 401, 'Token not valid : ' + response.statusText);
@@ -153,29 +160,30 @@ exports.check_token = async function (req, res)
 	});
 }
 
-exports.create_board_check_args = function(req, res, json)
+exports.create_board_check_args = function(res, json)
 {
-    if (!req.body.owner)
+    if (!global.getParam(json.reaction.params, 'owner'))
         global.responseError(res, 401, 'Missing the owner')
-    else if (!req.body.repo)
+    else if (!global.getParam(json.reaction.params, 'repository'))
        global.responseError(res, 401, 'Missing the repository')
-   else if (!req.body.title)
+   else if (!global.getParam(json.reaction.params, 'title'))
        global.responseError(res, 401, 'Missing the title')
-   else if (!req.body.body)
+   else if (!global.getParam(json.reaction.params, 'body'))
        global.responseError(res, 401, 'Missing the body')
     else {
 		// #### TODO : check if le project exist and we have the right to create a project on it
-        json.owner = req.body.owner;
-        json.repository = req.body.repository;
-        json.title = req.body.title;
-        json.body = req.body.body;
-        global.saveAREA(req, res, json);
+        global.saveAREA(res, json);
     }
 }
 
 exports.create_board = async function (area, res)
 {
-	if (!area.owner || !area.repository || !area.title || !area.body) {
+	let repository = global.getParam(area.reaction.params, 'repository');
+	let owner = global.getParam(area.reaction.params, 'owner');
+	let bodyGit = global.getParam(area.reaction.params, 'body');
+	let title = global.getParam(area.reaction.params, 'title');
+
+	if (!owner || !repository || !title || !bodyGit) {
 		global.responseError(res, 401, 'Missing something');
 		return;
 	}
@@ -184,11 +192,11 @@ exports.create_board = async function (area, res)
 		global.responseError(res, 401, 'No access token provide');
 		return;
 	}
-
-	var url =  'https://api.github.com/repos/' + area.user + '/' + area.repository + '/projects';
+	var url =  'https://api.github.com/repos/' + owner + '/' + repository + '/projects';
+	console.log(url)
 	const body = {
-		"name" : area.title,
-		"body" : area.body
+		"name" : title,
+		"body" : bodyGit
 	}
 
 	fetch(url, {
@@ -203,6 +211,7 @@ exports.create_board = async function (area, res)
 		if (response.status >= 300) {
 			return response.json();
 		}
+		res.send();
 		return ;
 	})
 	.then(function (resjson){
