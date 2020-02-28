@@ -5,18 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_select_action.imageButtonBack
 import kotlinx.android.synthetic.main.activity_select_parameter.*
 import kotlinx.android.synthetic.main.parameter_row.view.*
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.ResponseBody.Companion.create
-import java.io.IOException
 
 
 class selectParameter : AppCompatActivity() {
@@ -38,8 +32,6 @@ class selectParameter : AppCompatActivity() {
 
         imageButtonBack.setOnClickListener {
             this.onBackPressed()
-//            val intent = Intent(this, selectAction::class.java)
- //           startActivity(intent)
         }
 
         recyclerView_param.layoutManager = LinearLayoutManager(this)
@@ -53,12 +45,12 @@ class selectParameter : AppCompatActivity() {
             val listParam = Gson().fromJson(paramsAsString, Array<Param>::class.java)
             if (intent.getSerializableExtra("action") != null) {
                 action = intent.getSerializableExtra("action") as Action
-                recyclerView_param.adapter = ParameterAdapter(listParam, action.name)
+                recyclerView_param.adapter = ParameterAdapter(listParam)
             }
             if (intent.getSerializableExtra("reaction") != null) {
                 buttonCreateReaction.text = "Next"
                 reaction = intent.getSerializableExtra("reaction") as Reaction
-                recyclerView_param.adapter = ParameterAdapter(listParam, reaction.name)
+                recyclerView_param.adapter = ParameterAdapter(listParam)
             }
         }
 
@@ -85,9 +77,8 @@ class selectParameter : AppCompatActivity() {
                 val intent = Intent(this, selectName::class.java)
                 intent.putExtra("token", token)
                 intent.putExtra("action", action)
-                intent.putExtra("reaction", reaction) // à supprimer ?
+                intent.putExtra("reaction", reaction)
                 startActivity(intent)
-                //createArea()
             }
         }
     }

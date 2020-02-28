@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.client_mobile.Home.Companion.server_location
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -33,6 +34,8 @@ class DetailsArea : AppCompatActivity() {
         imageButtonBack.setOnClickListener {
             this.onBackPressed()
         }
+        recyclerView_params_action.layoutManager = LinearLayoutManager(this)
+        recyclerView_params_reaction.layoutManager = LinearLayoutManager(this)
         getArea()
     }
 
@@ -55,12 +58,26 @@ class DetailsArea : AppCompatActivity() {
                 } else {
                     println("BODYYY:")
                     println(body)
-//                    val action = GsonBuilder().create().fromJson(body, Action::class.java)
-//                    val actionAsString: String = Gson().toJson(action)
-                    //println(actionAsString)
+                    val detailedArea = GsonBuilder().create().fromJson(body, DetailedArea::class.java)
+                    textView_area_name.setText(detailedArea.area_name)
+                    textView_service_action.setText(detailedArea.action.service)
+                    textView_action_name.setText(detailedArea.action.title)
+                    textView_service_reaction.setText(detailedArea.reaction.service)
+                    textView_reaction_name.setText(detailedArea.reaction.title)
+
+
+                    val paramsActionAsString: String = Gson().toJson(detailedArea.action.params)
+                    val paramsReactionAsString: String = Gson().toJson(detailedArea.reaction.params)
+
+                    val listParamsAction = Gson().fromJson(paramsActionAsString, Array<Param>::class.java)
+                    val listParamsReaction = Gson().fromJson(paramsReactionAsString, Array<Param>::class.java)
+
+                    println(paramsActionAsString)
+                    println(paramsReactionAsString)
                     runOnUiThread {
                         //loadingPanel.visibility = View.GONE
-                        //recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token)
+                        recyclerView_params_action.adapter = DetailsActionAdapter(listParamsAction)
+                        recyclerView_params_reaction.adapter = DetailsActionAdapter(listParamsReaction)
                     }
                 }
             }
@@ -76,4 +93,4 @@ class DetailsArea : AppCompatActivity() {
     }
 }
 
-class DetailedArea(val area_id: String, val area_name: String, val color: String)
+class DetailedArea(val area_id: String, val area_name: String, val color: String, val action: Action, val reaction: Reaction)
