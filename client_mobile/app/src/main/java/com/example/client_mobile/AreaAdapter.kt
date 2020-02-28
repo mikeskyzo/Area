@@ -65,7 +65,6 @@ class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?
             intent.putExtra("token", token)
             intent.putExtra("area_id", area.area_id)
             context?.startActivity(intent)
-            println(area.area_id)
             Toast.makeText(holder.view.context, area.area_id, Toast.LENGTH_SHORT).show()
         }
         if (area.action == "Github")

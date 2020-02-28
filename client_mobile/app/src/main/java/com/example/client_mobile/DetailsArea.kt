@@ -58,6 +58,7 @@ class DetailsArea : AppCompatActivity() {
             .build()
 
         loadingPanel.visibility = View.VISIBLE
+        Toast.makeText(getContext(), "Deleting area...", Toast.LENGTH_SHORT).show()
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
