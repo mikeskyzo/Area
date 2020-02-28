@@ -156,6 +156,10 @@
 						{
 							"type" : "delete_action",
 							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
 						}
 					],
 					"params" : [

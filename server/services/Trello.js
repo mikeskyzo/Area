@@ -2,7 +2,11 @@ const fetch = require("node-fetch");
 
 //https://trello.com/app-key
 
-exports.createNewWebhook = async function (res, json, next) {
+exports.confirmWebhookFunctionTrello = async function(req, res, area)
+{
+}
+
+exports.createNewWebhook = async function(res, json, next) {
 	let idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel || idModel.trim() === "") {
@@ -19,19 +23,19 @@ exports.createNewWebhook = async function (res, json, next) {
 		global.responseError(res, 401, "No APIKey provided");
 		return;
 	}
+
+	await global.saveInDbAsync(global.CollectionArea, json);
 	const callback = `${global.url}/webhooks/${json.area_id}`;
 	const url = `https://api.trello.com/1/webhooks/?idModel=${idModel}&description=WebhookAREACOON&callbackURL=${callback}&key=${token.APIKey}&token=${token.APIToken}`;
 	fetch(url, {
 		method: "POST"
 	})
 	.then(function (response) {
-		if (response.status === 201)
-			return response.json();
-		throw `Failed to create webhook : ${response.statusText}`
+		return response.json();
 	})
-	.then(function (resJson){
-		json.webhook_id = resJson.id
-		next(res, json);
+	.then(function (resJson) {
+		json.webhook_id = resJson.id;
+		res.send("Trello's webhook well created !");
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, error)
@@ -90,7 +94,9 @@ exports.CheckToken = function (req, res)
 
 exports.FormatWebhookUpdateModel = function (req, res, area, next)
 {
+	console.log("JE PASSE BIEN ICI")
 	if (area.message) {
+		console.log("Area.message : " + area.message);
 		if (area.message.includes("{name}") && req.body.action && req.body.action.memberCreator && req.body.action.memberCreator.username)
 			area.message = area.message.replace("{name}", req.body.action.memberCreator.username)
 		if (req.body.type && area.message.includes("{event}")) {
@@ -117,7 +123,6 @@ exports.FormatWebhookUpdateModel = function (req, res, area, next)
 		} else
 			res.send();
 	}
-	console.log("Area.message : " + area.message);
 	next(area, res);
 }
 
