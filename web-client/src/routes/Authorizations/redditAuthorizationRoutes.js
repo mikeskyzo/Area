@@ -13,8 +13,9 @@ module.exports = {
 			app.logger.log(2, newres.data);
 			RedditApi.generalSettings.authorizationToken = newres.data.access_token;
 			RedditApi.generalSettings.refreshToken = newres.data.refresh_token;
-			ServerApi.setRedditAccessToken(req, res,
-				RedditApi.generalSettings.authorizationToken, RedditApi.generalSettings.refreshToken);
+			ServerApi.setRedditAccessToken(app, req, res,
+				RedditApi.generalSettings.authorizationToken,
+				RedditApi.generalSettings.refreshToken);
 
 		});
 	}

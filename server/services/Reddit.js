@@ -26,7 +26,7 @@ const checkBody = function (req, res) {
 exports.check_token = async function (req, res)
 {
 	// Check if all required datas are in body
-	if (!checkBody(res, res))
+	if (!checkBody(req, res))
 		return;
 
 	// Make sure that no token already saved for this service
