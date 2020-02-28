@@ -54,9 +54,7 @@ exports.getArea = function (req, res)
 		if (!result)
 			global.responseError(res, 401, 'Area not found');
 		else {
-			result.forEach(element => {
-				delete element._id;
-			});
+			delete element._id;
 			res.json(result);
 		}
     });
