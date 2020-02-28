@@ -98,10 +98,10 @@ exports.deleteWebhook = async function (area, req, res)
 
 exports.FormatWebhookIssueEvent = function (req, res, area, next)
 {
-// 	if (!req.body.action) {
-// 		res.send();
-// 		return;
-// 	}
+	if (!req.body.action) {
+		res.send();
+		return;
+	}
 // 	let message = area.reaction.message;
 // 	if (message) {
 // 		if (message.includes('{event}'))
@@ -117,10 +117,10 @@ exports.FormatWebhookIssueEvent = function (req, res, area, next)
 
 exports.FormatWebhookPushOnRepo = function (req, res, area, next)
 {
-	// if (req.body.zen) {
-	// 	res.send();
-	// 	return;
-	// }
+	if (req.body.zen) {
+		res.send();
+		return;
+	}
 	// if (area.reaction.message) {
 	// 	if (area.reaction.message.includes('{name}') && req.body.pusher && req.body.pusher.name)
 	// 		area.reaction.message = area.reaction.message.replace('{name}', req.body.pusher.name)
