@@ -1,5 +1,8 @@
 //const fetch = require('node-fetch');
 const axios = require('axios');
+const snoowrap = require('snoowrap');
+const clientSecret = 'TMXP7_srRo0CGHrXsyAggv-WRms';
+const clientId = 'xxa4cp-hsWE_iA';
 
 const RedditApiUrl = `https://www.reddit.com/api/v1`;
 const RedditAuthApiUrl = `https://oauth.reddit.com/api/v1`;
@@ -45,6 +48,22 @@ exports.check_token = async function (req, res)
 		global.responseError(res, 500, 'err : ' + error)
 	})
 };
+
+exports.Reddit_Submit_Url = function (req, res, json) {
+
+	let token = check_token(req, res);
+	const r = new snoowrap({
+		userAgent: 'Area_Dashboard++ - Marcoleric',
+		clientId: clientId,
+		clientSecret: clientSecret,
+		refreshToken: token
+	});
+	r.getSubreddit('sub').submitLink({
+		title: 'title',
+		url: 'url'
+	});
+}
+
 
 /* FETCH BACKUP
 fetch(
