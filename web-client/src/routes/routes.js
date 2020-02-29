@@ -1,8 +1,4 @@
 const ServerApi = require('../services/ApplicationServer');
-const githubAuthorizationRoutes = require('./Authorizations/githubAuthorizationRoutes');
-const redditAuthorizationRoutes = require('./Authorizations/redditAuthorizationRoutes');
-const slackAuthorizationRoutes = require('./Authorizations/slackAuthorizationRoutes');
-const trelloAuthorizationRoutes = require('./Authorizations/trelloAuthorizationRoutes');
 
 const enableViewsRoutes = async function(app) {
 
@@ -48,6 +44,9 @@ const enableViewsRoutes = async function(app) {
 
 };
 
+// error routes
+const errorLogicRoutes = require('./logic/errorLogicalRoutes');
+// Enable authorizations routes function
 const enableLogicRoutes = async function (app) {
 
 	// This route download the mobile client apk
@@ -127,8 +126,16 @@ const enableLogicRoutes = async function (app) {
 		}
 	});
 
+	await errorLogicRoutes.enableErrorLogicRoutes(app);
+
 };
 
+// authorizations routes
+const githubAuthorizationRoutes = require('./Authorizations/githubAuthorizationRoutes');
+const redditAuthorizationRoutes = require('./Authorizations/redditAuthorizationRoutes');
+const slackAuthorizationRoutes = require('./Authorizations/slackAuthorizationRoutes');
+const trelloAuthorizationRoutes = require('./Authorizations/trelloAuthorizationRoutes');
+// Enable authorizations routes function
 const enableAuthorizationsRoutes = async function(app) {
 	await githubAuthorizationRoutes.enableGithubAuthorizationRoute(app);
 	await redditAuthorizationRoutes.enableRedditAuthorizationRoute(app);
