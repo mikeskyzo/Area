@@ -213,7 +213,6 @@ exports.trelloCreateCard = async function (area, res)
   		method: "POST"
 	})
 	.then(function (response) {
-		console.log(response);
 		if (response.status !== 200) {
 			console.log(`Bad response from Trello : ${response.error}`);
 			res.status(500).send();
@@ -221,7 +220,6 @@ exports.trelloCreateCard = async function (area, res)
 			return response.json();
 	})
 	.then(function (resjson) {
-		console.log(resjson);
 		res.send();
 		return;
 	})
@@ -249,12 +247,12 @@ exports.checkArgsCreateList = async function (json)
 		return "No APIKey provided";
 	fetch(`https://api.trello.com/1/boards/${idBoard}?&key=${token.APIKey}&token=${token.APIToken}`)
 	.then(function (response) {
-		return response.json();
-	})
-	.then(function (resjson) {
-		if (resjson.ok == false)
-			return `Bad response from Trello : ${resjson.error}`;
+		if (response.status !== 200)
+			return `Bad response from Trello : ${response.error}`;
 		return null;
+	})
+	.then(function (res) {
+		return res;
 	})
 	.catch(function (error) {
 		return `err : ${error}`;
@@ -285,19 +283,18 @@ exports.trelloCreateList = async function (area, res)
   		method: "POST"
 	})
 	.then(function (response) {
-		return response.json();
+		if (response.status !== 200) {
+			console.log(`Bad response from Trello : ${response.error}`);
+			res.status(500).send();
+		} else
+			return response.json();
 	})
 	.then(function (resjson) {
-		if (resjson.ok == false) {
-			console.error(`Bad response from Trello : ${resjson.error}`);
-			res.status(500).send();
-		} else {
-			res.send();
-		}
+		res.send();
 		return;
 	})
 	.catch(function (error) {
-		global.responseError(res, 500, `err : ${error}`)
+		global.responseError(res, 500, `err : ${error}`);
 	});
 }
 
@@ -317,12 +314,12 @@ exports.checkArgsCreateLabel = async function (json)
 		return "No APIKey provided";
 	fetch(`https://api.trello.com/1/boards/${idBoard}?fileds=all&key=${token.APIKey}&token=${token.APIToken}`)
 	.then(function (response) {
-		return response.json();
-	})
-	.then(function (resjson) {
-		if (resjson.ok == false)
-			return `Bad response from Trello : ${resjson.error}`;
+		if (response.status !== 200)
+			return `Bad response from Trello : ${response.error}`;
 		return null;
+	})
+	.then(function (res) {
+		return res;
 	})
 	.catch(function (error) {
 		return `err : ${error}`;
@@ -356,15 +353,14 @@ exports.trelloCreateLabel = async function (area, res)
   		method: "POST"
 	})
 	.then(function (response) {
-		return response.json();
+		if (response.status !== 200) {
+			console.log(`Bad response from Trello : ${response.error}`);
+			res.status(500).send();
+		} else
+			return response.json();
 	})
 	.then(function (resjson) {
-		if (resjson.ok == false) {
-			console.error(`Bad response from Trello : ${resjson.error}`);
-			res.status(500).send();
-		} else {
-			res.send();
-		}
+		res.send();
 		return;
 	})
 	.catch(function (error) {
@@ -418,15 +414,14 @@ exports.trelloCreateBoard = async function (area, res)
   		method: "POST"
 	})
 	.then(function (response) {
-		return response.json();
+		if (response.status !== 200) {
+			console.log(`Bad response from Trello : ${response.error}`);
+			res.status(500).send();
+		} else
+			return response.json();
 	})
 	.then(function (resjson) {
-		if (resjson.ok === false) {
-			console.error(`Bad response from Trello : ${resjson.error}`);
-			res.status(500).send();
-		} else {
-			res.send();
-		}
+		res.send();
 		return;
 	})
 	.catch(function (error) {
