@@ -89,6 +89,20 @@ exports.initGetReactions = function(req, res, server, token) {
 	)
 };
 
+exports.initGetAreas = function(req, res, server, token) {
+	const ApplicationApi = axios.create({
+		baseURL: server,
+		crossDomain: true
+	});
+	return ApplicationApi.get(`/GetAreas`,
+		{
+			headers: {
+				Authorization: `token ${token}`
+			}
+		}
+	)
+};
+
 // Authorizations
 exports.setGithubAccessToken = function(req, res, token) {
 	ApplicationApi.baseURL = generalSettings.url;

@@ -57,7 +57,7 @@ class Settings : AppCompatActivity() {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    val allServices = GsonBuilder().create().fromJson(body, Services::class.java)
+                    //val allServices = GsonBuilder().create().fromJson(body, Services::class.java)
                     println("SERVICES")
                     println(body)
                     runOnUiThread {
@@ -74,6 +74,5 @@ class Settings : AppCompatActivity() {
     }
 }
 
-class Service(val name: String, val state: Boolean) : Serializable
 
 class Services(val services: List<Service>) : Serializable
