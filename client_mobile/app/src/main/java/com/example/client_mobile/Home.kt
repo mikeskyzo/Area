@@ -235,7 +235,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         list_services.add("Slack")
         list_services.add("Trello")
 
-        menu_services = navView.menu.addSubMenu("New Super SubMenu")
+        menu_services = navView.menu.addSubMenu("Services")
         for (i in 0 until list_services.size) {
             val service_name = resources.getIdentifier(list_services[i], "string", getContext()?.packageName)
             val service_icon = resources.getIdentifier(list_services[i].decapitalize(), "drawable", getContext()?.packageName)
@@ -347,43 +347,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 intent.putExtra("server_location", server_location)
                 startActivity(intent)
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_github -> {
-                val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scope=admin:repo_hook")
-                startActivity(openURL)
-            }
-            R.id.nav_slack -> {
-                val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("https://slack.com/oauth/v2/authorize?client_id=933637704274.945976210260&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&redirect_uri=slack://truc.truc")
-                startActivity(openURL)
-            }
-            R.id.nav_reddit -> {
-                val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("https://www.reddit.com/api/v1/authorize?client_id=YRYKkBFVxzy12Q&redirect_uri=reddit://truc.truc&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=permanent&state=NONE")
-                startActivity(openURL)
-            }
-            R.id.nav_trello -> {
-                val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                val tokenEndpoint = "https://trello.com/1/OAuthAuthorizeToken?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never\""
-
-                tokenEndpoint.httpPost(listOf(
-                    "grant_type" to "client_credentials",
-                    "client_id" to "cfd14732f1e65ebbfc3521de87b214a1",
-                    "client_secret" to "8efc48c0d75ff42474c06c236c3b85684c534cfab5f7538e026ea35bebd82eb5",
-                    "scope" to "read,write,account"))
-                    .responseString { request, response, result ->
-                        when (result) {
-                            is Result.Success -> {
-                                println(result.value)
-                            }
-                            is Result.Failure -> {
-                                println(result.error)
-                                println("error trello failure")
-                            }
-                        }
-                    }
-
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
