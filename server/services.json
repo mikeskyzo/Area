@@ -430,6 +430,10 @@
 						"description" : "login of the twitch user to follow"
 					}
 				]
+			},
+			{
+				"type" : "confirm_webhook_function",
+				"name" : "confirmWebhookFunctionTwitch"
 			}
 		],
 		"reactions" : [
