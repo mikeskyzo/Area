@@ -225,7 +225,9 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         })
     }
 
+
     fun getServices() {
+        //getservices()
         list_services.add("Github")
         list_services.add("Discord")
         list_services.add("Twitch")
@@ -234,12 +236,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         list_services.add("Trello")
 
         menu_services = navView.menu.addSubMenu("New Super SubMenu")
-        var service_name = 0
         for (i in 0 until list_services.size) {
-            service_name = resources.getIdentifier(list_services[i], "string", getContext()?.packageName)
-            menu_services.add(0, service_name, Menu.NONE, list_services[i])
+            val service_name = resources.getIdentifier(list_services[i], "string", getContext()?.packageName)
+            val service_icon = resources.getIdentifier(list_services[i].decapitalize(), "drawable", getContext()?.packageName)
+            menu_services.add(0, service_name, Menu.NONE, list_services[i]).setIcon(service_icon)
         }
-
         navView.invalidate()
 
         /*
@@ -320,6 +321,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         for (i in 0 until list_services.size) {
             if (item.itemId == resources.getIdentifier(list_services[i], "string", getContext()?.packageName)) {
                 println(list_services[i])
+                //Request AddToken/{list_services[i]}
                 Toast.makeText(getContext(), list_services[i], Toast.LENGTH_SHORT).show()
                 break
             }

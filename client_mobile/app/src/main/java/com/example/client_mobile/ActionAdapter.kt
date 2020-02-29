@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.action_row.view.*
@@ -29,17 +28,17 @@ class ActionAdapter(val allActions: Actions, val context: Context?, val token: S
 
         holder.view.buttonAction.text = action.title
         if (action.service == "Github")
-            holder.view.imageViewIcon.setImageResource(R.drawable.ic_github)
+            holder.view.imageViewIcon.setImageResource(R.drawable.github)
         if (action.service == "Slack")
-            holder.view.imageViewIcon.setImageResource(R.drawable.ic_slack)
+            holder.view.imageViewIcon.setImageResource(R.drawable.slack)
         if (action.service == "Twitch")
-            holder.view.imageViewIcon.setImageResource(R.drawable.ic_twitch)
+            holder.view.imageViewIcon.setImageResource(R.drawable.twitch)
         if (action.service == "Reddit")
-            holder.view.imageViewIcon.setImageResource(R.drawable.ic_reddit)
+            holder.view.imageViewIcon.setImageResource(R.drawable.reddit)
         if (action.service == "Discord")
-            holder.view.imageViewIcon.setImageResource(R.drawable.ic_discord)
+            holder.view.imageViewIcon.setImageResource(R.drawable.discord)
         if (action.service == "Trello")
-            holder.view.imageViewIcon.setImageResource(R.drawable.ic_trello)
+            holder.view.imageViewIcon.setImageResource(R.drawable.trello)
         holder.view.buttonAction.setOnClickListener {
             val intent = Intent(context, selectParameter::class.java)
             val arrayAsString: String = Gson().toJson(action.params)
