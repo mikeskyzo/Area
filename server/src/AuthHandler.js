@@ -5,7 +5,7 @@ exports.redirectToService = function(req, res)
 	let json = {
 		user_id: req.body.user_id,
 		service : req.params.service,
-		support : req.query.client
+		support : !req.query.client ? 'web' : req.query.client
 	};
 	let token = jwt.sign(json, global.secret, {
 		expiresIn : '2m'
