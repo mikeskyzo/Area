@@ -51,6 +51,582 @@ exports.createNewWebhookUpdateCard = async function (res, json, next)
 	createNewWebhook(res, json, next);
 }
 
+exports.createNewWebhookUpdateList = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "updateList"});
+	json.action.params = params;
+
+	const idList = global.getParam(json.reaction.params, "idModel");
+
+	if (!idList) {
+		global.responseError(res, 401, "Trello needs a idModel of list");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/lists/${idList}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a list");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
+exports.createNewWebhookUpdateChecklist = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "updateChecklist"});
+	json.action.params = params;
+
+	const idChecklist = global.getParam(json.reaction.params, "idModel");
+
+	if (!idChecklist) {
+		global.responseError(res, 401, "Trello needs a idModel of list");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/checklists/${idChecklist}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a checklists");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
+exports.createNewWebhookUpdateMember = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "updateMember"});
+	json.action.params = params;
+
+	const idMember = global.getParam(json.reaction.params, "idModel");
+
+	if (!idMember) {
+		global.responseError(res, 401, "Trello needs a idModel of list");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/checklists/${idMember}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a member");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
+exports.createNewWebhookCreateCard = async function (res, json, next)
+{
+	let errorType = "";
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "createCard"});
+	json.action.params = params;
+
+	const idModel = global.getParam(json.reaction.params, "idModel");
+
+	if (!idModel) {
+		global.responseError(res, 401, "Trello needs a idModel of list, board or member");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/lists/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a list\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/boards/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a board\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/members/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a member\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	global.responseError(res, 401, errorType);
+}
+
+exports.createNewWebhookCreateCard = async function (res, json, next)
+{
+	let errorType = "";
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "createCard"});
+	json.action.params = params;
+
+	const idModel = global.getParam(json.reaction.params, "idModel");
+
+	if (!idModel) {
+		global.responseError(res, 401, "Trello needs a idModel of list, board or member");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/lists/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a list\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/boards/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a board\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/members/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a member\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	global.responseError(res, 401, errorType);
+}
+
+exports.createNewWebhookCreateList = async function (res, json, next)
+{
+	let errorType = "";
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "createList"});
+	json.action.params = params;
+
+	const idModel = global.getParam(json.reaction.params, "idModel");
+
+	if (!idModel) {
+		global.responseError(res, 401, "Trello needs a idModel of board or member");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/boards/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a board\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/members/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a member\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	global.responseError(res, 401, errorType);
+}
+
+exports.createNewWebhookCommentCard = async function (res, json, next)
+{
+	let errorType = "";
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "commentCard"});
+	json.action.params = params;
+
+	const idModel = global.getParam(json.reaction.params, "idModel");
+
+	if (!idModel) {
+		global.responseError(res, 401, "Trello needs a idModel of card, list, board or member");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/cards/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a card\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/lists/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a list\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/boards/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a board\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/members/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a member\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	global.responseError(res, 401, errorType);
+}
+
+exports.createNewWebhookDeleteCard = async function (res, json, next)
+{
+	let errorType = "";
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "deleteCard"});
+	json.action.params = params;
+
+	const idModel = global.getParam(json.reaction.params, "idModel");
+
+	if (!idModel) {
+		global.responseError(res, 401, "Trello needs a idModel of card, list, board or member");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/cards/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a card\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/lists/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a list\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/boards/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a board\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	fetch(`https://api.trello.com/1/members/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			errorType += "idModel isn't a member\n";
+			return;
+		}
+		createNewWebhook(res, json, next);
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+	global.responseError(res, 401, errorType);
+}
+
+exports.createNewWebhookRemoveChecklistFromCard = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "removeChecklistFromCard"});
+	json.action.params = params;
+
+	const idCard = global.getParam(json.reaction.params, "idModel");
+
+	if (!idCard) {
+		global.responseError(res, 401, "Trello needs a idModel of card");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/cards/${idCard}?&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a card");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
+exports.createNewWebhookAddChecklistFromCard = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "addChecklistFromCard"});
+	json.action.params = params;
+
+	const idCard = global.getParam(json.reaction.params, "idModel");
+
+	if (!idCard) {
+		global.responseError(res, 401, "Trello needs a idModel of card");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/cards/${idCard}?&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a card");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
+exports.createNewWebhookRemoveMemberFromCard = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "removeMemberFromCard"});
+	json.action.params = params;
+
+	const idCard = global.getParam(json.reaction.params, "idModel");
+
+	if (!idCard) {
+		global.responseError(res, 401, "Trello needs a idModel of card");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/cards/${idCard}?&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a card");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
+exports.createNewWebhookAddAttachmentToCard = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "addChecklistFromCard"});
+	json.action.params = params;
+
+	const idCard = global.getParam(json.reaction.params, "idModel");
+
+	if (!idCard) {
+		global.responseError(res, 401, "Trello needs a idModel of card");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/cards/${idCard}?&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a card");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
+exports.createNewWebhookCreateBoard = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "removeMemberFromCard"});
+	json.action.params = params;
+
+	const idMember = global.getParam(json.reaction.params, "idModel");
+
+	if (!idMember) {
+		global.responseError(res, 401, "Trello needs a idModel of member");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/members/${idMember}?&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a member");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
 createNewWebhook = async function(res, json, next)
 {
 	const idModel = global.getParam(json.action.params, "idModel");
