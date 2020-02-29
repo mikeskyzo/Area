@@ -240,9 +240,453 @@
 			"check_token_function" : "CheckToken",
 			"actions" : [
 				{
-					"name" : "create_new_webhook_trello",
-					"title" : "Create Trello's webhook",
-					"description" : "Trigger when there's an update on a Trello's model.",
+					"name" : "create_new_webhook_trello_update_card",
+					"title" : "Create Trello's webhook on updated card",
+					"description" : "Trigger when there's an update on a Trello's card.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhookUpdateCard"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_update_list",
+					"title" : "Create Trello's webhook on a updated list",
+					"description" : "Trigger when there's an update on a Trello's list.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_update_checklist",
+					"title" : "Create Trello's webhook on a updated checklist",
+					"description" : "Trigger when there's an update on a Trello's checklist.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_update_member",
+					"title" : "Create Trello's webhook on a updated member",
+					"description" : "Trigger when there's an update on a Trello's member.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_create_card",
+					"title" : "Create Trello's webhook on a created card",
+					"description" : "Trigger when there's an card created on a Trello's list.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_create_list",
+					"title" : "Create Trello's webhook on a created list",
+					"description" : "Trigger when there's a list created on a Trello's board.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_comment_card",
+					"title" : "Create Trello's webhook on comments on card",
+					"description" : "Trigger when there's a comment on a Trello's card.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_delete_card",
+					"title" : "Create Trello's webhook on delete cards",
+					"description" : "Trigger when there's a delete of a Trello's card.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_remove_checklist_from_card",
+					"title" : "Create Trello's webhook when a checklist is removed from a card",
+					"description" : "Trigger when there's a checklist removed from a Trello's card.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_remove_member_from_card",
+					"title" : "Create Trello's webhook when a member is removed from a card",
+					"description" : "Trigger when there's a member removed from a Trello's card..",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_create_board",
+					"title" : "Create Trello's webhook for board creation",
+					"description" : "Trigger when there's an board created by a Trello's member.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_add_checklist_to_card",
+					"title" : "Create Trello's webhook for add checklist to card event",
+					"description" : "Trigger when there's a checklist added to a Trello's card.",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createNewWebhook"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookUpdateModel"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
+						}
+					],
+					"params" : [
+						{
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send on the channel"
+						}
+					]
+				},
+				{
+					"name" : "create_new_webhook_trello_add_attachment_to_card",
+					"title" : "Create Trello's webhook for add of attachment to a card",
+					"description" : "Trigger when there's attachment added to a Trello's card.",
 					"functions" : [
 						{
 							"type" : "create_action",
