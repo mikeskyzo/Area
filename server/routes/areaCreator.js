@@ -15,7 +15,7 @@ exports.updateArea = function (req, res) {
 	checkAndSaveAREA(req.body.area_id, req, res);
 };
 
-function checkAndSaveAREA(area_id, req, res)
+async function checkAndSaveAREA(area_id, req, res)
 {
 	if (!req.body.action || !req.body.reaction) {
 		res.status(401);
@@ -45,7 +45,8 @@ function checkAndSaveAREA(area_id, req, res)
 	if (!global.ReactionCheckArgsMap.get(json.reaction.name))
 		responseError(res, 403, 'Reaction not found');
 	else if (global.ActionMap.get(json.action.name)) {
-		let err = global.ReactionCheckArgsMap.get(json.reaction.name)(json);
+		let err = await global.ReactionCheckArgsMap.get(json.reaction.name)(json);
+		console.log(err);
 		if (err)
 			global.responseError(res, 403, err);
 		else

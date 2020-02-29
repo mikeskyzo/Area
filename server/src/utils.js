@@ -104,6 +104,9 @@ global.updateInDbAsync = async function (collection, query, update) {
 global.deleteInDbAsync = async function (collection, param) {
 	return db.collection(collection).deleteOne(param);
 }
+global.saveInDbAsync = async function (collection, param) {
+	return db.collection(collection).insertOne(param);
+}
 
 global.saveAREA = function (res, json)
 {
@@ -162,4 +165,22 @@ global.getParam = function (params, name)
 		if (params[nb].name == name)
 			return params[nb].value;
 	return null;
+}
+
+global.modifyParam = function (params, name, newValue)
+{
+	for (nb in params)
+		if (params[nb].name == name) {
+			params[nb].value = newValue;
+			return;
+		}
+}
+
+global.addParam = function (params, name, value)
+{
+	let json = {
+		name : name,
+		value : value
+	}
+	params.push(json);
 }

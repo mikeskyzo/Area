@@ -255,12 +255,20 @@
 						{
 							"type" : "delete_action",
 							"name" : "deleteWebhook"
+						},
+						{
+							"type" : "confirm_webhook_function",
+							"name" : "confirmWebhookFunctionTrello"
 						}
 					],
 					"params" : [
 						{
-							"name" : "modelID",
-							"description" : "ID a Trello's model (board, card, list, etc...)"
+							"name" : "idModel",
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
 						},
 						{
 							"name" : "message",

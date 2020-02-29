@@ -28,9 +28,9 @@ exports.send_message = async function (area, res)
 		return;
     }
     let body = {
-        'content' : area.reaction.message,
-        username : area.reaction.username,
-        avatar_url : area.reaction.avatar
+        'content' : global.getParam(area.reaction.params, 'message'),
+        username : global.getParam(area.reaction.params, 'username'),
+        avatar_url : global.getParam(area.reaction.params, 'avatar')
     };
     let url = 'https://discordapp.com/api/webhooks/' + token.webhook_id + '/' + token.webhook_token;
     let response = await fetch(url, {
@@ -44,15 +44,14 @@ exports.send_message = async function (area, res)
         res.send();
 }
 
-exports.send_message_check_args = function(res, json)
+exports.send_message_check_args = function(json)
 {
-    if (!json.reaction.username)
-        json.reaction.username = 'Mike'
-    if (!json.reaction.avatar)
-        json.reaction.avatar = 'https://i.imgur.com/GMo6l8u.jpg'
-    if (!json.reaction.message)
-       global.responseError(res, 401, 'Missing a message to send')
-    else {
-        global.saveAREA(res, json);
-    }
+    if (!global.getParam(json.reaction.params, 'username'))
+        global.addParam(json.reaction.params, 'username', 'Mike')
+    if (!global.getParam(json.reaction.params, 'avatar'))
+        global.addParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
+    if (!global.getParam(json.reaction.params, 'message'))
+       return 'Missing a message to send';
+    else
+        return null;
 }
