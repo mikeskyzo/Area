@@ -112,10 +112,20 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                         ).show()
                     }
                 } else {
-                    val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
-                    runOnUiThread {
-                        loadingPanel.visibility = View.GONE
-                        recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token)
+                    val tab = body.toString().split(" ")
+                    println(tab[0])
+                    if (tab[0] != "Tunnel") {
+                        val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
+                        runOnUiThread {
+                            loadingPanel.visibility = View.GONE
+                            recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token)
+                        }
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                        }
+                        val intent = Intent(getContext(), Start::class.java)
+                        startActivity(intent)
                     }
                 }
             }
@@ -302,12 +312,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         }
     }
 
-    fun addToken(
-        service: String,
-        access_token: String,
-        refresh_token: String = "",
-        expires_in: String = ""
-    ) {
+    fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
@@ -334,10 +339,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                } else if (body == "409") {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                    }
                 } else {
                     runOnUiThread {
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
@@ -352,16 +353,45 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         })
     }
 
+    fun connectToService(service: String) {
+        val client = OkHttpClient()
+
+        val formBody: RequestBody = FormBody.Builder()
+            .add("service", service)
+            .build()
+
+        val request: Request = Request.Builder()
+            .url(server_location.plus("/auth/addToken"))
+            .post(formBody)
+            .header("Authorization", "token ".plus(token.toString()))
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body?.string()
+                if (body == "404") {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    runOnUiThread {
+                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("Failed to execute request")
+                println(e)
+            }
+        })
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         for (i in 0 until list_services.size) {
-            if (item.itemId == resources.getIdentifier(
-                    list_services[i],
-                    "string",
-                    getContext()?.packageName
-                )
-            ) {
+            if (item.itemId == resources.getIdentifier(list_services[i], "string", getContext()?.packageName)) {
                 println(list_services[i])
                 //Request AddToken/{list_services[i]}
+                //connectToService(list_services[i])
                 Toast.makeText(getContext(), list_services[i], Toast.LENGTH_SHORT).show()
                 break
             }
@@ -391,6 +421,14 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun redirectHome(message: String) {
+        runOnUiThread {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show()
+        }
+        val intent = Intent(getContext(), Start::class.java)
+        startActivity(intent)
     }
 }
 
