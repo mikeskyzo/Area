@@ -1,5 +1,6 @@
 global.Services = new Object();
-global.ServiceTokenCheckMap = new Map();
+global.ServiceGenerateUrlMap = new Map();
+global.ServiceRedirectAuthMap = new Map();
 
 global.Action = new Object();
 global.ActionFinishWebhook = new Map();
@@ -15,16 +16,21 @@ global.ReactionCheckArgsMap = new Map();
 var json = require('../services.json')
 
 if (!json || !json.services)
-	exitProg('Services.json wrong format')
+	global.terminateServer('Services.json wrong format');
 for (service in json.services){
     try {
 		var obj = json.services[service];
         var module = require('../services/' + obj.name);
 
-		if (!obj.check_token_function in module || !typeof module[obj.check_token_function] === "function")
-			throw obj.name +  ' : check_token_function was not found for ' + obj.name;
-		LoadFunction(global.ServiceTokenCheckMap, obj.check_token_function, obj.name, module);
-        if (obj.actions) {
+		if (!obj.generate_url_function)
+			throw obj.name +  ' : the function to generate url was not found for ' + obj.name;
+		LoadFunction(global.ServiceGenerateUrlMap, obj.generate_url_function, obj.name, module);
+
+		if (!obj.redirect_auth_function)
+			throw obj.name +  ' : the function for save token from oauth was not found for ' + obj.name;
+		LoadFunction(global.ServiceRedirectAuthMap, obj.redirect_auth_function, obj.name, module);
+
+		if (obj.actions) {
 			for (action in obj.actions)
             	loadActions(obj.actions[action], module);
         }
@@ -40,8 +46,8 @@ for (service in json.services){
     }
 }
 
-if ((global.action === null || global.action.length === 0) || (global.reaction === null || global.reaction.length === 0)) {
-	exitProg('The server need at least one action and one reaction');
+if ((global.action == null || global.action.length === 0) || (global.reaction == null || global.reaction.length === 0)) {
+	global.terminateServer('The server need at least one action and one reaction');
 }
 
 function loadReactions(reaction, module)
@@ -93,13 +99,9 @@ function loadActions(action, module)
 
 function LoadFunction(map, functionName, key, module)
 {
-	if (!functionName in module || !typeof module[functionName] === "function")
+	if (!module[functionName])
 		throw obj.name +  ' : ' + functionName + ' was not found for ' + obj.name;
+	if (!(typeof module[functionName] == 'function'))
+		throw obj.name +  ' : ' + functionName + ' is not a function in ' + obj.name;
 	map.set(key, module[functionName])
-}
-
-function exitProg(err) {
-	if (err)
-		console.log(err);
-	process.exit(84);
 }

@@ -69,6 +69,17 @@
                     android:host="truc.truc"
                     android:scheme="reddit" />
             </intent-filter>
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.SEND" />
+
+                <data
+                    android:host="truc.truc"
+                    android:scheme="mobile" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".createAccount"

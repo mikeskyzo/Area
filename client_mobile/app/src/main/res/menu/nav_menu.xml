@@ -1,38 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_menu">
 
-    <item android:title="Services">
-        <menu>
-            <item
-                android:id="@+id/nav_github"
-                android:icon="@drawable/ic_github"
-                android:title="Github"/>
-            <item
-                android:id="@+id/nav_discord"
-                android:icon="@drawable/ic_discord"
-                android:title="Discord"/>
-            <item
-                android:id="@+id/nav_twitch"
-                android:icon="@drawable/ic_twitch"
-                android:title="Twitch"/>
-            <item
-                android:id="@+id/nav_reddit"
-                android:icon="@drawable/ic_reddit"
-                android:title="Reddit"/>
-            <item
-                android:id="@+id/nav_slack"
-                android:icon="@drawable/ic_slack"
-                android:title="Slack"/>
-            <item
-                android:id="@+id/nav_trello"
-                android:icon="@drawable/ic_trello"
-                android:title="Trello"/>
-        </menu>
-    </item>
-
-
-    <item android:title="Account Settings">
-        <menu>
+    <item android:title="Account Settings"
+        android:id="@+id/account_settings">
+        <menu android:id="@+id/menu_account_settings">
             <item
                 android:id="@+id/nav_create_area"
                 android:icon="@drawable/ic_add_black_24dp"
