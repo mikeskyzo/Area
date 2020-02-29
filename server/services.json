@@ -103,7 +103,106 @@
 		},
 		{
 			"name" : "Reddit",
-			"check_token_function" : "check_token"
+			"check_token_function" : "check_token",
+			"actions" : [
+			],
+			"reactions" : [
+				{
+					"name": "Reddit_submit_url",
+					"title": "submit an url to a subreddit",
+					"description": "Use to send an url in a new post on a subreddit",
+					"functions": [
+						{
+							"type": "execute_reaction",
+							"name": "Reddit_Submit_Url"
+						},
+						{
+							"type": "verify_arguments",
+							"name": "Reddit_Submit_Url_CheckArgs"
+						}
+					],
+					"params": [
+						{
+							"name": "subreddit",
+							"description": "name of the subreddit"
+						},
+						{
+							"name": "title",
+							"description": "title of the post"
+						},
+						{
+							"name": "url",
+							"description": "url to post"
+						}
+					]
+				},
+				{
+					"name": "Reddit_submit_post",
+					"title": "submit a post to a subreddit",
+					"description": "Use to create a new post on a subreddit",
+					"functions": [
+						{
+							"type": "execute_reaction",
+							"name": "Reddit_Submit_post"
+						},
+						{
+							"type": "verify_arguments",
+							"name": "Reddit_Submit_post_CheckArgs"
+						}
+					],
+					"params": [
+						{
+							"name": "subreddit",
+							"description": "name of the subreddit"
+						},
+						{
+							"name": "title",
+							"description": "title of the post"
+						},
+						{
+							"name": "text",
+							"description": "text to post"
+						}
+					]
+				},
+				{
+					"name": "Reddit_create_post",
+					"title": "submit subreddit creation request",
+					"description": "Use to create a sub on reddit",
+					"functions": [
+						{
+							"type": "execute_reaction",
+							"name": "Reddit_create_sub"
+						},
+						{
+							"type": "verify_arguments",
+							"name": "Reddit_create_sub_CheckArgs"
+						}
+					],
+					"params": [
+						{
+							"name": "name",
+							"description": "name of the subreddit"
+						},
+						{
+							"name": "title",
+							"description": "title of the subreddit"
+						},
+						{
+							"name": "description",
+							"description": "description of the sub"
+						},
+						{
+							"name": "Pdescription",
+							"description": "public description of the sub"
+						},
+						{
+							"name": "type",
+							"description": "type of the sub"
+						}
+					]
+				}
+			]
 		},
 		{
 			"name" : "Slack",
@@ -339,6 +438,10 @@
 						"description" : "login of the twitch user to follow"
 					}
 				]
+			},
+			{
+				"type" : "confirm_webhook_function",
+				"name" : "confirmWebhookFunctionTwitch"
 			}
 		],
 		"reactions" : [
