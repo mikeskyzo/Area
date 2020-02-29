@@ -9,7 +9,7 @@ function isInArray (elem, arr) {
 	return (false);
 }
 
-const events = ["updateBoard", "updateCard", "updateList", "updateChecklist", "updateMember", "createCard", "createlist", "commentCard", "deleteCard", "removeChecklistFromCard"];
+const events = ["updateBoard", "updateCard", "updateList", "updateChecklist", "updateMember", "createCard", "createlist", "commentCard", "deleteCard", "removeChecklistFromCard", "removeMemberFromCard", "createBoard", "addChecklistToCard", "addAttachmentToCard"];
 
 exports.confirmWebhookFunctionTrello = async function(req, res, area)
 {
