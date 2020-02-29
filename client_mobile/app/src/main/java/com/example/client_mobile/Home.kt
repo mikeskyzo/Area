@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -29,10 +30,14 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+    lateinit var menu_services: Menu
+    lateinit var menu_account_settings: Menu
+    //lateinit var list_services : ArrayList<String>
 
     companion object {
         var server_location: String? = ""
         var token: String? = ""
+        var list_services = ArrayList<String>()
     }
 
     fun getContext(): Context? {
@@ -43,6 +48,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        list_services.clear()
         loadingPanel.visibility = View.VISIBLE
         if (intent.getStringExtra("server_location") != null)
             server_location = intent.getStringExtra("server_location")
@@ -63,6 +69,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         navView.setNavigationItemSelectedListener(this)
         recyclerView_areas.layoutManager = LinearLayoutManager(this)
         getAreas()
+        getServices()
     }
 
     override fun onResume() {
@@ -93,12 +100,16 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .header("Authorization", "token ".plus(token.toString()))
             .build()
         loadingPanel.visibility = View.VISIBLE
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 if (body == "404") {
                     runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            getContext(),
+                            "Error 404: server not found",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
                     val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
@@ -108,6 +119,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 }
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -119,7 +131,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         val regex = Regex("(?<=code=).*\$")
         val result: MatchResult? = regex.find(uri.toString())
         val code = result?.value!!
-        val url = "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(code)
+        val url =
+            "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(
+                code
+            )
 
         val client = OkHttpClient()
 
@@ -131,7 +146,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .post(formBody)
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 val delimiter1 = "access_token="
@@ -141,6 +156,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 addToken("Github", access_token)
 
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -155,9 +171,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
 
         val authString: String = "YRYKkBFVxzy12Q:"
-        val encodedAuthString: String = Base64.encodeToString(authString.toByteArray(), Base64.NO_WRAP)
+        val encodedAuthString: String =
+            Base64.encodeToString(authString.toByteArray(), Base64.NO_WRAP)
 
-        val url = "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=".plus(code).plus("&redirect_uri=").plus("reddit://truc.truc")
+        val url =
+            "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=".plus(
+                code
+            ).plus("&redirect_uri=").plus("reddit://truc.truc")
 
         val client = OkHttpClient()
 
@@ -171,12 +191,14 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .post(formBody)
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                val access_token = GsonBuilder().create().fromJson(body, AccessToken::class.java).access_token
+                val access_token =
+                    GsonBuilder().create().fromJson(body, AccessToken::class.java).access_token
                 addToken("Reddit", access_token)
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -188,10 +210,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         println(uri)
     }
 
-    fun addTokenSlack(uri : Uri?) {
+    fun addTokenSlack(uri: Uri?) {
         val tab = uri.toString().split("code=", "&state=")
         val code = tab[1]
-        val url = "https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&redirect_uri=slack://truc.truc&client_secret=248197e37352e5aa521b969a3cbb8a91&code=".plus(code)
+        val url =
+            "https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&redirect_uri=slack://truc.truc&client_secret=248197e37352e5aa521b969a3cbb8a91&code=".plus(
+                code
+            )
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
@@ -202,7 +227,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .post(formBody)
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 val delimiter1 = "access_token\":\""
@@ -212,6 +237,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 addToken("Slack", access_token)
 
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -219,7 +245,30 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         })
     }
 
+
     fun getServices() {
+        //getservices()
+        list_services.add("Github")
+        list_services.add("Discord")
+        list_services.add("Twitch")
+        list_services.add("Reddit")
+        list_services.add("Slack")
+        list_services.add("Trello")
+
+        menu_services = navView.menu.addSubMenu("Services")
+        for (i in 0 until list_services.size) {
+            val service_name =
+                resources.getIdentifier(list_services[i], "string", getContext()?.packageName)
+            val service_icon = resources.getIdentifier(
+                list_services[i].decapitalize(),
+                "drawable",
+                getContext()?.packageName
+            )
+            menu_services.add(0, service_name, Menu.NONE, list_services[i]).setIcon(service_icon)
+        }
+        navView.invalidate()
+
+        /*
         val client = OkHttpClient()
         val request: Request = Request.Builder()
             .url(server_location.plus("/auth/getServices"))
@@ -235,6 +284,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     runOnUiThread {
+                        val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+                        createItemsServices(services)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -243,10 +294,20 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 println("Failed to execute request")
                 println(e)
             }
-        })
+        })*/
     }
 
-    fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
+    fun createItemsServices(services: Array<Service>) {
+        for (i in 0 until services.size) {
+        }
+    }
+
+    fun addToken(
+        service: String,
+        access_token: String,
+        refresh_token: String = "",
+        expires_in: String = ""
+    ) {
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
@@ -262,12 +323,16 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .header("Authorization", "token ".plus(token.toString()))
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 if (body == "404") {
                     runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            getContext(),
+                            "Error 404: server not found",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else if (body == "409") {
                     runOnUiThread {
@@ -279,6 +344,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 }
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -287,14 +353,25 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        for (i in 0 until list_services.size) {
+            if (item.itemId == resources.getIdentifier(
+                    list_services[i],
+                    "string",
+                    getContext()?.packageName
+                )
+            ) {
+                println(list_services[i])
+                //Request AddToken/{list_services[i]}
+                Toast.makeText(getContext(), list_services[i], Toast.LENGTH_SHORT).show()
+                break
+            }
+        }
         when (item.itemId) {
             R.id.nav_profile -> {
                 val intent = Intent(this, Settings::class.java)
                 intent.putExtra("token", token)
                 intent.putExtra("server_location", server_location)
                 startActivity(intent)
-//                getServices()
-//                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_create_area -> {
                 val intent = Intent(this, selectAction::class.java)
@@ -303,7 +380,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             }
             R.id.nav_help -> {
                 val intent = Intent(this, Help::class.java)
-                 startActivity(intent)
+                startActivity(intent)
             }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
@@ -311,53 +388,22 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 startActivity(intent)
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_github -> {
-                val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("https://github.com/login/oauth/authorize?client_id=b3925ca43ee751191104&scope=admin:repo_hook")
-                startActivity(openURL)
-            }
-            R.id.nav_slack -> {
-                val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("https://slack.com/oauth/v2/authorize?client_id=933637704274.945976210260&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&redirect_uri=slack://truc.truc")
-                startActivity(openURL)
-            }
-            R.id.nav_reddit -> {
-                val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                openURL.data = Uri.parse("https://www.reddit.com/api/v1/authorize?client_id=YRYKkBFVxzy12Q&redirect_uri=reddit://truc.truc&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=permanent&state=NONE")
-                startActivity(openURL)
-            }
-            R.id.nav_trello -> {
-                val openURL = Intent(android.content.Intent.ACTION_VIEW)
-                val tokenEndpoint = "https://trello.com/1/OAuthAuthorizeToken?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never\""
-
-                tokenEndpoint.httpPost(listOf(
-                    "grant_type" to "client_credentials",
-                    "client_id" to "cfd14732f1e65ebbfc3521de87b214a1",
-                    "client_secret" to "8efc48c0d75ff42474c06c236c3b85684c534cfab5f7538e026ea35bebd82eb5",
-                    "scope" to "read,write,account"))
-                    .responseString { request, response, result ->
-                        when (result) {
-                            is Result.Success -> {
-                                println(result.value)
-                            }
-                            is Result.Failure -> {
-                                println(result.error)
-                                println("error trello failure")
-                            }
-                        }
-                    }
-                //openURL.data = Uri.parse("https://trello.com/1/OAuthAuthorizeToken?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never")
-                //openURL.data = Uri.parse("https://trello.com/1/connect?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&response_type=token&expiration=never")
-                //startActivity(openURL)
-            }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 }
 
-class Area(val area_id: String, val action: String, val reaction: String, val area_name: String, val color: String) : Serializable
+class Area(
+    val area_id: String,
+    val action: String,
+    val reaction: String,
+    val area_name: String,
+    val color: String
+) : Serializable
 
 class Areas(val areas: List<Area>) : Serializable
 
 class AccessToken(val access_token: String)
+
+class Service(val name: String, val active: Boolean)

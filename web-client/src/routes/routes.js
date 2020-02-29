@@ -80,6 +80,14 @@ const enableLogicRoutes = async function (app) {
 			var serverAddress = req.body.serverLogin;
 
 			ServerApi.connectUser(username, password, serverAddress, req, res);
+		} else if (req.params.action == 'changeUsername') {
+			var newUsername = req.body.newUsername;
+
+			ServerApi.changeUsername(req, res, req.cookies.server, newUsername);
+		} else if (req.params.action == 'changePassword') {
+			var newPassword = req.body.newPassword;
+
+			//ServerApi.connectUser();
 		} else {
 			res.redirect('/error');
 		}
@@ -96,13 +104,19 @@ const enableLogicRoutes = async function (app) {
 			const result = await ServerApi.initGetActions(req, res, req.cookies.server, req.cookies.access_token);
 			res.json({
 				success : true,
-				data : result.data
+				data : result.data.actions
 			})
 		} else if (req.params.action === 'getInitReaction') {
 			const result = await ServerApi.initGetReactions(req, res, req.cookies.server, req.cookies.access_token);
 			res.json({
 				success: true,
-				data: result.data
+				data: result.data.reactions
+			})
+		} else if (req.params.action === 'getInitArea') {
+			const result = await ServerApi.initGetAreas(req, res, req.cookies.server, req.cookies.access_token);
+			res.json({
+				success : true,
+				data : result.data
 			})
 		} else if (req.params.action === 'getGithubLoginStatus') {
 			res.json({
