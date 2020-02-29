@@ -27,4 +27,13 @@
     <string name="service_reaction">Service_reaction</string>
     <string name="reaction_name">Reaction_name</string>
     <string name="delete_this_area">Delete this area</string>
+    <string name="my_id">myid</string>
+
+    <string name="Github">Github</string>
+    <string name="Discord">Discord</string>
+    <string name="Twitch">Twitch</string>
+    <string name="Reddit">Reddit</string>
+    <string name="Slack">Slack</string>
+    <string name="Trello">Trello</string>
+
 </resources>
