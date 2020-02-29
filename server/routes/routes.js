@@ -69,7 +69,7 @@ router.get('/auth/connect/:service', function(req, res) {
 	utils.verifyToken(req ,res, authHandler.redirectToService);
 });
 
-router.get('/auth/redirect/:service?', function(req, res) {
+router.get('/auth/redirect/:token?', function(req, res) {
 	authHandler.getTokenFromService(req, res);
 });
 
