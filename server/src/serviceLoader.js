@@ -2,7 +2,7 @@ global.Services = new Object();
 global.ServiceTokenCheckMap = new Map();
 
 global.Action = new Object();
-global.ActionFinishWebhook = new Object();
+global.ActionFinishWebhook = new Map();
 global.ActionMap = new Map();
 global.ActionFormatResultMap = new Map();
 global.ActionDeleteWebhookMap = new Map();
