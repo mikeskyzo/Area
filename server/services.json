@@ -106,7 +106,9 @@
 		},
 		{
 			"name" : "Reddit",
-			"check_token_function" : "check_token",
+			"check_token_function" : "checkToken",
+			"generate_url_function" : "generateUrl",
+			"redirect_auth_function" : "redirectAuth",
 			"actions" : [
 			],
 			"reactions" : [
