@@ -9,25 +9,59 @@ function isInArray (elem, arr) {
 	return (false);
 }
 
-const events = ["updateBoard", "updateCard", "updateList", "updateChecklist", "updateMember", "createCard", "createlist", "commentCard", "deleteCard", "removeChecklistFromCard", "removeMemberFromCard", "createBoard", "addChecklistToCard", "addAttachmentToCard"];
+const events = ["updateCard", "updateList", "updateChecklist", "updateMember", "createCard", "createList", "commentCard", "deleteCard", "removeChecklistFromCard", "removeMemberFromCard", "createBoard", "addChecklistToCard", "addAttachmentToCard"];
 
 exports.confirmWebhookFunctionTrello = async function(req, res, area)
 {
 	res.send();
 }
 
-exports.createNewWebhook = async function(res, json, next)
+exports.createNewWebhookUpdateCard = async function (res, json, next)
+{
+	let params = json.action.params;
+
+	params.push({"name" : "event", "value" : "updateCard"});
+	json.action.params = params;
+
+	const idCard = global.getParam(json.reaction.params, "idModel");
+
+	if (!idCard) {
+		global.responseError(res, 401, "Trello needs a idModel of card");
+		return;
+	}
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	if (!token || !token.APIToken) {
+		return "No APIToken provided";
+	}
+	if (!token.APIKey) {
+		return "No APIKey provided";
+	}
+	fetch(`https://api.trello.com/1/cards/${idCard}?&key=${token.APIKey}&token=${token.APIToken}`)
+	.then(function (response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+			global.responseError(res, 401, "idModel given isn't a card");
+			return;
+		}
+	})
+	.catch(function (error) {
+		return `err : ${error}`;
+	});
+
+	createNewWebhook(res, json, next);
+}
+
+createNewWebhook = async function(res, json, next)
 {
 	const idModel = global.getParam(json.action.params, "idModel");
-	const event = global.getParam(json.action.params, "event");
 
-	if (!idModel || idModel.trim() === "" || !event || event.trim() === "" && isInArray(req.body.action.type, events)) {
-		global.responseError(res, 401, "Trello needs a idModel and a event to trigger");
+	if (!idModel || idModel.trim() === "") {
+		global.responseError(res, 401, "Trello needs a idModel");
 		return;
 	}
 
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
-	if (!token.APIToken) {
+	if (!token || !token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
 	}
@@ -50,9 +84,8 @@ exports.createNewWebhook = async function(res, json, next)
 		}
 	})
 	.then(function (resJson) {
-		console.log(resJson);
 		json.action.webhook_id = resJson.id;
-		res.send(`Trello's webhook well created with id : ${resJson.id}`);
+		res.status(201).send(`Trello's webhook well created with id : ${resJson.id}`);
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, error);
@@ -113,7 +146,7 @@ exports.FormatWebhookUpdateModel = function (req, res, area, next)
 {
 	const event = global.getParam(area.action.params, "event");
 
-	if (req.body.action.type && isInArray(req.body.action.type, events) && req.body.action.type === event)
+	if (req.body.action.type && req.body.action.type === event)
 		next(area, res);
 	else
 		res.send();
@@ -150,13 +183,13 @@ exports.FormatWebhookUpdateModel = function (req, res, area, next)
 
 exports.checkArgsCreateCard = async function (json)
 {
-	const idList = global.getParam(json.reaction.params, "idList");
+	const idList = global.getParam(json.reaction.params, "idModel");
 	const name = global.getParam(json.reaction.params, "name");
 	const description = global.getParam(json.reaction.params, "description");
 	const event = global.getParam(json.action.params, "event");
 
 	if (!idList)
-		return "Missing list ID";
+		return "Missing ID of list";
 	else if (!name)
 		return "Missing name";
 	else if (!description)
@@ -187,7 +220,7 @@ exports.checkArgsCreateCard = async function (json)
 
 exports.trelloCreateCard = async function (area, res)
 {
-	const idList = global.getParam(area.reaction.params, "idList");
+	const idList = global.getParam(area.reaction.params, "idModel");
 	const name = global.getParam(area.reaction.params, "name");
 	const description = global.getParam(area.reaction.params, "description");
 
@@ -230,12 +263,12 @@ exports.trelloCreateCard = async function (area, res)
 
 exports.checkArgsCreateList = async function (json)
 {
-	const idBoard = global.getParam(json.reaction.params, "idBoard");
+	const idBoard = global.getParam(json.reaction.params, "idModel");
 	const name = global.getParam(json.reaction.params, "name");
 	const event = global.getParam(json.action.params, "event");
 
 	if (!idBoard)
-		return "Missing board ID";
+		return "Missing ID of board";
 	else if (!name)
 		return "Missing name";
 	else if (event && event === createList)
@@ -262,11 +295,11 @@ exports.checkArgsCreateList = async function (json)
 
 exports.trelloCreateList = async function (area, res)
 {
-	const idBoard = global.getParam(area.reaction.params, "idBoard");
+	const idBoard = global.getParam(area.reaction.params, "idModel");
 	const name = global.getParam(area.reaction.params, "name");
 
 	if (!idBoard || !name) {
-		global.responseError(res, 401, 'Missing board ID or a name')
+		global.responseError(res, 401, 'Missing ID of board or a name')
 		return;
 	}
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : res.user_id, service : global.service.Trello});
@@ -300,11 +333,11 @@ exports.trelloCreateList = async function (area, res)
 
 exports.checkArgsCreateLabel = async function (json)
 {
-	const idBoard = global.getParam(json.reaction.params, "idBoard");
+	const idBoard = global.getParam(json.reaction.params, "idModel");
 	const name = global.getParam(json.reaction.params, "name");
 
 	if (!idBoard)
-		return "Missing board ID";
+		return "Missing ID of board";
 	else if (!name)
 		return "Missing name";
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
@@ -331,11 +364,11 @@ const labelColors = ["yellow", "purple", "blue", "red", "green", "orange", "blac
 
 exports.trelloCreateLabel = async function (area, res)
 {
-	const idBoard = global.getParam(area.reaction.params, "idBoard");
+	const idBoard = global.getParam(area.reaction.params, "idModel");
 	const name = global.getParam(area.reaction.params, "name");
 
 	if (!idBoard || !name) {
-		global.responseError(res, 401, 'Missing board ID or a name');
+		global.responseError(res, 401, 'Missing ID of board or a name');
 		return;
 	}
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : res.user_id, service : global.service.Trello});
