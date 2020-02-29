@@ -22,13 +22,12 @@ for (service in json.services){
 		var obj = json.services[service];
         var module = require('../services/' + obj.name);
 
-		if (!obj.generate_url_function)
-			throw obj.name +  ' : the function to generate url was not found for ' + obj.name;
-		LoadFunction(global.ServiceGenerateUrlMap, obj.generate_url_function, obj.name, module);
-
-		if (!obj.redirect_auth_function)
-			throw obj.name +  ' : the function for save token from oauth was not found for ' + obj.name;
-		LoadFunction(global.ServiceRedirectAuthMap, obj.redirect_auth_function, obj.name, module);
+		if (obj.generate_url_function && obj.redirect_auth_function) {
+			LoadFunction(global.ServiceGenerateUrlMap, obj.generate_url_function, obj.name, module);
+			LoadFunction(global.ServiceRedirectAuthMap, obj.redirect_auth_function, obj.name, module);
+		}
+		else if (!obj.generate_url_function || !obj.redirect_auth_function)
+			throw obj.name +  ' : the function to generate url or the function for save token from oauth was not found for ' + obj.name;
 
 		if (obj.actions) {
 			for (action in obj.actions)
