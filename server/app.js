@@ -1,29 +1,27 @@
-var createError = require('http-errors');
-var express = require('express');
+const express = require('express');
 const bodyParser= require('body-parser')
-var path = require('path');
-var cookieParser = require('cookie-parser');
+const path = require('path');
 const localtunnel = require('localtunnel');
+const device = require('express-device');
 
-var routes = require('./routes/routes');
-var webhooks = require('./routes/webhooks');
+const routes = require('./routes/routes');
+const webhooks = require('./routes/webhooks');
 
-var logger = require('morgan');
-var process = require('process')
+const logger = require('morgan');
+const process = require('process')
 
-require('./src/serviceLoader');
-var utils = require('./src/utils')
-var mongoDb = require('./src/manageDb')
+const utils = require('./src/utils')
+const mongoDb = require('./src/manageDb')
 
-var app = express();
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(device.capture());
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -39,13 +37,6 @@ app.use('/', webhooks);
 mongoDb.initDb();
 
 const fetch = require('node-fetch');
-
-app.route('/test').get(function(req, res) {
-
-    res.json({
-        test : 'success'
-    })
-});
 
 const ngrok = require('ngrok');
 const token = '1XKuDgkqMYnETxr5sEgd6faCkh1_3iQ2dASUNn2DVmr8dbi5R'
@@ -87,8 +78,11 @@ process.on('SIGINT', function() {
 global.terminateServer = function (err)
 {
     console.log('Shutting down the server');
-    if (err)
+    if (err) {
+        console.log('========== ERROR ===============');
         console.log(err);
+        console.log('================================');
+    }
     if (ngrok)
         ngrok.disconnect();
     server.close();
@@ -96,5 +90,7 @@ global.terminateServer = function (err)
         global.clientDb.close();
     process.exit(84);
 }
+
+require('./src/serviceLoader');
 
 module.exports = app;
