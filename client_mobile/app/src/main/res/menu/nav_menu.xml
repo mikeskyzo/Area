@@ -30,27 +30,27 @@
         <menu android:id="@+id/menu_services">
             <item
                 android:id="@+id/nav_github"
-                android:icon="@drawable/ic_github"
+                android:icon="@drawable/github"
                 android:title="Github"/>
             <item
                 android:id="@+id/nav_discord"
-                android:icon="@drawable/ic_discord"
+                android:icon="@drawable/discord"
                 android:title="Discord"/>
             <item
                 android:id="@+id/nav_twitch"
-                android:icon="@drawable/ic_twitch"
+                android:icon="@drawable/twitch"
                 android:title="Twitch"/>
             <item
                 android:id="@+id/nav_reddit"
-                android:icon="@drawable/ic_reddit"
+                android:icon="@drawable/reddit"
                 android:title="Reddit"/>
             <item
                 android:id="@+id/nav_slack"
-                android:icon="@drawable/ic_slack"
+                android:icon="@drawable/slack"
                 android:title="Slack"/>
             <item
                 android:id="@+id/nav_trello"
-                android:icon="@drawable/ic_trello"
+                android:icon="@drawable/trello"
                 android:title="Trello"/>
         </menu>
     </item>
