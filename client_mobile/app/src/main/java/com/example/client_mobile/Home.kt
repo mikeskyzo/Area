@@ -309,7 +309,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 val intent = Intent(this, Start::class.java)
                 intent.putExtra("server_location", server_location)
                 startActivity(intent)
-                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_github -> {
                 val openURL = Intent(android.content.Intent.ACTION_VIEW)
