@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -29,10 +30,14 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+    lateinit var menu_services: Menu
+    lateinit var menu_account_settings: Menu
+    //lateinit var list_services : ArrayList<String>
 
     companion object {
         var server_location: String? = ""
         var token: String? = ""
+        var list_services = ArrayList<String>()
     }
 
     fun getContext(): Context? {
@@ -63,6 +68,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         navView.setNavigationItemSelectedListener(this)
         recyclerView_areas.layoutManager = LinearLayoutManager(this)
         getAreas()
+        getServices()
     }
 
     override fun onResume() {
@@ -220,6 +226,23 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 
     fun getServices() {
+        list_services.add("Github")
+        list_services.add("Discord")
+        list_services.add("Twitch")
+        list_services.add("Reddit")
+        list_services.add("Slack")
+        list_services.add("Trello")
+
+        menu_services = navView.menu.addSubMenu("New Super SubMenu")
+        var service_name = 0
+        for (i in 0 until list_services.size) {
+            service_name = resources.getIdentifier(list_services[i], "string", getContext()?.packageName)
+            menu_services.add(0, service_name, Menu.NONE, list_services[i])
+        }
+
+        navView.invalidate()
+
+        /*
         val client = OkHttpClient()
         val request: Request = Request.Builder()
             .url(server_location.plus("/auth/getServices"))
@@ -235,6 +258,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     runOnUiThread {
+                        val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+                        createItemsServices(services)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -243,7 +268,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 println("Failed to execute request")
                 println(e)
             }
-        })
+        })*/
+    }
+
+    fun createItemsServices(services: Array<Service>) {
+        for (i in 0 until services.size) {
+        }
     }
 
     fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
@@ -287,14 +317,19 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        for (i in 0 until list_services.size) {
+            if (item.itemId == resources.getIdentifier(list_services[i], "string", getContext()?.packageName)) {
+                println(list_services[i])
+                Toast.makeText(getContext(), list_services[i], Toast.LENGTH_SHORT).show()
+                break
+            }
+        }
         when (item.itemId) {
             R.id.nav_profile -> {
                 val intent = Intent(this, Settings::class.java)
                 intent.putExtra("token", token)
                 intent.putExtra("server_location", server_location)
                 startActivity(intent)
-//                getServices()
-//                Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_create_area -> {
                 val intent = Intent(this, selectAction::class.java)
@@ -346,9 +381,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                             }
                         }
                     }
-                //openURL.data = Uri.parse("https://trello.com/1/OAuthAuthorizeToken?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never")
-                //openURL.data = Uri.parse("https://trello.com/1/connect?key=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&response_type=token&expiration=never")
-                //startActivity(openURL)
+
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -361,3 +394,5 @@ class Area(val area_id: String, val action: String, val reaction: String, val ar
 class Areas(val areas: List<Area>) : Serializable
 
 class AccessToken(val access_token: String)
+
+class Service(val name: String, val active: Boolean)
