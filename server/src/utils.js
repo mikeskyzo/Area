@@ -166,3 +166,21 @@ global.getParam = function (params, name)
 			return params[nb].value;
 	return null;
 }
+
+global.modifyParam = function (params, name, newValue)
+{
+	for (nb in params)
+		if (params[nb].name == name) {
+			params[nb].value = newValue;
+			return;
+		}
+}
+
+global.addParam = function (params, name, value)
+{
+	let json = {
+		name : name,
+		value : value
+	}
+	params.push(json);
+}
