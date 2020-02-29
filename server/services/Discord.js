@@ -1,8 +1,8 @@
 const fetch = require("node-fetch");
 
-exports.is_service_active = async function ()
+exports.is_service_active = async function (user_id)
 {
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Discord});
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : user_id, service : global.Services.Discord});
 	if (!token)
 		return false;
 	return true;
