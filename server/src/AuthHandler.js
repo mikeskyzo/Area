@@ -32,8 +32,8 @@ function getToken(req)
 	let token;
 	if (req.query.state)
 		token = req.query.state;
-	else if (req.params.service)
-		token = req.params.service;
+	else if (req.params.token)
+		token = req.params.token;
 	if (!token)
 		return null;
 	return jwt.verify(token, global.secret);
