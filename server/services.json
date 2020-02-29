@@ -165,7 +165,11 @@
 					"params" : [
 						{
 							"name" : "idModel",
-							"description" : "ID of a Trello's model (board, card, list, etc...)"
+							"description" : "ID of a Trello's model (board, card, list, member, ...)"
+						},
+						{
+							"name" : "event",
+							"description" : "Event wanted to trigger"
 						},
 						{
 							"name" : "message",

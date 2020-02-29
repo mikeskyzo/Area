@@ -2,6 +2,15 @@ const fetch = require("node-fetch");
 
 //https://trello.com/app-key
 
+function isInArray (elem, arr) {
+	for (let i = 0; i < arr.length; i++)
+		if (elem.startsWith(arr[i]))
+			return (true);
+	return (false);
+}
+
+const events = ["updateBoard", "updateCard", "updateList", "updateChecklist", "updateMember", "createCard", "createlist", "commentCard", "deleteCard", "removeChecklistFromCard"];
+
 exports.confirmWebhookFunctionTrello = async function(req, res, area)
 {
 	res.send();
@@ -10,9 +19,10 @@ exports.confirmWebhookFunctionTrello = async function(req, res, area)
 exports.createNewWebhook = async function(res, json, next)
 {
 	const idModel = global.getParam(json.action.params, "idModel");
+	const event = global.getParam(json.action.params, "event");
 
-	if (!idModel || idModel.trim() === "") {
-		global.responseError(res, 401, "Trello needs a idModel")
+	if (!idModel || idModel.trim() === "" || !event || event.trim() === "" && isInArray(req.body.action.type, events)) {
+		global.responseError(res, 401, "Trello needs a idModel and a event to trigger");
 		return;
 	}
 
@@ -45,7 +55,7 @@ exports.createNewWebhook = async function(res, json, next)
 		res.send(`Trello's webhook well created with id : ${resJson.id}`);
 	})
 	.catch(function (error) {
-		global.responseError(res, 500, error)
+		global.responseError(res, 500, error);
 	});
 }
 
@@ -101,9 +111,9 @@ exports.CheckToken = function (req, res)
 
 exports.FormatWebhookUpdateModel = function (req, res, area, next)
 {
-	console.log("JE PASSE BIEN ICI");
-	console.log(req.body);
-	if (req.body.action.type && (req.body.action.type === "updateBoard" || req.body.action.type === "updateCard" || req.body.action.type === "updateList" || req.body.action.type === "updateChecklist" || req.body.type === "updateMember" || req.body.action.type === "createCard" || req.body.action.type === "createlist" || req.body.action.type === "commentCard" || req.body.action.type === "deleteCard" || req.body.action.type === "removeChecklistFromCard"))
+	const event = global.getParam(area.action.params, "event");
+
+	if (req.body.action.type && isInArray(req.body.action.type, events) && req.body.action.type === event)
 		next(area, res);
 	else
 		res.send();
@@ -174,7 +184,6 @@ exports.checkArgsCreateCard = async function (json)
 
 exports.trelloCreateCard = async function (area, res)
 {
-	console.log("Essaye de créer une card");
 	const idList = global.getParam(area.reaction.params, "idList");
 	const name = global.getParam(area.reaction.params, "name");
 	const description = global.getParam(area.reaction.params, "description");
