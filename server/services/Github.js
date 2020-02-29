@@ -1,5 +1,23 @@
 const fetch = require('node-fetch');
 
+exports.is_service_active = async function ()
+{
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Github});
+	if (!token || !token.access_token)
+		return false;
+	return true;
+}
+
+exports.generate_url = function ()
+{
+	return ''
+}
+
+exports.redirect_auth = function ()
+{
+	return ''
+}
+
 exports.createWebhookIssueEvent = function (res, json, next)
 {
 	createWebhook('issues', res, json, next);

@@ -1,5 +1,23 @@
 const fetch = require("node-fetch");
 
+exports.is_service_active = async function ()
+{
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Discord});
+	if (!token)
+		return false;
+	return true;
+}
+
+exports.generate_url = function ()
+{
+	return ''
+}
+
+exports.redirect_auth = function ()
+{
+	return ''
+}
+
 exports.check_token = async function (req, res)
 {
 	if (!req.body.webhook_id || !req.body.webhook_token) {
