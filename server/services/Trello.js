@@ -153,6 +153,7 @@ exports.checkArgsCreateCard = async function (json)
 	const idList = global.getParam(json.reaction.params, "idList");
 	const name = global.getParam(json.reaction.params, "name");
 	const description = global.getParam(json.reaction.params, "description");
+	const event = global.getParam(json.action.params, "event");
 
 	if (!idList)
 		return "Missing list ID";
@@ -160,6 +161,8 @@ exports.checkArgsCreateCard = async function (json)
 		return "Missing name";
 	else if (!description)
 		return "Missing description";
+	else if (event && event === "createCard")
+		return "Reaction can't be same as action";
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
 	if (!token.APIToken) {
 		return "No APIToken provided";
@@ -231,11 +234,14 @@ exports.checkArgsCreateList = async function (json)
 {
 	const idBoard = global.getParam(json.reaction.params, "idBoard");
 	const name = global.getParam(json.reaction.params, "name");
+	const event = global.getParam(json.action.params, "event");
 
 	if (!idBoard)
 		return "Missing board ID";
 	else if (!name)
 		return "Missing name";
+	else if (event && event === createList)
+		return "Reaction can't be same as action";
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
 	if (!token.APIToken)
 		return "No APIToken provided";
@@ -370,11 +376,14 @@ exports.checkArgsCreateBoard = async function (json)
 {
 	const name = global.getParam(json.reaction.params, "name");
 	const description = global.getParam(json.reaction.params, "description");
+	const event = global.getParam(json.action.params, "event");
 
 	if (!name)
 		return "Missing name";
 	else if (!description)
 		return "Missing description";
+	else if (event && event === createBoard)
+		return "Reaction can't be as same action";
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
 	if (!token.APIToken)
 		return "No APIToken provided";
