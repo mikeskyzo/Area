@@ -48,6 +48,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        list_services.clear()
         loadingPanel.visibility = View.VISIBLE
         if (intent.getStringExtra("server_location") != null)
             server_location = intent.getStringExtra("server_location")
@@ -99,12 +100,16 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .header("Authorization", "token ".plus(token.toString()))
             .build()
         loadingPanel.visibility = View.VISIBLE
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 if (body == "404") {
                     runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            getContext(),
+                            "Error 404: server not found",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
                     val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
@@ -114,6 +119,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 }
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -125,7 +131,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         val regex = Regex("(?<=code=).*\$")
         val result: MatchResult? = regex.find(uri.toString())
         val code = result?.value!!
-        val url = "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(code)
+        val url =
+            "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(
+                code
+            )
 
         val client = OkHttpClient()
 
@@ -137,7 +146,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .post(formBody)
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 val delimiter1 = "access_token="
@@ -147,6 +156,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 addToken("Github", access_token)
 
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -161,9 +171,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
 
         val authString: String = "YRYKkBFVxzy12Q:"
-        val encodedAuthString: String = Base64.encodeToString(authString.toByteArray(), Base64.NO_WRAP)
+        val encodedAuthString: String =
+            Base64.encodeToString(authString.toByteArray(), Base64.NO_WRAP)
 
-        val url = "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=".plus(code).plus("&redirect_uri=").plus("reddit://truc.truc")
+        val url =
+            "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=".plus(
+                code
+            ).plus("&redirect_uri=").plus("reddit://truc.truc")
 
         val client = OkHttpClient()
 
@@ -177,12 +191,14 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .post(formBody)
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                val access_token = GsonBuilder().create().fromJson(body, AccessToken::class.java).access_token
+                val access_token =
+                    GsonBuilder().create().fromJson(body, AccessToken::class.java).access_token
                 addToken("Reddit", access_token)
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -194,10 +210,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         println(uri)
     }
 
-    fun addTokenSlack(uri : Uri?) {
+    fun addTokenSlack(uri: Uri?) {
         val tab = uri.toString().split("code=", "&state=")
         val code = tab[1]
-        val url = "https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&redirect_uri=slack://truc.truc&client_secret=248197e37352e5aa521b969a3cbb8a91&code=".plus(code)
+        val url =
+            "https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&redirect_uri=slack://truc.truc&client_secret=248197e37352e5aa521b969a3cbb8a91&code=".plus(
+                code
+            )
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
@@ -208,7 +227,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .post(formBody)
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 val delimiter1 = "access_token\":\""
@@ -218,6 +237,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 addToken("Slack", access_token)
 
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -237,8 +257,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
         menu_services = navView.menu.addSubMenu("Services")
         for (i in 0 until list_services.size) {
-            val service_name = resources.getIdentifier(list_services[i], "string", getContext()?.packageName)
-            val service_icon = resources.getIdentifier(list_services[i].decapitalize(), "drawable", getContext()?.packageName)
+            val service_name =
+                resources.getIdentifier(list_services[i], "string", getContext()?.packageName)
+            val service_icon = resources.getIdentifier(
+                list_services[i].decapitalize(),
+                "drawable",
+                getContext()?.packageName
+            )
             menu_services.add(0, service_name, Menu.NONE, list_services[i]).setIcon(service_icon)
         }
         navView.invalidate()
@@ -277,7 +302,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         }
     }
 
-    fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
+    fun addToken(
+        service: String,
+        access_token: String,
+        refresh_token: String = "",
+        expires_in: String = ""
+    ) {
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
@@ -293,12 +323,16 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             .header("Authorization", "token ".plus(token.toString()))
             .build()
 
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
                 if (body == "404") {
                     runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            getContext(),
+                            "Error 404: server not found",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else if (body == "409") {
                     runOnUiThread {
@@ -310,6 +344,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 }
             }
+
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
@@ -319,7 +354,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         for (i in 0 until list_services.size) {
-            if (item.itemId == resources.getIdentifier(list_services[i], "string", getContext()?.packageName)) {
+            if (item.itemId == resources.getIdentifier(
+                    list_services[i],
+                    "string",
+                    getContext()?.packageName
+                )
+            ) {
                 println(list_services[i])
                 //Request AddToken/{list_services[i]}
                 Toast.makeText(getContext(), list_services[i], Toast.LENGTH_SHORT).show()
@@ -340,7 +380,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             }
             R.id.nav_help -> {
                 val intent = Intent(this, Help::class.java)
-                 startActivity(intent)
+                startActivity(intent)
             }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
@@ -354,7 +394,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 }
 
-class Area(val area_id: String, val action: String, val reaction: String, val area_name: String, val color: String) : Serializable
+class Area(
+    val area_id: String,
+    val action: String,
+    val reaction: String,
+    val area_name: String,
+    val color: String
+) : Serializable
 
 class Areas(val areas: List<Area>) : Serializable
 
