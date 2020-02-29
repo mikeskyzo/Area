@@ -11,7 +11,6 @@ var webhooks = require('./routes/webhooks');
 var logger = require('morgan');
 var process = require('process')
 
-require('./src/serviceLoader');
 var utils = require('./src/utils')
 var mongoDb = require('./src/manageDb')
 
@@ -38,14 +37,9 @@ app.use('/', webhooks);
 
 mongoDb.initDb();
 
+require('./src/serviceLoader');
+
 const fetch = require('node-fetch');
-
-app.route('/test').get(function(req, res) {
-
-    res.json({
-        test : 'success'
-    })
-});
 
 const ngrok = require('ngrok');
 const token = '1XKuDgkqMYnETxr5sEgd6faCkh1_3iQ2dASUNn2DVmr8dbi5R'
