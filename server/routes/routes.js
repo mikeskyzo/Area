@@ -4,12 +4,12 @@ const utils = require('../src/utils');
 const getArea = require('../src/GetArea');
 
 const area = require('./areaCreator');
+const authHandler = require('../src/AuthHandler');
 const about = require('./aboutJson');
-const authToken = require('./tokens');
 
-var users = require('./users');
+const users = require('./users');
 
-var router = express.Router();
+const router = express.Router();
 
 router.patch('/user/changeUsername', function(req, res) {
 	utils.verifyToken(req, res, users.changeUsername);
@@ -59,44 +59,19 @@ router.get('/about.json', function(req, res) {
 	about.sendAbout(req, res);
 });
 
-router.post('/auth/addToken', function(req, res) {
-	utils.verifyToken(req, res, authToken.newAuth);
-});
-
-router.delete('/auth/token', function(req, res) {
-	utils.verifyToken(req, res, authToken.deleteToken);
-});
-
 router.get('/auth/getServices', function(req, res) {
-	utils.verifyToken(req, res, authToken.getServices);
-});
-router.get('/caca', function(req, res) {
-	//console.log(req.body);
-		console.log(req.query["hub.challenge"]);
-	res.send(req.query["hub.challenge"], 202);
-});
-router.post('/caca', function(req, res) {
-	console.log(req.body);
+	// To change with the new oauth update
 	res.send();
+	// utils.verifyToken(req, res, authToken.getServices);
 });
 
-router.get('/sex', function(req, res) {
-	console.log(req.body);
-	res.send();
+router.get('/auth/connect/:service', function(req, res) {
+	utils.verifyToken(req ,res, authHandler.redirectToService);
 });
 
-router.post('/sex', function(req, res) {
-	console.log(req.body);
-	res.send();
+router.get('/auth/redirect/:service?', function(req, res) {
+	authHandler.getTokenFromService(req, res);
 });
-var twitch = require ('../services/Twitch');
-
-router.get('/penis', function(req, res) {
-	twitch.Twitch_Create_Webhook_NewSubscriber(req, res,'a_very_good_test');
-	//console.log(req.query["hub.challenge"]);
-
-});
-
 
 
 module.exports = router;

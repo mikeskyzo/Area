@@ -37,8 +37,6 @@ app.use('/', webhooks);
 
 mongoDb.initDb();
 
-require('./src/serviceLoader');
-
 const fetch = require('node-fetch');
 
 const ngrok = require('ngrok');
@@ -81,8 +79,11 @@ process.on('SIGINT', function() {
 global.terminateServer = function (err)
 {
     console.log('Shutting down the server');
-    if (err)
+    if (err) {
+        console.log('========== ERROR ===============');
         console.log(err);
+        console.log('================================');
+    }
     if (ngrok)
         ngrok.disconnect();
     server.close();
@@ -90,5 +91,7 @@ global.terminateServer = function (err)
         global.clientDb.close();
     process.exit(84);
 }
+
+require('./src/serviceLoader');
 
 module.exports = app;
