@@ -81,9 +81,14 @@ class Start : AppCompatActivity() {
                     runOnUiThread {
                         val code = response.code
                         loadingPanel.visibility = View.GONE
-                        if (code >= 400) {
-                            val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
-                            Toast.makeText(getContext(), "Error: ".plus(resp.message), Toast.LENGTH_SHORT).show()
+                        if (code >= 400 ) {
+                            val tab = body.toString().split(" ")
+                            println(tab[0])
+                            if (tab[0] != "Tunnel") {
+                                val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
+                                Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
+                            } else
+                                Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                         } else {
                             val account = GsonBuilder().create().fromJson(body, Account::class.java)
                             val intent = Intent(getContext(), Home::class.java)

@@ -301,11 +301,15 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 intent.putExtra("token", token)
                 startActivity(intent)
             }
+            R.id.nav_help -> {
+                val intent = Intent(this, Help::class.java)
+                 startActivity(intent)
+            }
             R.id.nav_logout -> {
                 val intent = Intent(this, Start::class.java)
                 intent.putExtra("server_location", server_location)
                 startActivity(intent)
-                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_github -> {
                 val openURL = Intent(android.content.Intent.ACTION_VIEW)
