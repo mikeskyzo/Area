@@ -5,7 +5,7 @@ exports.redirectToService = function(req, res)
 	let json = {
 		user_id: req.body.user_id,
 		service : req.params.service,
-		support : !req.query.client ? 'web' : req.query.client
+		support : req.device.type.toUpperCase() == 'PHONE' ? 'mobile' : 'web'
 	};
 	let token = jwt.sign(json, global.secret, {
 		expiresIn : '2m'
@@ -22,7 +22,7 @@ exports.getTokenFromService = function(req, res)
 	if (!token || !token.service || !token.user_id || !token.support || !global.ServiceRedirectAuthMap.get(token.service))
 		res.redirect('https://theuselessweb.com/');
 	else {
-		global.ServiceRedirectAuthMap.get(token.service, token.user_id)();
+		global.ServiceRedirectAuthMap.get(token.service, token.user_id)(req);
 		redirectToClient(res, token.support);
 	}
 }

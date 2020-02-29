@@ -1,28 +1,27 @@
-var createError = require('http-errors');
-var express = require('express');
+const express = require('express');
 const bodyParser= require('body-parser')
-var path = require('path');
-var cookieParser = require('cookie-parser');
+const path = require('path');
 const localtunnel = require('localtunnel');
+const device = require('express-device');
 
-var routes = require('./routes/routes');
-var webhooks = require('./routes/webhooks');
+const routes = require('./routes/routes');
+const webhooks = require('./routes/webhooks');
 
-var logger = require('morgan');
-var process = require('process')
+const logger = require('morgan');
+const process = require('process')
 
-var utils = require('./src/utils')
-var mongoDb = require('./src/manageDb')
+const utils = require('./src/utils')
+const mongoDb = require('./src/manageDb')
 
-var app = express();
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(device.capture());
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
