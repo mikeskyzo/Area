@@ -20,38 +20,7 @@
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_power_settings_new_red_24dp"
-                android:title="Sign Out"
-                android:visible="false"/>
-        </menu>
-    </item>
-
-    <item android:title="Services"
-        android:id="@+id/services">
-        <menu android:id="@+id/menu_services">
-            <item
-                android:id="@+id/nav_github"
-                android:icon="@drawable/github"
-                android:title="Github"/>
-            <item
-                android:id="@+id/nav_discord"
-                android:icon="@drawable/discord"
-                android:title="Discord"/>
-            <item
-                android:id="@+id/nav_twitch"
-                android:icon="@drawable/twitch"
-                android:title="Twitch"/>
-            <item
-                android:id="@+id/nav_reddit"
-                android:icon="@drawable/reddit"
-                android:title="Reddit"/>
-            <item
-                android:id="@+id/nav_slack"
-                android:icon="@drawable/slack"
-                android:title="Slack"/>
-            <item
-                android:id="@+id/nav_trello"
-                android:icon="@drawable/trello"
-                android:title="Trello"/>
+                android:title="Sign Out"/>
         </menu>
     </item>
 </menu>
