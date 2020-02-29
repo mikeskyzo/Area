@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_menu">
 
-    <item android:title="Services">
-        <menu>
+    <item android:title="Account Settings"
+        android:id="@+id/account_settings">
+        <menu android:id="@+id/menu_account_settings">
+            <item
+                android:id="@+id/nav_create_area"
+                android:icon="@drawable/ic_add_black_24dp"
+                android:title="Create area"/>
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help_outline_black_24dp"
+                android:title="Help"/>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_account_circle_orange_24dp"
+                android:title="User profile"/>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_power_settings_new_red_24dp"
+                android:title="Sign Out"
+                android:visible="false"/>
+        </menu>
+    </item>
+
+    <item android:title="Services"
+        android:id="@+id/services">
+        <menu android:id="@+id/menu_services">
             <item
                 android:id="@+id/nav_github"
                 android:icon="@drawable/ic_github"
@@ -27,28 +52,6 @@
                 android:id="@+id/nav_trello"
                 android:icon="@drawable/ic_trello"
                 android:title="Trello"/>
-        </menu>
-    </item>
-
-
-    <item android:title="Account Settings">
-        <menu>
-            <item
-                android:id="@+id/nav_create_area"
-                android:icon="@drawable/ic_add_black_24dp"
-                android:title="Create area"/>
-            <item
-                android:id="@+id/nav_help"
-                android:icon="@drawable/ic_help_outline_black_24dp"
-                android:title="Help"/>
-            <item
-                android:id="@+id/nav_profile"
-                android:icon="@drawable/ic_account_circle_orange_24dp"
-                android:title="User profile"/>
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_power_settings_new_red_24dp"
-                android:title="Sign Out"/>
         </menu>
     </item>
 </menu>
