@@ -91,7 +91,6 @@ exports.Twitch_Create_Webhook_StreamChangeState_FM = async function(req, res, ar
 }
 exports.Twitch_Delete_Webhook_StreamChangeState = async function(area, req, res)
 {
-    await global.deleteInDbAsync(global.CollectionArea, area);
     var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
     if (user_id === 84) {
         global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
