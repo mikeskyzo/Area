@@ -62,9 +62,9 @@ document.addEventListener("DOMContentLoaded", function (req, res) {
             btnGithub.textContent = "Github"
         }
         if (Reddit === "true") {
-            btnReddit.textContent = "Reddit : Connected"
+            btnReddit.textContent = "reddit : Connected"
         } else {
-            btnReddit.textContent = "Reddit"
+            btnReddit.textContent = "reddit"
         }
         if (Slack === "true") {
             btnSlack.textContent = "Slack : Connected"

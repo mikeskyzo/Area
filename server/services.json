@@ -141,6 +141,35 @@
 							"description": "Text of the new post"
 						}
 					]
+				},
+				{
+					"name": "composePrivateMessage",
+					"title": "Post in a subreddit",
+					"description": "Create a new post in a subreddit",
+					"functions": [
+						{
+							"type": "execute_reaction",
+							"name": "postInSubreddit"
+						},
+						{
+							"type": "verify_arguments",
+							"name": "postInSubredditCheck"
+						}
+					],
+					"params": [
+						{
+							"name": "subReddit",
+							"description": "Title of the sub reddit"
+						},
+						{
+							"name": "title",
+							"description": "Title of the new post"
+						},
+						{
+							"name": "text",
+							"description": "Text of the new post"
+						}
+					]
 				}
 			]
 		},
