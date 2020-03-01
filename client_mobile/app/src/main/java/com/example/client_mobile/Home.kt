@@ -77,15 +77,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         val service = uri.toString().split(delimiter)
 
         println(uri)
-        if (service[0] == "github") {
-            addTokenGithub(uri)
-        } else if (service[0] == "slack") {
-            addTokenSlack(uri)
-        } else if (service[0] == "reddit") {
-            addTokenReddit(uri)
-        } else if (service[0] == "trello") {
-            addTokenTrello(uri)
-        }
 
         if (uri !== null) {
             Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
@@ -137,125 +128,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         })
     }
 
-    fun addTokenGithub(uri: Uri?) {
-        val regex = Regex("(?<=code=).*\$")
-        val result: MatchResult? = regex.find(uri.toString())
-        val code = result?.value!!
-        val url =
-            "https://github.com/login/oauth/access_token?client_id=b3925ca43ee751191104&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&code=".plus(
-                code
-            )
-
-        val client = OkHttpClient()
-
-        val formBody: RequestBody = FormBody.Builder()
-            .build()
-
-        val request: Request = Request.Builder()
-            .url(url)
-            .post(formBody)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                val delimiter1 = "access_token="
-                val delimiter2 = "&scope"
-
-                val access_token = body.toString().split(delimiter1, delimiter2)[1]
-                addToken("Github", access_token)
-
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute request")
-                println(e)
-            }
-        })
-    }
-
-    fun addTokenReddit(uri: Uri?) {
-        val regex = Regex("(?<=code=).*\$")
-        val result: MatchResult? = regex.find(uri.toString())
-        val code = result?.value!!
-
-
-        val authString: String = "YRYKkBFVxzy12Q:"
-        val encodedAuthString: String =
-            Base64.encodeToString(authString.toByteArray(), Base64.NO_WRAP)
-
-        val url =
-            "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=".plus(
-                code
-            ).plus("&redirect_uri=").plus("reddit://truc.truc")
-
-        val client = OkHttpClient()
-
-        val formBody: RequestBody = FormBody.Builder()
-            .build()
-
-        val request: Request = Request.Builder()
-            .url(url)
-            .header("User-Agent", "Sample App")
-            .header("Authorization", "Basic ".plus(encodedAuthString))
-            .post(formBody)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                val access_token =
-                    GsonBuilder().create().fromJson(body, AccessToken::class.java).access_token
-                addToken("Reddit", access_token)
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute request")
-                println(e)
-            }
-        })
-    }
-
-    fun addTokenTrello(uri: Uri?) {
-        println(uri)
-    }
-
-    fun addTokenSlack(uri: Uri?) {
-        val tab = uri.toString().split("code=", "&state=")
-        val code = tab[1]
-        val url =
-            "https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=1d1d691af539a19b5dac1270273fa433f3b8ac04&redirect_uri=slack://truc.truc&client_secret=248197e37352e5aa521b969a3cbb8a91&code=".plus(
-                code
-            )
-        val client = OkHttpClient()
-
-        val formBody: RequestBody = FormBody.Builder()
-            .build()
-
-        val request: Request = Request.Builder()
-            .url(url)
-            .post(formBody)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                val delimiter1 = "access_token\":\""
-                val delimiter2 = "\",\"token_type"
-
-                val access_token = body.toString().split(delimiter1, delimiter2)[1]
-                addToken("Slack", access_token)
-
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute request")
-                println(e)
-            }
-        })
-    }
-
-
     fun getServices() {
 
         val client = OkHttpClient()
@@ -291,21 +163,19 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         menu_services = navView.menu.addSubMenu("Services")
         for (i in 0 until services.size) {
             list_services.add(services[i].service)
-            if (services[i].active) {
-                val service_name =
-                    resources.getIdentifier(
-                        services[i].service,
-                        "string",
-                        getContext()?.packageName
-                    )
-                val service_icon = resources.getIdentifier(
-                    services[i].service.decapitalize(),
-                    "drawable",
+            val service_name =
+                resources.getIdentifier(
+                    services[i].service,
+                    "string",
                     getContext()?.packageName
                 )
-                menu_services.add(0, service_name, Menu.NONE, services[i].service)
-                    .setIcon(service_icon)
-            }
+            val service_icon = resources.getIdentifier(
+                services[i].service.decapitalize(),
+                "drawable",
+                getContext()?.packageName
+            )
+            menu_services.add(0, service_name, Menu.NONE, services[i].service)
+                .setIcon(service_icon)
         }
         navView.invalidate()
     }
@@ -344,39 +214,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 }
             }
 
-            override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute request")
-                println(e)
-            }
-        })
-    }
-
-    fun connectToService(service: String) {
-        val client = OkHttpClient()
-
-        val formBody: RequestBody = FormBody.Builder()
-            .add("service", service)
-            .build()
-
-        val request: Request = Request.Builder()
-            .url(server_location.plus("/auth/addToken"))
-            .post(formBody)
-            .header("Authorization", "token ".plus(token.toString()))
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
                 println(e)
