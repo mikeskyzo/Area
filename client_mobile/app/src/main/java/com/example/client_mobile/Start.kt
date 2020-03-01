@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_start.*
 import kotlinx.android.synthetic.main.activity_start.loadingPanel
@@ -27,6 +28,7 @@ class Start : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setContentView(R.layout.activity_start)
         loadingPanel.visibility = View.GONE
         if (intent.getStringExtra("server_location") != null) {
