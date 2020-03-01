@@ -972,6 +972,25 @@ exports.CheckToken = function (req, res)
 	});
 };
 
+exports.is_service_active = async function(user_id)
+{
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : user_id, service : global.Services.Trello});
+	if (!token || !token.access_token)
+		return false;
+	return true;
+}
+ 
+exports.generate_url = async function(token)
+{
+
+}
+
+exports.redirect_auth = async function(req, json)
+{
+
+}
+
+
 exports.FormatWebhookUpdateModel = function (req, res, area, next)
 {
 	const event = global.getParam(area.action.params, "event");
