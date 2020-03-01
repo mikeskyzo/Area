@@ -207,6 +207,37 @@
 			]
 		},
 		{
+			"name" : "Mail",
+			"is_service_active": "is_service_active",
+			"reactions" : [
+				{
+					"name" : "send_mail",
+					"title" : "Send mail",
+					"description" : "Send a mail",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "send_message"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "send_message_check_args"
+						}
+					],
+					"params" : [
+						{
+							"name" : "email",
+							"description" : "Email address to send to"
+						},
+						{
+							"name" : "message",
+							"description" : "Message to send"
+						}
+					]
+				}
+			]
+		},
+		{
 			"name" : "Trello",
 			"is_service_active" : "is_service_active",
 			"generate_url_function" : "generate_url",
