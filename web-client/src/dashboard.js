@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     var createArea = document.getElementById("create-area-button");
 
     var areaList = document.getElementById("area-list");
+    var areaResult = document.getElementById("area-create-result");
 
     var actionName = "";
     var reactionName = "";
@@ -133,7 +134,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
             method : "post",
             crossDomain : true,
             url : url,
-            data : "area=" + dataParse
+            data : "area=" + dataParse,
+            success : function (data) {
+                console.log(data);
+                areaResult.innerHTML = '' +
+                    '<div>' + data.result + '</div>';
+            },
         });
     }
     
