@@ -31,11 +31,11 @@ const enableViewsRoutes = async function(app) {
 	});
 
 	app.get('/dashboard', function (req, res) {
-		res.render('dashboard.ejs');
+		res.render(req.cookies.access_token ? '/dashboard.ejs' : '/register.ejs');
 	});
 
 	app.get('/profil', function (req, res) {
-		res.render('profil.ejs');
+		res.render(req.cookies.access_token ? '/profil.ejs' : '/register.ejs');
 	});
 
 	app.get('/mobile', function (req, res) {
@@ -90,8 +90,11 @@ const enableLogicRoutes = async function (app) {
 			//ServerApi.connectUser();
 		} else if (req.params.action == 'createArea') {
 			var areaToCreate = JSON.parse(req.body.area);
-			console.log("before requete create area au serveur");
-			ServerApi.createArea(req, res, req.cookies.server, req.cookies.access_token, areaToCreate);
+			ServerApi.createArea(req, res, areaToCreate);
+		} else if (req.params.action == 'deleteArea') {
+		    var areaId = req.body.area_id;
+		    ServerApi.deleteArea(req, res, areaId);
+		    res.send();
 		} else {
 			res.redirect('/error');
 		}
