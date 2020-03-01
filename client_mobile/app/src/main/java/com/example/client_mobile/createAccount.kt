@@ -84,7 +84,6 @@ class createAccount : AppCompatActivity() {
                         loadingPanel.visibility = View.GONE
                         if (code >= 400) {
                             val tab = body.toString().split(" ")
-                            println(tab[0])
                             if (tab[0] != "Tunnel") {
                                 val account = GsonBuilder().create().fromJson(body, Account::class.java)
                                 Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
