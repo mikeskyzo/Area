@@ -71,5 +71,9 @@ router.get('/auth/redirect/:token?', function(req, res) {
 	authHandler.getTokenFromService(req, res);
 });
 
+router.delete('/auth/delete/:service', function(req, res) {
+	utils.verifyToken(req ,res, authHandler.deleteService);
+});
+
 
 module.exports = router;
