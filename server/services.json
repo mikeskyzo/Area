@@ -141,6 +141,35 @@
 							"description": "Text of the new post"
 						}
 					]
+				},
+				{
+					"name": "composePrivateMessage",
+					"title": "Send private message",
+					"description": "Send a private message to an other user.",
+					"functions": [
+						{
+							"type": "execute_reaction",
+							"name": "composePrivateMessage"
+						},
+						{
+							"type": "verify_arguments",
+							"name": "composePrivateMessageCheck"
+						}
+					],
+					"params": [
+						{
+							"name": "to",
+							"description": "Title of the sub reddit"
+						},
+						{
+							"name": "subject",
+							"description": "Subject of the message"
+						},
+						{
+							"name": "text",
+							"description": "Content of the message"
+						}
+					]
 				}
 			]
 		},
