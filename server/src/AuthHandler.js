@@ -62,6 +62,10 @@ exports.deleteService = async function(req, res)
 {
 	let json = await global.deleteInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.params.service});
 	if (json.deletedCount == 1)
-		res.send();
-	global.responseError(res, 403, 'The service is not connected to you\'r account');
+		res.send({
+			success : true,
+			message : 'Auth deleted'
+		});
+	else
+		global.responseError(res, 403, 'The service is not connected to you\'r account');
 }
