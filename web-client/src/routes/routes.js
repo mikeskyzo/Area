@@ -87,6 +87,10 @@ const enableLogicRoutes = async function (app) {
 			var newPassword = req.body.newPassword;
 
 			//ServerApi.connectUser();
+		} else if (req.params.action == 'createArea') {
+			var areaToCreate = JSON.parse(req.body.area);
+			console.log("before requete create area au serveur");
+			ServerApi.createArea(req, res, req.cookies.server, req.cookies.access_token, areaToCreate);
 		} else {
 			res.redirect('/error');
 		}
