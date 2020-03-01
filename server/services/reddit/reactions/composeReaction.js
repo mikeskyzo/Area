@@ -26,7 +26,7 @@ module.exports = {
 				`?to=${to}` +
 				`&subject=${subject}` +
 				`&text=${text}` +
-				{}, {
+				{}, {}, {
 					headers: {
 						Authorization: `bearer ${token.access_token}`
 					}
