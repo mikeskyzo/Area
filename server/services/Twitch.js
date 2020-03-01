@@ -152,13 +152,3 @@ exports.is_service_active = async function(user_id)
 {
     return true;
 };
-
-exports.generate_url = async function(token)
-{
-
-}
-
-exports.redirect_auth = async function(req, json)
-{
-
-}
