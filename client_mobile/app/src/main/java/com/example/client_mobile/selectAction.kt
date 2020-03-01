@@ -63,7 +63,6 @@ class selectAction : AppCompatActivity() {
                 } else {
                     val allActions = GsonBuilder().create().fromJson(body, Actions::class.java)
                     runOnUiThread {
-                        println(body)
                         loadingPanel.visibility = View.GONE
                         recyclerView_action.adapter = ActionAdapter(allActions, getContext(), token, resources)
                     }

@@ -97,7 +97,6 @@ class Start : AppCompatActivity() {
                         loadingPanel.visibility = View.GONE
                         if (code >= 400 ) {
                             val tab = body.toString().split(" ")
-                            println(tab[0])
                             if (tab[0] != "Tunnel") {
                                 val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
                                 Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
