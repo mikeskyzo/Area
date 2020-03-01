@@ -44,7 +44,7 @@ function redirectToClient(res, support)
 	if (support == 'mobile')
 		res.redirect('https://mobile.truc.truc');
 	else if (support == 'web')
-		res.redirect('http://localhost:8081/home');
+		res.redirect('http://localhost:8081/profil');
 	else
 		res.redirect('https://theuselessweb.com/');
 }
