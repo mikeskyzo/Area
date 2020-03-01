@@ -29,10 +29,8 @@ const checkToken = async function (json, access_token, refresh_token) {
 		user_id: json.user_id,
 		service: json.service
 	});
-	if (token) {
-		console.log(`You already have a token saved for ${json.service}`);
-		return;
-	}
+	if (token)
+		global.deleteInDbAsync(global.CollectionToken, {user_id : json.user_id, service : json.service});
 
 	// As tokens are valid, add them to the json to save them in db
 	json.access_token = access_token;
@@ -100,6 +98,12 @@ module.exports = {
 		let text = global.getParams(area.reaction.params, "text");
 		let sr = global.getParams(area.reaction.params, "sr");
 		let kind = 'self';
+		let token = global.findInDbAsync(
+			global.CollectionToken, {
+				user_id: area.user_id,
+				service: global.Services.Reddit
+			}
+		);
 
 		RedditAuthApi
 			.post(`/submit` +
@@ -109,19 +113,21 @@ module.exports = {
 				`&kind=${kind}`,
 				{}, {
 					headers: {
-						Authorization: `bearer ${generalSettings.authorizationToken}`
+						Authorization: `bearer ${token}`
 					}
 				}
 			)
 			.catch((error) => {
 				console.log(error);
-			})
+				global.responseError(res, 401, 'An error occured : ' + response.statusText);
+			});
+		res.send();
 	},
 
 	postInSubredditCheck: function (json) {
-		let title = global.getParams(json.reaction.params, "title");
-		let text = global.getParams(json.reaction.params, "text");
-		let sr = global.getParams(json.reaction.params, "sr");
+		let title = global.getParam(json.reaction.params, "title");
+		let text = global.getParam(json.reaction.params, "text");
+		let sr = global.getParam(json.reaction.params, "sr");
 
 		if (!(title && text && sr))
 			return "Missing the title of the subreddit";
