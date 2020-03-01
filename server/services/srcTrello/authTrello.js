@@ -27,17 +27,24 @@ const oauth = new OAuth(
 	"HMAC-SHA1"
 );
 
-exports.generate_url = function(ttoken)
+let sel = "";
+
+exports.generate_url = function(token)
 {
-	oauth.getOAuthRequestToken((error, token, tokenSecret, results) => {
-		if (error)
-			console.log(error);
-		const scope = 'read,write,account';
-		const expiration = 'never';
-		oauthSecrets[token] = tokenSecret;
-		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + ttoken;
-	});
-};
+	return 'https://trello.com/1/OAuthAuthorizeToken?oauth_token=cfd14732f1e65ebbfc3521de87b214a1&name=Area_Dashboard++&scope=read,write,account&expiration=never&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect/' + token;
+}
+// {
+// 	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
+// 		if (error)
+// 			console.log(error);
+// 		const scope = 'read,write,account';
+// 		const expiration = 'never';
+// 		oauthSecrets[token] = tokenSecret;
+// 		sel = `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + ttoken;
+// 		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + ttoken;
+// 	});
+// 	return sel;
+// }
 
 exports.redirect_auth = async function(req, json)
 {
