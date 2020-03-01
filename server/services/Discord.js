@@ -47,7 +47,7 @@ exports.redirect_auth = async function (req, json)
         }
         json.webhook_token = resjson.webhook.token;
         json.webhook_id = resjson.webhook.id
-        if (!json.webhook_id || json.webhook_token)
+        if (!json.webhook_id || !json.webhook_token)
             return ;
 		global.saveInDbAsync(global.CollectionToken, json);
 	})
