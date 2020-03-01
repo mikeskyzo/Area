@@ -979,17 +979,70 @@ exports.is_service_active = async function(user_id)
 		return false;
 	return true;
 }
- 
+
+const OAuth = require('oauth').OAuth;
+const url = require('url');
+/* General settings */
+const generalSettings = {
+	// Api
+	trelloApi: 'https://trello.com/1',
+
+	// App related
+	appName: 'Area_Dashboard++',
+	clientId: 'cfd14732f1e65ebbfc3521de87b214a1',
+	clientSecret: '8efc48c0d75ff42474c06c236c3b85684c534cfab5f7538e026ea35bebd82eb5',
+	redirectUri: 'http://localhost:8080/auth/redirect',
+
+	// Session related
+	authorizationToken: '', // to get in res after calling GET AUTHORIZATION TOKEN
+	secretAuthorizationToken: '' // to get in res after calling GET AUTHORIZATION TOKEN
+};
+/* Initializing OAuth instance */
+const oauthSecrets = {};
+const oauth = new OAuth(
+	`${generalSettings.trelloApi}/OAuthGetRequestToken`,
+	`${generalSettings.trelloApi}/OAuthGetAccessToken`,
+	generalSettings.clientId,
+	generalSettings.clientSecret,
+	"1.0A",
+	generalSettings.redirectUri,
+	"HMAC-SHA1"
+);
+
 exports.generate_url = async function(token)
 {
+	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
+		const scope = 'read,write,account';
+		const expiration = 'never';
 
+		oauthSecrets[token] = tokenSecret;
+		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}`;
+	});
 }
 
 exports.redirect_auth = async function(req, json)
 {
+	const query = url.parse(req.url, true).query;
+	const token = query.oauth_token;
+	const tokenSecret = oauthSecrets[token];
+	const verifier = query.oauth_verifier;
 
+	oauth.getOAuthAccessToken(
+		token, tokenSecret, verifier,
+		function(error, accessToken, accessTokenSecret, results) {
+			oauth.getProtectedResource(
+				"https://api.trello.com/1/members/me",
+				"GET", accessToken, accessTokenSecret,
+				function(error, data, response) {
+					generalSettings.authorizationToken = accessToken;
+					generalSettings.secretAuthorizationToken = accessTokenSecret;
+					json.APIToken = generalSettings.authorizationToken;
+					json.APIKey = generalSettings.clientId;
+					await global.saveInDbAsync(global.CollectionArea, json);
+				}
+			)
+	});
 }
-
 
 exports.FormatWebhookUpdateModel = function (req, res, area, next)
 {
