@@ -90,6 +90,7 @@ module.exports = {
 			`&state=${token}`;
 	},
 
+	// Called after authorized by user, used to save token in db
 	redirectAuth: async function (req, json) {
 		const newreq = await getAccessToken(req.query.code);
 		await checkToken(json, newreq.data.access_token, newreq.data.refresh_token);
