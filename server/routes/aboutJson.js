@@ -33,8 +33,8 @@ exports.getReactions = async function (req, res)
 		reactions : []
 	};
 	for (var nb in global.Services) {
-		if (await global.ServiceIsActiveMap.get(global.Services[nb])) {
-			if (global.ServiceIsActiveMap.get(global.Services[nb])(req.body.user_id)) {
+		if (global.ServiceIsActiveMap.get(global.Services[nb])) {
+			if (await global.ServiceIsActiveMap.get(global.Services[nb])(req.body.user_id)) {
 				var serv = getService(global.Services[nb]);
 				var reactions = serv.reactions;
 				for (i in reactions) {
