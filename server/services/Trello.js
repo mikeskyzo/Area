@@ -1033,9 +1033,12 @@ exports.redirect_auth = async function(req, json)
 			oauth.getProtectedResource(
 				"https://api.trello.com/1/members/me",
 				"GET", accessToken, accessTokenSecret,
-				function(error, data, response) {
+				async function(error, data, response) {
 					generalSettings.authorizationToken = accessToken;
 					generalSettings.secretAuthorizationToken = accessTokenSecret;
+					let token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : json.service})
+					if (token)
+						global.deleteInDbAsync(global.CollectionToken, {user_id : json.user_id, service : json.service});
 					json.APIToken = generalSettings.authorizationToken;
 					json.APIKey = generalSettings.clientId;
 					await global.saveInDbAsync(global.CollectionArea, json);
