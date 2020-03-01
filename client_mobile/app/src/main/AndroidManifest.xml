@@ -37,48 +37,11 @@
             android:name=".Home"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
+                <action android:name="my_action"/>
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.SEND" />
-
-                <data
-                    android:host="truc.truc"
-                    android:scheme="github" />
-            </intent-filter>
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.SEND" />
-
-                <data
-                    android:host="truc.truc"
-                    android:scheme="slack" />
-            </intent-filter>
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.SEND" />
-
-                <data
-                    android:host="truc.truc"
-                    android:scheme="reddit" />
-            </intent-filter>
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.SEND" />
-
-                <data
-                    android:host="truc.truc"
-                    android:scheme="mobile" />
+                <data android:scheme="my_scheme" android:host="my_host" />
             </intent-filter>
         </activity>
         <activity

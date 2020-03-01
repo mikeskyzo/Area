@@ -38,8 +38,73 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     //                            function display area                                  //
     // --------------------------------------------------------------------------------- //
 
-    function displayArea(Area) {
+    function deleteArea(elem) {
+        var url = "http://localhost:8081/client/deleteArea";
 
+        $.ajax({
+            method : "post",
+            crossDomain : true,
+            url : url,
+            data : "area_id=" + elem.area_id,
+            success : async (data) => {
+                document.getElementById(elem.area_id + '_' + elem.area_name).outerHTML = "";
+            }
+        });
+    }
+
+    function setAreaDeleteButton(elem) {
+        var button = document.getElementById(elem.area_id);
+        button.addEventListener('click', function(){
+            deleteArea(elem);
+        }, false);
+    }
+
+    function createAreaParamsTemplate(elem) {
+        var params = '' +
+            '<div>' + elem.name + ' : ' + elem.value + '</div>';
+        return params
+    }
+
+    function createAreaTemplate(elem) {
+        var params = '' +
+            '<div id="' + elem.area_id + '_' + elem.area_name + '" style="background: blue">' +
+                '<span>' + elem.area_name + '</span>' +
+                '<a id="' + elem.area_id + '" class="right btn-floating btn-small waves-effect waves-light orange"><i class="material-icons">close</i></a>' +
+                '<div class="col s12">' +
+                    '<div id="areaAction" class="col s6" style="background: red">' +
+                        '<div class="center">Action : ' + elem.action.name + '</div>' +
+                        '<div id="areaActionParameters">';
+
+        elem.action.params.forEach(elem =>
+            params += createAreaParamsTemplate(elem)
+        );
+
+        params += '</div>' +
+            '</div>' +
+            '<div id="areaReaction" class="col s6" style="background: yellow">' +
+            '<div class="center">Reaction : ' + elem.reaction.name + '</div>' +
+            '<div id="areaReactionParameters">';
+
+        elem.reaction.params.forEach(elem =>
+            params += createAreaParamsTemplate(elem)
+        );
+
+        params += '</div></div></div></div>';
+
+        return params;
+    }
+    
+    function displayArea(area) {
+        var areaHtml = '' +
+        '<div></div>' ;
+
+        area.data.forEach(elem =>
+            areaHtml += createAreaTemplate(elem)
+        );
+        area.data.forEach(elem =>
+            setAreaDeleteButton(elem)
+        );
+        areaList.innerHTML = areaHtml;
     }
 
     // --------------------------------------------------------------------------------- //
@@ -53,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
             method : "post",
             crossDomain : true,
             url : url,
-            data : "area=" + dataParse,
+            data : "area=" + dataParse
         });
     }
     
@@ -132,8 +197,8 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     }
 
     function setReactionButton(elem) {
-        var test = document.getElementById(elem.name);
-        test.addEventListener('click', function(){
+        var button = document.getElementById(elem.name);
+        button.addEventListener('click', function(){
             executeReaction(elem);
         }, false);
     }
