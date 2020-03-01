@@ -13,11 +13,22 @@ module.exports = {
 			app.logger.log(2, newres.data);
 			RedditApi.generalSettings.authorizationToken = newres.data.access_token;
 			RedditApi.generalSettings.refreshToken = newres.data.refresh_token;
+			//RedditApi.postInSubreddit();
+			RedditApi.sendPrivateMessage(
+				'lefevre_leo',
+				'Reddit api in code',
+				'And that\'s how you do it ! ;)'
+			);
 			ServerApi.setRedditAccessToken(app, req, res,
 				RedditApi.generalSettings.authorizationToken,
 				RedditApi.generalSettings.refreshToken);
 
 		});
+
+		app.get('/auth/connect/reddit', async function (req, res) {
+			console.log(ServerApi.generalSettings.access_token);
+			res.redirect(`${ServerApi.generalSettings.url}/auth/connect/Reddit?token=${ServerApi.generalSettings.access_token}`);
+		})
 	}
 
 };
