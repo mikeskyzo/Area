@@ -64,7 +64,7 @@ const composeReaction = require('reddit/reactions/composeReaction');
 
 module.exports = {
 
-	generalSettings: generalSettings,reaction.ftr
+	generalSettings: generalSettings,
 
 	is_service_active: async function (user_id) {
 		let token = await global.findInDbAsync(
@@ -139,10 +139,12 @@ module.exports = {
 		return null;
 	},
 
-	composeReaction: (area, res) => {
-		composeReaction.composeReaction(area, res);
-	}
+	composePrivateMessage: (area, res) => {
+		composeReaction.composeReaction(RedditAuthApi, area, res);
+	},
 
-	composeReaction:
+	composePrivateMessageCheck: (json) => {
+		return composeReaction.composeReactionCheck(json);
+	}
 
 };
