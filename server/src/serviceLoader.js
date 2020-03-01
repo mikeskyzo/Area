@@ -1,6 +1,7 @@
 global.Services = new Object();
 global.ServiceGenerateUrlMap = new Map();
 global.ServiceRedirectAuthMap = new Map();
+global.ServiceIsActiveMap = new Map();
 
 global.Action = new Object();
 global.ActionFinishWebhook = new Map();
@@ -22,13 +23,16 @@ for (service in json.services){
 		var obj = json.services[service];
         var module = require('../services/' + obj.name);
 
-		if (!obj.generate_url_function)
-			throw obj.name +  ' : the function to generate url was not found for ' + obj.name;
-		LoadFunction(global.ServiceGenerateUrlMap, obj.generate_url_function, obj.name, module);
+		if (obj.generate_url_function && obj.redirect_auth_function) {
+			LoadFunction(global.ServiceGenerateUrlMap, obj.generate_url_function, obj.name, module);
+			LoadFunction(global.ServiceRedirectAuthMap, obj.redirect_auth_function, obj.name, module);
+		}
+		else if (!obj.generate_url_function || !obj.redirect_auth_function)
+			throw obj.name +  ' : the function to generate url or the function for save token from oauth was not found for ' + obj.name;
 
-		if (!obj.redirect_auth_function)
-			throw obj.name +  ' : the function for save token from oauth was not found for ' + obj.name;
-		LoadFunction(global.ServiceRedirectAuthMap, obj.redirect_auth_function, obj.name, module);
+		if (!obj.is_service_active)
+			throw obj.name +  ' : the function to check if the service is active was not found for ' + obj.name;
+		LoadFunction(global.ServiceIsActiveMap, obj.is_service_active, obj.name, module);
 
 		if (obj.actions) {
 			for (action in obj.actions)
