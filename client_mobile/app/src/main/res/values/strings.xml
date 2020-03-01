@@ -35,5 +35,6 @@
     <string name="Reddit">Reddit</string>
     <string name="Slack">Slack</string>
     <string name="Trello">Trello</string>
+    <string name="Mail">Mail</string>
 
 </resources>
