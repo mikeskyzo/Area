@@ -12,7 +12,9 @@ import kotlinx.android.synthetic.main.service_row.view.*
 import okhttp3.*
 import java.io.IOException
 
-
+/**
+ * Handles the list of services the user subscribed to
+ */
 class SettingsAdapter(val services: Array<Service?>, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderSettings>() {
     override fun getItemCount(): Int {
         var nb = services.count()
@@ -34,6 +36,9 @@ class SettingsAdapter(val services: Array<Service?>, val context: Context?, val 
         }
     }
 
+    /**
+     * Sends a DELETE request on /auth/delete to unsubscribe from a service
+     */
     fun deleteService(service: String) {
         val client = OkHttpClient()
 
@@ -77,5 +82,9 @@ class SettingsAdapter(val services: Array<Service?>, val context: Context?, val 
     }
 }
 
+/**
+ * Holds Settings view
+ * @param view: view
+ */
 class CustomViewHolderSettings(val view: View): RecyclerView.ViewHolder(view) {
 }

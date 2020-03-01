@@ -13,6 +13,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.*
 import java.io.IOException
 
+/**
+ * Class used to select a name and a color of the area and create it
+ */
 class selectName : AppCompatActivity() {
 
     lateinit var option : Spinner
@@ -66,6 +69,9 @@ class selectName : AppCompatActivity() {
         }
     }
 
+    /**
+     * Builds the json request to create an area
+     */
     fun formatRequest(): String {
         val actionAsString: String = Gson().toJson(action)
         val reactionAsString: String = Gson().toJson(reaction)
@@ -76,6 +82,9 @@ class selectName : AppCompatActivity() {
         return jsonBody
     }
 
+    /**
+     * Send a POST request to /CreateArea to create an area
+     */
     fun createArea() {
         val myBody = formatRequest().trimIndent()
         val client = OkHttpClient()
@@ -125,6 +134,9 @@ class selectName : AppCompatActivity() {
         })
     }
 
+    /**
+     * Gets the current context
+     */
     fun getContext(): Context? {
         return this
     }

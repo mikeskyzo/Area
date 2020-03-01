@@ -43,10 +43,19 @@ class createAccount : AppCompatActivity() {
         }
     }
 
+    /**
+     * Returns the current context
+     */
     fun getContext(): Context? {
         return this as Context
     }
 
+    /**
+     * Request the server to create a new user with a POST on /createUser
+     * @param username: username of the user
+     * @param password: password of the user
+     * @param server_location: server address
+     */
     fun askForAccountCreation(username: String, password: String, server_location: String) {
         val client = OkHttpClient()
 
@@ -98,5 +107,8 @@ class createAccount : AppCompatActivity() {
         })
     }
 
+    /**
+     * Used to create an obj of the response from POST /createUser
+     */
     class Account(val success: Boolean, val message: String, val token: String)
 }

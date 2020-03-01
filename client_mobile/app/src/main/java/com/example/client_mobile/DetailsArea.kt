@@ -17,14 +17,24 @@ import kotlinx.android.synthetic.main.activity_details_area.loadingPanel
 import okhttp3.*
 import java.io.IOException
 
+/**
+ * Class used to display the details of an area and to delete it
+ */
 class DetailsArea : AppCompatActivity() {
-    lateinit var option : Spinner
-
     companion object {
+        /**
+         * User token
+         */
         var token: String? = ""
+        /**
+         * Area id
+         */
         var area_id: String? = ""
     }
 
+    /**
+     * Creates activity DetailsArea
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details_area)
@@ -44,6 +54,9 @@ class DetailsArea : AppCompatActivity() {
         getArea()
     }
 
+    /**
+     * Send a request DELETE /DeleteArea to delete an area by its id
+     */
     fun deleteArea(token: String?, areaId: String?) {
         val client = OkHttpClient()
 
@@ -95,6 +108,9 @@ class DetailsArea : AppCompatActivity() {
         })
     }
 
+    /**
+     * Send a GET request on /GetArea to retrieve an area by its id
+     */
     fun getArea() {
         val client = OkHttpClient()
         val request: Request = Request.Builder()
@@ -133,6 +149,11 @@ class DetailsArea : AppCompatActivity() {
             }
         })
     }
+
+    /**
+     * Sets the area information on the layout
+     * @param detailedArea: area to be displayed
+     */
     fun setDetails(detailedArea: DetailedArea) {
         val paramsActionAsString: String = Gson().toJson(detailedArea.action.params)
         val paramsReactionAsString: String = Gson().toJson(detailedArea.reaction.params)
@@ -143,12 +164,12 @@ class DetailsArea : AppCompatActivity() {
         textView_service_action.setText("Action : ".plus(detailedArea.action.service))
         textView_action_name.setText(detailedArea.action.title)
         runOnUiThread{
-            recyclerView_params_action.adapter = DetailsActionAdapter(listParamsAction)
+            recyclerView_params_action.adapter = DetailsActionReactionAdapter(listParamsAction)
         }
         textView_service_reaction.setText("Reaction : ".plus(detailedArea.reaction.service))
         textView_reaction_name.setText(detailedArea.reaction.title)
         runOnUiThread{
-            recyclerView_params_reaction.adapter = DetailsActionAdapter(listParamsReaction)
+            recyclerView_params_reaction.adapter = DetailsActionReactionAdapter(listParamsReaction)
         }
 
         if (detailedArea.color == "orange") {
@@ -171,9 +192,20 @@ class DetailsArea : AppCompatActivity() {
         }
     }
 
+    /**
+     * Gets the current context
+     */
     fun getContext(): Context? {
         return this
     }
 }
 
+/**
+ * Used to create a JSON object when requesting an area by its id
+ * @param area_id: area id
+ * @param area_name: area name
+ * @param color: color
+ * @param action: action
+ * @param reaction: reaction
+ */
 class DetailedArea(val area_id: String, val area_name: String, val color: String, val action: Action, val reaction: Reaction)
