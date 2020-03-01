@@ -144,30 +144,30 @@
 				},
 				{
 					"name": "composePrivateMessage",
-					"title": "Post in a subreddit",
-					"description": "Create a new post in a subreddit",
+					"title": "Send private message",
+					"description": "Send a private message to an other user.",
 					"functions": [
 						{
 							"type": "execute_reaction",
-							"name": "postInSubreddit"
+							"name": "composePrivateMessage"
 						},
 						{
 							"type": "verify_arguments",
-							"name": "postInSubredditCheck"
+							"name": "composePrivateMessageCheck"
 						}
 					],
 					"params": [
 						{
-							"name": "subReddit",
+							"name": "to",
 							"description": "Title of the sub reddit"
 						},
 						{
-							"name": "title",
-							"description": "Title of the new post"
+							"name": "subject",
+							"description": "Subject of the message"
 						},
 						{
 							"name": "text",
-							"description": "Text of the new post"
+							"description": "Content of the message"
 						}
 					]
 				}
