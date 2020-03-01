@@ -101,16 +101,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
      * Called when the server redirects the client to the application
      */
     override fun onResume() {
-        println("ONRESUME")
-        val uri = intent.data
-        val delimiter = "://"
-        val service = uri.toString().split(delimiter)
-
-        println(uri)
-
-        if (uri !== null) {
-            Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
-        }
         super.onResume()
     }
 
@@ -137,7 +127,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     }
                 } else {
                     val tab = body.toString().split(" ")
-                    println(tab[0])
                     if (tab[0] != "Tunnel") {
                         val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
                         runOnUiThread {
@@ -183,11 +172,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     println(body)
                     runOnUiThread {
                         val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
-/*                        for (i in 0 until services.size) {
-                            println(services[0].service)
-                        }*/
                         createItemsServices(services)
-                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
