@@ -75,18 +75,18 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
 
     function createAreaParamsTemplate(elem) {
         var params = '' +
-            '<div>' + elem.name + ' : ' + elem.value + '</div>';
+            '<div style="margin-left: 10px"><i>' + elem.name + '</i> : ' + elem.value + '</div>';
         return params
     }
 
     function createAreaTemplate(elem) {
         var params = '' +
-            '<div id="' + elem.area_id + '_' + elem.area_name + '" style="background: blue">' +
-                '<span>' + elem.area_name + '</span>' +
-                '<a id="' + elem.area_id + '" class="right btn-floating btn-small waves-effect waves-light orange"><i class="material-icons">close</i></a>' +
-                '<div class="col s12">' +
-                    '<div id="areaAction" class="col s6" style="background: red">' +
-                        '<div class="center">Action : ' + elem.action.name + '</div>' +
+            '<div id="' + elem.area_id + '_' + elem.area_name + '" style="margin: 20px 40px 20px;">' +
+                '<div style="font-size: 30px; margin-left: 10px"><b>' + elem.area_name +
+                '</b><a id="' + elem.area_id + '" class="right btn-floating btn-small waves-effect waves-light black-text orange" style="margin-right: 10px; margin-top: 5px"><i class="material-icons black-text">close</i></a></div>' +
+                '<div class="col s12" style="background: #ff9800;  border: 4px solid #000000;">' +
+                    '<div id="areaAction" class="col s6" style="background: #ff9800;">' +
+                        '<div class="center" style="font-size: 20px"><u>Action : ' + elem.action.name + '</u></div>' +
                         '<div id="areaActionParameters">';
 
         elem.action.params.forEach(elem =>
@@ -95,8 +95,8 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
 
         params += '</div>' +
             '</div>' +
-            '<div id="areaReaction" class="col s6" style="background: yellow">' +
-            '<div class="center">Reaction : ' + elem.reaction.name + '</div>' +
+            '<div id="areaReaction" class="col s6" style="background: #ff9800;">' +
+            '<div class="center" style="font-size: 20px"><u>Reaction : ' + elem.reaction.name + '</u></div>' +
             '<div id="areaReactionParameters">';
 
         elem.reaction.params.forEach(elem =>
@@ -109,8 +109,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     }
     
     function displayArea(area) {
-        var areaHtml = '' +
-        '<div></div>' ;
+        var areaHtml = '';
 
         area.data.forEach(elem =>
             areaHtml += createAreaTemplate(elem)
