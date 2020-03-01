@@ -59,6 +59,9 @@ const getAccessToken = async function (code) {
 		})
 };
 
+
+const composeReaction = require('./reddit/reactions/composeReaction');
+
 module.exports = {
 
 	generalSettings: generalSettings,
@@ -134,7 +137,14 @@ module.exports = {
 		if (!(title && text && sr))
 			return "Missing the title of the subreddit";
 		return null;
-	}
+	},
 
+	composePrivateMessage: async (area, res) => {
+		await composeReaction.composeReaction(RedditAuthApi, area, res);
+	},
+
+	composePrivateMessageCheck: (json) => {
+		return composeReaction.composeReactionCheck(json);
+	}
 
 };
