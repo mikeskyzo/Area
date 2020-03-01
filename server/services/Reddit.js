@@ -10,10 +10,6 @@ const generalSettings = {
 	clientId: 'xxa4cp-hsWE_iA',
 	clientSecret: '466F9UWdI-Eh1iz7AhN8zNyszE8',
 	redirectUri: 'http://localhost:8080/auth/redirect',
-
-	// Session related
-	authorizationToken: '', // to get in res after calling GET AUTHORIZATION TOKEN
-	refreshToken: '' // to get in res after calling GET AUTHORIZATION TOKEN
 };
 
 /* Initialize axios */
@@ -122,29 +118,17 @@ module.exports = {
 			.catch((error) => {
 				console.log(error);
 			})
+	},
+
+	postInSubredditCheck: function (json) {
+		let title = global.getParams(area.reaction.params, "title");
+		let text = global.getParams(area.reaction.params, "text");
+		let sr = global.getParams(area.reaction.params, "sr");
+
+		if (!(title && text && sr))
+			return "Missing the title of the subreddit";
+		return null;
 	}
 
+
 };
-
-/*
-* 			"reactions" : [
-				{
-					"name": "postInSubreddit",
-					"title": "Post in a subreddit",
-					"description": "",
-					"functions": [
-						{
-							"type": "",
-							"name": ""
-						}
-					],
-					"params": [
-						{
-							"name": "",
-							"description": ""
-						}
-					]
-				}
-			]
-
-* */
