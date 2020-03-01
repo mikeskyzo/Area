@@ -27,11 +27,17 @@ const enableViewsRoutes = async function(app) {
 	});
 
 	app.get('/dashboard', function (req, res) {
-		res.render(req.cookies.access_token ? '/dashboard.ejs' : '/register.ejs');
+		if (req.cookies.access_token)
+			res.render('dashboard.ejs');
+		else
+			res.redirect('/register');
 	});
 
 	app.get('/profil', function (req, res) {
-		res.render(req.cookies.access_token ? '/profil.ejs' : '/register.ejs');
+		if (req.cookies.access_token)
+			res.render('profil.ejs');
+		else
+			res.redirect('/register');
 	});
 
 	app.get('/mobile', function (req, res) {

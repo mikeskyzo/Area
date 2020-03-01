@@ -4,7 +4,7 @@ const axios = require('axios');
 const generalSettings = {
 	// Api
 	redditApi: `https://www.reddit.com/api/v1/`,
-	redditAuthApi: `https://oauth.reddit.com/api/v1/`,
+	redditAuthApi: `https://oauth.reddit.com`,
 
 	// App related
 	clientId: 'xxa4cp-hsWE_iA',
@@ -88,6 +88,44 @@ module.exports = {
 			.catch(function (error) {
 				console.log(error)
 			})
+	},
+
+	postInSubreddit: function () {
+		let title = 'Area_Dashboard#';
+		let text = 'Marcoleric s\'est connecté';
+		let sr = 'Area_coon_test';
+		let kind = 'self';
+		RedditAuthApi
+			.post(`submit` +
+				`?title=${title}` +
+				`&text=${text}` +
+				`&sr=${sr}` +
+				`&kind=${kind}`, {}, {
+					headers: {
+						Authorization: `bearer ${generalSettings.authorizationToken}`
+					}
+				}
+			)
+			.catch((error) => {
+				console.log(error);
+			})
+	},
+
+	sendPrivateMessage: function (to, subject, text) {
+		RedditAuthApi
+			.post(`/api/compose` +
+				`?to=${to}` +
+				`&text=${text}` +
+				`&subject=${subject}`, {}, {
+					headers: {
+						Authorization: `bearer ${generalSettings.authorizationToken}`
+					}
+				}
+			)
+			.catch((error) => {
+				console.log(error);
+			})
 	}
+
 
 };
