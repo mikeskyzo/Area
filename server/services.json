@@ -116,7 +116,7 @@
 				{
 					"name": "postInSubreddit",
 					"title": "Post in a subreddit",
-					"description": "Create a new post in a subreddit",
+					"description": "Create a new post in a given subreddit.",
 					"functions": [
 						{
 							"type": "execute_reaction",
@@ -145,7 +145,7 @@
 				{
 					"name": "composePrivateMessage",
 					"title": "Send private message",
-					"description": "Send a private message to an other user.",
+					"description": "Send a private message to a given user.",
 					"functions": [
 						{
 							"type": "execute_reaction",
@@ -159,7 +159,7 @@
 					"params": [
 						{
 							"name": "to",
-							"description": "Title of the sub reddit"
+							"description": "Target user pseudo"
 						},
 						{
 							"name": "subject",
