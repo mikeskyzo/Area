@@ -1,82 +1,96 @@
 
 document.addEventListener("DOMContentLoaded", function (req, res) {
 
-    async function checkIfConnectedToService() {
-        const resGithub = await checkGithub();
-        const resReddit = await checkReddit();
-        const resSlack = await checkSlack();
-        const resTrello = await checkTrello();
+    var buttonList = document.getElementById("button-list");
 
-        changeButtonIfConnected(resGithub.service, resReddit.service, resSlack.service, resTrello.service)
+    var disconnectButton = [];
+
+    async function initProfilePage() {
+        const serviceStatus = await getService();
+
+        initServices(serviceStatus);
     }
 
-    function checkTrello() {
-        var url = "http://localhost:8081/client/getTrelloLoginStatus";
+    // --------------------------------------------------------------------------------- //
+    //                                connexion services                                 //
+    // --------------------------------------------------------------------------------- //
+
+    function sendDeconnexion(elem) {
+        var url = "http://localhost:8081/client/disconnectService";
+
+        $.ajax({
+            method : "post",
+            crossDomain : true,
+            url : url,
+            data : "service=" + elem
+        });
+    }
+
+    function setDisconnectButton(elem) {
+        var button = document.getElementById(elem);
+        button.addEventListener('click', function(){
+            sendDeconnexion(elem);
+        }, false);
+    }
+
+    function createDeconnexionButton(elem, status) {
+        disconnectButton.push(elem.service);
+        var button = '' +
+            '<a id="' + elem.service + '" class="btnOAuth center waves-effect waves-light orange btn">' + elem.service + status + '</a><br>';
+        return button;
+    }
+
+    function createConnexionButton(elem, status, server, token) {
+        var button = '' +
+            '<a href="' + server + '/Auth/connect/' + elem.service + '?token=' + token + '" class="btnOAuth center waves-effect waves-light orange btn">' + elem.service + status + '</a><br>';
+        return button;
+    }
+
+    function checkIfConnected(elem, server, token) {
+        if (elem.active === true)
+            return createDeconnexionButton(elem, " : Connected", server, token);
+         else
+            return createConnexionButton(elem, " : Not Connected", server, token);
+    }
+
+    function initServices(servicesStatus) {
+        let connexionButton = "";
+        disconnectButton = [];
+
+        console.log(servicesStatus);
+
+        servicesStatus.data.forEach(elem =>
+            connexionButton += checkIfConnected(elem, servicesStatus.server, servicesStatus.token)
+        );
+        buttonList.innerHTML = connexionButton;
+        disconnectButton.forEach(elem =>
+            setDisconnectButton(elem)
+        );
+    }
+
+
+    // --------------------------------------------------------------------------------- //
+    //                                      request                                      //
+    // --------------------------------------------------------------------------------- //
+
+    function getService() {
+        var url = "http://localhost:8081/client/getServices";
 
         return $.ajax({
             method : "get",
             crossDomain : true,
             url : url,
+            success : function (data) {
+                console.log("getService OK");
+            },
+            error : function (data, status, error) {
+                console.log(data);
+                console.log(status);
+                console.log(error);
+            }
         });
     }
 
-    function checkSlack() {
-        var url = "http://localhost:8081/client/getSlackLoginStatus";
-
-        return $.ajax({
-            method : "get",
-            crossDomain : true,
-            url : url,
-        });
-    }
-
-    function checkReddit() {
-        var url = "http://localhost:8081/client/getRedditLoginStatus";
-
-        return $.ajax({
-            method : "get",
-            crossDomain : true,
-            url : url,
-        });
-    }
-
-    function checkGithub() {
-        var url = "http://localhost:8081/client/getGithubLoginStatus";
-
-        return $.ajax({
-            method : "get",
-            crossDomain : true,
-            url : url,
-        });
-    }
-
-    function changeButtonIfConnected(Github, Reddit, Slack, Trello) {
-        var btnGithub = document.getElementById("btnGithub");
-        var btnReddit = document.getElementById("btnReddit");
-        var btnSlack = document.getElementById("btnSlack");
-        var btnTrello = document.getElementById("btnTrello");
-
-        if (Github === "true") {
-            btnGithub.textContent = "Github : Connected"
-        } else {
-            btnGithub.textContent = "Github"
-        }
-        if (Reddit === "true") {
-            btnReddit.textContent = "reddit : Connected"
-        } else {
-            btnReddit.textContent = "reddit"
-        }
-        if (Slack === "true") {
-            btnSlack.textContent = "Slack : Connected"
-        } else {
-            btnSlack.textContent = "Slack"
-        }
-        if (Trello === "true") {
-            btnTrello.textContent = "Trello : Connected"
-        } else {
-            btnTrello.textContent = "Trello"
-        }
-    }
-
-    checkIfConnectedToService();
+    // Start program
+    initProfilePage()
 });

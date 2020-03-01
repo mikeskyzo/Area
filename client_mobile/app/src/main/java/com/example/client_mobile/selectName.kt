@@ -103,6 +103,8 @@ class selectName : AppCompatActivity() {
                         val code = response.code
                         loadingPanel.visibility = View.GONE
                         if (code >= 400) {
+                            println("BODY")
+                            println(body)
                             Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(getContext(), selectAction::class.java)
                             intent.putExtra("token", token)
