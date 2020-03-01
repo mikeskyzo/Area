@@ -24,8 +24,8 @@ module.exports = {
 		RedditAuthApi
 			.post(`/api/compose` +
 				`?to=${to}` +
+				`&subject=${subject}` +
 				`&text=${text}` +
-				`&sr=${sr}` +
 				{}, {
 					headers: {
 						Authorization: `bearer ${token.access_token}`
