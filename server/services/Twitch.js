@@ -26,7 +26,7 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(res, json, next)
         return ;
     }
     console.log(global.url);
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=300&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
     let resp = await fetch(url, {
         'method': 'POST',
         'headers' : {'Client-ID' : client_id}
@@ -55,7 +55,7 @@ exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
         return ;
     }
     console.log(global.url);
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=300&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
     let resp = await fetch(url, {
         'method': 'POST',
         'headers' : {'Client-ID' : client_id}
@@ -83,7 +83,7 @@ exports.Twitch_Create_Webhook_StreamChangeState = async function(res, json, next
         return ;
     }
     console.log(global.url);
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=300`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=86400`;
     let resp = await fetch(url, {
         'method': 'POST',
         'headers' : {'Client-ID' : client_id}
@@ -111,7 +111,7 @@ exports.Twitch_Delete_Webhook_StreamChangeState = async function(area, req, res)
         return ;
     }
     console.log(global.url);
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${area.id}&hub.lease_seconds=300`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${area.id}&hub.lease_seconds=86400`;
     let resp = await fetch(url, {
         'method': 'POST',
         'headers' : {'Client-ID' : client_id}
