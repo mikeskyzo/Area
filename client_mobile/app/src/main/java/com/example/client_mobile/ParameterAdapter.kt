@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.parameter_row.view.*
 
 
+/**
+ * Handles the list of parameter for actions an reactions
+ * @param params: an array of parameters
+ */
 class ParameterAdapter(val params: Array<Param>): RecyclerView.Adapter<CustomViewHolderParam>() {
     override fun getItemCount(): Int {
         val nb = params.count()
