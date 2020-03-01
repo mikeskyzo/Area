@@ -913,8 +913,9 @@ createNewWebhook = async function(res, json, next)
 			return response.json();
 		}
 	})
-	.then(function (resJson) {
+	.then(async function (resJson) {
 		json.action.webhook_id = resJson.id;
+		await global.updateInDbAsync(global.CollectionArea, {area_id : json.area_id}, { $set: { 'webhook_id' : resJson.id}});
 		res.status(201).send(`Trello's webhook well created with id : ${resJson.id}`);
 	})
 	.catch(function (error) {
@@ -923,7 +924,7 @@ createNewWebhook = async function(res, json, next)
 }
 
 exports.deleteWebhook = async function (area, req, res) {
-	if (!area.action.webhook_id) {
+	if (!area.webhook_id) {
 		global.responseError(res, 401, "The area has no webhook id");
 		return;
 	}
@@ -939,6 +940,13 @@ exports.deleteWebhook = async function (area, req, res) {
 	const url = `https://api.trello.com/1/webhooks/${area.webhook_id}?key=${token.APIKey}&token=${token.APIToken}`;
 	await fetch(url, {
 		method: "DELETE"
+	})
+	.then(function(response) {
+		if (response.status !== 200) {
+			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
+		} else {
+			global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
+		}
 	});
 }
 
