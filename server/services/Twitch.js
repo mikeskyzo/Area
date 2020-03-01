@@ -10,7 +10,7 @@ async function Twitch_UserId (login)
         'headers' : {'Client-ID' : client_id}
     });
     var json = await object.json()
-    if(json.hasOwnProperty('data')){
+    if(json.data[0].id){
         return(json.data[0].id);
     }
     return(84);
