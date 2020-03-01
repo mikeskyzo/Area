@@ -176,7 +176,7 @@ exports.setRedditAccessToken = function(app, req, res, accessToken, refreshToken
 		{},
 		{
 			data: {
-				'service': 'Reddit',
+				'service': 'reddit',
 				'access_token': accessToken,
 				'refresh_token': refreshToken
 			},
