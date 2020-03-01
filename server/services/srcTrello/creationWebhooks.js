@@ -44,11 +44,7 @@ createNewWebhook = async function(res, json, next)
 exports.createNewWebhookUpdateCard = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "updateCard"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "updateCard"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -128,11 +124,7 @@ exports.createNewWebhookUpdateCard = async function (res, json, next)
 exports.createNewWebhookUpdateList = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "updateList"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "updateList"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -198,11 +190,7 @@ exports.createNewWebhookUpdateList = async function (res, json, next)
 exports.createNewWebhookUpdateChecklist = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "updateChecklist"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "updateChecklist"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -253,11 +241,7 @@ exports.createNewWebhookUpdateChecklist = async function (res, json, next)
 exports.createNewWebhookUpdateMember = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "updateMember"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "updateMember"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -357,11 +341,7 @@ exports.createNewWebhookCreateCard = async function (res, json, next)
 exports.createNewWebhookCreateList = async function (res, json, next)
 {
 	let goodType = false
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "createList"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "createList"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -411,11 +391,7 @@ exports.createNewWebhookCreateList = async function (res, json, next)
 exports.createNewWebhookCommentCard = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "commentCard"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "commentCard"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -494,12 +470,8 @@ exports.createNewWebhookCommentCard = async function (res, json, next)
 
 exports.createNewWebhookDeleteCard = async function (res, json, next)
 {
-	let params = json.action.params;
 	let goodType = false;
-
-	params.push({"name" : "event", "value" : "deleteCard"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "deleteCard"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -579,11 +551,7 @@ exports.createNewWebhookDeleteCard = async function (res, json, next)
 exports.createNewWebhookRemoveChecklistFromCard = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "removeChecklistFromCard"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "removeChecklistFromCard"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -648,11 +616,7 @@ exports.createNewWebhookRemoveChecklistFromCard = async function (res, json, nex
 exports.createNewWebhookAddChecklistToCard = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "addChecklistToCard"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "addChecklistToCard"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -718,11 +682,7 @@ exports.createNewWebhookAddChecklistToCard = async function (res, json, next)
 exports.createNewWebhookRemoveMemberFromCard = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "removeMemberFromCard"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "removeMemberFromCard"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -788,11 +748,7 @@ exports.createNewWebhookRemoveMemberFromCard = async function (res, json, next)
 exports.createNewWebhookAddAttachmentToCard = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "addAttachmentToCard"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "addAttachmentToCard"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
@@ -872,11 +828,7 @@ exports.createNewWebhookAddAttachmentToCard = async function (res, json, next)
 exports.createNewWebhookCreateBoard = async function (res, json, next)
 {
 	let goodType = false;
-	let params = json.action.params;
-
-	params.push({"name" : "event", "value" : "CreateBoard"});
-	json.action.params = params;
-
+	json.action.params.push({"name" : "event", "value" : "CreateBoard"});
 	const idModel = global.getParam(json.action.params, "idModel");
 
 	if (!idModel) {
