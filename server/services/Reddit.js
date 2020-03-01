@@ -60,7 +60,7 @@ const getAccessToken = async function (code) {
 };
 
 
-const composeReaction = require('reddit/reactions/composeReaction');
+const composeReaction = require('./reddit/reactions/composeReaction');
 
 module.exports = {
 
