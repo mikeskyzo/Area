@@ -1,5 +1,47 @@
 const fetch = require('node-fetch');
 
+exports.is_service_active = async function (user_id)
+{
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : user_id, service : global.Services.Slack});
+	if (!token || !token.access_token)
+		return false;
+	return true;
+}
+
+exports.generate_url = function (token)
+{
+	return 'https://slack.com/oauth/v2/authorize?client_id=933637704274.945976210260&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&state=' + token;
+}
+
+exports.redirect_auth = async function (req, json)
+{
+	const code = req.query.code;
+
+	var token = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Slack})
+	if (token)
+        global.deleteSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Slack});
+
+	const url = 'https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=248197e37352e5aa521b969a3cbb8a91&code=' + code;
+	fetch(url, {
+		'method': 'POST',
+		headers : {"Accept": "application/json"}
+	})
+	.then(function (response) {
+		if (response.status == 200)
+			return response.json();
+		throw 'Failur : ' + res;
+	})
+	.then(function (resjson) {
+		json.access_token = resjson.authed_user.access_token;
+		console.log(resjson.authed_user.access_token);
+		console.log(json);
+		global.saveInDbAsync(global.CollectionToken, json);
+	})
+	.catch(function (err){
+		console.log(err);
+	})
+}
+
 exports.send_message = async function (area, res)
 {
 	let channel_id = global.getParam(area.reaction.params, 'channel_id');

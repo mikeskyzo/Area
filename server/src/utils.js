@@ -39,7 +39,7 @@ var jwt = require('jsonwebtoken');
 
 exports.verifyToken = function(req, res, next)
 {
-	let token = extractToken(req);
+	let token = extractToken(req, res);
 	jwt.verify(token, global.secret, function(err, decoded) {
 		if (err) {
 			res.json({ success: false, message: 'Failed to authenticate token.' });
@@ -54,7 +54,7 @@ exports.verifyToken = function(req, res, next)
 	});
 }
 
-function extractToken(req)
+function extractToken(req, res)
 {
 	if (req.query.token)
 		return req.query.token;
