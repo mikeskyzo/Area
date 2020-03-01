@@ -6,7 +6,7 @@ module.exports = {
 	enableRedditAuthorizationRoute: async function (app) {
 		app.get('/authorizations/reddit', async function (req, res) {
 
-			app.logger.log(1,'\n   ====== Reddit authorization ====== \n');
+			app.logger.log(1,'\n   ====== reddit authorization ====== \n');
 			RedditApi.generalSettings.code = req.query.code;
 			const newres = await RedditApi.getAccessToken();
 			app.logger.log(2, `Reddit sent us those datas :`);
@@ -16,7 +16,7 @@ module.exports = {
 			//RedditApi.postInSubreddit();
 			RedditApi.sendPrivateMessage(
 				'lefevre_leo',
-				'Reddit api in code',
+				'reddit api in code',
 				'And that\'s how you do it ! ;)'
 			);
 			ServerApi.setRedditAccessToken(app, req, res,
