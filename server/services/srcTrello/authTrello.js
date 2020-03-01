@@ -31,6 +31,7 @@ let sel = "";
 
 exports.generate_url = function(token)
 {
+	// return 'https://trello.com/1/authorize?expiration=never&name=Area_Dashboard++&scope=read&response_type=fragment&key=cfd14732f1e65ebbfc3521de87b214a1&callback_method=fragment&redirect_uri=https://localhost:8080/auth/redirect/' + token;
 	return 'https://trello.com/1/authorize?expiration=never&name=Area_Dashboard++&scope=read&response_type=fragment&key=cfd14732f1e65ebbfc3521de87b214a1&callback_method=fragment&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect/' + token;
 }
 // {
@@ -48,10 +49,10 @@ exports.generate_url = function(token)
 
 exports.redirect_auth = async function(req, json)
 {
-	const query = url.parse(req.url, true).query;
-	const token = query.oauth_token;
+	// const query = url.parse(req.url, true).query;
+	const token = req.query.oauth_token;
 	const tokenSecret = oauthSecrets[token];
-	const verifier = query.oauth_verifier;
+	const verifier = req.query.oauth_verifier;
 
 	oauth.getOAuthAccessToken(
 		token, tokenSecret, verifier,
@@ -60,13 +61,11 @@ exports.redirect_auth = async function(req, json)
 				"https://api.trello.com/1/members/me",
 				"GET", accessToken, accessTokenSecret,
 				async function(error, data, response) {
-					generalSettings.authorizationToken = accessToken;
-					generalSettings.secretAuthorizationToken = accessTokenSecret;
-					let token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : json.service})
+					json.access_token = accessToken;
+					json.accessTokenSecret = accessTokenSecret;
+					let token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello})
 					if (token)
-						global.deleteInDbAsync(global.CollectionToken, {user_id : json.user_id, service : json.service});
-					json.APIToken = generalSettings.authorizationToken;
-					json.APIKey = generalSettings.clientId;
+						global.deleteSomeInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 					await global.saveInDbAsync(global.CollectionArea, json);
 				}
 			);
