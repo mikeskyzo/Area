@@ -32,22 +32,19 @@ exports.getReactions = async function (req, res)
 	var json = {
 		reactions : []
 	};
-	var services = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id});
-	services.forEach(element => {
-		var serv = getService(element.service);
-		if (!serv) {
-			console.error("Unknown service : ");
-			console.log(element);
-		}
-		else {
-			var reactions = serv.reactions;
-			for (nb in reactions) {
-				delete reactions[nb].functions;
-				reactions[nb].service = element.service;
+	for (var nb in global.Services) {
+		if (global.ServiceIsActiveMap.get(global.Services[nb])) {
+			if (await global.ServiceIsActiveMap.get(global.Services[nb])(req.body.user_id)) {
+				var serv = getService(global.Services[nb]);
+				var reactions = serv.reactions;
+				for (i in reactions) {
+					delete reactions[i].functions;
+					reactions[i].service = global.Services[nb];
+				}
+				mergeJSON.merge(json.reactions, reactions);
 			}
-			mergeJSON.merge(json.reactions, reactions);
 		}
-	});
+	}
 	res.json(json);
 }
 
@@ -56,22 +53,19 @@ exports.getActions = async function (req, res)
 	var json = {
 		actions : []
 	};
-	var services = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id});
-	services.forEach(element => {
-		var serv = getService(element.service);
-		if (!serv) {
-			console.error("Unknown service : ");
-			console.log(element);
-		}
-		else {
-			var actions = serv.actions;
-			for (nb in actions){
-				delete actions[nb].functions;
-				actions[nb].service = element.service;
+	for (var nb in global.Services) {
+		if (global.ServiceIsActiveMap.get(global.Services[nb])) {
+			if (await global.ServiceIsActiveMap.get(global.Services[nb])(req.body.user_id)) {
+				var serv = getService(global.Services[nb]);
+				var actions = serv.actions;
+				for (i in actions) {
+					delete actions[i].functions;
+					actions[i].service = global.Services[nb];
+				}
+				mergeJSON.merge(json.actions, actions);
 			}
-			mergeJSON.merge(json.actions, actions);
 		}
-	});
+	}
 	res.json(json);
 }
 

@@ -27,7 +27,7 @@ for (service in json.services){
 			LoadFunction(global.ServiceGenerateUrlMap, obj.generate_url_function, obj.name, module);
 			LoadFunction(global.ServiceRedirectAuthMap, obj.redirect_auth_function, obj.name, module);
 		}
-		else if (!obj.generate_url_function || !obj.redirect_auth_function)
+		else if (!(!obj.generate_url_function && !obj.redirect_auth_function))
 			throw obj.name +  ' : the function to generate url or the function for save token from oauth was not found for ' + obj.name;
 
 		if (!obj.is_service_active)
