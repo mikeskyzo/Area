@@ -59,3 +59,20 @@ exports.getArea = function (req, res)
 		}
     });
 }
+
+exports.getServices = async function (req, res)
+{
+	let json= [];
+
+	for (nb in global.Services)
+	{
+		console.log(global.Services[nb]);
+		if (global.ServiceIsActiveMap.get(global.Services[nb])) {
+			json.push({
+				service : global.Services[nb],
+				active : await global.ServiceIsActiveMap.get(global.Services[nb])(req.body.user_id)
+			});
+		}
+	}
+	res.send(json);
+}
