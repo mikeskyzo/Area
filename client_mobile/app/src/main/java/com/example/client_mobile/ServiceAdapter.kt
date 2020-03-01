@@ -29,10 +29,10 @@ class ServiceAdapter(val allServices: Services, val context: Context?, val token
 
         val service = allServices.services.get(position)
 
-        holder.view.textView_service.setText(service.name)
+        holder.view.textView_service.setText(service.service)
 
         holder.view.imageViewDelete.setOnClickListener {
-            deleteService(service.name)
+            deleteService(service.service)
         }
     }
     fun deleteService(service: String) {
