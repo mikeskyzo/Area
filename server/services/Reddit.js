@@ -48,18 +48,21 @@ const checkToken = async function (json) {
 
 const getAccessToken = async function (code) {
 	const grantType = 'authorization_code';
-	return await RedditApi.post(`access_token` +
-		`?grant_type=${grantType}` +
-		`&code=${generalSettings.code}` +
-		`&redirect_uri=${generalSettings.redirectUri}`,
-		{},
-		{
-			auth: {
-				username: generalSettings.clientId,
-				password: generalSettings.clientSecret
-			}
-		}
-	)
+	return await RedditApi
+		.post(`api/v1/access_token` +
+			`?grant_type=${grantType}` +
+			`&code=${code}` +
+			`&redirect_uri=${generalSettings.redirectUri}`,
+			{},
+			{
+				auth: {
+					username: generalSettings.clientId,
+					password: generalSettings.clientSecret
+				}
+			})
+		.catch(function (error) {
+			console.log(error);
+		})
 };
 
 module.exports = {
@@ -98,7 +101,10 @@ module.exports = {
 	redirectAuth: async function (req, json) {
 		// TODO: Get access_token thanks to code
 		// req.query.code;
+		console.log(`Got the following code for Reddit : ${req.query.code}`);
 		const newreq = await getAccessToken(req.query.code);
+		console.log(`access_token : ${newreq.data.access_token}`);
+		console.log(`refresh_token : ${newreq.data.refresh_token}`);
 		generalSettings.authorizationToken = newreq.data.access_token;
 		generalSettings.refreshToken = newreq.data.refresh_token;
 		await checkToken(json);
