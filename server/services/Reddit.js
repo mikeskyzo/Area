@@ -96,7 +96,7 @@ module.exports = {
 	postInSubreddit: function (area, res) {
 		let title = global.getParams(area.reaction.params, "title");
 		let text = global.getParams(area.reaction.params, "text");
-		let sr = global.getParams(area.reaction.params, "sr");
+		let sr = global.getParams(area.reaction.params, "subReddit");
 		let kind = 'self';
 		let token = global.findInDbAsync(
 			global.CollectionToken, {
@@ -127,7 +127,7 @@ module.exports = {
 	postInSubredditCheck: function (json) {
 		let title = global.getParam(json.reaction.params, "title");
 		let text = global.getParam(json.reaction.params, "text");
-		let sr = global.getParam(json.reaction.params, "sr");
+		let sr = global.getParam(json.reaction.params, "subReddit");
 
 		if (!(title && text && sr))
 			return "Missing the title of the subreddit";
