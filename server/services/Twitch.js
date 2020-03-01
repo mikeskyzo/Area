@@ -49,7 +49,7 @@ exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
         global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
         return ;
     }
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${area.id}&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
     let resp = await fetch(url, {
         'method': 'POST',
         'headers' : {'Client-ID' : client_id}
