@@ -153,25 +153,11 @@ const enableLogicRoutes = async function (app) {
 
 };
 
-// authorizations routes
-const githubAuthorizationRoutes = require('./Authorizations/githubAuthorizationRoutes');
-const redditAuthorizationRoutes = require('./Authorizations/redditAuthorizationRoutes');
-const slackAuthorizationRoutes = require('./Authorizations/slackAuthorizationRoutes');
-const trelloAuthorizationRoutes = require('./Authorizations/trelloAuthorizationRoutes');
-// Enable authorizations routes function
-const enableAuthorizationsRoutes = async function(app) {
-	await githubAuthorizationRoutes.enableGithubAuthorizationRoute(app);
-	await redditAuthorizationRoutes.enableRedditAuthorizationRoute(app);
-	await slackAuthorizationRoutes.enableSlackAuthorizationRoute(app);
-	await trelloAuthorizationRoutes.enableTrelloAuthorizationRoute(app);
-};
-
 module.exports = {
 
 	enableAllRoutes: async function (app) {
 		await enableViewsRoutes(app);
 		await enableLogicRoutes(app);
-		await enableAuthorizationsRoutes(app);
 	}
 
 };
