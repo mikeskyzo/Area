@@ -3,7 +3,11 @@
     min-height: 1000px !important;
 }*/
 
-html, body {margin: 0; height: 100%; overflow: hidden}
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
 
 .row .col {
     padding: 0;
