@@ -139,8 +139,8 @@ module.exports = {
 		return null;
 	},
 
-	composePrivateMessage: (area, res) => {
-		composeReaction.composeReaction(RedditAuthApi, area, res);
+	composePrivateMessage: async (area, res) => {
+		await composeReaction.composeReaction(RedditAuthApi, area, res);
 	},
 
 	composePrivateMessageCheck: (json) => {
