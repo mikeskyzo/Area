@@ -61,7 +61,7 @@ class selectReaction: AppCompatActivity() {
                     val allReactions = GsonBuilder().create().fromJson(body, Reactions::class.java)
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
-                        recyclerView_action.adapter = ReactionAdapter(allReactions, getContext(), token)
+                        recyclerView_action.adapter = ReactionAdapter(allReactions, getContext(), token, resources)
                     }
                 }
             }
