@@ -741,7 +741,10 @@
 		},
 		{
 			"name" : "Twitch",
-			"check_token_function" : "check_token",
+			"is_service_active" : "is_service_active",
+			"generate_url_function" : "generate_url",
+			"redirect_auth_function" : "redirect_auth",
+			"check_token_function" : "CheckToken",
 			"actions" : [
 				{
 					"name" : "Twitch_Create_Webhook_New_Subscriber",
