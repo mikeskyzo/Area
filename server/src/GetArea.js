@@ -24,6 +24,8 @@ exports.getNameAreas = function (req, res)
 		result.forEach(element => {
 			delete element._id;
 			delete element.user_id;
+			if (!element.action || !element.action.name || !element.reaction || element.reaction.name)
+				return;
 			element.action = getService(element.action.name, 'actions');
 			element.reaction = getService(element.reaction.name, 'reactions');
 			if (element.reaction == null || element.action == null) {
