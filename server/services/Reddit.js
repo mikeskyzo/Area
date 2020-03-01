@@ -98,6 +98,12 @@ module.exports = {
 		let text = global.getParams(area.reaction.params, "text");
 		let sr = global.getParams(area.reaction.params, "sr");
 		let kind = 'self';
+		let token = global.findInDbAsync(
+			global.CollectionToken, {
+				user_id: area.user_id,
+				service: global.Services.Reddit
+			}
+		);
 
 		RedditAuthApi
 			.post(`/submit` +
@@ -107,13 +113,15 @@ module.exports = {
 				`&kind=${kind}`,
 				{}, {
 					headers: {
-						Authorization: `bearer ${generalSettings.authorizationToken}`
+						Authorization: `bearer ${token}`
 					}
 				}
 			)
 			.catch((error) => {
 				console.log(error);
-			})
+				global.responseError(res, 401, 'An error occured : ' + response.statusText);
+			});
+		res.send();
 	},
 
 	postInSubredditCheck: function (json) {
