@@ -20,22 +20,25 @@ const oauthSecrets = {};
 const oauth = new OAuth(
 	`${generalSettings.trelloApi}/OAuthGetRequestToken`,
 	`${generalSettings.trelloApi}/OAuthGetAccessToken`,
-	generalSettings.clientId,
+	generalSettings.clientId, 
 	generalSettings.clientSecret,
 	"1.0A",
 	generalSettings.redirectUri,
 	"HMAC-SHA1"
 );
 
-exports.generate_url = function(token)
+exports.generate_url = function(ttoken)
 {
-	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
+	let res = "";
+	res = oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
 		const scope = 'read,write,account';
 		const expiration = 'never';
-
+	
 		oauthSecrets[token] = tokenSecret;
-		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}`;
+		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + ttoken;
 	});
+	console.log(res);
+	return (res);
 }
 
 exports.redirect_auth = async function(req, json)

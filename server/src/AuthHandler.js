@@ -11,17 +11,20 @@ exports.redirectToService = function(req, res)
 	let token = jwt.sign(json, global.secret, {
 		expiresIn : '2m'
 	});
-	if (global.ServiceGenerateUrlMap.get(req.params.service))
+	if (global.ServiceGenerateUrlMap.get(req.params.service)) {
 		res.redirect(global.ServiceGenerateUrlMap.get(req.params.service)(token));
+	}
 	else
-		res.redirect('https://theuselessweb.com/');
+		redirectToClient(res, json.support);
 }
 
 exports.getTokenFromService = function(req, res)
 {
 	let token = getToken(req);
-	if (!token || !token.service || !token.user_id || !token.support || !global.ServiceRedirectAuthMap.get(token.service))
-		res.redirect('https://theuselessweb.com/');
+	if (!token || !token.service || !token.user_id || !token.support)
+		res.redirect('https://google.com/');
+	else if (!global.ServiceRedirectAuthMap.get(token.service))
+		res.redirect('https://twitter.com/');
 	else {
 		let json = {
 			user_id : token.user_id,
