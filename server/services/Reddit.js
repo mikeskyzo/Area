@@ -29,10 +29,8 @@ const checkToken = async function (json, access_token, refresh_token) {
 		user_id: json.user_id,
 		service: json.service
 	});
-	if (token) {
-		console.log(`You already have a token saved for ${json.service}`);
-		return;
-	}
+	if (token)
+		global.deleteInDbAsync(global.CollectionToken, {user_id : json.user_id, service : json.service});
 
 	// As tokens are valid, add them to the json to save them in db
 	json.access_token = access_token;
