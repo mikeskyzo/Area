@@ -59,17 +59,15 @@ router.get('/about.json', function(req, res) {
 	about.sendAbout(req, res);
 });
 
-router.get('/auth/getServices', function(req, res) {
-	// To change with the new oauth update
-	res.send();
-	// utils.verifyToken(req, res, authToken.getServices);
+router.get('/getServices', function(req, res) {
+	utils.verifyToken(req, res, getArea.getServices);
 });
 
 router.get('/auth/connect/:service', function(req, res) {
 	utils.verifyToken(req ,res, authHandler.redirectToService);
 });
 
-router.get('/auth/redirect/:service?', function(req, res) {
+router.get('/auth/redirect/:token?', function(req, res) {
 	authHandler.getTokenFromService(req, res);
 });
 
