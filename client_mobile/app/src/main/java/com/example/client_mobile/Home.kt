@@ -29,8 +29,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
     lateinit var menu_services: Menu
-    lateinit var menu_account_settings: Menu
-    //lateinit var list_services : ArrayList<String>
 
     companion object {
         var server_location: String? = ""
@@ -147,6 +145,9 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     println(body)
                     runOnUiThread {
                         val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+/*                        for (i in 0 until services.size) {
+                            println(services[0].service)
+                        }*/
                         createItemsServices(services)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
@@ -225,12 +226,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         for (i in 0 until list_services.size) {
             if (item.itemId == resources.getIdentifier(list_services[i], "string", getContext()?.packageName)) {
                 println(list_services[i])
-                //Request AddToken/{list_services[i]}
-                //connectToService(list_services[i])
-                ///Auth/connect/:service?token={access_token}
                 val url = server_location.plus("/auth/connect/").plus(list_services[i]).plus("?token=").plus(token)
-                println(url)
-                println(server_location)
                 val inte = Intent(Intent.ACTION_VIEW)
                 inte.data = Uri.parse(url)
                 startActivity(inte)
