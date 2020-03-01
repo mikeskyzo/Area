@@ -744,6 +744,8 @@
 		{
 			"name" : "Twitch",
 			"is_service_active" : "is_service_active",
+			"generate_url_function" : "generate_url",
+			"redirect_auth_function" : "redirect_auth",
 			"check_token_function" : "CheckToken",
 			"actions" : [
 				{
