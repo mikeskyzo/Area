@@ -1,0 +1,30 @@
+html, body {margin: 0; height: 100%; overflow: hidden}
+
+.row .col {
+    padding: 0;
+}
+
+.tabs .tab a{
+    background-color:#1b1b1b;
+    color:#ff9800;
+} /*Black color to the text*/
+
+.tabs .tab a:hover {
+    background-color:#1b1b1b;
+    color: #ff9800;
+} /*Text color on hover*/
+
+.tabs .tab a.active {
+    background-color:#1b1b1b;
+    color:#ff9800;
+} /*Background and text color when a tab is active*/
+
+.tabs .indicator {
+    background-color:#ff9800;
+} /*Color of underline*/
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+}
