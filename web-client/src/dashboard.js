@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
             '<input id="' + reactionName + '_' + elem.name + '" type="text">' +
             '<label for="' + reactionName + '_' + elem.name + '">' + elem.name + '</label>' +
             '</div>' +
-            '<div style="margin-bottom: 10px">' + elem.description + '</div>'
+            '<div style="margin-bottom: 10px; margin-left: 30px;"> <i class="material-icons small">subdirectory_arrow_right</i>' + elem.description + '</div>'
         return params;
     }
 
@@ -204,11 +204,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         reactionParam = [];
         reactionName = reaction.name;
         let paramsHtml = '' +
-            '<div class="center" style="margin-top: 10px; font-size: 20px"><b>Reaction : ' + reaction.name + '</b></div>';
+            '<div class="center orange-text" style="margin-top: 10px; font-size: 20px"><b>Reaction : ' + reaction.name + '</b></div>';
 
         reaction.params.forEach(elem =>
             paramsHtml += createReactionParamsTemplate(elem, reaction.name)
         );
+        paramsHtml += '<div style="border-bottom:  4px solid #ff9800; margin-top: 20px; margin-bottom: 20px"></div>';
         reactionCreator.innerHTML = paramsHtml;
     }
 
@@ -222,10 +223,10 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     function createReactionTemplate(elem) {
         var newReaction = '' +
             '<div style="margin: 20px">' +
-                '<span class="orange right">' + elem.service + '</span><br>' +
-                '<span class="orange right">' + elem.title + '</span>' +
-                '<a id="' + elem.name + '" class="left btn-floating btn waves-effect waves-light orange" style="margin-bottom: 10px"><i class="material-icons">keyboard_arrow_left</i></a><br>' +
-                '<span class="orange right">' + elem.description + '</span><br>' +
+                '<span class="orange-text right"><b>' + elem.service + '</b></span><br>' +
+                '<span class="orange-text right"><u>' + elem.title + ' :</u></span>' +
+                '<a id="' + elem.name + '" class="left btn-floating btn waves-effect waves-light orange" style="margin-bottom: 10px"><i class="material-icons black-text">keyboard_arrow_left</i></a><br>' +
+                '<span class="orange-text right">' + elem.description + '</span><br>' +
             '</div>' +
             '<div style="border-bottom: 4px solid #ff9800;"></div>'
         return newReaction;
@@ -256,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
                 '<input id="' + actionName + '_' + elem.name + '" type="text">' +
                 '<label for="' + actionName + '_' + elem.name + '">' + elem.name + '</label>' +
             '</div>' +
-            '<div style="margin-bottom: 10px">' + elem.description + '</div>'
+            '<div style="margin-bottom: 10px; margin-left: 30px;"> <i class="material-icons small">subdirectory_arrow_right</i>' + elem.description + '</div>'
         return params;
     }
 
@@ -265,11 +266,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         actionParam = [];
         actionName = action.name;
         let paramsHtml = '' +
-            '<div class="center" style="margin-top: 10px; font-size: 20px"><b>Action : ' + action.name + '</b></div>';
+            '<div class="center orange-text" style="margin-top: 10px; font-size: 20px"><b>Action : ' + action.name + '</b></div>';
 
         action.params.forEach(elem =>
             paramsHtml += createActionParamsTemplate(elem, action.name)
         );
+        paramsHtml += '<div style="border-bottom:  4px solid #ff9800; margin-top: 20px; margin-bottom: 20px"></div>';
         actionCreator.innerHTML = paramsHtml;
     }
 
@@ -283,10 +285,10 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     function createActionTemplate(elem) {
         var newAction = '' +
             '<div style="margin: 20px">' +
-                '<span class="orange">' + elem.service + '</span><br>' +
-                '<span class="orange">' + elem.title + '</span>' +
-                '<a id="' + elem.name + '" class="right btn-floating btn waves-effect waves-light orange" style="margin-bottom: 10px"><i class="material-icons">keyboard_arrow_right</i></a><br>' +
-                '<span class="orange">' + elem.description + '</span><br>' +
+                '<span class="orange-text"><b>' + elem.service + '</b></span><br>' +
+                '<span class="orange-text"><u>' + elem.title + ' :</u></span>' +
+                '<a id="' + elem.name + '" class="right btn-floating btn waves-effect waves-light orange" style="margin-bottom: 10px"><i class="material-icons black-text">keyboard_arrow_right</i></a><br>' +
+                '<span class="orange-text">' + elem.description + '</span><br>' +
             '</div>' +
             '<div style="border-bottom: 4px solid #ff9800;"></div>'
         return newAction;
