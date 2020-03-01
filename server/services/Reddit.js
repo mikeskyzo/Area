@@ -69,9 +69,7 @@ module.exports = {
 
 	generalSettings: generalSettings,
 
-	is_service_active: async function (user_id)
-	{
-		/*
+	is_service_active: async function (user_id) {
 		let token = await global.findInDbAsync(
 			global.CollectionToken, {
 				user_id: user_id,
@@ -79,8 +77,6 @@ module.exports = {
 			}
 		);
 		return !(!token || !token.access_token);
-		*/
-		return true;
 	},
 
 	// Return the service url to redirect the user to as a string
@@ -99,15 +95,56 @@ module.exports = {
 	},
 
 	redirectAuth: async function (req, json) {
-		// TODO: Get access_token thanks to code
-		// req.query.code;
-		console.log(`Got the following code for Reddit : ${req.query.code}`);
 		const newreq = await getAccessToken(req.query.code);
-		console.log(`access_token : ${newreq.data.access_token}`);
-		console.log(`refresh_token : ${newreq.data.refresh_token}`);
 		generalSettings.authorizationToken = newreq.data.access_token;
 		generalSettings.refreshToken = newreq.data.refresh_token;
 		await checkToken(json);
+	},
+
+	postInSubreddit: function (area, res) {
+		let title = global.getParams(area.reaction.params, "title");
+		let text = global.getParams(area.reaction.params, "text");
+		let sr = global.getParams(area.reaction.params, "sr");
+		let kind = 'self';
+
+		RedditAuthApi
+			.post(`/submit` +
+				`?title=${title}` +
+				`&text=${text}` +
+				`&sr=${sr}` +
+				`&kind=${kind}`,
+				{}, {
+					headers: {
+						Authorization: `bearer ${generalSettings.authorizationToken}`
+					}
+				}
+			)
+			.catch((error) => {
+				console.log(error);
+			})
 	}
 
 };
+
+/*
+* 			"reactions" : [
+				{
+					"name": "postInSubreddit",
+					"title": "Post in a subreddit",
+					"description": "",
+					"functions": [
+						{
+							"type": "",
+							"name": ""
+						}
+					],
+					"params": [
+						{
+							"name": "",
+							"description": ""
+						}
+					]
+				}
+			]
+
+* */
