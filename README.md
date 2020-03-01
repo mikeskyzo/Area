@@ -14,6 +14,16 @@ __three main parts__ :
 * A mobile client to use the application from your phone by querying the application server
 
 ----------------------
+Project's structure
+----------------------
+With this project, three solutions are built:
+ - The application server
+    > It will run on localhost:8080
+ - The web client
+    > It will run on localhost:8081
+ - The mobile client
+
+----------------------
 Installation
 ----------------------
 The project use docker, so, from the root of the project, you can use the following command to build the software :
