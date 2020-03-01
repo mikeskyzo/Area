@@ -11,28 +11,23 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://discordapp.com/api/oauth2/authorize?client_id=680706257992024065&redirect_uri=https%3A%2F%2Fareacoon-api.eu.ngrok.io%2Fauth%2Fredirect&response_type=code&scope=rpc.api%20webhook.incoming&state=' + token
+	return 'https://discordapp.com/api/oauth2/authorize?client_id=680706257992024065&redirect_uri=https%3A%2F%2Fareacoon-api.eu.ngrok.io%2Fauth%2Fredirect&response_type=code&scope=webhook.incoming&state=' + token
 }
 
 exports.redirect_auth = function (req, json)
 {
-	const code = req.query.code;
+    const code = req.query.code;
+    if (!code) {
+        return ;
+    }
     const url = 'https://discordapp.com/api/v6/oauth2/token';
-    let body = {
-        'client_id' : '680706257992024065',
-        'client_secret' : 'eaQjWT9RwgohzOrn2JRgZRwBxhtxVBZ5',
-        'grant_type' : 'authorization_code',
-        'code' : code,
-        'scope' : 'rpc.api%20webhook.incoming',
-        'redirect_uri' : 'https://areacoon-api.eu.ngrok.io/auth/redirect'
-    };
     const data = new FormData();
 
     data.append('client_id', '680706257992024065');
     data.append('client_secret', 'eaQjWT9RwgohzOrn2JRgZRwBxhtxVBZ5');
     data.append('grant_type', 'authorization_code');
     data.append('redirect_uri', 'https://areacoon-api.eu.ngrok.io/auth/redirect');
-    data.append('scope', 'rpc.api%20webhook.incoming');
+    data.append('scope', 'webhook.incoming');
     data.append('code', code);
 	fetch(url, {
 		method: 'POST',
@@ -42,7 +37,6 @@ exports.redirect_auth = function (req, json)
         return response.json();
 	})
 	.then(function (resjson) {
-        console.log(resjson);
         if (resjson.error) {
             throw resjson.error_description;
         }
