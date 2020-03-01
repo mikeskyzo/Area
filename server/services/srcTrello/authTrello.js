@@ -9,7 +9,7 @@ const generalSettings = {
 	appName: 'Area_Dashboard++',
 	clientId: 'cfd14732f1e65ebbfc3521de87b214a1',
 	clientSecret: '8efc48c0d75ff42474c06c236c3b85684c534cfab5f7538e026ea35bebd82eb5',
-	redirectUri: 'http://localhost:8080/auth/redirect',
+	redirectUri: 'https://areacoon-api.eu.ngrok.io/auth/redirect/',
 
 	// Session related
 	authorizationToken: '', // to get in res after calling GET AUTHORIZATION TOKEN
@@ -20,7 +20,7 @@ const oauthSecrets = {};
 const oauth = new OAuth(
 	`${generalSettings.trelloApi}/OAuthGetRequestToken`,
 	`${generalSettings.trelloApi}/OAuthGetAccessToken`,
-	generalSettings.clientId,
+	generalSettings.clientId, 
 	generalSettings.clientSecret,
 	"1.0A",
 	generalSettings.redirectUri,
@@ -34,7 +34,9 @@ exports.generate_url = function(token)
 		const expiration = 'never';
 
 		oauthSecrets[token] = tokenSecret;
-		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}`;
+		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + token;
+	}).then(function (res) {
+		return res;
 	});
 }
 
