@@ -31,11 +31,11 @@ const enableViewsRoutes = async function(app) {
 	});
 
 	app.get('/dashboard', function (req, res) {
-		res.render('dashboard.ejs');
+		res.render(req.cookies.access_token ? '/dashboard.ejs' : '/register.ejs');
 	});
 
 	app.get('/profil', function (req, res) {
-		res.render('profil.ejs');
+		res.render(req.cookies.access_token ? '/profil.ejs' : '/register.ejs');
 	});
 
 	app.get('/mobile', function (req, res) {
