@@ -4,10 +4,27 @@
 <head>
     <title>Rushboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style type="text/css">
+        <%- include('css/error.css') -%>
+    </style>
 </head>
 
 <body>
-ERROR 404
-</body>
+    <nav class="black">
+        <div class="nav-wrapper">
+            <a href="#" class="left brand-logo orange-text" style="margin-left: 20px"><b>AREA</b></a>
+        </div>
+    </nav>
 
+    <div id="bindingTest">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        <%- include('../src/controllers/errorController.js'); -%>
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
 </html>
