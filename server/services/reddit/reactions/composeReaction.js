@@ -10,7 +10,7 @@ module.exports = {
 		return null;
 	},
 
-	composeReaction: function (RedditAuthApi, area, res) {
+	composeReaction: async function (RedditAuthApi, area, res) {
 		let to = global.getParam(json.reaction.params, "to");
 		let subject = global.getParam(json.reaction.params, "subject");
 		let text = global.getParam(json.reaction.params, "text");
