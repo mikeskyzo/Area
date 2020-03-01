@@ -9,7 +9,7 @@ const generalSettings = {
 	// App related
 	clientId: 'xxa4cp-hsWE_iA',
 	clientSecret: '466F9UWdI-Eh1iz7AhN8zNyszE8',
-	redirectUri: 'http://localhost:8080/auth/redirect',
+	redirectUri: 'https://areacoon-api.eu.ngrok.io/auth/redirect',
 };
 
 /* Initialize axios */
@@ -22,21 +22,19 @@ const RedditAuthApi = axios.create({
 	crossDomain: true
 });
 
-const checkToken = async function (json) {
+const checkToken = async function (json, access_token, refresh_token) {
 
 	// Make sure that no token already saved for this service
 	const token = await global.findInDbAsync(global.CollectionToken, {
 		user_id: json.user_id,
 		service: json.service
 	});
-	if (token) {
-		console.log(`You already have a token saved for ${json.service}`);
-		return;
-	}
+	if (token)
+		global.deleteInDbAsync(global.CollectionToken, {user_id : json.user_id, service : json.service});
 
 	// As tokens are valid, add them to the json to save them in db
-	json.access_token = generalSettings.access_token;
-	json.refresh_token = generalSettings.refresh_token;
+	json.access_token = access_token;
+	json.refresh_token = refresh_token;
 	// Save tokens in db
 	global.saveInDbAsync(global.CollectionToken, json);
 
@@ -92,9 +90,7 @@ module.exports = {
 
 	redirectAuth: async function (req, json) {
 		const newreq = await getAccessToken(req.query.code);
-		generalSettings.authorizationToken = newreq.data.access_token;
-		generalSettings.refreshToken = newreq.data.refresh_token;
-		await checkToken(json);
+		await checkToken(json, newreq.data.access_token, newreq.data.refresh_token);
 	},
 
 	postInSubreddit: function (area, res) {
@@ -102,6 +98,12 @@ module.exports = {
 		let text = global.getParams(area.reaction.params, "text");
 		let sr = global.getParams(area.reaction.params, "sr");
 		let kind = 'self';
+		let token = global.findInDbAsync(
+			global.CollectionToken, {
+				user_id: area.user_id,
+				service: global.Services.Reddit
+			}
+		);
 
 		RedditAuthApi
 			.post(`/submit` +
@@ -111,19 +113,21 @@ module.exports = {
 				`&kind=${kind}`,
 				{}, {
 					headers: {
-						Authorization: `bearer ${generalSettings.authorizationToken}`
+						Authorization: `bearer ${token}`
 					}
 				}
 			)
 			.catch((error) => {
 				console.log(error);
-			})
+				global.responseError(res, 401, 'An error occured : ' + response.statusText);
+			});
+		res.send();
 	},
 
 	postInSubredditCheck: function (json) {
-		let title = global.getParams(area.reaction.params, "title");
-		let text = global.getParams(area.reaction.params, "text");
-		let sr = global.getParams(area.reaction.params, "sr");
+		let title = global.getParam(json.reaction.params, "title");
+		let text = global.getParam(json.reaction.params, "text");
+		let sr = global.getParam(json.reaction.params, "sr");
 
 		if (!(title && text && sr))
 			return "Missing the title of the subreddit";

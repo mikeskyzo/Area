@@ -14,12 +14,17 @@ exports.generate_url = function (token)
 	return 'https://discordapp.com/api/oauth2/authorize?client_id=680706257992024065&redirect_uri=https%3A%2F%2Fareacoon-api.eu.ngrok.io%2Fauth%2Fredirect&response_type=code&scope=webhook.incoming&state=' + token
 }
 
-exports.redirect_auth = function (req, json)
+exports.redirect_auth = async function (req, json)
 {
     const code = req.query.code;
     if (!code) {
         return ;
     }
+
+	var token = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Discord})
+	if (token)
+        global.deleteSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Discord});
+
     const url = 'https://discordapp.com/api/v6/oauth2/token';
     const data = new FormData();
 
@@ -40,8 +45,10 @@ exports.redirect_auth = function (req, json)
         if (resjson.error) {
             throw resjson.error_description;
         }
-        json.webhook_token = resjson.webhook_token;
-        json.webhook_id = resjson.webhook_id
+        json.webhook_token = resjson.webhook.token;
+        json.webhook_id = resjson.webhook.id
+        if (!json.webhook_id || !json.webhook_token)
+            return ;
 		global.saveInDbAsync(global.CollectionToken, json);
 	})
 	.catch(function (err){
@@ -97,8 +104,9 @@ exports.send_message_check_args = function(json)
 {
     if (!global.getParam(json.reaction.params, 'username'))
         global.addParam(json.reaction.params, 'username', 'Mike')
-    if (!global.getParam(json.reaction.params, 'avatar'))
-        global.addParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
+    let avatar = global.getParam(json.reaction.params, 'avatar')
+    if (!avatar || avatar.trim() == '')
+        global.modifyParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
     if (!global.getParam(json.reaction.params, 'message'))
        return 'Missing a message to send';
     else

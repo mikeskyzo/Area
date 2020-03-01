@@ -127,9 +127,9 @@ exports.createArea = function(req, res, areaToCreate) {
 exports.deleteArea = function(req, res, areaId) {
 	ApplicationApi.baseURL = generalSettings.url;
 	ApplicationApi.defaults.baseURL = generalSettings.url;
-	ApplicationApi.post(
-		`/CreateArea`,
-		{}, {
+	ApplicationApi.delete(
+		`/DeleteArea`,
+		{
 			data: {
 				'area_id': areaId
 			},
@@ -143,6 +143,36 @@ exports.deleteArea = function(req, res, areaId) {
 		console.log(error);
 		res.redirect('/error')
 	})
+};
+
+exports.disconnectService = function(req, res, url) {
+	ApplicationApi.baseURL = generalSettings.url;
+	ApplicationApi.defaults.baseURL = generalSettings.url;
+	ApplicationApi.delete(
+		url,
+		{
+			headers: {
+				Authorization: `token ${generalSettings.access_token}`
+			}
+		}
+	).then(function(response) {
+		console.log("web client : to change");
+	}).catch(function(error) {
+		console.log(error);
+		res.redirect('/error')
+	})
+};
+
+exports.getServices= function(req, res) {
+	ApplicationApi.baseURL = generalSettings.url;
+	ApplicationApi.defaults.baseURL = generalSettings.url;
+	return ApplicationApi.get(`/getServices`,
+		{
+			headers: {
+				Authorization: `token ${generalSettings.access_token}`
+			}
+		}
+	)
 };
 
 // Authorizations
