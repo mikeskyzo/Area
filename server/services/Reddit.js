@@ -29,10 +29,8 @@ const checkToken = async function (json, access_token, refresh_token) {
 		user_id: json.user_id,
 		service: json.service
 	});
-	if (token) {
-		console.log(`You already have a token saved for ${json.service}`);
-		return;
-	}
+	if (token)
+		global.deleteInDbAsync(global.CollectionToken, {user_id : json.user_id, service : json.service});
 
 	// As tokens are valid, add them to the json to save them in db
 	json.access_token = access_token;
@@ -119,9 +117,9 @@ module.exports = {
 	},
 
 	postInSubredditCheck: function (json) {
-		let title = global.getParams(json.reaction.params, "title");
-		let text = global.getParams(json.reaction.params, "text");
-		let sr = global.getParams(json.reaction.params, "sr");
+		let title = global.getParam(json.reaction.params, "title");
+		let text = global.getParam(json.reaction.params, "text");
+		let sr = global.getParam(json.reaction.params, "sr");
 
 		if (!(title && text && sr))
 			return "Missing the title of the subreddit";
