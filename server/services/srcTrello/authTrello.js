@@ -27,7 +27,7 @@ const oauth = new OAuth(
 	"HMAC-SHA1"
 );
 
-exports.generate_url = async function(token)
+exports.generate_url = function(token)
 {
 	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
 		const scope = 'read,write,account';
