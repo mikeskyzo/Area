@@ -15,8 +15,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.result.Result
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_main.*
@@ -73,10 +71,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     }
 
     override fun onResume() {
+        println("ONRESUME")
         val uri = intent.data
         val delimiter = "://"
         val service = uri.toString().split(delimiter)
 
+        println(uri)
         if (service[0] == "github") {
             addTokenGithub(uri)
         } else if (service[0] == "slack") {
@@ -391,6 +391,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 //Request AddToken/{list_services[i]}
                 //connectToService(list_services[i])
                 ///Auth/connect/:service?token={access_token}
+                val url = server_location.plus("/auth/connect/").plus(list_services[i]).plus("?token=").plus(token)
+                println(url)
+                println(server_location)
+                val inte = Intent(Intent.ACTION_VIEW)
+                inte.data = Uri.parse(url)
+                startActivity(inte)
                 Toast.makeText(getContext(), list_services[i], Toast.LENGTH_SHORT).show()
                 break
             }
