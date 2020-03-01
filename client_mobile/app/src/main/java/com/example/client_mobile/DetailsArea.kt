@@ -113,8 +113,18 @@ class DetailsArea : AppCompatActivity() {
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
                     }
-                    val detailedArea = GsonBuilder().create().fromJson(body, DetailedArea::class.java)
-                    setDetails(detailedArea)
+                    val tab = body.toString().split(" ")
+                    println(tab[0])
+                    if (tab[0] != "Tunnel") {
+                        val detailedArea = GsonBuilder().create().fromJson(body, DetailedArea::class.java)
+                        setDetails(detailedArea)
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                        }
+                        val intent = Intent(getContext(), Start::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
             override fun onFailure(call: Call, e: IOException) {
