@@ -41,7 +41,7 @@ exports.connectUser = function(username, password, server, req, res) {
 	});
 };
 
-exports.createUser = function(email, Uname, Pword, server, req, res) {
+exports.createUser = function(Uname, Pword, server, req, res) {
 	var url = server + '/createUser';
 
 	$.ajax({
@@ -105,10 +105,12 @@ exports.initGetAreas = function(req, res, server, token) {
 	)
 };
 
-exports.createArea = function(req, res, areaToCreate) {
+exports.createArea = async function(req, res, areaToCreate) {
+	var result = "";
+
 	ApplicationApi.baseURL = generalSettings.url;
 	ApplicationApi.defaults.baseURL = generalSettings.url;
-	ApplicationApi.post(
+	await ApplicationApi.post(
 		`/CreateArea`,
 		{}, {
 			data: areaToCreate,
@@ -117,11 +119,12 @@ exports.createArea = function(req, res, areaToCreate) {
 			}
 		}
 	).then(function(response) {
-		console.log("web client : to change");
+		result = "Area created with success";
 	}).catch(function(error) {
+		result = "Something went wrong, please try again";
 		console.log(error);
-		res.redirect('/error')
-	})
+	});
+	return result;
 };
 
 exports.deleteArea = function(req, res, areaId) {
