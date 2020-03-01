@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.GsonBuilder
@@ -30,6 +31,7 @@ class Settings : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        loadingPanel.visibility = View.VISIBLE
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
         if (intent.getStringExtra("server_location") != null)
@@ -41,6 +43,7 @@ class Settings : AppCompatActivity() {
             startActivity(intent)
         }
 
+        loadingPanel.visibility = View.VISIBLE
         getServices()
     }
 
@@ -62,12 +65,11 @@ class Settings : AppCompatActivity() {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    println(body)
                     runOnUiThread {
+                        loadingPanel.visibility = View.GONE
                         val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
                         val listServices = ArrayList<Service>()
 
-                        //createItemsServices(services)
                         for (i in 0 until services.size) {
                             if (services[i].active == true) {
                                 listServices.add(services[i])
@@ -76,7 +78,6 @@ class Settings : AppCompatActivity() {
                         val arrayServices = arrayOfNulls<Service>(listServices.size)
                         listServices.toArray(arrayServices)
                         recyclerView_services.adapter = SettingsAdapter(arrayServices, getContext(), token)
-                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
