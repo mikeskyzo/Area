@@ -945,7 +945,7 @@ exports.deleteWebhook = async function (area, req, res) {
 		if (response.status !== 200) {
 			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
 		} else {
-			res.status(201).send(`Trello's webhook well deleted`);
+			global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
 		}
 	});
 }
