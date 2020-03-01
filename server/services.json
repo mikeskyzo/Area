@@ -2,9 +2,7 @@
 	"services" : [
 		{
 			"name" : "Discord",
-			"is_service_active" : "is_service_active",
-			"generate_url_function" : "generate_url",
-			"redirect_auth_function" : "redirect_auth",
+			"check_token_function" : "check_token",
 			"reactions" : [
 				{
 					"name" : "discord_send_message",
@@ -41,9 +39,7 @@
 		},
 		{
 			"name" : "Github",
-			"is_service_active" : "is_service_active",
-			"generate_url_function" : "generate_url",
-			"redirect_auth_function" : "redirect_auth",
+			"check_token_function" : "check_token",
 			"actions" : [
 				{
 					"name" : "github_new_push",
@@ -141,7 +137,7 @@
 					]
 				},
 				{
-					"name": "Reddit_Submit_post",
+					"name": "Reddit_submit_post",
 					"title": "submit a post to a subreddit",
 					"description": "Use to create a new post on a subreddit",
 					"functions": [
@@ -170,7 +166,7 @@
 					]
 				},
 				{
-					"name": "Reddit_create_sub",
+					"name": "Reddit_create_post",
 					"title": "submit subreddit creation request",
 					"description": "Use to create a sub on reddit",
 					"functions": [
@@ -577,7 +573,7 @@
 					"functions" : [
 						{
 							"type" : "create_action",
-							"name" : "createNewWebhookAddChecklistFromCard"
+							"name" : "createNewWebhookAddChecklistToCard"
 						},
 						{
 							"type" : "format_result",
@@ -646,7 +642,7 @@
 					],
 					"params" : [
 						{
-							"name" : "IDList",
+							"name" : "idModel",
 							"description" : "ID of the list to add the card"
 						},
 						{
@@ -675,7 +671,7 @@
 					],
 					"params" : [
 						{
-							"name" : "IDBoard",
+							"name" : "idModel",
 							"description" : "ID of the board to add the card"
 						},
 						{
@@ -700,7 +696,7 @@
 					],
 					"params" : [
 						{
-							"name" : "IDBoard",
+							"name" : "idModel",
 							"description" : "ID of the board to add the label"
 						},
 						{
@@ -730,75 +726,74 @@
 						},
 						{
 							"name" : "description",
-							"description" : "ID of the board to add the label"
+							"description" : "Description of the board"
 						}
 					]
 				}
 			]
 		},
 		{
-			"name" : "Twitch",
-			"check_token_function" : "check_token",
-			"actions" : [
-				{
-					"name" : "Twitch_Create_Webhook_New_Subscriber",
-					"title" : "Create Twitch newSuscriber webhook",
-					"description" : "Trigger when there's a new follower to the given login.",
-					"functions" : [
-						{
-							"type" : "create_action",
-							"name" : "Twitch_Create_Webhook_NewSubscriber"
-						},
-						{
-							"type" : "format_result",
-							"name" : "Twitch_Create_Webhook_NewSubscriber_FM"
-						},
-						{
-							"type" : "delete_action",
-							"name" : "Twitch_Delete_Webhook_NewSubscriber"
-						},
-						{
-							"type" : "confirm_webhook_function",
-							"name" : "confirmWebhookFunctionTwitch"
-						}
-					],
-					"params" : [
-						{
-							"name" : "login",
-							"description" : "login of the twitch channel"
-						}
-					]
-				},
-				{
-					"name" : "Twitch_Create_Webhook_Stream_ChangeState",
-					"title" : "Create Twitch changeState webhook",
-					"description" : "Trigger when the given login change his stream state.",
-					"functions" : [
-						{
-							"type" : "create_action",
-							"name" : "Twitch_Create_Webhook_StreamChangeState"
-						},
-						{
-							"type" : "format_result",
-							"name" : "Twitch_Create_Webhook_StreamChangeState_FM"
-						},
-						{
-							"type" : "delete_action",
-							"name" : "Twitch_Delete_Webhook_StreamChangeState"
-						},
-						{
-							"type" : "confirm_webhook_function",
-							"name" : "confirmWebhookFunctionTwitch"
-						}
-					],
-					"params" : [
-						{
-							"name" : "login",
-							"description" : "login of the twitch channel"
-						}
-					]
-				}
-			]
+		"name" : "Twitch",
+		"check_token_function" : "NULL",
+		"actions" : [
+			{
+				"name" : "Twitch_new_user",
+				"title" : "new follow from a user",
+				"description" : "Trigger when someone follow a user",
+				"functions" : [
+					{
+						"type" : "create_action",
+						"name" : "Twitch_Create_Webhook_NewSubscriber"
+					},
+					{
+						"type" : "format_result",
+						"name" : "FormatWebhookPushOnRepo"
+					},
+					{
+						"type" : "delete_action",
+						"name" : "Twitch_Delete_Webhook_NewSubscriber"
+					}
+				],
+				"params" : [
+					{
+						"name" : "login",
+						"description" : "login of the twitch user to follow"
+					}
+
+				]
+			},
+			{
+				"name" : "Twitch_streams_change_state",
+				"title" : "Streams goes offline/online",
+				"description" : "Trigger when a twitch channel change states",
+				"functions" : [
+					{
+						"type" : "create_action",
+						"name" : "Twitch_Create_Webhook_StreamChangeState"
+					},
+					{
+						"type" : "format_result",
+						"name" : "FormatWebhookIssueEvent"
+					},
+					{
+						"type" : "delete_action",
+						"name" : "Twitch_Delete_Webhook_StreamChangeState"
+					}
+				],
+				"params" : [
+					{
+						"name" : "login",
+						"description" : "login of the twitch user to follow"
+					}
+				]
+			},
+			{
+				"type" : "confirm_webhook_function",
+				"name" : "confirmWebhookFunctionTwitch"
+			}
+		],
+		"reactions" : [
+		]
 		}
 	]
 }
