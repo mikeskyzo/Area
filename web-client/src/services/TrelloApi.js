@@ -25,7 +25,8 @@ const oauth = new OAuth(
 	generalSettings.clientId,
 	generalSettings.clientSecret,
 	"1.0A",
-	generalSettings.redirectUri,
+	'https://localhost:8080/auth/redirect/token'
+	/*generalSettings.redirectUri*/,
 	"HMAC-SHA1"
 );
 

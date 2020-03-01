@@ -18,6 +18,8 @@ const ApplicationApi = axios.create({
 	crossDomain: true
 });
 
+exports.generalSettings = generalSettings;
+
 exports.connectUser = function(username, password, server, req, res) {
 	var url = server + '/connectUser';
 
