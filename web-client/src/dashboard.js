@@ -30,13 +30,27 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         displayAction(resAction);
         displayReaction(resReaction);
         setCreateArea();
-
+        createRefreshButton();
         displayArea(resArea);
+
+
     }
 
     // --------------------------------------------------------------------------------- //
     //                            function display area                                  //
     // --------------------------------------------------------------------------------- //
+
+    async function areaDisplayRefresh() {
+        const resArea = await getArea();
+        displayArea(resArea);
+    }
+
+    function createRefreshButton() {
+        var areaRefreshButton = document.getElementById("area-refresh-button");
+        areaRefreshButton.addEventListener('click', function(){
+            areaDisplayRefresh();
+        }, false);
+    }
 
     function deleteArea(elem) {
         var url = "http://localhost:8081/client/deleteArea";
@@ -101,10 +115,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         area.data.forEach(elem =>
             areaHtml += createAreaTemplate(elem)
         );
+
+        areaList.innerHTML = areaHtml;
+
         area.data.forEach(elem =>
             setAreaDeleteButton(elem)
         );
-        areaList.innerHTML = areaHtml;
     }
 
     // --------------------------------------------------------------------------------- //
@@ -289,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     }
 
     // --------------------------------------------------------------------------------- //
-    //                                      requete                                      //
+    //                                      request                                      //
     // --------------------------------------------------------------------------------- //
 
     function getAction() {
@@ -322,5 +338,6 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         });
     }
 
+    // Start program
     initArea();
 });
