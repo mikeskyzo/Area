@@ -2,7 +2,7 @@
 
 <html lang="en">
 <head>
-    <title>Rushboard</title>
+    <title>Areacoon</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style type="text/css">
@@ -29,34 +29,44 @@
 
         <div id="test1" class="col s12">
             <div class="row flex">
-
                 <div id="actionCol" class="col s3 full-width" style="background: #1b1b1b;">
-                    <div id="action-list">
-                    </div>
+                    <div id="action-list"></div>
                 </div>
 
                 <div id="statusCol" class="col s6 full-width" style="background: #363636;">
-                    <div id="action-creator">
-                    </div>
+                    <div class="cols s12">
+                        <div id="fake-col" class="col s3"></div>
 
-                    <!-- <div style="border-bottom: 4px solid #ff9800"></div> -->
+                        <div id="input-col" class="col s6">
+                            <div id="action-creator"></div>
 
-                    <div id="reaction-creator">
+                            <div class="center">
+                                <a id="create-area-button" class="orange waves-effect waves-light btn-large"><i class="material-icons left">add</i>Create Area</a>
+                            </div>
+
+                            <div id="reaction-creator"></div>
+                        </div>
+
+                        <div id="fake-col" class="col s3"></div>
                     </div>
                 </div>
 
                 <div id="reactionCol" class="col s3 full-width" style="background: #1b1b1b;">
-                    <div id="reaction-list">
-                    </div>
+                    <div id="reaction-list"></div>
                 </div>
-
             </div>
         </div>
 
         <div id="test2" class="col s12" style="background: #363636;">
             <div class="row flex">
                 <div id="fake-col" class="col s3 full-width" style="background: #1b1b1b;"></div>
-                <div id="areaCol" class="col s6 full-width" style="background: #1b1b1b;"></div>
+
+                <div id="areaCol" class="col s6 full-width" style="background: #1b1b1b;">
+                    <div id="area-list">
+
+                    </div>
+                </div>
+
                 <div id="fake-col" class="col s3 full-width" style="background: #1b1b1b;"></div>
             </div>
         </div>
