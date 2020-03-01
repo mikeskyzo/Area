@@ -10,7 +10,7 @@ async function Twitch_UserId (login)
         'headers' : {'Client-ID' : client_id}
     });
     var json = await object.json()
-    if(json.data.hasOwnProperty('id')){
+    if(json.data[0].hasOwnProperty('id')){
         return(json.data[0].id);
     }
     return(84);
@@ -22,7 +22,7 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(res, json, next)
     await global.saveInDbAsync(global.CollectionArea, json);
     var user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
     if (user_id === 84) {
-        global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
+        global.responseError(res, 404, 'error, the username is does not match with Twitch database');
         return ;
     }
     let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
