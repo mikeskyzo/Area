@@ -57,6 +57,7 @@ Features
     * Twitch
     * Gmail
     * Trello
+    * GitHub
 
 ----------------------
 How to contribute ?
