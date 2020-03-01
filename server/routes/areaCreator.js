@@ -46,7 +46,6 @@ async function checkAndSaveAREA(area_id, req, res)
 		responseError(res, 403, 'Reaction not found');
 	else if (global.ActionMap.get(json.action.name)) {
 		let err = await global.ReactionCheckArgsMap.get(json.reaction.name)(json);
-		console.log(err);
 		if (err)
 			global.responseError(res, 403, err);
 		else
