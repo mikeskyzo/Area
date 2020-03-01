@@ -12,6 +12,9 @@ import kotlinx.android.synthetic.main.activity_select_action.*
 import okhttp3.*
 import java.io.IOException
 
+/**
+ * Class used to select a reaction from the available ones
+ */
 class selectReaction: AppCompatActivity() {
 
     companion object {
@@ -24,8 +27,6 @@ class selectReaction: AppCompatActivity() {
         setContentView(R.layout.activity_select_action)
         imageButtonBack.setOnClickListener {
             this.onBackPressed()
-//            val intent = Intent(this, selectAction::class.java)
-//            startActivity(intent)
         }
         if (intent.getStringExtra("token") != null)
             token = intent.getStringExtra("token")
@@ -39,6 +40,9 @@ class selectReaction: AppCompatActivity() {
         return this
     }
 
+    /**
+     * Sends a GET request on /getReactions to get all the available reactions
+     */
     fun getReactions() {
         val client = OkHttpClient()
         val request: Request = Request.Builder()

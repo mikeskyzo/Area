@@ -9,6 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.action_row.view.*
 
+/**
+ * Handles the list of reactions
+ * @param allReactions: holds an array of reaction
+ * @param context: current context
+ * @param token: user token
+ */
 class ReactionAdapter(val allReactions: Reactions, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderReaction>() {
 
     override fun getItemCount(): Int {

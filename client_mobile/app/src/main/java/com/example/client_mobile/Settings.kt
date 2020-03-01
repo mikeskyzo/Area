@@ -19,6 +19,9 @@ class Settings : AppCompatActivity() {
         var server_location: String? = ""
     }
 
+    /**
+     * Gets the current context
+     */
     fun getContext(): Context? {
         return this
     }
@@ -41,6 +44,9 @@ class Settings : AppCompatActivity() {
         getServices()
     }
 
+    /**
+     * Request the server to get the services to which the user subscribed with a GET on /getServices
+     */
     fun getServices() {
         val client = OkHttpClient()
         val request: Request = Request.Builder()
@@ -83,4 +89,7 @@ class Settings : AppCompatActivity() {
 }
 
 
+/**
+ * Holds a list of services
+ */
 class Services(val services: List<Service>) : Serializable
