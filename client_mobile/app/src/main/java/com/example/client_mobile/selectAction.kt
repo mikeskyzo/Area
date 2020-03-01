@@ -65,7 +65,7 @@ class selectAction : AppCompatActivity() {
                     runOnUiThread {
                         println(body)
                         loadingPanel.visibility = View.GONE
-                        recyclerView_action.adapter = ActionAdapter(allActions, getContext(), token)
+                        recyclerView_action.adapter = ActionAdapter(allActions, getContext(), token, resources)
                     }
                 }
             }

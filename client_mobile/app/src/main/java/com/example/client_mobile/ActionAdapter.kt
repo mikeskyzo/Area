@@ -2,6 +2,7 @@ package com.example.client_mobile
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import kotlinx.android.synthetic.main.action_row.view.*
  * @param token: user token
  */
 
-class ActionAdapter(val allActions: Actions, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderAction>() {
+class ActionAdapter(val allActions: Actions, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderAction>() {
 
     /**
      * Gets the number of actions
@@ -42,19 +43,14 @@ class ActionAdapter(val allActions: Actions, val context: Context?, val token: S
 
         val action = allActions.actions.get(position)
 
+        val service_icon = resources.getIdentifier(
+            action.service.decapitalize(),
+            "drawable",
+            context!!.packageName
+        )
+        holder.view.imageViewIcon.setImageResource(service_icon)
+
         holder.view.buttonAction.text = action.title
-        if (action.service == "Github")
-            holder.view.imageViewIcon.setImageResource(R.drawable.github)
-        if (action.service == "Slack")
-            holder.view.imageViewIcon.setImageResource(R.drawable.slack)
-        if (action.service == "Twitch")
-            holder.view.imageViewIcon.setImageResource(R.drawable.twitch)
-        if (action.service == "Reddit")
-            holder.view.imageViewIcon.setImageResource(R.drawable.reddit)
-        if (action.service == "Discord")
-            holder.view.imageViewIcon.setImageResource(R.drawable.discord)
-        if (action.service == "Trello")
-            holder.view.imageViewIcon.setImageResource(R.drawable.trello)
         holder.view.buttonAction.setOnClickListener {
             val intent = Intent(context, selectParameter::class.java)
             val arrayAsString: String = Gson().toJson(action.params)
