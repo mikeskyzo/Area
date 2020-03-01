@@ -27,17 +27,20 @@ const oauth = new OAuth(
 	"HMAC-SHA1"
 );
 
-exports.generate_url = function(token)
+async function tmp()
 {
-	let res = "";
 	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
 		const scope = 'read,write,account';
 		const expiration = 'never';
 
 		oauthSecrets[token] = tokenSecret;
-		res = `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + token;
+		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + token;
 	});
-	return res;
+}
+
+exports.generate_url = function(token)
+{
+	return await tmp();
 }
 
 exports.redirect_auth = async function(req, json)
