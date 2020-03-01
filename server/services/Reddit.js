@@ -119,9 +119,9 @@ module.exports = {
 	},
 
 	postInSubredditCheck: function (json) {
-		let title = global.getParams(area.reaction.params, "title");
-		let text = global.getParams(area.reaction.params, "text");
-		let sr = global.getParams(area.reaction.params, "sr");
+		let title = global.getParams(json.reaction.params, "title");
+		let text = global.getParams(json.reaction.params, "text");
+		let sr = global.getParams(json.reaction.params, "sr");
 
 		if (!(title && text && sr))
 			return "Missing the title of the subreddit";
