@@ -9,7 +9,7 @@ const generalSettings = {
 	// App related
 	clientId: 'xxa4cp-hsWE_iA',
 	clientSecret: '466F9UWdI-Eh1iz7AhN8zNyszE8',
-	redirectUri: 'http://localhost:8080/auth/redirect',
+	redirectUri: 'https://areacoon-api.eu.ngrok.io/auth/redirect',
 };
 
 /* Initialize axios */
