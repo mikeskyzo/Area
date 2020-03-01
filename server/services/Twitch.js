@@ -44,7 +44,7 @@ exports.Twitch_Create_Webhook_NewSubscriber_FM = async function(req, res, area, 
 };
 exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
 {
-    var user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
+    var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
     if (user_id === 84) {
         global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
         return ;
