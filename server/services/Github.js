@@ -8,14 +8,31 @@ exports.is_service_active = async function (user_id)
 	return true;
 }
 
-exports.generate_url = function ()
+exports.generate_url = function (token)
 {
-	return ''
+	return 'https://github.com/login/oauth/authorize?client_id=a5c1a4e56df11fc5735a&scope=admin:repo_hook%20repo&state=' + token;
 }
 
-exports.redirect_auth = function ()
+exports.redirect_auth = async function (req, json)
 {
-	return ''
+	const code = req.query.code;
+	const url = 'https://github.com/login/oauth/access_token?client_id=a5c1a4e56df11fc5735a&client_secret=d34b0ddb1e2990542e7c42ea6faa1f668a5d8e20&code=' + code;
+	fetch(url, {
+		'method': 'POST',
+		headers : {"Accept": "application/json"}
+	})
+	.then(function (response) {
+		if (response.status == 200)
+			return response.json();
+		throw 'Failur : ' + res;
+	})
+	.then(function (resjson) {
+		json.access_token = resjson.access_token
+		global.saveInDbAsync(global.CollectionToken, json);
+	})
+	.catch(function (err){
+		console.log(err);
+	})
 }
 
 exports.createWebhookIssueEvent = function (res, json, next)
