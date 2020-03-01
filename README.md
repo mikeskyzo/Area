@@ -18,9 +18,7 @@ Project's structure
 ----------------------
 With this project, three solutions are built:
  - The application server
-    > It will run on localhost:8080
  - The web client
-    > It will run on localhost:8081
  - The mobile client
 
 ----------------------
@@ -50,7 +48,7 @@ Features
 * Authentication
     * Built-in Authentication
     * Third party Authentication
-* setup of webhook for :
+* setting services for :
     * Discord
     * Reddit
     * Slack
