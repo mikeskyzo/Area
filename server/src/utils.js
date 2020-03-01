@@ -39,10 +39,7 @@ var jwt = require('jsonwebtoken');
 
 exports.verifyToken = function(req, res, next)
 {
-    if (!req.headers.authorization)  return res.status(401).send({ success: false, message: 'No authorization header.' });
-	var token = req.headers.authorization.split(' ')[1];
-	if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
-
+	let token = extractToken(req);
 	jwt.verify(token, global.secret, function(err, decoded) {
 		if (err) {
 			res.json({ success: false, message: 'Failed to authenticate token.' });
@@ -55,6 +52,16 @@ exports.verifyToken = function(req, res, next)
 		req.body.user_id = decoded.id;
 		DoesUserExist(decoded.id, req, res, next);
 	});
+}
+
+function extractToken(req)
+{
+	if (req.query.token)
+		return req.query.token;
+	if (!req.headers.authorization)  return res.status(401).send({ success: false, message: 'No authorization header.' });
+	let token = req.headers.authorization.split(' ')[1];
+	if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
+	return token;
 }
 
 global.DoesUserExist = function (user_id, req, res, next) {
