@@ -171,7 +171,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 } else {
                     val tab = body.toString().split(" ")
                     if (tab[0] != "Tunnel") {
-                        println(body)
                         runOnUiThread {
                             val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
                             createItemsServices(services)
@@ -222,7 +221,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         for (i in 0 until list_services.size) {
             if (item.itemId == resources.getIdentifier(list_services[i], "string", getContext()?.packageName)) {
-                println(list_services[i])
                 val url = server_location.plus("/auth/connect/").plus(list_services[i]).plus("?token=").plus(token)
                 val inte = Intent(Intent.ACTION_VIEW)
                 inte.data = Uri.parse(url)

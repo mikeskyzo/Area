@@ -77,8 +77,6 @@ class selectName : AppCompatActivity() {
         val reactionAsString: String = Gson().toJson(reaction)
         val nameAndColor = ",\"area_name\":\"".plus(name).plus("\",\"color\":\"").plus(color).plus("\"")
         val jsonBody = "{\"action\":".plus(actionAsString).plus(",\"reaction\":").plus(reactionAsString).plus(nameAndColor).plus("}")
-        println("TO SEND:")
-        println(jsonBody)
         return jsonBody
     }
 
@@ -112,8 +110,6 @@ class selectName : AppCompatActivity() {
                         val code = response.code
                         loadingPanel.visibility = View.GONE
                         if (code >= 400) {
-                            println("BODY")
-                            println(body)
                             Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(getContext(), selectAction::class.java)
                             intent.putExtra("token", token)
