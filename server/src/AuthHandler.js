@@ -7,9 +7,6 @@ exports.redirectToService = function(req, res)
 		service : req.params.service,
 		support : req.device.type.toUpperCase() == 'PHONE' ? 'mobile' : 'web'
 	};
-	console.log('=============================================');
-	console.log(req.device.type.toUpperCase());
-	console.log('=============================================');
 
 	let token = jwt.sign(json, global.secret, {
 		expiresIn : '2m'
@@ -50,7 +47,7 @@ function getToken(req)
 function redirectToClient(res, support)
 {
 	if (support == 'mobile')
-		res.redirect('https://mobile.truc.truc');
+		res.redirect('intent://my_host#Intent;scheme=my_scheme;action=my_action;end');
 	else if (support == 'web')
 		res.redirect('http://localhost:8081/profil');
 	else
