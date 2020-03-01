@@ -49,7 +49,6 @@ exports.Twitch_Create_Webhook_NewSubscriber_FM = async function(req, res, area, 
 };
 exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
 {
-    await global.deleteInDbAsync(global.CollectionArea, area);
     var user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
     if (user_id === 84) {
         global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
@@ -64,12 +63,13 @@ exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
 
     if (resp.status == 202) {
         console.log(resp);
+        await global.deleteInDbAsync(global.CollectionArea, area);
         //json.action.webhook_id = resp.json().id;
         console.log(`Webhook created on the user ${user_id}`);
         res.status(202).send(`Webhook created on the user ${user_id}`);
     }
     else
-        global.responseError(res, 401, 'error, webhook not created, maybe you created too much webhook at once');
+        global.responseError(res, 401, 'error, webhook not deleted');
 };
 
 
@@ -118,13 +118,14 @@ exports.Twitch_Delete_Webhook_StreamChangeState = async function(area, req, res)
     });
 
     if (resp.status == 202) {
+        await global.deleteInDbAsync(global.CollectionArea, area);
         console.log(resp);
         //json.action.webhook_id = resp.json().id;
         console.log(`Webhook created on the user ${user_id}`);
         res.status(202).send(`Webhook created on the user ${user_id}`);
     }
     else
-        global.responseError(res, 401, 'error, webhook not created, maybe you created too much webhook at once');
+        global.responseError(res, 401, 'error, webhook not deleted');
 };
 
 
