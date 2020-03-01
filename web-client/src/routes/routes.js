@@ -100,6 +100,11 @@ const enableLogicRoutes = async function (app) {
 		    var areaId = req.body.area_id;
 		    ServerApi.deleteArea(req, res, areaId);
 		    res.send();
+		} else if (req.params.action == 'disconnectService') {
+			var service = req.body.service;
+			var url = "/auth/delete/" + service;
+			ServerApi.disconnectService(req, res, url);
+			res.send();
 		} else {
 			res.redirect('/error');
 		}
@@ -122,7 +127,7 @@ const enableLogicRoutes = async function (app) {
 			const result = await ServerApi.initGetReactions(req, res, req.cookies.server, req.cookies.access_token);
 			res.json({
 				success: true,
-				data: result.data.reactions
+				data : result.data.reactions
 			})
 		} else if (req.params.action === 'getInitArea') {
 			const result = await ServerApi.initGetAreas(req, res, req.cookies.server, req.cookies.access_token);
@@ -130,25 +135,16 @@ const enableLogicRoutes = async function (app) {
 				success : true,
 				data : result.data
 			})
-		} else if (req.params.action === 'getGithubLoginStatus') {
-			res.json({
+		} else if (req.params.action === 'getServices') {
+            const result = await ServerApi.getServices(req, res);
+
+            console.log(result);
+
+            res.json({
 				success : true,
-				service : req.cookies.githubConnect
-			})
-		} else if (req.params.action === 'getRedditLoginStatus') {
-			res.json({
-				success : true,
-				service : req.cookies.redditConnect
-			})
-		} else if (req.params.action === 'getSlackLoginStatus') {
-			res.json({
-				success : true,
-				service : req.cookies.slackConnect
-			})
-		} else if (req.params.action === 'getTrelloLoginStatus') {
-			res.json({
-				success : true,
-				service : req.cookies.trelloConnect
+				data : result.data,
+				server : req.cookies.server,
+				token : req.cookies.access_token
 			})
 		}
 	});
