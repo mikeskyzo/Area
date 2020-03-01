@@ -22,7 +22,11 @@ exports.getTokenFromService = function(req, res)
 	if (!token || !token.service || !token.user_id || !token.support || !global.ServiceRedirectAuthMap.get(token.service))
 		res.redirect('https://theuselessweb.com/');
 	else {
-		global.ServiceRedirectAuthMap.get(token.service, token.user_id)(req);
+		let json = {
+			user_id : token.user_id,
+			service : token.service
+		};
+		global.ServiceRedirectAuthMap.get(token.service, token.user_id)(req, json);
 		redirectToClient(res, token.support);
 	}
 }

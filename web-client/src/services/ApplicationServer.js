@@ -105,6 +105,25 @@ exports.initGetAreas = function(req, res, server, token) {
 	)
 };
 
+exports.createArea = function(req, res, server, token, areaToCreate) {
+	ApplicationApi.baseURL = generalSettings.url;
+	ApplicationApi.defaults.baseURL = generalSettings.url;
+	ApplicationApi.post(
+		`/CreateArea`,
+		{}, {
+			data: areaToCreate,
+			headers: {
+				Authorization: `token ${generalSettings.access_token}`
+			}
+		}
+	).then(function(response) {
+		console.log("web client : to change");
+	}).catch(function(error) {
+		console.log(error);
+		res.redirect('/error')
+	})
+}
+
 // Authorizations
 exports.setGithubAccessToken = function(req, res, token) {
 	ApplicationApi.baseURL = generalSettings.url;
