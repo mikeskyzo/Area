@@ -103,7 +103,7 @@ exports.initGetAreas = function(req, res, server, token) {
 	)
 };
 
-exports.createArea = function(req, res, server, token, areaToCreate) {
+exports.createArea = function(req, res, areaToCreate) {
 	ApplicationApi.baseURL = generalSettings.url;
 	ApplicationApi.defaults.baseURL = generalSettings.url;
 	ApplicationApi.post(
@@ -120,7 +120,28 @@ exports.createArea = function(req, res, server, token, areaToCreate) {
 		console.log(error);
 		res.redirect('/error')
 	})
-}
+};
+
+exports.deleteArea = function(req, res, areaId) {
+	ApplicationApi.baseURL = generalSettings.url;
+	ApplicationApi.defaults.baseURL = generalSettings.url;
+	ApplicationApi.post(
+		`/CreateArea`,
+		{}, {
+			data: {
+				'area_id': areaId
+			},
+			headers: {
+				Authorization: `token ${generalSettings.access_token}`
+			}
+		}
+	).then(function(response) {
+		console.log("web client : to change");
+	}).catch(function(error) {
+		console.log(error);
+		res.redirect('/error')
+	})
+};
 
 // Authorizations
 exports.setGithubAccessToken = function(req, res, token) {
