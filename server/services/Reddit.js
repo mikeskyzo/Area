@@ -22,7 +22,7 @@ const RedditAuthApi = axios.create({
 	crossDomain: true
 });
 
-const checkToken = async function (json) {
+const checkToken = async function (json, access_token, refresh_token) {
 
 	// Make sure that no token already saved for this service
 	const token = await global.findInDbAsync(global.CollectionToken, {
@@ -35,8 +35,8 @@ const checkToken = async function (json) {
 	}
 
 	// As tokens are valid, add them to the json to save them in db
-	json.access_token = generalSettings.access_token;
-	json.refresh_token = generalSettings.refresh_token;
+	json.access_token = access_token;
+	json.refresh_token = refresh_token;
 	// Save tokens in db
 	global.saveInDbAsync(global.CollectionToken, json);
 
@@ -92,9 +92,7 @@ module.exports = {
 
 	redirectAuth: async function (req, json) {
 		const newreq = await getAccessToken(req.query.code);
-		generalSettings.authorizationToken = newreq.data.access_token;
-		generalSettings.refreshToken = newreq.data.refresh_token;
-		await checkToken(json);
+		await checkToken(json, newreq.data.access_token, newreq.data.refresh_token);
 	},
 
 	postInSubreddit: function (area, res) {
