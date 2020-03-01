@@ -28,6 +28,7 @@ const appInitialization = function () {
 		res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 		next();
 	});
+	app.use('/public/images/', express.static('./public/images'));
 	app.logger = logs.logger;
 	app.logger.setLogLevel(logLevel);
 	routes
