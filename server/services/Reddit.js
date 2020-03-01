@@ -93,12 +93,12 @@ module.exports = {
 		await checkToken(json, newreq.data.access_token, newreq.data.refresh_token);
 	},
 
-	postInSubreddit: function (area, res) {
-		let title = global.getParams(area.reaction.params, "title");
-		let text = global.getParams(area.reaction.params, "text");
-		let sr = global.getParams(area.reaction.params, "subReddit");
+	postInSubreddit: async function (area, res) {
+		let title = global.getParam(area.reaction.params, "title");
+		let text = global.getParam(area.reaction.params, "text");
+		let sr = global.getParam(area.reaction.params, "subReddit");
 		let kind = 'self';
-		let token = global.findInDbAsync(
+		let token = await global.findInDbAsync(
 			global.CollectionToken, {
 				user_id: area.user_id,
 				service: global.Services.Reddit
@@ -106,22 +106,24 @@ module.exports = {
 		);
 
 		RedditAuthApi
-			.post(`/submit` +
+			.post(`/api/submit` +
 				`?title=${title}` +
 				`&text=${text}` +
 				`&sr=${sr}` +
 				`&kind=${kind}`,
 				{}, {
 					headers: {
-						Authorization: `bearer ${token}`
+						Authorization: `bearer ${token.access_token}`
 					}
 				}
 			)
+			.then (function (response){
+				res.send();
+			})
 			.catch((error) => {
 				console.log(error);
-				global.responseError(res, 401, 'An error occured : ' + response.statusText);
+				global.responseError(res, 401, 'An error occured ');
 			});
-		res.send();
 	},
 
 	postInSubredditCheck: function (json) {
