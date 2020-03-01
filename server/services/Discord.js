@@ -104,8 +104,9 @@ exports.send_message_check_args = function(json)
 {
     if (!global.getParam(json.reaction.params, 'username'))
         global.addParam(json.reaction.params, 'username', 'Mike')
-    if (!global.getParam(json.reaction.params, 'avatar'))
-        global.addParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
+    let avatar = global.getParam(json.reaction.params, 'avatar')
+    if (!avatar || avatar.trim() == '')
+        global.modifyParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
     if (!global.getParam(json.reaction.params, 'message'))
        return 'Missing a message to send';
     else
