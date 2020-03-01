@@ -15,13 +15,16 @@ import java.io.IOException
 
 
 /**
- * Start class it's cool
+ * Class that'll be launched at the start of the application, displays a login menu
  */
 class Start : AppCompatActivity() {
     companion object {
         var server_location: String? = ""
     }
 
+    /**
+     * Called when the activity starts
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
@@ -53,10 +56,16 @@ class Start : AppCompatActivity() {
         }
     }
 
+    /**
+     * Returns the current context
+     */
     fun getContext(): Context? {
         return this
     }
 
+    /**
+     * Send a request connectUser to the server, with a GET on /connectUser
+     */
     fun askForLogin(username: String, password: String) {
         val serverLocation = editTextServerLocation.getText().toString()
         val client = OkHttpClient()
@@ -118,5 +127,12 @@ class Start : AppCompatActivity() {
 
 }
 
+/**
+ * Used to create a json obj of the response, because ngrok returns "Tunnel not found" when the server isn't found
+ */
 class BodyResp(val success: Boolean, val message: String)
+
+/**
+ * Used to create an instance of the response of the request createAccount
+ */
 class Account(val success: Boolean, val message: String, val token: String)

@@ -11,19 +11,34 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.area_row.view.*
 
-
+/**
+ * Handles the list of areas
+ * @param allAreas: Holds an array of areas
+ * @param context: current context
+ * @param token: user token
+ * @param resources: drawables resources (used to get icons)
+ */
 class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderArea>() {
+    /**
+     * Gets number of area
+     */
     override fun getItemCount(): Int {
         val nb = allAreas.areas.count()
         return nb
     }
 
+    /**
+     * Create action view holder
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderArea {
         val layoutInflater = LayoutInflater.from(parent.context)
         val cellForRow = layoutInflater.inflate(R.layout.area_row, parent, false)
         return CustomViewHolderArea(cellForRow)
     }
 
+    /**
+     * Called for each item area
+     */
     override fun onBindViewHolder(holder: CustomViewHolderArea, position: Int) {
 
         val area = allAreas.areas.get(position)
@@ -75,12 +90,12 @@ class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?
             area.reaction.decapitalize(),
             "drawable",
             context!!.packageName))
-/*        if (area.action == "Github")
-            holder.view.imageViewIconAction.setImageResource(R.drawable.github)
-        if (area.reaction == "Slack")
-            holder.view.imageViewIconReaction.setImageResource(R.drawable.slack)*/
     }
 }
 
+/**
+ * Holds Area view
+ * @param view: view
+ */
 class CustomViewHolderArea(val view: View): RecyclerView.ViewHolder(view) {
 }

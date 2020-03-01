@@ -14,6 +14,9 @@ import okhttp3.*
 import java.io.IOException
 import java.io.Serializable
 
+/**
+ * Class that is used to displays the available actions and select one
+ */
 class selectAction : AppCompatActivity() {
 
     companion object {
@@ -40,6 +43,9 @@ class selectAction : AppCompatActivity() {
         return this
     }
 
+    /**
+     * Sends a GET request on /getActions to get all the availables actions
+     */
     fun getActions() {
         val client = OkHttpClient()
         val request: Request = Request.Builder()
@@ -71,12 +77,27 @@ class selectAction : AppCompatActivity() {
     }
 }
 
+/**
+ * Used to create a json object of a parameter
+ */
 class Param(val name: String, val description: String, var value: String) : Serializable
 
+/**
+ * Used to create a json object of a Action
+ */
 class Action(val name: String, val service: String, val title: String, val description: String, val params: List<Param>) : Serializable
 
+/**
+ * Used to create a json object of a Reaction
+ */
 class Reaction(val name: String, val service: String, val title: String, val description: String, val params: List<Param> ) : Serializable
 
+/**
+ * Used to create a json object of a Actions instance that holds a list of actions
+ */
 class Actions(val actions: List<Action>) : Serializable
 
+/**
+ * Used to create a json object of a Reactions instance that holds a list of reactions
+ */
 class Reactions(val reactions: List<Reaction>): Serializable

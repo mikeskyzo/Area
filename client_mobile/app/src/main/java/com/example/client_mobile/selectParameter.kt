@@ -12,7 +12,9 @@ import kotlinx.android.synthetic.main.activity_select_action.imageButtonBack
 import kotlinx.android.synthetic.main.activity_select_parameter.*
 import kotlinx.android.synthetic.main.parameter_row.view.*
 
-
+/**
+ * Class that displays a list of available parameters for actions or reactions
+ */
 class selectParameter : AppCompatActivity() {
 
     companion object {
@@ -83,6 +85,9 @@ class selectParameter : AppCompatActivity() {
         }
     }
 
+    /**
+     * Gets the current context
+     */
     fun getContext(): Context? {
         return this
     }
