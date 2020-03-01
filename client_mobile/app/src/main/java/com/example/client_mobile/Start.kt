@@ -14,6 +14,9 @@ import okhttp3.*
 import java.io.IOException
 
 
+/**
+ * Start class it's cool
+ */
 class Start : AppCompatActivity() {
     companion object {
         var server_location: String? = ""
