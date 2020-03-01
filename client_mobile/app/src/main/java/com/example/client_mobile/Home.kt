@@ -257,31 +257,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
 
     fun getServices() {
-        //getservices()
-        list_services.add("Github")
-        list_services.add("Discord")
-        list_services.add("Twitch")
-        list_services.add("Reddit")
-        list_services.add("Slack")
-        list_services.add("Trello")
 
-        menu_services = navView.menu.addSubMenu("Services")
-        for (i in 0 until list_services.size) {
-            val service_name =
-                resources.getIdentifier(list_services[i], "string", getContext()?.packageName)
-            val service_icon = resources.getIdentifier(
-                list_services[i].decapitalize(),
-                "drawable",
-                getContext()?.packageName
-            )
-            menu_services.add(0, service_name, Menu.NONE, list_services[i]).setIcon(service_icon)
-        }
-        navView.invalidate()
-
-        /*
         val client = OkHttpClient()
         val request: Request = Request.Builder()
-            .url(server_location.plus("/auth/getServices"))
+            .url(server_location.plus("/getServices"))
             .header("Authorization", "token ".plus(token.toString()))
             .build()
 
@@ -293,6 +272,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
+                    println(body)
                     runOnUiThread {
                         val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
                         createItemsServices(services)
@@ -304,12 +284,30 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 println("Failed to execute request")
                 println(e)
             }
-        })*/
+        })
     }
 
     fun createItemsServices(services: Array<Service>) {
+        menu_services = navView.menu.addSubMenu("Services")
         for (i in 0 until services.size) {
+            list_services.add(services[i].service)
+            if (services[i].active) {
+                val service_name =
+                    resources.getIdentifier(
+                        services[i].service,
+                        "string",
+                        getContext()?.packageName
+                    )
+                val service_icon = resources.getIdentifier(
+                    services[i].service.decapitalize(),
+                    "drawable",
+                    getContext()?.packageName
+                )
+                menu_services.add(0, service_name, Menu.NONE, services[i].service)
+                    .setIcon(service_icon)
+            }
         }
+        navView.invalidate()
     }
 
     fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
@@ -392,6 +390,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 println(list_services[i])
                 //Request AddToken/{list_services[i]}
                 //connectToService(list_services[i])
+                ///Auth/connect/:service?token={access_token}
                 Toast.makeText(getContext(), list_services[i], Toast.LENGTH_SHORT).show()
                 break
             }
@@ -444,4 +443,4 @@ class Areas(val areas: List<Area>) : Serializable
 
 class AccessToken(val access_token: String)
 
-class Service(val name: String, val active: Boolean)
+class Service(val service: String, val active: Boolean)
