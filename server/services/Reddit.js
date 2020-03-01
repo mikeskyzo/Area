@@ -64,7 +64,7 @@ const composeReaction = require('reddit/reactions/composeReaction');
 
 module.exports = {
 
-	generalSettings: generalSettings,
+	generalSettings: generalSettings,reaction.ftr
 
 	is_service_active: async function (user_id) {
 		let token = await global.findInDbAsync(
