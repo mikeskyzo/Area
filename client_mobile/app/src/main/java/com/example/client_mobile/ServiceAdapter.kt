@@ -31,46 +31,6 @@ class ServiceAdapter(val allServices: Services, val context: Context?, val token
 
         holder.view.textView_service.setText(service.service)
 
-        holder.view.imageViewDelete.setOnClickListener {
-            deleteService(service.service)
-        }
-    }
-    fun deleteService(service: String) {
-        val client = OkHttpClient()
-
-
-        val formBody: RequestBody = FormBody.Builder()
-            .add("service", service)
-            .build()
-
-        val request: Request = Request.Builder()
-            .url(Home.server_location.plus("/getActions"))
-            .header("Authorization", "token ".plus(token.toString()))
-            .delete(formBody)
-            .build()
-
-        client.newCall(request).enqueue(object: Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                if (body == "404") {
-                    (context as Activity).runOnUiThread {
-                        Toast.makeText(context, "Error 404: server not found", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                } else {
-                    (context as Activity).runOnUiThread {
-                        val intent = Intent(context, Settings::class.java)
-                        intent.putExtra("token", token)
-                        intent.putExtra("server_location", Home.server_location)
-                        context.startActivity(intent)
-                    }
-                }
-            }
-            override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute request")
-                println(e)
-            }
-        })
     }
 }
 
