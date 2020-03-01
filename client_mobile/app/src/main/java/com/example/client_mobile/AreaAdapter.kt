@@ -2,6 +2,7 @@ package com.example.client_mobile
 
 import android.content.Intent
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.area_row.view.*
 
 
-class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderArea>() {
+class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderArea>() {
     override fun getItemCount(): Int {
         val nb = allAreas.areas.count()
         return nb
@@ -66,10 +67,18 @@ class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?
             context?.startActivity(intent)
             Toast.makeText(holder.view.context, area.area_id, Toast.LENGTH_SHORT).show()
         }
-        if (area.action == "Github")
+        holder.view.imageViewIconAction.setImageResource(resources.getIdentifier(
+            area.action.decapitalize(),
+            "drawable",
+            context!!.packageName))
+        holder.view.imageViewIconReaction.setImageResource(resources.getIdentifier(
+            area.reaction.decapitalize(),
+            "drawable",
+            context!!.packageName))
+/*        if (area.action == "Github")
             holder.view.imageViewIconAction.setImageResource(R.drawable.github)
         if (area.reaction == "Slack")
-            holder.view.imageViewIconReaction.setImageResource(R.drawable.slack)
+            holder.view.imageViewIconReaction.setImageResource(R.drawable.slack)*/
     }
 }
 

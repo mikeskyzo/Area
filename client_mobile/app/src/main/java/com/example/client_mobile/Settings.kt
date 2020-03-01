@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.GsonBuilder
@@ -60,8 +59,17 @@ class Settings : AppCompatActivity() {
                     println(body)
                     runOnUiThread {
                         val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+                        val listServices = ArrayList<Service>()
+
                         //createItemsServices(services)
-                        recyclerView_services.adapter = SettingsAdapter(services)
+                        for (i in 0 until services.size) {
+                            if (services[i].active == true) {
+                                listServices.add(services[i])
+                            }
+                        }
+                        val arrayServices = arrayOfNulls<Service>(listServices.size)
+                        listServices.toArray(arrayServices)
+                        recyclerView_services.adapter = SettingsAdapter(arrayServices, getContext(), token)
                         Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }

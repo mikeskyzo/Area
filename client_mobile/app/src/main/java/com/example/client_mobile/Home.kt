@@ -107,7 +107,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                         val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
                         runOnUiThread {
                             loadingPanel.visibility = View.GONE
-                            recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token)
+                            recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token, resources)
                         }
                     } else {
                         runOnUiThread {
