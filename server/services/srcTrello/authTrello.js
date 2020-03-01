@@ -34,7 +34,7 @@ exports.generate_url = function(token)
 		const expiration = 'never';
 
 		oauthSecrets[token] = tokenSecret;
-		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}`;
+		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + token;
 	});
 }
 
