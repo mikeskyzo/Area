@@ -169,10 +169,19 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    println(body)
-                    runOnUiThread {
-                        val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
-                        createItemsServices(services)
+                    val tab = body.toString().split(" ")
+                    if (tab[0] != "Tunnel") {
+                        println(body)
+                        runOnUiThread {
+                            val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+                            createItemsServices(services)
+                        }
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                        }
+                        val intent = Intent(getContext(), Start::class.java)
+                        startActivity(intent)
                     }
                 }
             }
@@ -218,7 +227,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 val inte = Intent(Intent.ACTION_VIEW)
                 inte.data = Uri.parse(url)
                 startActivity(inte)
-                Toast.makeText(getContext(), list_services[i], Toast.LENGTH_SHORT).show()
                 break
             }
         }
