@@ -66,7 +66,6 @@ exports.getServices = async function (req, res)
 
 	for (nb in global.Services)
 	{
-		console.log(global.Services[nb]);
 		if (global.ServiceIsActiveMap.get(global.Services[nb])) {
 			json.push({
 				service : global.Services[nb],

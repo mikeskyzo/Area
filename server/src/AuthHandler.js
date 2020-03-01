@@ -7,9 +7,6 @@ exports.redirectToService = function(req, res)
 		service : req.params.service,
 		support : req.device.type.toUpperCase() == 'PHONE' ? 'mobile' : 'web'
 	};
-	console.log('=============================================');
-	console.log(req.device.type.toUpperCase());
-	console.log('=============================================');
 
 	let token = jwt.sign(json, global.secret, {
 		expiresIn : '2m'
