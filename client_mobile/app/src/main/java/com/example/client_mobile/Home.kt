@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,23 +22,53 @@ import java.io.IOException
 import java.io.Serializable
 
 
+/**
+ * Class that will displays the currents areas, allow the user to subscribe to a service and create an area
+ */
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    /**
+     * Toolbar at the top of the screen
+     */
     lateinit var toolbar: Toolbar
+    /**
+     * Drawer layout
+     */
     lateinit var drawerLayout: DrawerLayout
+    /**
+     * Navigation view on the left
+     */
     lateinit var navView: NavigationView
+    /**
+     * Menu containing a list of services that'll be created dynamically
+     */
     lateinit var menu_services: Menu
 
     companion object {
+        /**
+         * Server address
+         */
         var server_location: String? = ""
+        /**
+         * User token
+         */
         var token: String? = ""
+        /**
+         * List of services
+         */
         var list_services = ArrayList<String>()
     }
 
+    /**
+     * Returns the current context
+     */
     fun getContext(): Context? {
         return this
     }
 
+    /**
+     * Creates Home activity
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -68,6 +97,9 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         getServices()
     }
 
+    /**
+     * Called when the server redirects the client to the application
+     */
     override fun onResume() {
         println("ONRESUME")
         val uri = intent.data
@@ -82,6 +114,9 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onResume()
     }
 
+    /**
+     * Send a request GET /getAreas/name to get all the areas of the current user
+     */
     fun getAreas() {
         val client = OkHttpClient()
         val request: Request = Request.Builder()
@@ -126,6 +161,9 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         })
     }
 
+    /**
+     * Send a request GET /getServices to retrieves all the services availables on the server
+     */
     fun getServices() {
 
         val client = OkHttpClient()
@@ -160,6 +198,9 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         })
     }
 
+    /**
+     * Creates new items on the navigation bar according to the services retrieved from getServices()
+     */
     fun createItemsServices(services: Array<Service>) {
         menu_services = navView.menu.addSubMenu("Services")
         for (i in 0 until services.size) {
@@ -181,47 +222,9 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         navView.invalidate()
     }
 
-    fun addToken(service: String, access_token: String, refresh_token: String = "", expires_in: String = "") {
-        val client = OkHttpClient()
-
-        val formBody: RequestBody = FormBody.Builder()
-            .add("service", service)
-            .add("access_token", access_token)
-            .add("refresh_token", refresh_token)
-            .add("expires_in", expires_in)
-            .build()
-
-        val request: Request = Request.Builder()
-            .url(server_location.plus("/auth/addToken"))
-            .post(formBody)
-            .header("Authorization", "token ".plus(token.toString()))
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(
-                            getContext(),
-                            "Error 404: server not found",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                println("Failed to execute request")
-                println(e)
-            }
-        })
-    }
-
+    /**
+     * Called when the user click on an item from a menu of the navigation bar
+     */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         for (i in 0 until list_services.size) {
             if (item.itemId == resources.getIdentifier(list_services[i], "string", getContext()?.packageName)) {
@@ -260,16 +263,16 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-
-    fun redirectHome(message: String) {
-        runOnUiThread {
-            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show()
-        }
-        val intent = Intent(getContext(), Start::class.java)
-        startActivity(intent)
-    }
 }
 
+/**
+ * User to create a JSON object of an area retrieved from a request
+ * @param area_id: area id
+ * @param action: action
+ * @param reaction: reaction
+ * @param area_name: area name
+ * @param color: color
+ */
 class Area(
     val area_id: String,
     val action: String,
@@ -278,8 +281,12 @@ class Area(
     val color: String
 ) : Serializable
 
+/**
+ * User to create a JSON object of a list of areas retrieved from a request
+ */
 class Areas(val areas: List<Area>) : Serializable
 
-class AccessToken(val access_token: String)
-
+/**
+ * User to create a JSON object of a service retrieved from a request
+ */
 class Service(val service: String, val active: Boolean)

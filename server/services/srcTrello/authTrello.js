@@ -27,18 +27,17 @@ const oauth = new OAuth(
 	"HMAC-SHA1"
 );
 
-exports.generate_url = function(token)
+exports.generate_url = function(ttoken)
 {
-	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
+	oauth.getOAuthRequestToken((error, token, tokenSecret, results) => {
+		if (error)
+			console.log(error);
 		const scope = 'read,write,account';
 		const expiration = 'never';
-
 		oauthSecrets[token] = tokenSecret;
-		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + token;
-	}).then(function (res) {
-		return res;
+		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + ttoken;
 	});
-}
+};
 
 exports.redirect_auth = async function(req, json)
 {
@@ -63,6 +62,6 @@ exports.redirect_auth = async function(req, json)
 					json.APIKey = generalSettings.clientId;
 					await global.saveInDbAsync(global.CollectionArea, json);
 				}
-			)
+			);
 	});
 }
