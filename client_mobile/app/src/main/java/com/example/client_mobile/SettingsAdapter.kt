@@ -56,10 +56,6 @@ class SettingsAdapter(val services: Array<Service?>, val context: Context?, val 
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                println("DELETE")
-                println(body)
-                println("SEX")
-                println(Home.server_location.plus("/auth/delete/").plus(service))
                 if (body == "404") {
                     (context as Activity).runOnUiThread {
                         Toast.makeText(context, "Error 404: server not found", Toast.LENGTH_SHORT)

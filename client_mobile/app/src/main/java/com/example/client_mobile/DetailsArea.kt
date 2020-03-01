@@ -130,7 +130,6 @@ class DetailsArea : AppCompatActivity() {
                         loadingPanel.visibility = View.GONE
                     }
                     val tab = body.toString().split(" ")
-                    println(tab[0])
                     if (tab[0] != "Tunnel") {
                         val detailedArea = GsonBuilder().create().fromJson(body, DetailedArea::class.java)
                         setDetails(detailedArea)
