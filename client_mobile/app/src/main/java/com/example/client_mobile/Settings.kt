@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.GsonBuilder
@@ -45,7 +44,7 @@ class Settings : AppCompatActivity() {
     fun getServices() {
         val client = OkHttpClient()
         val request: Request = Request.Builder()
-            .url(server_location.plus("/auth/getServices"))
+            .url(server_location.plus("/getServices"))
             .header("Authorization", "token ".plus(token.toString()))
             .build()
 
@@ -57,12 +56,21 @@ class Settings : AppCompatActivity() {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    //val allServices = GsonBuilder().create().fromJson(body, Services::class.java)
-                    println("SERVICES")
                     println(body)
                     runOnUiThread {
-                        //loadingPanel.visibility = View.GONE
-                        //recyclerView_services.adapter = ServiceAdapter(allServices, getContext(), token)
+                        val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+                        val listServices = ArrayList<Service>()
+
+                        //createItemsServices(services)
+                        for (i in 0 until services.size) {
+                            if (services[i].active == true) {
+                                listServices.add(services[i])
+                            }
+                        }
+                        val arrayServices = arrayOfNulls<Service>(listServices.size)
+                        listServices.toArray(arrayServices)
+                        recyclerView_services.adapter = SettingsAdapter(arrayServices, getContext(), token)
+                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
