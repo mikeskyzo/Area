@@ -27,7 +27,7 @@ const oauth = new OAuth(
 	"HMAC-SHA1"
 );
 
-async function tmp()
+tmp = async function()
 {
 	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
 		const scope = 'read,write,account';
