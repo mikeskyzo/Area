@@ -24,12 +24,12 @@
     <div id="tabRow" class="row">
         <div class="col s12">
             <ul class="tabs">
-                <li class="black tab col s6"><a href="#test1" class="active"><b>Area creation</b></a></li>
-                <li class="black tab col s6"><a href="#test2"><b>Area history</b></a></li>
+                <li class="black tab col s6"><a href="#areaCreation" class="active"><b>Area creation</b></a></li>
+                <li class="black tab col s6"><a href="#areaHistory"><b>Area history</b></a></li>
             </ul>
         </div>
 
-        <div id="test1" class="col s12">
+        <div id="areaCreation" class="col s12">
             <div class="row flex">
                 <div id="actionCol" class="col s3 full-width" style="background: #1b1b1b;">
                     <div id="action-list"></div>
@@ -45,6 +45,7 @@
                             <div id="reaction-creator"></div>
 
                             <div class="center">
+                                <div id="area-create-result"></div>
                                 <a id="create-area-button" class="orange waves-effect waves-light btn-large black-text" style="margin-top: 10px"><i class="material-icons left">add</i><b>Create Area</b></a>
                             </div>
                         </div>
@@ -59,9 +60,9 @@
             </div>
         </div>
 
-        <div id="test2" class="col s12" style="background: #363636;">
+        <div id="areaHistory" class="col s12" style="background: #363636;">
             <div class="row flex">
-                <div id="fake-col" class="col s3 full-width" style="background: #1b1b1b;">
+                <div id="refresh-col" class="col s3 full-width" style="background: #1b1b1b;">
                     <div class="center">
                         <a id="area-refresh-button" class="orange black-text btn-large waves-effect waves-light btn" style="margin-top: 25px"><i class="material-icons left">refresh</i><b>Refresh</b></a>
                     </div>
@@ -71,7 +72,7 @@
                     <div id="area-list"></div>
                 </div>
 
-                <div id="fake-col" class="col s3 full-width" style="background: #1b1b1b;"></div>
+                <div id="log-col" class="col s3 full-width" style="background: #1b1b1b;"></div>
             </div>
         </div>
     </div>
