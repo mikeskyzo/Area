@@ -73,29 +73,23 @@ const enableLogicRoutes = async function (app) {
 
 	app.post('/client/:action', async (req, res) => {
 		if (req.params.action === 'register') {
-			var email = req.body.emailRegister;
 			var username = req.body.usernameRegister;
 			var password = req.body.passwordRegister;
 			var server = req.body.serverRegister;
 
-			ServerApi.createUser(email, username, password, server, req, res);
+			ServerApi.createUser(username, password, server, req, res);
 		} else if (req.params.action === 'login') {
 			var username = req.body.usernameLogin;
 			var password = req.body.passwordLogin;
 			var serverAddress = req.body.serverLogin;
 
 			ServerApi.connectUser(username, password, serverAddress, req, res);
-		} else if (req.params.action == 'changeUsername') {
-			var newUsername = req.body.newUsername;
-
-			ServerApi.changeUsername(req, res, req.cookies.server, newUsername);
-		} else if (req.params.action == 'changePassword') {
-			var newPassword = req.body.newPassword;
-
-			//ServerApi.connectUser();
 		} else if (req.params.action == 'createArea') {
 			var areaToCreate = JSON.parse(req.body.area);
-			ServerApi.createArea(req, res, areaToCreate);
+			var result = await ServerApi.createArea(req, res, areaToCreate);
+			res.json({
+				result : result
+			});
 		} else if (req.params.action == 'deleteArea') {
 		    var areaId = req.body.area_id;
 		    ServerApi.deleteArea(req, res, areaId);
@@ -137,9 +131,6 @@ const enableLogicRoutes = async function (app) {
 			})
 		} else if (req.params.action === 'getServices') {
             const result = await ServerApi.getServices(req, res);
-
-            console.log(result);
-
             res.json({
 				success : true,
 				data : result.data,

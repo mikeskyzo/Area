@@ -45,7 +45,7 @@ exports.CheckToken = checkToken.CheckToken;
 exports.is_service_active = async function(user_id)
 {
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : user_id, service : global.Services.Trello});
-	if (!token || !token.APIKey || !token.ApiToken)
+	if (!token || !token.access_token)
 		return false;
 	return true;
 }
