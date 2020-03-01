@@ -2,6 +2,7 @@ package com.example.client_mobile
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,7 @@ import kotlinx.android.synthetic.main.action_row.view.*
  * @param context: current context
  * @param token: user token
  */
-class ReactionAdapter(val allReactions: Reactions, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderReaction>() {
+class ReactionAdapter(val allReactions: Reactions, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderReaction>() {
 
     override fun getItemCount(): Int {
         val nb = allReactions.reactions.count()
@@ -32,26 +33,20 @@ class ReactionAdapter(val allReactions: Reactions, val context: Context?, val to
 
         val reaction = allReactions.reactions.get(position)
 
+        val service_icon = resources.getIdentifier(
+            reaction.service.decapitalize(),
+            "drawable",
+            context!!.packageName
+        )
+        holder.view.imageViewIcon.setImageResource(service_icon)
         holder.view.buttonAction.text = reaction.title
-        if (reaction.service == "Github")
-            holder.view.imageViewIcon.setImageResource(R.drawable.github)
-        if (reaction.service == "Slack")
-            holder.view.imageViewIcon.setImageResource(R.drawable.slack)
-        if (reaction.service == "Twitch")
-            holder.view.imageViewIcon.setImageResource(R.drawable.twitch)
-        if (reaction.service == "Reddit")
-            holder.view.imageViewIcon.setImageResource(R.drawable.reddit)
-        if (reaction.service == "Discord")
-            holder.view.imageViewIcon.setImageResource(R.drawable.discord)
-        if (reaction.service == "Trello")
-            holder.view.imageViewIcon.setImageResource(R.drawable.trello)
         holder.view.buttonAction.setOnClickListener {
             val intent = Intent(context, selectParameter::class.java)
             val arrayAsString: String = Gson().toJson(reaction.params)
             intent.putExtra("params", arrayAsString)
             intent.putExtra("reaction", reaction)
             intent.putExtra("token", token)
-            context?.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 }
