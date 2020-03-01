@@ -20,54 +20,53 @@ const oauthSecrets = {};
 const oauth = new OAuth(
 	`${generalSettings.trelloApi}/OAuthGetRequestToken`,
 	`${generalSettings.trelloApi}/OAuthGetAccessToken`,
-	generalSettings.clientId, 
+	generalSettings.clientId,
 	generalSettings.clientSecret,
 	"1.0A",
 	generalSettings.redirectUri,
 	"HMAC-SHA1"
 );
 
-let sel = "";
 
 exports.generate_url = function(token)
-{
-	// return 'https://trello.com/1/authorize?expiration=never&name=Area_Dashboard++&scope=read&response_type=fragment&key=cfd14732f1e65ebbfc3521de87b214a1&callback_method=fragment&redirect_uri=https://localhost:8080/auth/redirect/' + token;
-	return 'https://trello.com/1/authorize?expiration=never&name=Area_Dashboard++&scope=read&response_type=fragment&key=cfd14732f1e65ebbfc3521de87b214a1&callback_method=fragment&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect/' + token;
-}
 // {
-// 	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
-// 		if (error)
-// 			console.log(error);
-// 		const scope = 'read,write,account';
-// 		const expiration = 'never';
-// 		oauthSecrets[token] = tokenSecret;
-// 		sel = `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + ttoken;
-// 		return `${generalSettings.trelloApi}/OAuthAuthorizeToken?oauth_token=${token}&name=${generalSettings.appName}&scope=${scope}&expiration=${expiration}&redirect_uri=${generalSettings.redirectUri}` + ttoken;
-// 	});
-// 	return sel;
+// 	// return 'https://trello.com/1/authorize?expiration=never&name=Area_Dashboard++&scope=read&response_type=fragment&key=cfd14732f1e65ebbfc3521de87b214a1&callback_method=fragment&redirect_uri=https://localhost:8080/auth/redirect/' + token;
+// 	return 'https://trello.com/1/authorize?expiration=never&name=Area_Dashboard++&scope=read&response_type=fragment&key=cfd14732f1e65ebbfc3521de87b214a1&callback_method=fragment&redirect_uri=' + 'http://localhost:8080/auth/redirect/' + token;
 // }
+{
+	oauth.getOAuthRequestToken(function(error, token, tokenSecret, results) {
+		if (error)
+			console.log(error);
+		const scope = 'read,write,account';
+		const expiration = 'never';
+		oauthSecrets[token] = tokenSecret;
+	});
+	return 'https://trello.com/1/authorize?expiration=never&name=Area_Dashboard++&scope=read&response_type=fragment&key=cfd14732f1e65ebbfc3521de87b214a1&callback_method=token&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect/' + token;
+	// return 'https://trello.com/1/authorize?expiration=never&name=Area_Dashboard++&scope=read&response_type=fragment&key=cfd14732f1e65ebbfc3521de87b214a1&callback_method=fragment&redirect_uri=' + 'http://localhost:8080/auth/redirect/' + token;
+}
 
 exports.redirect_auth = async function(req, json)
 {
-	// const query = url.parse(req.url, true).query;
-	const token = req.query.oauth_token;
-	const tokenSecret = oauthSecrets[token];
-	const verifier = req.query.oauth_verifier;
+	// const query = url.parse(req.url);
+	// const token = query.oauth_token;
+	// const tokenSecret = oauthSecrets[token];
+	// const verifier = query.oauth_verifier;
+	console.log('=========================');
+	// console.log(query);
+	console.log(req.query);
+	// console.log(token);
+	console.log('=========================');
 
-	oauth.getOAuthAccessToken(
-		token, tokenSecret, verifier,
-		function(error, accessToken, accessTokenSecret, results) {
-			oauth.getProtectedResource(
-				"https://api.trello.com/1/members/me",
-				"GET", accessToken, accessTokenSecret,
-				async function(error, data, response) {
-					json.access_token = accessToken;
-					json.accessTokenSecret = accessTokenSecret;
-					let token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello})
-					if (token)
-						global.deleteSomeInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
-					await global.saveInDbAsync(global.CollectionArea, json);
-				}
-			);
-	});
+	let url = 'http://eu.httpbin.org/basic-auth/user/passwd';
+	let username = 'user';
+	let password = 'passwd';
+
+	// let headers = new Headers();
+	// headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + password));
+
+	// fetch(url, {method:'GET',
+    //     headers: headers,
+    // })
+	// .then(response => response.json())
+	// .then(json => console.log(json));
 }

@@ -45,14 +45,22 @@ var server = app.listen(8080, function () {
     console.log("Server is up !");
     (async function() {
         try {
-            // global.url = await ngrok.connect({authtoken: token, subdomain: 'GrosSex',}, 8080);
-            global.url = await ngrok.connect(8080);
+            global.url = await ngrok.connect({
+                authtoken: token,
+                subdomain: 'areacoon-api',
+                proto: 'http',
+                addr: 8080,
+                region: 'eu'
+            }, 8080);
             global.redirect_url = global.url + '/auth/redirect'
             console.log('=================================================');
             console.log('Url of you\'r api : ' + global.url);
             console.log('=================================================');
         } catch (err) {
+            console.log('=================================================');
+            console.log('The tunnel to the domain is not up : ');
             console.error(err);
+            console.log('=================================================');
         }
     })();
 }).on('error', function (err){
@@ -63,18 +71,6 @@ var server = app.listen(8080, function () {
 process.on('SIGINT', function() {
     global.terminateServer();
 });
-
-// const tunnel = localtunnel(8080, { subdomain: 'areacoon-api'})
-// .then(function (err, tunnel)
-// {
-//     global.url = err.url;
-//     console.log('=================================================');
-//     console.log('Url of you\'r api : ' + global.url);
-//     console.log('=================================================');
-// })
-// .catch( function (err) {
-//     console.log(err);
-// })
 
 global.terminateServer = function (err)
 {
@@ -92,6 +88,7 @@ global.terminateServer = function (err)
     process.exit(84);
 }
 
+global.app = app;
 require('./src/serviceLoader');
 
 module.exports = app;
