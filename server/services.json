@@ -75,6 +75,35 @@
 					]
 				},
 				{
+					"name" : "github_repo_labeled",
+					"title" : "Repository labeled",
+					"description" : "Trigger when a repo is labeled",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookRepoLabeled"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckAction"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
 					"name" : "github_issue_event",
 					"title" : "Repository issue event",
 					"description" : "Trigger when a issue is update or created",
@@ -85,7 +114,7 @@
 						},
 						{
 							"type" : "format_result",
-							"name" : "FormatWebhookIssueEvent"
+							"name" : "FormatWebhookCheckAction"
 						},
 						{
 							"type" : "delete_action",
@@ -114,7 +143,7 @@
 						},
 						{
 							"type" : "format_result",
-							"name" : "FormatWebhookRepoPublic"
+							"name" : "FormatWebhookCheckAction"
 						},
 						{
 							"type" : "delete_action",
