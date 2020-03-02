@@ -46,51 +46,82 @@ exports.redirect_auth = async function (req, json)
 	})
 }
 
-exports.playSong = async function (area, res)
+// exports.playSong = async function (area, res)
+// {
+// 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Discord});
+//     if (!token) {
+// 		global.responseError(res, 401, 'No access token provided');
+// 		return;
+//     }
+//     let body = {
+//         song_name : global.getParam(area.reaction.params, 'song_name')
+//     };
+// }
+
+async function getSongByName(song_name, token)
 {
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Discord});
-    if (!token) {
-		global.responseError(res, 401, 'No access token provided');
-		return;
-    }
-    let body = {
-        song_name : global.getParam(area.reaction.params, 'song_name')
-    };
+    let url = 'https://api.spotify.com/v1/search?q=' + song_name + '&type=track'
+    let response = await fetch(url, {
+        'method': 'GET',
+        'headers' : { 'Authorization' : 'Bearer ' + token.access_token }
+    });
+    if (response.status != 200) {
+		global.responseError(res, 401, 'Can\'t send a discord message : ' + response.statusText);
+	}
+	let resjson = await response.json();
+	var track_id;
+	try {
+		track_id = resjson.tracks.items[0].uri;
+	} catch (err) {
+		return null;
+	}
+	return track_id;
+}
+
+async function addSongToQueue(track_id, token)
+{
+	let url = 'https://api.spotify.com/v1/me/player/add-to-queue?uri=' + track_id;
+    let response = await fetch(url, {
+        'method': 'POST',
+        'headers' : {'Authorization' : 'Bearer ' + token.access_token}
+	})
+	if (response.status != 204) {
+		global.responseError(res, 401, 'Spotify failed add song queue');
+		return false;
+	}
+	return true;
 }
 
 exports.playSong = async function (area, res)
 {
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Discord});
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
     if (!token) {
 		global.responseError(res, 401, 'No access token provide');
 		return;
-    }
-    let body = {
-        'content' : global.getParam(area.reaction.params, 'message'),
-        username : global.getParam(area.reaction.params, 'username'),
-        avatar_url : global.getParam(area.reaction.params, 'avatar')
-    };
-    let url = 'https://discordapp.com/api/webhooks/' + token.webhook_id + '/' + token.webhook_token;
+	}
+	let track_id = await getSongByName(global.getParam(area.reaction.params, 'song_name'), token);
+	if (!track_id) {
+		global.responseError(res, 401, 'Spotify didn\'t find the song')
+		return;
+	}
+	if (!(await addSongToQueue(track_id, token)))
+		return;
+	url = 'https://api.spotify.com/v1/me/player/next';
     let response = await fetch(url, {
         'method': 'POST',
-        'body' : JSON.stringify(body),
-        'headers' : {'Content-Type' : 'application/json'}
-    });
-    if (response.status != 200 && response.status != 204)
-        global.responseError(res, 401, 'Can\'t send a discord message : ' + response.statusText);
-    else
-        res.send();
+        'headers' : {'Authorization' : 'Bearer ' + token.access_token}
+	})
+	if (response.status != 204) {
+		global.responseError(res, 401, 'Spotify failed to play next song');
+		return;
+	}
+	res.send();
 }
 
 exports.playSongCheckArgs = function(json)
 {
-    // if (!global.getParam(json.reaction.params, 'username'))
-    //     global.addParam(json.reaction.params, 'username', 'Mike')
-    // let avatar = global.getParam(json.reaction.params, 'avatar')
-    // if (!avatar || avatar.trim() == '')
-    //     global.modifyParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
-    // if (!global.getParam(json.reaction.params, 'message'))
-    //    return 'Missing a message to send';
-    // else
-        return null;
+	let song = global.getParam(json.reaction.params, 'song_name');
+    if (!song || song.trim() == '')
+	   return 'Missing a song name';
+    return null;
 }
