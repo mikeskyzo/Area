@@ -70,6 +70,11 @@ exports.createWebhookCommitComment = function (res, json, next)
 	createWebhook('commit_comment', res, json, next);
 }
 
+exports.createWebhookCreated = function (res, json, next)
+{
+	createWebhook('create', res, json, next);
+}
+
 async function createWebhook(event, res, json)
 {
 	let username = global.getParam(json.action.params, 'username');

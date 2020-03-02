@@ -6,7 +6,7 @@
 Project's goal
 ----------------------
 
-The Dev_area_2019 is a software suite that functions similar to that of IFTTT and/or Zapier. The project is split in
+The Dev_area_2019 is a software suite that functions similar to IFTTT and Zapier. The project is split in
 __three main parts__ :
 
 * An application server to implement all the features
@@ -36,7 +36,7 @@ docker-compose build
 Usage
 ----------------------
 
-you can launch the server with this command :
+You can launch the server with this command :
 
 ```bash
 docker-compose up
@@ -73,5 +73,3 @@ the project has been made by the following team members :
 * Jean Bourgarel
 * Matthieu Desrues
 * Mikael Gerard
-* Stanislas Hegron
-* Wittling Marc-Antoine
