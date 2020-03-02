@@ -60,6 +60,11 @@ exports.createWebhookRepoPullRequest = function (res, json, next)
 	createWebhook('repository', res, json, next);
 }
 
+exports.createWebhookRepoStar = function (res, json, next)
+{
+	createWebhook('star', res, json, next);
+}
+
 async function createWebhook(event, res, json)
 {
 	let username = global.getParam(json.action.params, 'username');
