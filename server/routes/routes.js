@@ -68,6 +68,9 @@ router.get('/auth/connect/:service', function(req, res) {
 });
 
 router.get('/auth/redirect/:token?', function(req, res) {
+	console.log(`===============================`);
+	console.log(`\nWelcome back on areacoon server\n`);
+	console.log(`===============================`);
 	authHandler.getTokenFromService(req, res);
 });
 
