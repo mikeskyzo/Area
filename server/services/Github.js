@@ -75,6 +75,11 @@ exports.createWebhookCreated = function (res, json, next)
 	createWebhook('create', res, json, next);
 }
 
+exports.createWebhookRepoFork = function (res, json, next)
+{
+	createWebhook('fork', res, json, next);
+}
+
 async function createWebhook(event, res, json)
 {
 	let username = global.getParam(json.action.params, 'username');
