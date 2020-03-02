@@ -7,7 +7,7 @@ async function Twitch_UserId (login)
     url += login;
     var object = await fetch(url,{
         'method': 'GET',
-        'headers' : {'Client-ID' : client_id}
+        'headers' : {'Client-ID' : process.env.TWITCH_ID}
     });
     var json = await object.json()
     if(json.data != [])
@@ -97,7 +97,6 @@ exports.Twitch_Delete_Webhook_StreamChangeState = async function(area, req, res)
         global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
         return ;
     }
-   // console.log(global.url);
     let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${area.id}&hub.lease_seconds=86400`;
     let resp = await fetch(url, {
         'method': 'POST',
@@ -120,9 +119,6 @@ exports.Twitch_Create_Webhook_StreamChangeState_CA = async function(req, res, ar
     else
         return null;
 };
-
-
-
 
 exports.confirmWebhookFunctionTwitch = function(req, res, area)
 {
