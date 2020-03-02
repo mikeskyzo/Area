@@ -10,13 +10,13 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://github.com/login/oauth/authorize?client_id=a5c1a4e56df11fc5735a&scope=admin:repo_hook%20repo&state=' + token;
+	return 'https://github.com/login/oauth/authorize?client_id=' + process.env.GITHUB_ID + '&scope=admin:repo_hook%20repo&state=' + token;
 }
 
 exports.redirect_auth = async function (req, json)
 {
 	const code = req.query.code;
-	const url = 'https://github.com/login/oauth/access_token?client_id=a5c1a4e56df11fc5735a&client_secret=d34b0ddb1e2990542e7c42ea6faa1f668a5d8e20&code=' + code;
+	const url = 'https://github.com/login/oauth/access_token?client_id=' + process.env.GITHUB_ID + '&client_secret=' + process.env.GITHUB_SECRET + '&code=' + code;
 	fetch(url, {
 		'method': 'POST',
 		headers : {"Accept": "application/json"}
