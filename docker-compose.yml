@@ -15,8 +15,8 @@ services:
         links:
             - db:db
         environment:
-            - GITHUB_ID=mysql
-            - GITHUB_SECRET=root
+            - GITHUB_ID=a5c1a4e56df11fc5735a
+            - GITHUB_SECRET=d34b0ddb1e2990542e7c42ea6faa1f668a5d8e20
             - NGROK_TOKEN=1XKuDgkqMYnETxr5sEgd6faCkh1_3iQ2dASUNn2DVmr8dbi5R
             - DISCORD_ID=680706257992024065
             - DISCORD_SECRET=eaQjWT9RwgohzOrn2JRgZRwBxhtxVBZ5
