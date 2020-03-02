@@ -55,6 +55,11 @@ exports.createWebhookRepoLabeled = function (res, json, next)
 	createWebhook('label', res, json, next);
 }
 
+exports.createWebhookRepoPullRequest = function (res, json, next)
+{
+	createWebhook('repository', res, json, next);
+}
+
 async function createWebhook(event, res, json)
 {
 	let username = global.getParam(json.action.params, 'username');
@@ -151,7 +156,7 @@ exports.FormatWebhookCheckAction = function (req, res, area, next)
 	next(area, res);
 }
 
-exports.FormatWebhookPushOnRepo = function (req, res, area, next)
+exports.FormatWebhookCheckZen = function (req, res, area, next)
 {
 	if (req.body.zen) {
 		res.send();
