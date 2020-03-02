@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+var btoa = require('btoa');
 
 exports.is_service_active = async function (user_id)
 {
@@ -10,32 +11,31 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return "https://accounts.spotify.com/authorize?client_id=" + process.env.SPOTIFY_ID + "&response_type=code&redirect_uri=" + global.redirect_uri + "&scope=user-modify-playback-state user-read-private user-read-currently-playing user-library-modify" + "&state=" + token;
+	return "https://accounts.spotify.com/authorize?client_id=" + process.env.SPOTIFY_ID + "&response_type=code&redirect_uri=" + global.redirect_url + "&scope=user-modify-playback-state user-read-private user-read-currently-playing user-library-modify" + "&state=" + token;
 }
 
 exports.redirect_auth = async function (req, json)
 {
 	const code = req.query.code;
+
+	const {URLSearchParams} = require('url');
+	const data = new URLSearchParams();
+	data.append("grant_type", "authorization_code");
+	data.append("redirect_uri", global.redirect_url);
+	data.append("client_id", process.env.SPOTIFY_ID);
+	data.append("client_secret", process.env.SPOTIFY_SECRET);
+	data.append("code", code);
+
 	const url = "https://accounts.spotify.com/api/token"
-	const body = {
-		"grant_type": "authorization_code",
-		"code": code,
-		"redirect_uri": global.redirect_uri,
-		"client_id": global.env.SPOTIFY_ID
-		"client_secret": global.env.SPOTIFY_SECRET 
-	}
 	fetch(url, {
 		'method': 'POST',
-		headers: {
-			"Accept": "x-www-form-urlencoded",
-			"Content-Type": "application/x-www-form-urlencoded"
-		}
-		body: JSON.stringify(body)
+		'headers': {"Content-Type": "application/x-www-form-urlencoded"},
+		'body': data
 	})
 	.then(function (response) {
 		if (response.status == 200)
 			return response.json();
-		throw 'Failure : ' + res;
+		throw 'Failure : ' + response.statusText;
 	})
 	.then(function (resjson) {
 		json.access_token = resjson.access_token
@@ -52,13 +52,13 @@ exports.playSong = async function (area, res)
     if (!token) {
 		global.responseError(res, 401, 'No access token provided');
 		return;
-    }	
+    }
     let body = {
         song_name : global.getParam(area.reaction.params, 'song_name')
     };
 }
 
-exports.send_message = async function (area, res)
+exports.playSong = async function (area, res)
 {
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Discord});
     if (!token) {
@@ -82,15 +82,15 @@ exports.send_message = async function (area, res)
         res.send();
 }
 
-exports.send_message_check_args = function(json)
+exports.playSongCheckArgs = function(json)
 {
-    if (!global.getParam(json.reaction.params, 'username'))
-        global.addParam(json.reaction.params, 'username', 'Mike')
-    let avatar = global.getParam(json.reaction.params, 'avatar')
-    if (!avatar || avatar.trim() == '')
-        global.modifyParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
-    if (!global.getParam(json.reaction.params, 'message'))
-       return 'Missing a message to send';
-    else
+    // if (!global.getParam(json.reaction.params, 'username'))
+    //     global.addParam(json.reaction.params, 'username', 'Mike')
+    // let avatar = global.getParam(json.reaction.params, 'avatar')
+    // if (!avatar || avatar.trim() == '')
+    //     global.modifyParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
+    // if (!global.getParam(json.reaction.params, 'message'))
+    //    return 'Missing a message to send';
+    // else
         return null;
 }
