@@ -189,6 +189,35 @@
 							"description" : "Owner's name of the repository"
 						}
 					]
+				},
+				{
+					"name" : "github_repo_star",
+					"title" : "Repository stared",
+					"description" : "Trigger when as a repository is stared",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookRepoStar"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckZen"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
 				}
 			]
 		},
