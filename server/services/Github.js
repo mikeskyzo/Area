@@ -50,6 +50,11 @@ exports.createWebhookRepoPublic = function (res, json, next)
 	createWebhook('public', res, json, next);
 }
 
+exports.createWebhookRepoLabeled = function (res, json, next)
+{
+	createWebhook('label', res, json, next);
+}
+
 async function createWebhook(event, res, json)
 {
 	let username = global.getParam(json.action.params, 'username');
@@ -136,7 +141,7 @@ exports.deleteWebhook = async function (area, req, res)
 	});
 }
 
-exports.FormatWebhookIssueEvent = function (req, res, area, next)
+exports.FormatWebhookCheckAction = function (req, res, area, next)
 {
 	if (!req.body.action) {
 		res.send();
@@ -147,15 +152,6 @@ exports.FormatWebhookIssueEvent = function (req, res, area, next)
 }
 
 exports.FormatWebhookPushOnRepo = function (req, res, area, next)
-{
-	if (req.body.zen) {
-		res.send();
-		return;
-	}
-	next(area, res);
-}
-
-exports.FormatWebhookRepoPublic = function (req, res, area, next)
 {
 	if (req.body.zen) {
 		res.send();
