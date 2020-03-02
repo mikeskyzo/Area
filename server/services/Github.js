@@ -65,6 +65,11 @@ exports.createWebhookRepoStar = function (res, json, next)
 	createWebhook('star', res, json, next);
 }
 
+exports.createWebhookCommitComment = function (res, json, next)
+{
+	createWebhook('commit_comment', res, json, next);
+}
+
 async function createWebhook(event, res, json)
 {
 	let username = global.getParam(json.action.params, 'username');
@@ -157,7 +162,6 @@ exports.FormatWebhookCheckAction = function (req, res, area, next)
 		res.send();
 		return;
 	}
-
 	next(area, res);
 }
 
