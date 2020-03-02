@@ -87,39 +87,3 @@ exports.send_message_check_args = function(json)
     else
 		return null;
 }
-
-exports.check_token = async function (req, res)
-{
-	if (!req.body.access_token) {
-		global.responseError(res, 401, 'Need an access token for slack');
-		return;
-	}
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service})
-	if (token)
-	{
-		global.responseError(res, 409, "You have already a token saved for " + req.body.service);
-		return;
-	}
-	var json = {
-		user_id : req.body.user_id,
-		service : global.Services.Slack,
-		access_token : req.body.access_token
-	}
-	var url =  'https://slack.com/api/auth.test?token=' + req.body.access_token;
-	fetch(url, {
-		'method': 'POST',
-	})
-	.then(function (response) {
-		return response.json();
-	})
-	.then(function (resjson) {
-		if (resjson.ok == false) {
-			global.responseError(res, 401, 'Token is invalid : ' + resjson.error)
-		} else {
-			global.saveInDb(global.CollectionToken, json, res, 'Token Slack saved for ' + resjson.user  + ' on ' + resjson.team);
-		}
-	})
-	.catch(function (error) {
-		global.responseError(res, 500, 'err : ' + error)
-	});
-}
