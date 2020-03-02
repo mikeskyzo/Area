@@ -40,6 +40,35 @@
 			]
 		},
 		{
+			"name" : "Spotify",
+			"is_service_active" : "is_service_active",
+			"generate_url_function" : "generate_url",
+			"redirect_auth_function" : "redirect_auth",
+			"reactions" : [
+				{
+					"name" : "play_song",
+					"title" : "Play song",
+					"description" : "Plays a song",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "playSong"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "playSongCheckArgs"
+						}
+					],
+					"params" : [
+						{
+							"name" : "song_name",
+							"description" : "Name of the song"
+						}
+					]
+				}
+			]
+		},
+		{
 			"name" : "Github",
 			"is_service_active" : "is_service_active",
 			"generate_url_function" : "generate_url",
