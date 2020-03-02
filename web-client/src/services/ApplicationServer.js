@@ -140,9 +140,7 @@ exports.deleteArea = function(req, res, areaId) {
 				Authorization: `token ${generalSettings.access_token}`
 			}
 		}
-	).then(function(response) {
-		console.log("web client : to change");
-	}).catch(function(error) {
+	).catch(function(error) {
 		console.log(error);
 		res.redirect('/error')
 	})
@@ -158,9 +156,7 @@ exports.disconnectService = function(req, res, url) {
 				Authorization: `token ${generalSettings.access_token}`
 			}
 		}
-	).then(function(response) {
-		console.log("web client : to change");
-	}).catch(function(error) {
+	).catch(function(error) {
 		console.log(error);
 		res.redirect('/error')
 	})
