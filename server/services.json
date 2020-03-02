@@ -102,6 +102,35 @@
 							"description" : "Owner's name of the repository"
 						}
 					]
+				},
+				{
+					"name" : "github_repo_public",
+					"title" : "Repository public",
+					"description" : "Trigger when a repository is made public",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookRepoPublic"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookRepoPublic"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
 				}
 			]
 		},

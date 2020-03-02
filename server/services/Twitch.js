@@ -10,8 +10,8 @@ async function Twitch_UserId (login)
         'headers' : {'Client-ID' : client_id}
     });
     var json = await object.json()
-    if(json.hasOwnProperty('data'))
-        if( json.data[0].hasOwnProperty('id'))
+    if(json.data != [])
+        if(json.data[0].hasOwnProperty('id'))
             return(json.data[0].id);
     return(84);
 
@@ -20,6 +20,7 @@ async function Twitch_UserId (login)
 exports.Twitch_Create_Webhook_NewSubscriber = async function(res, json, next)
 {
     await global.saveInDbAsync(global.CollectionArea, json);
+    console.log(json);
     var user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
     if (user_id === 84) {
         global.responseError(res, 404, 'error, the username is does not match with Twitch database');

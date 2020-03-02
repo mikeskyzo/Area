@@ -122,25 +122,7 @@ global.saveInDbAsync = async function (collection, param) {
 
 global.saveAREA = function (res, json)
 {
-	if (global.new_area)
-		global.saveInDb(global.CollectionArea, json, res, 'Area created successfully');
-	else {
-		global.db.collection(global.CollectionArea).update({'area_id' : json.area_id, 'user_id' : json.user_id}, json, function(err, result) {
-			if (err){
-				res.status(500);
-				res.json({
-					success : false,
-					message : err.message
-				});
-				return;
-			}
-			res.status(201);
-			res.json({
-				success : true,
-				message : 'Area updated',
-			});
-		});
-	}
+	global.saveInDb(global.CollectionArea, json, res, 'Area created successfully');
 }
 
 global.deleteInDb = function (collection, params, req, res)
