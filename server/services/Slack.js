@@ -10,7 +10,7 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://slack.com/oauth/v2/authorize?client_id=933637704274.945976210260&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&state=' + token;
+	return 'https://slack.com/oauth/v2/authorize?client_id=' + process.env.SLACK_ID + '&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&state=' + token;
 }
 
 exports.redirect_auth = async function (req, json)
@@ -21,7 +21,7 @@ exports.redirect_auth = async function (req, json)
 	if (token)
         global.deleteSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Slack});
 
-	const url = 'https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=248197e37352e5aa521b969a3cbb8a91&code=' + code;
+	const url = 'https://slack.com/api/oauth.v2.access?client_id=' + process.env.SLACK_ID + '&client_secret=' + process.env.SLACK_SECRET + '&code=' + code;
 	fetch(url, {
 		'method': 'POST',
 		headers : {"Accept": "application/json"}
