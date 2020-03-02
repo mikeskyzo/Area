@@ -164,7 +164,7 @@
 				{
 					"name" : "github_repo_archive",
 					"title" : "Repository archived",
-					"description" : "Trigger when as a repository is archived",
+					"description" : "Trigger when a repository is archived",
 					"functions" : [
 						{
 							"type" : "create_action",
@@ -193,7 +193,7 @@
 				{
 					"name" : "github_repo_star",
 					"title" : "Repository stared",
-					"description" : "Trigger when as a repository is stared",
+					"description" : "Trigger when a repository is stared",
 					"functions" : [
 						{
 							"type" : "create_action",
@@ -222,11 +222,40 @@
 				{
 					"name" : "github_repo_commit_comment",
 					"title" : "Repository commit comment",
-					"description" : "Trigger when as a repository commit is commented",
+					"description" : "Trigger when a repository commit is commented",
 					"functions" : [
 						{
 							"type" : "create_action",
 							"name" : "createWebhookCommitComment"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckZen"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_repo_created",
+					"title" : "Repository created",
+					"description" : "Trigger when a branch or a label on a repository is created",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookCreated"
 						},
 						{
 							"type" : "format_result",

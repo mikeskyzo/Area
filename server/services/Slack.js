@@ -33,8 +33,6 @@ exports.redirect_auth = async function (req, json)
 	})
 	.then(function (resjson) {
 		json.access_token = resjson.authed_user.access_token;
-		console.log(resjson.authed_user.access_token);
-		console.log(json);
 		global.saveInDbAsync(global.CollectionToken, json);
 	})
 	.catch(function (err){
