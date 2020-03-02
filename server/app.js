@@ -45,13 +45,14 @@ var server = app.listen(8080, function () {
     console.log("Server is up !");
     (async function() {
         try {
-            global.url = await ngrok.connect({
-                authtoken: token,
-                subdomain: 'areacoon-api',
-                proto: 'http',
-                addr: 8080,
-                region: 'eu'
-            }, 8080);
+            // global.url = await ngrok.connect({
+            //     authtoken: token,
+            //     subdomain: 'areacoon-api',
+            //     proto: 'http',
+            //     addr: 8080,
+            //     region: 'eu'
+            // }, 8080);
+            global.url = await ngrok.connect(8080);
             global.redirect_url = global.url + '/auth/redirect'
             console.log('=================================================');
             console.log('Url of you\'r api : ' + global.url);
