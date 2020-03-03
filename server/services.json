@@ -88,6 +88,27 @@
 					]
 				},
 				{
+					"name" : "set_volume",
+					"title" : "Set volume",
+					"description" : "Set the volume",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "setVolume"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SetVolumeCheckArgs"
+						}
+					],
+					"params" : [
+						{
+							"name" : "volume",
+							"description" : "Volume to set (0-100)"
+						}
+					]
+				},
+				{
 					"name" : "skip_song",
 					"title" : "Skip song",
 					"description" : "Skip the song",
