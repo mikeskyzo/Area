@@ -14,7 +14,7 @@ exports.checkArgsCreateCard = async function (json)
 		return "Missing description";
 	else if (json.action["name"].includes("trello_create_card"))
 		return "Reaction can't be same as action";
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -46,7 +46,7 @@ exports.trelloCreateCard = async function (area, res)
 		global.responseError(res, 401, "Missing list ID, a name or a description");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Trello});
 	if (!token) {
 		global.responseError(res, 401, "Can't get tokens for Trello");
 		return;
@@ -119,7 +119,7 @@ exports.trelloCreateList = async function (area, res)
 		global.responseError(res, 401, 'Missing ID of board or a name')
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : res.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
@@ -128,7 +128,7 @@ exports.trelloCreateList = async function (area, res)
 		global.responseError(res, 401, "No APIKey provided");
 		return;
 	}
-	const url = `https://api.trello.com/1/lists?name=${name}&idBoard=${idBoard}&pos=bottom&key=${token.APIKey}&token=${token.ApiToken}`;
+	const url = `https://api.trello.com/1/lists?name=${name}&idBoard=${idBoard}&pos=bottom&key=${token.APIKey}&token=${token.APIToken}`;
 	fetch(url, {
   		method: "POST"
 	})
@@ -158,7 +158,7 @@ exports.checkArgsCreateLabel = async function (json)
 		return "Missing name";
 	else if (json.action["name"].includes("trello_create_label"))
 		return "Reaction can't be same as action";
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken)
 		return "No APIToken provided";
 	if (!token.APIKey)
@@ -189,7 +189,7 @@ exports.trelloCreateLabel = async function (area, res)
 		global.responseError(res, 401, 'Missing ID of board or a name');
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : res.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
@@ -199,7 +199,7 @@ exports.trelloCreateLabel = async function (area, res)
 		return;
 	}
 	const color = labelColors[Math.floor(Math.random() * (labelColors.length - 1))];
-	const url = `https://api.trello.com/1/labels?name=${name}&color=${color}&idBoard=${idBoard}&key=${token.APIKey}&token=${token.ApiToken}`;
+	const url = `https://api.trello.com/1/labels?name=${name}&color=${color}&idBoard=${idBoard}&key=${token.APIKey}&token=${token.APIToken}`;
 	fetch(url, {
   		method: "POST"
 	})
@@ -230,7 +230,7 @@ exports.checkArgsCreateBoard = async function (json)
 		return "Missing description";
 	else if (json.action["name"].includes("trello_create_board"))
 		return "Reaction can't be same as action";
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token.APIToken)
 		return "No APIToken provided";
 	if (!token.APIKey)
@@ -249,7 +249,7 @@ exports.trelloCreateBoard = async function (area, res)
 		global.responseError(res, 401, 'Missing board name or description');
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : res.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
@@ -259,7 +259,7 @@ exports.trelloCreateBoard = async function (area, res)
 		return;
 	}
 	const color = boardColors[Math.floor(Math.random() * (boardColors.length - 1))];
-	const url = `https://api.trello.com/1/boards/?name=${name}&defaultLabels=true&defaultLists=true&desc=${description}&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=${color}&prefs_cardAging=regular&key=${token.APIKey}&token=${token.ApiToken}`
+	const url = `https://api.trello.com/1/boards/?name=${name}&defaultLabels=true&defaultLists=true&desc=${description}&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=${color}&prefs_cardAging=regular&key=${token.APIKey}&token=${token.APIToken}`
 	fetch(url, {
   		method: "POST"
 	})
