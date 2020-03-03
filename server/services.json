@@ -56,7 +56,7 @@
 						},
 						{
 							"type" : "verify_arguments",
-							"name" : "playSongCheckArgs"
+							"name" : "SongCheckArgs"
 						}
 					],
 					"params" : [
@@ -65,6 +65,64 @@
 							"description" : "Name of the song"
 						}
 					]
+				},
+				{
+					"name" : "add_song_to_queue",
+					"title" : "Add song to queue",
+					"description" : "Add a song in the queue",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "addSongToQueue"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SongCheckArgs"
+						}
+					],
+					"params" : [
+						{
+							"name" : "song_name",
+							"description" : "Name of the song"
+						}
+					]
+				},
+				{
+					"name" : "set_volume",
+					"title" : "Set volume",
+					"description" : "Set the volume",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "setVolume"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SetVolumeCheckArgs"
+						}
+					],
+					"params" : [
+						{
+							"name" : "volume",
+							"description" : "Volume to set (0-100)"
+						}
+					]
+				},
+				{
+					"name" : "skip_song",
+					"title" : "Skip song",
+					"description" : "Skip the song",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "SkipSong"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SkipSongCheckArgs"
+						}
+					],
+					"params" : []
 				}
 			]
 		},
@@ -476,8 +534,8 @@
 			"actions" : [
 				{
 					"name" : "Twitch_Create_Webhook_New_Subscriber",
-					"title" : "Create Twitch newSuscriber webhook",
-					"description" : "Trigger when there's a new follower to the given login.",
+					"title" : "New Subscriber",
+					"description" : "Trigger when there's a new follower.",
 					"functions" : [
 						{
 							"type" : "create_action",
@@ -505,8 +563,8 @@
 				},
 				{
 					"name" : "Twitch_Create_Webhook_Stream_ChangeState",
-					"title" : "Create Twitch changeState webhook",
-					"description" : "Trigger when the given login change his stream state.",
+					"title" : "Streamer change State",
+					"description" : "Trigger when the streamer change his stream state.",
 					"functions" : [
 						{
 							"type" : "create_action",
