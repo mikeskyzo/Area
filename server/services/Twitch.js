@@ -14,7 +14,6 @@ async function Twitch_UserId (login)
         if(json.data[0].hasOwnProperty('id'))
             return(json.data[0].id);
     return(84);
-
 };
 
 exports.Twitch_Create_Webhook_NewSubscriber = async function(res, json, next)
@@ -32,9 +31,8 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(res, json, next)
         'headers' : {'Client-ID' : client_id}
     });
 
-    if (resp.status == 202) {
+    if (resp.status == 202)
         res.status(202).send(`Webhook created on the user ${user_id}`);
-    }
     else
         global.responseError(res, 401, 'error, webhook not created, maybe you created too much webhook at once');
 };
@@ -42,7 +40,8 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(res, json, next)
 exports.Twitch_Create_Webhook_NewSubscriber_FM = async function(req, res, area, next)
 {
     next(area, res);
-};
+}
+
 exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
 {
     var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
@@ -90,6 +89,7 @@ exports.Twitch_Create_Webhook_StreamChangeState = async function(res, json, next
 exports.Twitch_Create_Webhook_StreamChangeState_FM = async function(req, res, area, next){
     next(area, res);
 }
+
 exports.Twitch_Delete_Webhook_StreamChangeState = async function(area, req, res)
 {
     var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
