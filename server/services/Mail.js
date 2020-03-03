@@ -1,17 +1,5 @@
 var nodemailer = require('nodemailer');
 
-// mailer.extend(global.app, {
-// 	from: 'areacoon@gmail.com',
-// 	host: 'smtp.gmail.com', // hostname
-// 	secureConnection: true, // use SSL
-// 	port: 465, // port for secure SMTP
-// 	transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
-// 	auth: {
-// 	  user: 'areacoon@gmail.com',
-// 	  pass: 'Areacoon123'
-// 	}
-// });
-
 exports.is_service_active = async function (user_id)
 {
 	return true;

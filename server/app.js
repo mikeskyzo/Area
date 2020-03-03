@@ -39,14 +39,13 @@ mongoDb.initDb();
 const fetch = require('node-fetch');
 
 const ngrok = require('ngrok');
-const token = '1XKuDgkqMYnETxr5sEgd6faCkh1_3iQ2dASUNn2DVmr8dbi5R'
 
 var server = app.listen(8080, function () {
     console.log("Server is up !");
     (async function() {
         try {
             global.url = await ngrok.connect({
-                authtoken: token,
+                authtoken: process.env.NGROK_TOKEN,
                 subdomain: 'areacoon-api',
                 proto: 'http',
                 addr: 8080,

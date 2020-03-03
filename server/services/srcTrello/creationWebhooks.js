@@ -39,7 +39,7 @@ createNewWebhook = async function(res, json, next)
 	.catch(function (error) {
 		global.responseError(res, 500, error);
 	});
-}
+};
 
 exports.createNewWebhookUpdateCard = async function (res, json, next)
 {
@@ -71,8 +71,9 @@ exports.createNewWebhookUpdateCard = async function (res, json, next)
 	.catch(function (error) {
 		return `err : ${error}`;
 	});
-	if (goodType)
+	if (goodType) {
 		return;
+	}
 	await fetch(`https://api.trello.com/1/lists/${idModel}?&key=${token.APIKey}&token=${token.APIToken}`)
 	.then(function (response) {
 		if (response.status !== 200) {
@@ -86,8 +87,9 @@ exports.createNewWebhookUpdateCard = async function (res, json, next)
 	.catch(function (error) {
 		return `err : ${error}`;
 	});
-	if (goodType)
+	if (goodType) {
 		return;
+	}
 	await fetch(`https://api.trello.com/1/boards/${idModel}?&key=${token.APIKey}&token=${token.APIToken}`)
 	.then(function (response) {
 		if (response.status !== 200) {
@@ -101,8 +103,9 @@ exports.createNewWebhookUpdateCard = async function (res, json, next)
 	.catch(function (error) {
 		return `err : ${error}`;
 	});
-	if (goodType)
+	if (goodType) {
 		return;
+	}
 	await fetch(`https://api.trello.com/1/members/${idModel}?&key=${token.APIKey}&token=${token.APIToken}`)
 	.then(function (response) {
 		if (response.status !== 200) {
@@ -116,8 +119,9 @@ exports.createNewWebhookUpdateCard = async function (res, json, next)
 	.catch(function (error) {
 		return `err : ${error}`;
 	});
-	if (goodType)
+	if (goodType) {
 		return;
+	}
 	global.responseError(res, 401, "idModel given isn't a card, list, board or member");
 }
 
@@ -234,7 +238,7 @@ exports.createNewWebhookUpdateChecklist = async function (res, json, next)
 		return `err : ${error}`;
 	});
 	if (goodType)
-		return;	
+		return;
 	global.responseError(res, 401, "idModel given isn't a board or member");
 }
 
@@ -647,7 +651,6 @@ exports.createNewWebhookAddChecklistToCard = async function (res, json, next)
 		return;
 	await fetch(`https://api.trello.com/1/boards/${idModel}?fields=all&key=${token.APIKey}&token=${token.APIToken}`)
 	.then(function (response) {
-		console.log(response)
 		if (response.status !== 200) {
 			res.status(500).send(`Bad response from Trello : ${resJson.error}`);
 			global.responseError(res, 401, "idModel given isn't a board");

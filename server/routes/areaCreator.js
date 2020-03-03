@@ -2,18 +2,8 @@ var uniqid = require('uniqid');
 
 exports.CreateArea = function (req, res)
 {
-	global.new_area = true;
 	checkAndSaveAREA(uniqid(), req, res);
 }
-
-exports.updateArea = function (req, res) {
-	if (!req.body.area_id) {
-		global.responseError(res, 401, 'Bad body');
-		return ;
-	}
-	global.new_area = false;
-	checkAndSaveAREA(req.body.area_id, req, res);
-};
 
 async function checkAndSaveAREA(area_id, req, res)
 {

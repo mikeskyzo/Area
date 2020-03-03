@@ -1,6 +1,7 @@
 const axios = require('axios');
 const submitReaction = require('./reddit/reactions/submitReaction');
 const composeReaction = require('./reddit/reactions/composeReaction');
+const friendReaction = require('./reddit/reactions/friendReaction');
 
 /* General settings */
 const generalSettings = {
@@ -9,8 +10,8 @@ const generalSettings = {
 	redditAuthApi: `https://oauth.reddit.com`,
 
 	// App related
-	clientId: 'xxa4cp-hsWE_iA',
-	clientSecret: '466F9UWdI-Eh1iz7AhN8zNyszE8',
+	clientId: process.env.REDDIT_ID,
+	clientSecret: process.env.REDDIT_SECRET,
 	redirectUri: 'https://areacoon-api.eu.ngrok.io/auth/redirect',
 };
 
@@ -110,6 +111,14 @@ module.exports = {
 	},
 	composePrivateMessageCheck: (json) => {
 		return composeReaction.composeReactionCheck(json);
+	},
+
+	// COMPOSE
+	addFriend: async (area, res) => {
+		await friendReaction.friendReaction(RedditAuthApi, area, res);
+	},
+	addFriendCheck: (json) => {
+		return friendReaction.friendReactionCheck(json);
 	}
 
 };

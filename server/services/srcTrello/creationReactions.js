@@ -65,7 +65,6 @@ exports.trelloCreateCard = async function (area, res)
 	})
 	.then(function (response) {
 		if (response.status !== 200) {
-			console.log(`Bad response from Trello : ${response.error}`);
 			res.status(500).send();
 		} else
 			return response.json();
@@ -90,15 +89,16 @@ exports.checkArgsCreateList = async function (json)
 		return "Missing name";
 	else if (json.action["name"].includes("trello_create_list"))
 		return "Reaction can't be same as action";
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
-	if (!token.APIToken)
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
+	if (!token || !token.APIToken)
 		return "No APIToken provided";
-	if (!token.APIKey)
+	if (!token || !token.APIKey)
 		return "No APIKey provided";
-	fetch(`https://api.trello.com/1/boards/${idBoard}?&key=${token.APIKey}&token=${token.APIToken}`)
+	await fetch(`https://api.trello.com/1/boards/${idBoard}?&key=${token.APIKey}&token=${token.APIToken}`)
 	.then(function (response) {
-		if (response.status !== 200)
+		if (response.status !== 200) {
 			return `Bad response from Trello : ${response.error}`;
+		}
 		return null;
 	})
 	.then(function (res) {
@@ -108,7 +108,7 @@ exports.checkArgsCreateList = async function (json)
 		return `err : ${error}`;
 	});
 	return null;
-}
+};
 
 exports.trelloCreateList = async function (area, res)
 {
@@ -134,19 +134,18 @@ exports.trelloCreateList = async function (area, res)
 	})
 	.then(function (response) {
 		if (response.status !== 200) {
-			console.log(`Bad response from Trello : ${response.error}`);
 			res.status(500).send();
-		} else
+		} else {
 			return response.json();
+		}
 	})
 	.then(function (resjson) {
 		res.send();
-		return;
 	})
 	.catch(function (error) {
 		global.responseError(res, 500, `err : ${error}`);
 	});
-}
+};
 
 exports.checkArgsCreateLabel = async function (json)
 {
@@ -160,7 +159,7 @@ exports.checkArgsCreateLabel = async function (json)
 	else if (json.action["name"].includes("trello_create_label"))
 		return "Reaction can't be same as action";
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
-	if (!token || !token.APIToken) 
+	if (!token || !token.APIToken)
 		return "No APIToken provided";
 	if (!token.APIKey)
 		return "No APIKey provided";

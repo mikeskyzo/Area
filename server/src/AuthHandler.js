@@ -21,7 +21,7 @@ exports.redirectToService = function(req, res)
 exports.getTokenFromService = function(req, res)
 {
 	let token = getToken(req);
-	if (!token || !token.service || !token.user_id || !token.support)
+	if (!token)
 		res.redirect('https://google.com/');
 	else if (!global.ServiceRedirectAuthMap.get(token.service))
 		res.redirect('https://twitter.com/');

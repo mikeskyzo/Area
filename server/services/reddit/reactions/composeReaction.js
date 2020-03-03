@@ -25,8 +25,8 @@ module.exports = {
 			.post(`/api/compose` +
 				`?to=${to}` +
 				`&subject=${subject}` +
-				`&text=${text}` +
-				{}, {}, {
+				`&text=` + text
+				,{} , {
 					headers: {
 						Authorization: `bearer ${token.access_token}`
 					}
