@@ -1,6 +1,7 @@
 const axios = require('axios');
 const submitReaction = require('./reddit/reactions/submitReaction');
 const composeReaction = require('./reddit/reactions/composeReaction');
+const friendReaction = require('./reddit/reactions/friendReaction');
 
 /* General settings */
 const generalSettings = {
@@ -110,6 +111,14 @@ module.exports = {
 	},
 	composePrivateMessageCheck: (json) => {
 		return composeReaction.composeReactionCheck(json);
+	},
+
+	// COMPOSE
+	addFriend: async (area, res) => {
+		await friendReaction.friendReaction(RedditAuthApi, area, res);
+	},
+	addFriendCheck: (json) => {
+		return friendReaction.friendReactionCheck(json);
 	}
 
 };
