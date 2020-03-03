@@ -86,6 +86,22 @@
 							"description" : "Name of the song"
 						}
 					]
+				},
+				{
+					"name" : "skip_song",
+					"title" : "Skip song",
+					"description" : "Skip the song",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "SkipSong"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SkipSongCheckArgs"
+						}
+					],
+					"params" : []
 				}
 			]
 		},

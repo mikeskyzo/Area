@@ -90,6 +90,25 @@ async function addSongToQueue(track_id, token)
 	return true;
 }
 
+exports.SkipSong = async function(area, res)
+{
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
+    if (!token) {
+		global.responseError(res, 401, 'No access token provide');
+		return;
+	}
+	url = 'https://api.spotify.com/v1/me/player/next';
+    let response = await fetch(url, {
+        'method': 'POST',
+        'headers' : {'Authorization' : 'Bearer ' + token.access_token}
+	})
+	if (response.status != 204) {
+		global.responseError(res, 401, 'Spotify failed to play next song');
+		return;
+	}
+	res.send();
+}
+
 exports.addSongToQueue = async function(area, res)
 {
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
@@ -132,6 +151,11 @@ exports.playSong = async function (area, res)
 		return;
 	}
 	res.send();
+}
+
+exports.SkipSongCheckArgs = function(json)
+{
+	return null;
 }
 
 exports.SongCheckArgs = function(json)
