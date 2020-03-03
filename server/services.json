@@ -56,7 +56,28 @@
 						},
 						{
 							"type" : "verify_arguments",
-							"name" : "playSongCheckArgs"
+							"name" : "SongCheckArgs"
+						}
+					],
+					"params" : [
+						{
+							"name" : "song_name",
+							"description" : "Name of the song"
+						}
+					]
+				},
+				{
+					"name" : "add_song_to_queue",
+					"title" : "Add song to queue",
+					"description" : "Add a song in the queue",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "addSongToQueue"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SongCheckArgs"
 						}
 					],
 					"params" : [
@@ -476,8 +497,8 @@
 			"actions" : [
 				{
 					"name" : "Twitch_Create_Webhook_New_Subscriber",
-					"title" : "Create Twitch newSuscriber webhook",
-					"description" : "Trigger when there's a new follower to the given login.",
+					"title" : "New Subscriber",
+					"description" : "Trigger when there's a new follower.",
 					"functions" : [
 						{
 							"type" : "create_action",
@@ -505,8 +526,8 @@
 				},
 				{
 					"name" : "Twitch_Create_Webhook_Stream_ChangeState",
-					"title" : "Create Twitch changeState webhook",
-					"description" : "Trigger when the given login change his stream state.",
+					"title" : "Streamer change State",
+					"description" : "Trigger when the streamer change his stream state.",
 					"functions" : [
 						{
 							"type" : "create_action",
