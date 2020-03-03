@@ -50,11 +50,9 @@ class selectName : AppCompatActivity() {
 
         option.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Toast.makeText(getContext(), "nothing selected", Toast.LENGTH_SHORT).show()
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(getContext(), colors.get(position), Toast.LENGTH_SHORT).show()
             }
         }
 
