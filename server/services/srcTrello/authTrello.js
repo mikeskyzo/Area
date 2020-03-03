@@ -31,37 +31,11 @@ let sel = "";
 
 exports.generate_url = function(token)
 {
-	/*
-	console.log('===========================================================================');
-	console.log(`\nYou made it up here ! Now I'll try to allow you to authorize Trello !\n`);
-	console.log('===========================================================================');
-	 */
-	/*
-	const scope = 'read,write,account';
-	const expiration = 'never';
-	OAuth.getOAuthRequestToken((error, token, tokenSecret, results)=> {
-		oauthSecrets[token] = tokenSecret;
-		return `https://trello.com/1/OAuthAuthorizeToken` +
-			`?oauth_token=${token}` +
-			`&name=${generalSettings.appName}` +
-			`&scope=${scope}` +
-			`&expiration=${expiration}`;
-	});*/
-	console.log(`-----------------------`);
-	console.log(token);
-	console.log(`-----------------------`);
 	return `https://trello.com/1/authorize?callback_method=frament&return_url=${global.url}/auth/flow/${token}/&scope=read,write,account&expiration=never&name=Area_Dashboard++&key=cfd14732f1e65ebbfc3521de87b214a1&response_type=token`;
 };
 
 exports.redirect_auth = async function(req, json)
 {
-	console.log(`=======================`);
-	console.log(`\nI'll try to parse url\n`);
-	console.log(req.query);
-	console.log(req.query.token);
-	console.log(`=======================`);
-	console.log(json);
-	console.log(`=======================`);
 	// As tokens are valid, add them to the json to save them in db
 	json.APIToken = req.query.token;
 	json.APIKey = generalSettings.clientId;

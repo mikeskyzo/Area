@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
 
         return params;
     }
-    
+
     function displayArea(area) {
         var areaHtml = '';
 
@@ -136,13 +136,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
             url : url,
             data : "area=" + dataParse,
             success : function (data) {
-                console.log(data);
                 areaResult.innerHTML = '' +
                     '<div>' + data.result + '</div>';
             },
         });
     }
-    
+
     function createAreaFunction() {
         for (var i = 0; i != actionParam.length; i++)
             actionParamValue[i] = document.getElementById(actionParam[i]).value;
@@ -298,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
             '<div style="border-bottom: 4px solid #ff9800;"></div>'
         return newAction;
     }
-    
+
     function displayAction(action) {
         let actionHtml = "";
 
