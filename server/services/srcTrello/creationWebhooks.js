@@ -9,7 +9,7 @@ createNewWebhook = async function(res, json, next)
 		return;
 	}
 
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
@@ -51,7 +51,7 @@ exports.createNewWebhookUpdateCard = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of card");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -131,7 +131,7 @@ exports.createNewWebhookUpdateList = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of list");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -197,7 +197,7 @@ exports.createNewWebhookUpdateChecklist = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of checklist");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -248,7 +248,7 @@ exports.createNewWebhookUpdateMember = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of member");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -283,7 +283,7 @@ exports.createNewWebhookCreateCard = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of list, board or member");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -348,7 +348,7 @@ exports.createNewWebhookCreateList = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of board or member");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -398,7 +398,7 @@ exports.createNewWebhookCommentCard = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of card, list, board or member");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -478,7 +478,7 @@ exports.createNewWebhookDeleteCard = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of card, list, board or member");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -558,7 +558,7 @@ exports.createNewWebhookRemoveChecklistFromCard = async function (res, json, nex
 		global.responseError(res, 401, "Trello needs a idModel of card");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -623,7 +623,7 @@ exports.createNewWebhookAddChecklistToCard = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of card");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -689,7 +689,7 @@ exports.createNewWebhookRemoveMemberFromCard = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of card");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -755,7 +755,7 @@ exports.createNewWebhookAddAttachmentToCard = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of card");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}
@@ -835,7 +835,7 @@ exports.createNewWebhookCreateBoard = async function (res, json, next)
 		global.responseError(res, 401, "Trello needs a idModel of member");
 		return;
 	}
-	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.service.Trello});
+	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
 	if (!token || !token.APIToken) {
 		return "No APIToken provided";
 	}

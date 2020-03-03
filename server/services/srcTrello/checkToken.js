@@ -16,7 +16,7 @@ exports.CheckToken = function (req, res)
 		if (response.status === 200) {
 			let json = {
 				user_id : req.body.user_id,
-				service : global.service.Trello,
+				service : global.Services.Trello,
 				APIToken : req.body.APIToken,
 				APIKey : req.body.APIKey
 			};

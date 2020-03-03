@@ -5,7 +5,7 @@ exports.deleteWebhook = async function (area, req, res) {
 		global.responseError(res, 401, "The area has no webhook id");
 		return;
 	}
-	let token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.service.Trello});
+	let token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Trello});
 	if (!token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
 		return;
