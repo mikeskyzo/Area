@@ -270,7 +270,6 @@ exports.setTrelloAccessToken = function(req, res, apiToken, apiKey) {
 		res.cookie('trelloConnect', true);
 		res.redirect('/profil')
 	}).catch(function(error) {
-		//console.log(error);
 		res.cookie('trelloConnect', true);
 		res.redirect('/error')
 	})
