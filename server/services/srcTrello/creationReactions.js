@@ -65,7 +65,6 @@ exports.trelloCreateCard = async function (area, res)
 	})
 	.then(function (response) {
 		if (response.status !== 200) {
-			console.log(`Bad response from Trello : ${response.error}`);
 			res.status(500).send();
 		} else
 			return response.json();
@@ -81,7 +80,6 @@ exports.trelloCreateCard = async function (area, res)
 
 exports.checkArgsCreateList = async function (json)
 {
-	console.log('CheckArgsCreateList -- start');
 	const idBoard = global.getParam(json.reaction.params, "idModel");
 	const name = global.getParam(json.reaction.params, "name");
 
@@ -91,9 +89,7 @@ exports.checkArgsCreateList = async function (json)
 		return "Missing name";
 	else if (json.action["name"].includes("trello_create_list"))
 		return "Reaction can't be same as action";
-	console.log(json.user_id);
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Trello});
-	console.log(token);
 	if (!token || !token.APIToken)
 		return "No APIToken provided";
 	if (!token || !token.APIKey)
@@ -101,44 +97,35 @@ exports.checkArgsCreateList = async function (json)
 	await fetch(`https://api.trello.com/1/boards/${idBoard}?&key=${token.APIKey}&token=${token.APIToken}`)
 	.then(function (response) {
 		if (response.status !== 200) {
-			console.log('CheckArgsCreateList -- end -- 1');
 			return `Bad response from Trello : ${response.error}`;
 		}
-		console.log('CheckArgsCreateList -- end -- 2');
 		return null;
 	})
 	.then(function (res) {
-		console.log('CheckArgsCreateList -- end -- 3');
 		return res;
 	})
 	.catch(function (error) {
-		console.log('CheckArgsCreateList -- end -- 4');
 		return `err : ${error}`;
 	});
-	console.log('CheckArgsCreateList -- end -- 5');
 	return null;
 };
 
 exports.trelloCreateList = async function (area, res)
 {
-	console.log('CreateList -- start');
 	const idBoard = global.getParam(area.reaction.params, "idModel");
 	const name = global.getParam(area.reaction.params, "name");
 
 	if (!idBoard || !name) {
 		global.responseError(res, 401, 'Missing ID of board or a name')
-		console.log('CreateList -- end -- 1');
 		return;
 	}
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : res.user_id, service : global.service.Trello});
 	if (!token || !token.APIToken) {
 		global.responseError(res, 401, "No APIToken provided");
-		console.log('CreateList -- end -- 2');
 		return;
 	}
 	if (!token.APIKey) {
 		global.responseError(res, 401, "No APIKey provided");
-		console.log('CreateList -- end -- 3');
 		return;
 	}
 	const url = `https://api.trello.com/1/lists?name=${name}&idBoard=${idBoard}&pos=bottom&key=${token.APIKey}&token=${token.ApiToken}`;
@@ -147,20 +134,15 @@ exports.trelloCreateList = async function (area, res)
 	})
 	.then(function (response) {
 		if (response.status !== 200) {
-			console.log(`Bad response from Trello : ${response.error}`);
-			console.log('CreateList -- end -- 4');
 			res.status(500).send();
 		} else {
-			console.log('CreateList -- end -- 5');
 			return response.json();
 		}
 	})
 	.then(function (resjson) {
-		console.log('CreateList -- end -- 6');
 		res.send();
 	})
 	.catch(function (error) {
-		console.log('CreateList -- end -- 7');
 		global.responseError(res, 500, `err : ${error}`);
 	});
 };

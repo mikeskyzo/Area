@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function (req, res) {
         let connexionButton = "";
         disconnectButton = [];
 
-        console.log(servicesStatus);
 
         servicesStatus.data.forEach(elem =>
             connexionButton += checkIfConnected(elem, servicesStatus.server, servicesStatus.token)
@@ -83,11 +82,6 @@ document.addEventListener("DOMContentLoaded", function (req, res) {
             method : "get",
             crossDomain : true,
             url : url,
-            error : function (data, status, error) {
-                console.log(data);
-                console.log(status);
-                console.log(error);
-            }
         });
     }
 
