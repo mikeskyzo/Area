@@ -22,7 +22,10 @@ document.addEventListener("DOMContentLoaded", function (req, res) {
             method : "post",
             crossDomain : true,
             url : url,
-            data : "service=" + elem
+            data : "service=" + elem,
+            success : function (data) {
+                location.reload();
+            }
         });
     }
 
@@ -57,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function (req, res) {
         let connexionButton = "";
         disconnectButton = [];
 
-        console.log(servicesStatus);
 
         servicesStatus.data.forEach(elem =>
             connexionButton += checkIfConnected(elem, servicesStatus.server, servicesStatus.token)
@@ -80,14 +82,6 @@ document.addEventListener("DOMContentLoaded", function (req, res) {
             method : "get",
             crossDomain : true,
             url : url,
-            success : function (data) {
-                console.log("getService OK");
-            },
-            error : function (data, status, error) {
-                console.log(data);
-                console.log(status);
-                console.log(error);
-            }
         });
     }
 

@@ -50,8 +50,6 @@ const enableViewsRoutes = async function(app) {
 
 };
 
-// error routes
-const errorLogicRoutes = require('./logic/errorLogicalRoutes');
 // Enable authorizations routes function
 const enableLogicRoutes = async function (app) {
 
@@ -139,9 +137,6 @@ const enableLogicRoutes = async function (app) {
 			})
 		}
 	});
-
-	await errorLogicRoutes.enableErrorLogicRoutes(app);
-
 };
 
 module.exports = {

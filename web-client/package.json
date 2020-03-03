@@ -14,11 +14,8 @@
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "jsdom": "^16.2.0",
-    "node-fetch": "^2.6.0",
     "oauth": "^0.9.15",
-    "url": "^0.11.0"
-  },
-  "devDependencies": {
+    "url": "^0.11.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "express-session": "^1.17.0",

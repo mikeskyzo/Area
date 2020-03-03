@@ -14,6 +14,19 @@ services:
             - db
         links:
             - db:db
+        environment:
+            - GITHUB_ID=a5c1a4e56df11fc5735a
+            - GITHUB_SECRET=d34b0ddb1e2990542e7c42ea6faa1f668a5d8e20
+            - NGROK_TOKEN=1XKuDgkqMYnETxr5sEgd6faCkh1_3iQ2dASUNn2DVmr8dbi5R
+            - DISCORD_ID=680706257992024065
+            - DISCORD_SECRET=eaQjWT9RwgohzOrn2JRgZRwBxhtxVBZ5
+            - SLACK_ID=933637704274.945976210260
+            - SLACK_SECRET=248197e37352e5aa521b969a3cbb8a91
+            - REDDIT_ID=xxa4cp-hsWE_iA
+            - REDDIT_SECRET=466F9UWdI-Eh1iz7AhN8zNyszE8
+            - TWITCH_ID=5cfjsk5flx3vkouomr7a26y7usrxmz
+            - SPOTIFY_ID=b9fdd1141e6c4fe2866b6a37134c514d
+            - SPOTIFY_SECRET=64fca0dd642a459696c36304ad1fff3a
 
     mobile_client:
         image: mobile_client
