@@ -7,10 +7,9 @@ const checkToken = require("./srcTrello/checkToken.js");
 const formatWebhook = require("./srcTrello/formatWebhook.js");
 const authTrello = require("./srcTrello/authTrello.js");
 
-exports.confirmWebhookFunctionTrello = async function(req, res, area)
-{
+exports.confirmWebhookFunctionTrello = async function(req, res, area) {
 	res.send();
-}
+};
 
 exports.createNewWebhookUpdateCard = creationWebhooks.createNewWebhookUpdateCard;
 
@@ -42,14 +41,12 @@ exports.deleteWebhook = deleteWebhooks.deleteWebhook;
 
 exports.CheckToken = checkToken.CheckToken;
 
-exports.is_service_active = async function(user_id)
-{
+exports.is_service_active = async function(user_id) {
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : user_id, service : global.Services.Trello});
-	console.log(token);
-	if (!token || !token.access_token)
+	if (!token || !token.APIToken)
 		return false;
 	return true;
-}
+};
 
 exports.generate_url = authTrello.generate_url;
 

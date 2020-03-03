@@ -460,6 +460,27 @@
 							"description": "Content of the message"
 						}
 					]
+				},
+				{
+					"name": "AddFriend",
+					"title": "Add a friend",
+					"description": "Add a new friend.",
+					"functions": [
+						{
+							"type": "execute_reaction",
+							"name": "addFriend"
+						},
+						{
+							"type": "verify_arguments",
+							"name": "addFriendCheck"
+						}
+					],
+					"params": [
+						{
+							"name": "name",
+							"description": "Name of the user to friend"
+						}
+					]
 				}
 			]
 		},

@@ -68,8 +68,20 @@ router.get('/auth/connect/:service', function(req, res) {
 });
 
 router.get('/auth/redirect/:token?', function(req, res) {
+	console.log(`===============================`);
+	console.log(`\nWelcome back on areacoon server\n`);
+	console.log(req.get('host') );
+	console.log(`\n===============================`);
 	authHandler.getTokenFromService(req, res);
 });
+
+router.get('/auth/flow/:state/:token?', function(req, res) {
+	res.set('Content-Type', 'text/html');
+	res.send(new Buffer(`<!doctype html><html lang="jp"><head><meta charset="utf-8"></head>
+<body><script>window.location = String(window.location).replace('/flow', '/redirect').replace('#', '?')</script>
+</body></html>`));
+});
+
 
 router.delete('/auth/delete/:service', function(req, res) {
 	utils.verifyToken(req ,res, authHandler.deleteService);
