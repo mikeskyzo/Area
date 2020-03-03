@@ -10,7 +10,7 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://slack.com/oauth/v2/authorize?client_id=933637704274.945976210260&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&state=' + token;
+	return 'https://slack.com/oauth/v2/authorize?client_id=' + process.env.SLACK_ID + '&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&state=' + token;
 }
 
 exports.redirect_auth = async function (req, json)
@@ -21,7 +21,7 @@ exports.redirect_auth = async function (req, json)
 	if (token)
         global.deleteSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Slack});
 
-	const url = 'https://slack.com/api/oauth.v2.access?client_id=933637704274.945976210260&client_secret=248197e37352e5aa521b969a3cbb8a91&code=' + code;
+	const url = 'https://slack.com/api/oauth.v2.access?client_id=' + process.env.SLACK_ID + '&client_secret=' + process.env.SLACK_SECRET + '&code=' + code;
 	fetch(url, {
 		'method': 'POST',
 		headers : {"Accept": "application/json"}
@@ -33,8 +33,6 @@ exports.redirect_auth = async function (req, json)
 	})
 	.then(function (resjson) {
 		json.access_token = resjson.authed_user.access_token;
-		console.log(resjson.authed_user.access_token);
-		console.log(json);
 		global.saveInDbAsync(global.CollectionToken, json);
 	})
 	.catch(function (err){
@@ -86,40 +84,4 @@ exports.send_message_check_args = function(json)
 		return 'Missing a message to send';
     else
 		return null;
-}
-
-exports.check_token = async function (req, res)
-{
-	if (!req.body.access_token) {
-		global.responseError(res, 401, 'Need an access token for slack');
-		return;
-	}
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : req.body.service})
-	if (token)
-	{
-		global.responseError(res, 409, "You have already a token saved for " + req.body.service);
-		return;
-	}
-	var json = {
-		user_id : req.body.user_id,
-		service : global.Services.Slack,
-		access_token : req.body.access_token
-	}
-	var url =  'https://slack.com/api/auth.test?token=' + req.body.access_token;
-	fetch(url, {
-		'method': 'POST',
-	})
-	.then(function (response) {
-		return response.json();
-	})
-	.then(function (resjson) {
-		if (resjson.ok == false) {
-			global.responseError(res, 401, 'Token is invalid : ' + resjson.error)
-		} else {
-			global.saveInDb(global.CollectionToken, json, res, 'Token Slack saved for ' + resjson.user  + ' on ' + resjson.team);
-		}
-	})
-	.catch(function (error) {
-		global.responseError(res, 500, 'err : ' + error)
-	});
 }

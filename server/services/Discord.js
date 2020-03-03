@@ -11,7 +11,7 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://discordapp.com/api/oauth2/authorize?client_id=680706257992024065&redirect_uri=https%3A%2F%2Fareacoon-api.eu.ngrok.io%2Fauth%2Fredirect&response_type=code&scope=webhook.incoming&state=' + token
+	return 'https://discordapp.com/api/oauth2/authorize?client_id=' + process.env.DISCORD_ID + '&redirect_uri=' + global.redirect_url + '&response_type=code&scope=webhook.incoming&state=' + token
 }
 
 exports.redirect_auth = async function (req, json)
@@ -28,8 +28,8 @@ exports.redirect_auth = async function (req, json)
     const url = 'https://discordapp.com/api/v6/oauth2/token';
     const data = new FormData();
 
-    data.append('client_id', '680706257992024065');
-    data.append('client_secret', 'eaQjWT9RwgohzOrn2JRgZRwBxhtxVBZ5');
+    data.append('client_id', process.env.DISCORD_ID);
+    data.append('client_secret', process.env.DISCORD_SECRET);
     data.append('grant_type', 'authorization_code');
     data.append('redirect_uri', 'https://areacoon-api.eu.ngrok.io/auth/redirect');
     data.append('scope', 'webhook.incoming');
@@ -54,26 +54,6 @@ exports.redirect_auth = async function (req, json)
 	.catch(function (err){
 		console.log(err);
 	})
-}
-
-exports.check_token = async function (req, res)
-{
-	if (!req.body.webhook_id || !req.body.webhook_token) {
-		global.responseError(res, 401, 'Need a access webhook_token and a webhook_id for Discord');
-		return;
-    }
-    let json = {
-        user_id : req.body.user_id,
-        service : global.Services.Discord,
-        webhook_id : req.body.webhook_id,
-        webhook_token : req.body.webhook_token
-    };
-    let url = 'https://discordapp.com/api/webhooks/' + req.body.webhook_id + '/' + req.body.webhook_token;
-    let response = await (await fetch(url, {}));
-    if (response.status != 200)
-        global.responseError(res, 401, 'Webhook not valid : ' + response.statusText);
-    else
-		global.saveInDb(global.CollectionToken, json, res, "Webhook Discord saved");
 }
 
 exports.send_message = async function (area, res)

@@ -31,7 +31,7 @@ function redirectToArea(area, req, res)
 function redirectToFinishWebhook(area, req, res)
 {
 	if (!area) {
-		global.responseError(res, 403, 'Area not is not existing')
+		global.responseError(res, 401, 'Area is not existing')
 		return;
 	}
 	if (global.ActionFinishWebhook.get(area.action.name)) {

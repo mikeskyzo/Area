@@ -40,6 +40,93 @@
 			]
 		},
 		{
+			"name" : "Spotify",
+			"is_service_active" : "is_service_active",
+			"generate_url_function" : "generate_url",
+			"redirect_auth_function" : "redirect_auth",
+			"reactions" : [
+				{
+					"name" : "play_song",
+					"title" : "Play song",
+					"description" : "Plays a song",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "playSong"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SongCheckArgs"
+						}
+					],
+					"params" : [
+						{
+							"name" : "song_name",
+							"description" : "Name of the song"
+						}
+					]
+				},
+				{
+					"name" : "add_song_to_queue",
+					"title" : "Add song to queue",
+					"description" : "Add a song in the queue",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "addSongToQueue"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SongCheckArgs"
+						}
+					],
+					"params" : [
+						{
+							"name" : "song_name",
+							"description" : "Name of the song"
+						}
+					]
+				},
+				{
+					"name" : "set_volume",
+					"title" : "Set volume",
+					"description" : "Set the volume",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "setVolume"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SetVolumeCheckArgs"
+						}
+					],
+					"params" : [
+						{
+							"name" : "volume",
+							"description" : "Volume to set (0-100)"
+						}
+					]
+				},
+				{
+					"name" : "skip_song",
+					"title" : "Skip song",
+					"description" : "Skip the song",
+					"functions" : [
+						{
+							"type" : "execute_reaction",
+							"name" : "SkipSong"
+						},
+						{
+							"type" : "verify_arguments",
+							"name" : "SkipSongCheckArgs"
+						}
+					],
+					"params" : []
+				}
+			]
+		},
+		{
 			"name" : "Github",
 			"is_service_active" : "is_service_active",
 			"generate_url_function" : "generate_url",
@@ -48,7 +135,7 @@
 				{
 					"name" : "github_new_push",
 					"title" : "Repository push",
-					"description" : "Trigger when someone push on a repo",
+					"description" : "Trigger when someone push on a repository",
 					"functions" : [
 						{
 							"type" : "create_action",
@@ -56,7 +143,36 @@
 						},
 						{
 							"type" : "format_result",
-							"name" : "FormatWebhookPushOnRepo"
+							"name" : "FormatWebhookCheckZen"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_repo_labeled",
+					"title" : "Repository labeled",
+					"description" : "Trigger when a repository is labeled",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookRepoLabeled"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckAction"
 						},
 						{
 							"type" : "delete_action",
@@ -85,7 +201,181 @@
 						},
 						{
 							"type" : "format_result",
-							"name" : "FormatWebhookIssueEvent"
+							"name" : "FormatWebhookCheckAction"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_repo_public",
+					"title" : "Repository public",
+					"description" : "Trigger when a repository is made public",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookRepoPublic"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckAction"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_repo_archive",
+					"title" : "Repository archived",
+					"description" : "Trigger when a repository is archived",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookRepoPullRequest"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckZen"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_repo_star",
+					"title" : "Repository stared",
+					"description" : "Trigger when a repository is stared",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookRepoStar"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckZen"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_repo_commit_comment",
+					"title" : "Repository commit comment",
+					"description" : "Trigger when a repository commit is commented",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookCommitComment"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckZen"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_repo_created",
+					"title" : "Repository created",
+					"description" : "Trigger when a branch or a label on a repository is created",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookCreated"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckZen"
+						},
+						{
+							"type" : "delete_action",
+							"name" : "deleteWebhook"
+						}
+					],
+					"params" : [
+						{
+							"name" : "repository",
+							"description" : "Name of the repository"
+						},
+						{
+							"name" : "username",
+							"description" : "Owner's name of the repository"
+						}
+					]
+				},
+				{
+					"name" : "github_repo_fork",
+					"title" : "Repository forked",
+					"description" : "Trigger when a repository is forked",
+					"functions" : [
+						{
+							"type" : "create_action",
+							"name" : "createWebhookRepoFork"
+						},
+						{
+							"type" : "format_result",
+							"name" : "FormatWebhookCheckZen"
 						},
 						{
 							"type" : "delete_action",
@@ -244,8 +534,8 @@
 			"actions" : [
 				{
 					"name" : "Twitch_Create_Webhook_New_Subscriber",
-					"title" : "Create Twitch newSuscriber webhook",
-					"description" : "Trigger when there's a new follower to the given login.",
+					"title" : "New Subscriber",
+					"description" : "Trigger when there's a new follower.",
 					"functions" : [
 						{
 							"type" : "create_action",
@@ -273,8 +563,8 @@
 				},
 				{
 					"name" : "Twitch_Create_Webhook_Stream_ChangeState",
-					"title" : "Create Twitch changeState webhook",
-					"description" : "Trigger when the given login change his stream state.",
+					"title" : "Streamer change State",
+					"description" : "Trigger when the streamer change his stream state.",
 					"functions" : [
 						{
 							"type" : "create_action",
