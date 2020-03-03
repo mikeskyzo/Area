@@ -16,6 +16,11 @@ exports.generate_url = function (token)
 
 exports.redirect_auth = async function (req, json)
 {
+	var token = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Spotify})
+	console.log(token);
+	if (token)
+        global.deleteSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Spotify});
+
 	const code = req.query.code;
 
 	const {URLSearchParams} = require('url');
@@ -45,18 +50,6 @@ exports.redirect_auth = async function (req, json)
 		console.log(err);
 	})
 }
-
-// exports.playSong = async function (area, res)
-// {
-// 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Discord});
-//     if (!token) {
-// 		global.responseError(res, 401, 'No access token provided');
-// 		return;
-//     }
-//     let body = {
-//         song_name : global.getParam(area.reaction.params, 'song_name')
-//     };
-// }
 
 async function getSongByName(song_name, token)
 {
@@ -153,6 +146,26 @@ exports.playSong = async function (area, res)
 	res.send();
 }
 
+exports.setVolume = async function(area, res)
+{
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
+    if (!token) {
+		global.responseError(res, 401, 'No access token provide');
+		return;
+	}
+	url = 'https://api.spotify.com/v1/me/player/volume?volume_percent=' + global.getParam(area.reaction.params, 'volume');
+    let response = await fetch(url, {
+        'method': 'PUT',
+        'headers' : {'Authorization' : 'Bearer ' + token.access_token}
+	})
+	if (response.status != 204) {
+		console.log('Spotify failed to set volume');
+		global.responseError(res, 401, 'Spotify failed to set volume');
+		return;
+	}
+	res.send();
+}
+
 exports.SkipSongCheckArgs = function(json)
 {
 	return null;
@@ -162,6 +175,14 @@ exports.SongCheckArgs = function(json)
 {
 	let song = global.getParam(json.reaction.params, 'song_name');
     if (!song || song.trim() == '')
+	   return 'Missing a song name';
+    return null;
+}
+
+exports.SetVolumeCheckArgs = function(json)
+{
+	let song = global.getParam(json.reaction.params, 'volume');
+    if (!song || isNaN(song))
 	   return 'Missing a song name';
     return null;
 }
