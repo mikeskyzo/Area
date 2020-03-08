@@ -121,7 +121,7 @@ exports.Twitch_Create_Webhook_StreamChangeState_CA = async function(req, res, ar
 
 exports.confirmWebhookFunctionTwitch = function(req, res, area)
 {
-    res.send(req.query["hub.challenge"], 202);
+    res.send(req.query["hub.challenge"], 200);
 };
 
 
