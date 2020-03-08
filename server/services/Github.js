@@ -86,18 +86,18 @@ async function createWebhook(event, res, json)
 	let repository = global.getParam(json.action.params, 'repository');
 
 	if (!username || username.trim() == '') {
-		global.responseError(res, 401, 'Github need a username')
+		global.sendResponse(res, 401, 'Github need a username')
 		return;
 	}
 	if (!repository || repository.trim() == '') {
-		global.responseError(res, 401, 'Github need a repository')
+		global.sendResponse(res, 401, 'Github need a repository')
 		return;
 	}
 	const url = 'https://api.github.com/repos/' + username + '/' + repository + '/hooks';
 
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Github});
 	if (!token || !token.access_token) {
-		global.responseError(res, 401, 'No access token provide for Github');
+		global.sendResponse(res, 401, 'No access token provide for Github');
 		return;
 	}
 	const body = {
@@ -120,7 +120,7 @@ async function createWebhook(event, res, json)
 	.then(function (response) {
 		if (response.status == 201)
 			return response.json();
-		global.responseError(res, 401, 'failed to create webhook : ' + response.statusText);
+		global.sendResponse(res, 401, 'failed to create webhook : ' + response.statusText);
 		return null;
 	})
 	.then(function (resJson) {
@@ -130,7 +130,7 @@ async function createWebhook(event, res, json)
 		}
 	})
 	.catch(function (error) {
-		global.responseError(res, 500, error)
+		global.sendResponse(res, 500, error)
 	});
 }
 
@@ -147,7 +147,7 @@ exports.deleteWebhook = async function (area, req, res)
 
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Github});
 	if (!token.access_token) {
-		global.responseError(res, 401, 'No access token provide');
+		global.sendResponse(res, 401, 'No access token provide');
 		return;
 	}
 	var url =  'https://api.github.com/repos/' + username + '/' + repository + '/hooks/' + area.action.webhook_id;
@@ -162,7 +162,7 @@ exports.deleteWebhook = async function (area, req, res)
 		global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
 	})
 	.catch(function (error) {
-		global.responseError(res, 500, 'err : ' + error)
+		global.sendResponse(res, 500, 'err : ' + error)
 	});
 }
 

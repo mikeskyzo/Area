@@ -33,21 +33,23 @@ async function checkAndSaveAREA(area_id, req, res)
 	json.reaction = req.body.reaction;
 
 	if (!global.ReactionCheckArgsMap.get(json.reaction.name))
-		responseError(res, 403, 'Reaction not found');
+		global.sendResponse(res, 403, 'Reaction not found');
 	else if (global.ActionMap.get(json.action.name)) {
 		let err = await global.ReactionCheckArgsMap.get(json.reaction.name)(json);
+		if (!err)
+			err = await global.ActionMap.get(json.action.name)(json);
 		if (err)
-			global.responseError(res, 403, err);
+			global.sendResponse(res, 403, err);
 		else
-			global.ActionMap.get(json.action.name)(res, json);
+			global.sendResponse(res, 200, 'Area created')
 	}
 	else
-		responseError(res, 403, 'Action not found');
+		global.sendResponse(res, 403, 'Action not found');
 }
 
 exports.deleteArea = function (req, res) {
 	if (!req.body.area_id || !req.body.user_id) {
-		global.responseError(res, 401, 'Need a area id');
+		global.sendResponse(res, 401, 'Need a area id');
 		return ;
 	}
 	global.findInDb(global.CollectionArea, {area_id : req.body.area_id}, req, res, redirectToAreaDelete)
@@ -56,11 +58,11 @@ exports.deleteArea = function (req, res) {
 function redirectToAreaDelete(result, req, res)
 {
 	if (!result) {
-		global.responseError(res, 401, 'Area not found');
+		global.sendResponse(res, 401, 'Area not found');
 		return;
 	}
 	if (global.ActionDeleteWebhookMap.get(result.action.name))
 		global.ActionDeleteWebhookMap.get(result.action.name)(result, req, res)
 	else
-		responseError(res, 500, 'Error, Service not found, please contact Mike')
+		global.sendResponse(res, 500, 'Service not found')
 }
