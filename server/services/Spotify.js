@@ -122,17 +122,14 @@ exports.playSong = async function (area, res)
 {
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
     if (!token) {
-		global.sendResponse(res, 401, 'No access token provide');
-		return;
+		return 'No access token provide';
 	}
 	let track_id = await getSongByName(global.getParam(area.reaction.params, 'song_name'), token);
 	if (!track_id) {
-		global.sendResponse(res, 401, 'Spotify didn\'t find the song')
-		return;
+		return 'Spotify didn\'t find the song';
 	}
 	if (!(await addSongToQueue(track_id, token))) {
-		global.sendResponse(res, 401, 'Spotify failed add song queue');
-		return;
+		return 'Spotify failed add song queue';
 	}
 	url = 'https://api.spotify.com/v1/me/player/next';
     let response = await fetch(url, {
@@ -140,10 +137,8 @@ exports.playSong = async function (area, res)
         'headers' : {'Authorization' : 'Bearer ' + token.access_token}
 	})
 	if (response.status != 204) {
-		global.sendResponse(res, 401, 'Spotify failed to play next song');
-		return;
+		return 'Spotify failed to play next song';
 	}
-	res.send();
 }
 
 exports.setVolume = async function(area, res)
