@@ -70,5 +70,5 @@ exports.deleteService = async function(req, res)
 			message : 'Auth deleted'
 		});
 	else
-		global.responseError(res, 403, 'The service is not connected to you\'r account');
+		global.sendResponse(res, 403, 'The service is not connected to the account');
 }
