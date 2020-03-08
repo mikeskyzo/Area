@@ -11,7 +11,7 @@ router.get('/webhooks/:areaId', function(req, res) {
 
 module.exports = router;
 
-function redirectToArea(area, req, res)
+async function redirectToArea(area, req, res)
 {
 	if (!area) {
 		global.sendResponse(res, 403, 'Area not is not existing')
@@ -22,7 +22,15 @@ function redirectToArea(area, req, res)
 		return;
 	}
 	if (global.ActionFormatResultMap.get(area.action.name)) {
-		global.ActionFormatResultMap.get(area.action.name)(req, res, area, global.ReactionMap.get(area.reaction.name));
+		let result = global.ActionFormatResultMap.get(area.action.name)(req);
+		if (result == null) {
+			global.sendResponse(res, 200)
+			return;
+		}
+		let err = await global.ReactionMap.get(area.reaction.name)(area, result);
+		if (err)
+			console.log(err); // Write in the log
+		global.sendResponse(res, 200)
 		return;
 	}
 	global.sendResponse(res, 500, 'Action not found')
