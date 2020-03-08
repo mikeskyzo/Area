@@ -39,7 +39,7 @@ module.exports = {
 			})
 			.catch((error) => {
 				console.log(error);
-				global.responseError(res, 401, 'An error occured ');
+				global.sendResponse(res, 401, 'An error occured ');
 			});
 	}
 

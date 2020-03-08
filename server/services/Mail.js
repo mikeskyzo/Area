@@ -11,7 +11,7 @@ exports.send_message = async function (area, res)
 	let message = global.getParam(area.reaction.params, 'message');
 
 	if (!email || !message) {
-		global.responseError(res, 401, 'Missing email or a message')
+		global.sendResponse(res, 401, 'Missing email or a message')
 	  	return;
   	}
 

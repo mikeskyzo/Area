@@ -14,29 +14,29 @@ module.exports = router;
 function redirectToArea(area, req, res)
 {
 	if (!area) {
-		global.responseError(res, 403, 'Area not is not existing')
+		global.sendResponse(res, 403, 'Area not is not existing')
 		return;
 	}
 	if (!global.ReactionMap.get(area.reaction.name)) {
-		global.responseError(res, 500, 'Reaction not found')
+		global.sendResponse(res, 500, 'Reaction not found')
 		return;
 	}
 	if (global.ActionFormatResultMap.get(area.action.name)) {
 		global.ActionFormatResultMap.get(area.action.name)(req, res, area, global.ReactionMap.get(area.reaction.name));
 		return;
 	}
-	global.responseError(res, 500, 'Action not found')
+	global.sendResponse(res, 500, 'Action not found')
 }
 
 function redirectToFinishWebhook(area, req, res)
 {
 	if (!area) {
-		global.responseError(res, 401, 'Area is not existing')
+		global.sendResponse(res, 401, 'Area is not existing')
 		return;
 	}
-	if (global.ActionFinishWebhook.get(area.action.name)) {
-		global.ActionFinishWebhook.get(area.action.name)(req, res, area);
+	if (global.ActionFinishWebhook.get('Twitch_Create_Webhook_New_Subscriber')) {
+		global.ActionFinishWebhook.get('Twitch_Create_Webhook_New_Subscriber')(req, res, area);
 		return;
 	}
-	global.responseError(res, 500, 'Action not found')
+	global.sendResponse(res, 500, 'Action not found')
 }

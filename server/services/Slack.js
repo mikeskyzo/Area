@@ -46,13 +46,13 @@ exports.send_message = async function (area, res)
 	let message = global.getParam(area.reaction.params, 'message');
 
 	if (!channel_id || !message) {
-		global.responseError(res, 401, 'Missing channel ID or a message')
+		global.sendResponse(res, 401, 'Missing channel ID or a message')
 		return;
 	}
 
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Slack});
 	if (!token || !token.access_token) {
-		global.responseError(res, 401, 'No access token provide');
+		global.sendResponse(res, 401, 'No access token provide');
 		return;
 	}
 	var url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + channel_id + '&text=' + message;
@@ -72,7 +72,7 @@ exports.send_message = async function (area, res)
 		return;
 	})
 	.catch(function (error) {
-		global.responseError(res, 500, 'err : ' + error)
+		global.sendResponse(res, 500, 'err : ' + error)
 	});
 }
 
