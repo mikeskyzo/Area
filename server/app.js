@@ -7,6 +7,8 @@ const device = require('express-device');
 const routes = require('./routes/routes');
 const webhooks = require('./routes/webhooks');
 
+const ngrok = require('ngrok');
+
 const logger = require('morgan');
 const process = require('process')
 
@@ -36,32 +38,34 @@ app.use('/', webhooks);
 
 mongoDb.initDb();
 
-const fetch = require('node-fetch');
-
-const ngrok = require('ngrok');
+async function createTunnel(domain)
+{
+    global.url = await ngrok.connect({
+        authtoken: process.env.NGROK_TOKEN,
+        subdomain: domain,
+        proto: 'http',
+        addr: 8080,
+        region: 'eu'
+    }, 8080);
+    global.redirect_url = global.url + '/auth/redirect'
+    console.log('=================================================');
+    console.log("The server is up !");
+    console.log('Url of you\'r api : ' + global.url);
+    console.log('=================================================');
+}
 
 var server = app.listen(8080, function () {
-    console.log("Server is up !");
     (async function() {
-        try {
-            global.url = await ngrok.connect({
-                authtoken: process.env.NGROK_TOKEN,
-                subdomain: 'areacoon-api',
-                proto: 'http',
-                addr: 8080,
-                region: 'eu'
-            }, 8080);
-            global.redirect_url = global.url + '/auth/redirect'
-            console.log('=================================================');
-            console.log('Url of you\'r api : ' + global.url);
-            console.log('=================================================');
-        } catch (err) {
-            console.log('=================================================');
-            console.log('The tunnel to the domain is not up : ');
-            console.error(err);
-            console.log('=================================================');
+        const domain_list = process.env.DOMAIN_NAME_LIST.split(';')
+        for (nb in domain_list) {
+            if (global.url)
+                break;
+            try {
+                await createTunnel(domain_list[nb]);
+            } catch (err) {
+            }
         }
-    })();
+    }());
 }).on('error', function (err){
     console.error("something broke : ");
     console.error(err);

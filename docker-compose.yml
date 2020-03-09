@@ -27,6 +27,7 @@ services:
             - TWITCH_ID=5cfjsk5flx3vkouomr7a26y7usrxmz
             - SPOTIFY_ID=b9fdd1141e6c4fe2866b6a37134c514d
             - SPOTIFY_SECRET=64fca0dd642a459696c36304ad1fff3a
+            - DOMAIN_NAME_LIST=areacoon-api;areacoon;areacoon-api2;areacoon2
 
     mobile_client:
         image: mobile_client
