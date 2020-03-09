@@ -4,7 +4,7 @@ exports.getAreas = function (req, res)
 {
     global.db.collection(global.CollectionArea).find({user_id : req.body.user_id}).toArray(function (err, result) {
         if (err) {
-            global.responseError(res, 401, err.message)
+            global.sendResponse(res, 401, err.message)
 			return;
 		}
 		result.forEach(element => {
@@ -18,7 +18,7 @@ exports.getNameAreas = function (req, res)
 {
     global.db.collection(global.CollectionArea).find({user_id : req.body.user_id}).toArray(function (err, result) {
         if (err) {
-            global.responseError(res, 401, err.message);
+            global.sendResponse(res, 401, err.message);
 			return;
 		}
 		result.forEach(element => {
@@ -48,11 +48,11 @@ exports.getArea = function (req, res)
 {
     global.db.collection(global.CollectionArea).findOne({user_id : req.body.user_id, area_id : req.params.AreaId}, function (err, result) {
         if (err) {
-            global.responseError(res, 401, err.message)
+            global.sendResponse(res, 401, err.message)
 			return;
 		}
 		if (!result)
-			global.responseError(res, 401, 'Area not found');
+			global.sendResponse(res, 401, 'Area not found');
 		else {
 			delete result._id;
 			res.json(result);

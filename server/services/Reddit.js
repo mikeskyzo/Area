@@ -1,7 +1,6 @@
 const axios = require('axios');
 const submitReaction = require('./reddit/reactions/submitReaction');
 const composeReaction = require('./reddit/reactions/composeReaction');
-const friendReaction = require('./reddit/reactions/friendReaction');
 
 /* General settings */
 const generalSettings = {
@@ -99,27 +98,19 @@ module.exports = {
 	},
 
 	// SUBMIT
-	postInSubreddit: async (area, res) => {
-		await submitReaction.submitReaction(RedditAuthApi, area, res);
+	postInSubreddit: async (area) => {
+		await submitReaction.submitReaction(RedditAuthApi, area);
 	},
 	postInSubredditCheck: (json) => {
 		return submitReaction.submitReactionCheck(json);
 	},
 
 	// COMPOSE
-	composePrivateMessage: async (area, res) => {
-		await composeReaction.composeReaction(RedditAuthApi, area, res);
+	composePrivateMessage: async (area) => {
+		await composeReaction.composeReaction(RedditAuthApi, area);
 	},
 	composePrivateMessageCheck: (json) => {
 		return composeReaction.composeReactionCheck(json);
 	},
-
-	// COMPOSE
-	addFriend: async (area, res) => {
-		await friendReaction.friendReaction(RedditAuthApi, area, res);
-	},
-	addFriendCheck: (json) => {
-		return friendReaction.friendReactionCheck(json);
-	}
 
 };

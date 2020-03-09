@@ -5,15 +5,13 @@ exports.is_service_active = async function (user_id)
 	return true;
 }
 
-exports.send_message = async function (area, res)
+exports.send_message = async function (area)
 {
 	let email = global.getParam(area.reaction.params, 'email');
 	let message = global.getParam(area.reaction.params, 'message');
 
-	if (!email || !message) {
-		global.responseError(res, 401, 'Missing email or a message')
-	  	return;
-  	}
+	if (!email || !message)
+		return 'Missing email or a message'
 
 	var transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
@@ -21,8 +19,8 @@ exports.send_message = async function (area, res)
 		secure: false,
 		requireTLS: true,
 		auth: {
-			user: 'areacoon@gmail.com',
-			pass: 'Areacoon123'
+			user: process.env.GMAIL_USERNAME,
+			pass: process.env.GMAIL_PASS
 		}
 	});
 
@@ -34,13 +32,8 @@ exports.send_message = async function (area, res)
     };
 
     transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-        	console.log(error);
-			res.send();
-        } else {
-			res.send();
-			console.log('Email sent: ' + info.response);
-        }
+        if (error)
+			; // Info log
     });
 }
 
@@ -50,6 +43,4 @@ exports.send_message_check_args = function(json)
 		return 'Missing a email';
     else if (!global.getParam(json.reaction.params, 'message'))
 		return 'Missing a message to send';
-    else
-		return null;
 }

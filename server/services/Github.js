@@ -10,7 +10,9 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://github.com/login/oauth/authorize?client_id=' + process.env.GITHUB_ID + '&scope=admin:repo_hook%20repo&state=' + token;
+	return 'https://github.com/login/oauth/authorize?client_id=' + process.env.GITHUB_ID
+	+ '&scope=admin:repo_hook%20repo'
+	+ '&state=' + token
 }
 
 exports.redirect_auth = async function (req, json)
@@ -35,71 +37,65 @@ exports.redirect_auth = async function (req, json)
 	})
 }
 
-exports.createWebhookIssueEvent = function (res, json, next)
+exports.createWebhookIssueEvent = async function (json)
 {
-	createWebhook('issues', res, json, next);
+	return await createWebhook('issues', json);
 }
 
-exports.createWebhookPushOnRepo = function (res, json, next)
+exports.createWebhookPushOnRepo = async function (json)
 {
-	createWebhook('push', res, json, next);
+	return await createWebhook('push', json);
 }
 
-exports.createWebhookRepoPublic = function (res, json, next)
+exports.createWebhookRepoPublic = async function (json)
 {
-	createWebhook('public', res, json, next);
+	return await createWebhook('public',json);
 }
 
-exports.createWebhookRepoLabeled = function (res, json, next)
+exports.createWebhookRepoLabeled = async function (json)
 {
-	createWebhook('label', res, json, next);
+	return await createWebhook('label', json);
 }
 
-exports.createWebhookRepoPullRequest = function (res, json, next)
+exports.createWebhookRepoPullRequest = async function (json)
 {
-	createWebhook('repository', res, json, next);
+	return await createWebhook('repository', json);
 }
 
-exports.createWebhookRepoStar = function (res, json, next)
+exports.createWebhookRepoStar = async function (json)
 {
-	createWebhook('star', res, json, next);
+	return await createWebhook('star', json);
 }
 
-exports.createWebhookCommitComment = function (res, json, next)
+exports.createWebhookCommitComment = async function (json)
 {
-	createWebhook('commit_comment', res, json, next);
+	return await createWebhook('commit_comment', json);
 }
 
-exports.createWebhookCreated = function (res, json, next)
+exports.createWebhookCreated = async function (json)
 {
-	createWebhook('create', res, json, next);
+	return await createWebhook('create', json);
 }
 
-exports.createWebhookRepoFork = function (res, json, next)
+exports.createWebhookRepoFork = async function (json)
 {
-	createWebhook('fork', res, json, next);
+	return await createWebhook('fork', json);
 }
 
-async function createWebhook(event, res, json)
+async function createWebhook(event, json)
 {
 	let username = global.getParam(json.action.params, 'username');
 	let repository = global.getParam(json.action.params, 'repository');
 
-	if (!username || username.trim() == '') {
-		global.responseError(res, 401, 'Github need a username')
-		return;
-	}
-	if (!repository || repository.trim() == '') {
-		global.responseError(res, 401, 'Github need a repository')
-		return;
-	}
+	if (!username || username.trim() == '')
+		return 'Github need a username';
+	if (!repository || repository.trim() == '')
+		return 'Github need a repository name';
 	const url = 'https://api.github.com/repos/' + username + '/' + repository + '/hooks';
 
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Github});
-	if (!token || !token.access_token) {
-		global.responseError(res, 401, 'No access token provide for Github');
-		return;
-	}
+	if (!token || !token.access_token)
+		return 'No access token provide for Github';
 	const body = {
 		"name": "web",
 		"active": true,
@@ -112,74 +108,63 @@ async function createWebhook(event, res, json)
 		  "insecure_ssl": "0"
 		}
 	}
-	fetch(url, {
+	const response = await fetch(url, {
 		'method': 'POST',
 		'headers' : {'Authorization' : 'token ' + token.access_token},
 		'body' : JSON.stringify(body),
 	})
-	.then(function (response) {
-		if (response.status == 201)
-			return response.json();
-		global.responseError(res, 401, 'failed to create webhook : ' + response.statusText);
-		return null;
-	})
-	.then(function (resJson) {
-		if (resJson) {
-			json.action.webhook_id = resJson.id;
-			global.saveAREA(res, json);
-		}
-	})
-	.catch(function (error) {
-		global.responseError(res, 500, error)
-	});
+	if (response.status != 201)
+		return 'fail';
+	let resJson;
+	try {
+		resJson = await response.json();
+	} catch (err) {
+		return 'Failed to create webhook on Github : ' + response.statusText;
+	}
+	if (!resJson)
+		return 'Gros fail';
+	json.action.webhook_id = resJson.id;
 }
 
-exports.deleteWebhook = async function (area, req, res)
+exports.deleteWebhook = async function (area)
 {
 	let username = global.getParam(area.action.params, 'username');
 	let repository = global.getParam(area.action.params, 'repository');
 
-	if (!area.action.webhook_id) {
-		console.error('The area has no webhook id');
-		global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
+	if (!area.action.webhook_id)
 		return;
-	}
 
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Github});
-	if (!token.access_token) {
-		global.responseError(res, 401, 'No access token provide');
-		return;
-	}
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Github});
+	if (!token.access_token)
+		return 'No access token provide';
 	var url =  'https://api.github.com/repos/' + username + '/' + repository + '/hooks/' + area.action.webhook_id;
 	fetch(url, {
 		'method': 'DELETE',
 		'headers' : {'Authorization' : 'token ' + token.access_token}
 	})
 	.then(function (response) {
-		if (response.status != 204) {
-			console.log('Failed to delete webhook : ' + response.statusText);
-		}
-		global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
+		if (response.status != 204)
+			console.error('Failed to delete webhook : ' + response.statusText);
 	})
 	.catch(function (error) {
-		global.responseError(res, 500, 'err : ' + error)
+		console.error('Error while deleting webhook on github :');
+		console.error(error);
+		return;
 	});
 }
 
-exports.FormatWebhookCheckAction = function (req, res, area, next)
+exports.FormatWebhookCheckAction = function (req)
 {
 	if (!req.body.action) {
-		res.send();
 		return;
 	}
-	next(area, res);
+	return {};
 }
 
-exports.FormatWebhookCheckZen = function (req, res, area, next)
+exports.FormatWebhookCheckZen = function (req)
 {
 	if (req.body.zen) {
-		res.send();
 		return;
 	}
-	next(area, res);
+	return {};
 }
