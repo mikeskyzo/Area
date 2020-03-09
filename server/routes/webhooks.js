@@ -42,8 +42,8 @@ function redirectToFinishWebhook(area, req, res)
 		global.sendResponse(res, 401, 'Area is not existing')
 		return;
 	}
-	if (global.ActionFinishWebhook.get('Twitch_Create_Webhook_New_Subscriber')) {
-		global.ActionFinishWebhook.get('Twitch_Create_Webhook_New_Subscriber')(req, res, area);
+	if (global.ActionFinishWebhook.get(area.action.name)) {
+		global.ActionFinishWebhook.get(area.action.name)(req, res, area);
 		return;
 	}
 	global.sendResponse(res, 500, 'Action not found')

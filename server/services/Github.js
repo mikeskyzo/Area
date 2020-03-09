@@ -124,7 +124,6 @@ async function createWebhook(event, json)
 	if (!resJson)
 		return 'Gros fail';
 	json.action.webhook_id = resJson.id;
-	let err = await global.saveInDbAsync(global.CollectionArea, json);
 }
 
 exports.deleteWebhook = async function (area, req, res)
@@ -132,37 +131,31 @@ exports.deleteWebhook = async function (area, req, res)
 	let username = global.getParam(area.action.params, 'username');
 	let repository = global.getParam(area.action.params, 'repository');
 
-	if (!area.action.webhook_id) {
-		console.error('The area has no webhook id');
-		global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
+	if (!area.action.webhook_id)
 		return;
-	}
 
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Github});
-	if (!token.access_token) {
-		global.sendResponse(res, 401, 'No access token provide');
-		return;
-	}
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Github});
+	if (!token.access_token)
+		return 'No access token provide';
 	var url =  'https://api.github.com/repos/' + username + '/' + repository + '/hooks/' + area.action.webhook_id;
 	fetch(url, {
 		'method': 'DELETE',
 		'headers' : {'Authorization' : 'token ' + token.access_token}
 	})
 	.then(function (response) {
-		if (response.status != 204) {
-			console.log('Failed to delete webhook : ' + response.statusText);
-		}
-		global.deleteInDb(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id}, req, res);
+		if (response.status != 204)
+			console.error('Failed to delete webhook : ' + response.statusText);
 	})
 	.catch(function (error) {
-		global.sendResponse(res, 500, 'err : ' + error)
+		console.error('Error while deleting webhook on github :');
+		console.error(error);
+		return;
 	});
 }
 
 exports.FormatWebhookCheckAction = function (req)
 {
 	if (!req.body.action) {
-		res.send();
 		return;
 	}
 	return {};
@@ -171,7 +164,6 @@ exports.FormatWebhookCheckAction = function (req)
 exports.FormatWebhookCheckZen = function (req)
 {
 	if (req.body.zen) {
-		res.send();
 		return;
 	}
 	return {};
