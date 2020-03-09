@@ -10,7 +10,9 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://github.com/login/oauth/authorize?client_id=' + process.env.GITHUB_ID + '&scope=admin:repo_hook%20repo&state=' + token;
+	return 'https://github.com/login/oauth/authorize?client_id=' + process.env.GITHUB_ID
+	+ '&scope=admin:repo_hook%20repo'
+	+ '&state=' + token
 }
 
 exports.redirect_auth = async function (req, json)
@@ -124,7 +126,7 @@ async function createWebhook(event, json)
 	json.action.webhook_id = resJson.id;
 }
 
-exports.deleteWebhook = async function (area, req, res)
+exports.deleteWebhook = async function (area)
 {
 	let username = global.getParam(area.action.params, 'username');
 	let repository = global.getParam(area.action.params, 'repository');
