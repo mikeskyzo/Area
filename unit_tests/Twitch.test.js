@@ -1,5 +1,18 @@
 const fetch = require("node-fetch");
-const client_id = '5cfjsk5flx3vkouomr7a26y7usrxmz';
+const client_id = "5cfjsk5flx3vkouomr7a26y7usrxmz";
+const globalURL = "https://areacoon-api.eu.ngrok.io";
+
+test("function_Twitch_UserId", async function() {
+	let url = 'https://api.twitch.tv/helix/users?login=Marcoleric';
+	let object = await fetch(url,{
+		'method': 'GET',
+		'headers' : {'Client-ID' : client_id}
+	});
+	expect(object.status).toBe(200);
+	let json = await object.json();
+	if(json && json.data != [])
+		expect(json.data[0].hasOwnProperty('id')).toBe(true);
+});
 
 async function Twitch_UserId (login)
 {
@@ -7,39 +20,30 @@ async function Twitch_UserId (login)
 	url += login;
 	let object = await fetch(url,{
 		'method': 'GET',
-		'headers' : {'Client-ID' : process.env.TWITCH_ID}
+		'headers' : {'Client-ID' : client_id}
 	});
-	let json = await object.json()
+	let json = await object.json();
 	if(json.data != [])
 		if(json.data[0].hasOwnProperty('id'))
 			return(json.data[0].id);
 	return(84);
-};
+}
 
-exports.Twitch_Create_Webhook_NewSubscriber = async function(res, json, next)
-{
-	await global.saveInDbAsync(global.CollectionArea, json);
-	let login = global.getParam(json.action.params, 'login');
-	if (!login) {
-		global.responseError(res, 404, "error, there\'s no login given");
-		return ;
-	}
-	let user_id = await Twitch_UserId(login);
+test("function_Twitch_Create_Webhook_NewSubscriber", async function() {
+	let user_id = await Twitch_UserId("Marcoleric");
 	if (user_id === 84) {
-		global.responseError(res, 404, 'error, the username is does not match with Twitch database');
-		return ;
+		console.log("bad response from function twitch_userid")
+		return false;
 	}
-	let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
+	let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${globalURL}/about.json&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
 	let resp = await fetch(url, {
 		'method': 'POST',
-		'headers' : {'Client-ID' : process.env.TWITCH_ID}
+		'headers' : {'Client-ID' : client_id}
 	});
+	expect(resp.status).toBe(202);
+});
 
-	if (resp.status == 202)
-		res.status(202).send(`Webhook created on the user ${user_id}`);
-	else
-		global.responseError(res, 401, 'error, webhook not created, maybe you created too much webhook at once');
-};
+/*
 
 exports.Twitch_Create_Webhook_NewSubscriber_FM = async function(req, res, area, next)
 {
@@ -149,3 +153,4 @@ exports.is_service_active = async function(user_id)
 {
 	return true;
 };
+*/
