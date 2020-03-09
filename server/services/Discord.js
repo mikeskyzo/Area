@@ -11,7 +11,12 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://discordapp.com/api/oauth2/authorize?client_id=' + process.env.DISCORD_ID + '&redirect_uri=' + global.redirect_url + '&response_type=code&scope=webhook.incoming&state=' + token
+    return 'https://discordapp.com/api/oauth2/authorize?'
+    + 'client_id=' + process.env.DISCORD_ID
+    + '&redirect_uri=' + global.redirect_url
+    + '&response_type=code'
+    + '&scope=webhook.incoming'
+    + '&state=' + token
 }
 
 exports.redirect_auth = async function (req, json)
@@ -85,6 +90,4 @@ exports.send_message_check_args = function(json)
         global.modifyParam(json.reaction.params, 'avatar', 'https://i.imgur.com/GMo6l8u.jpg')
     if (!global.getParam(json.reaction.params, 'message'))
        return 'Missing a message to send';
-    else
-        return null;
 }

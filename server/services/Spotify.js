@@ -11,7 +11,11 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return "https://accounts.spotify.com/authorize?client_id=" + process.env.SPOTIFY_ID + "&response_type=code&redirect_uri=" + global.redirect_url + "&scope=user-modify-playback-state user-read-private user-read-currently-playing user-library-modify" + "&state=" + token;
+	return 'https://accounts.spotify.com/authorize?'
+	+ 'client_id=' + process.env.SPOTIFY_ID
+	+ "&response_type=code&redirect_uri=" + global.redirect_url
+	+ "&scope=user-modify-playback-state user-read-private user-read-currently-playing user-library-modify"
+	+ "&state=" + token;
 }
 
 exports.redirect_auth = async function (req, json)
