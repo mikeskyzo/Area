@@ -15,7 +15,7 @@ async function Twitch_UserId (login)
     return(-1);
 };
 
-exports.Twitch_Create_Webhook_NewSubscriber = async function(json)
+exports.newSubscriberWebhookCreate = async function(json)
 {
     var user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
     if (user_id === -1)
@@ -37,12 +37,7 @@ exports.Twitch_Create_Webhook_NewSubscriber = async function(json)
     return resjson.message;
 };
 
-exports.Twitch_Create_Webhook_NewSubscriber_FM = async function(req)
-{
-	return {};
-}
-
-exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
+exports.newSubscriberWebhookDelete = async function(area, req, res)
 {
     var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
     if (user_id === -1)
@@ -59,7 +54,7 @@ exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
 
 
 
-exports.Twitch_Create_Webhook_StreamChangeState = async function(res, json, next)
+exports.streamChangingOfStateWebhookCreate = async function(res, json, next)
 {
     var user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
     if (user_id === -1)
@@ -80,12 +75,12 @@ exports.Twitch_Create_Webhook_StreamChangeState = async function(res, json, next
     return resjson.message;
 };
 
-exports.Twitch_Create_Webhook_StreamChangeState_FM = async function(req)
+exports.TwitchFormatResult = async function(req)
 {
 	return {};
 }
 
-exports.Twitch_Delete_Webhook_StreamChangeState = async function(area, req, res)
+exports.streamChangingOfStateWebhookDelete = async function(area, req, res)
 {
     var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
     if (user_id === -1)
