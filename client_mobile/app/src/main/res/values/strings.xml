@@ -8,14 +8,6 @@
     <string name="home">Home</string>
     <string name="server_location">Server location</string>
     <string name="server_addr">https://areacoon-api.eu.ngrok.io</string>
-    <string name="client_id_discord">676366574768095232</string>
-    <string name="client_secret_discord">SoACsXnw86IOLMwsAM-sBRfCtMhf1Wwu</string>
-    <string name="client_id_github">b3925ca43ee751191104</string>
-    <string name="client_secret_github">1d1d691af539a19b5dac1270273fa433f3b8ac04</string>
-    <string name="client_id_slack">933637704274.945976210260</string>
-    <string name="client_secret_slack">248197e37352e5aa521b969a3cbb8a91</string>
-    <string name="client_id_reddit">YRYKkBFVxzy12Q</string>
-    <string name="client_secret_reddit">248197e37352e5aa521b969a3cbb8a91</string>
     <string name="create_reaction">Create a reaction</string>
     <string name="name">Name</string>
     <string name="my_area">My area</string>
