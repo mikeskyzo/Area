@@ -33,7 +33,7 @@ exports.send_message = async function (area)
 
     transporter.sendMail(mailOptions, function(error, info){
         if (error)
-			; // Info log
+			return 'Something went wrong with the send of email';
     });
 }
 

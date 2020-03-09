@@ -10,7 +10,11 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://slack.com/oauth/v2/authorize?client_id=' + process.env.SLACK_ID + '&redirect_uri=' + global.redirect_url + '&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&state=' + token;
+	return 'https://slack.com/oauth/v2/authorize?'
+	+ 'client_id=' + process.env.SLACK_ID
+	+ '&redirect_uri=' + global.redirect_url
+	+ '&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read'
+	+ '&state=' + token;
 }
 
 exports.redirect_auth = async function (req, json)

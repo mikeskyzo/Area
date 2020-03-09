@@ -85,7 +85,7 @@ exports.streamChangingOfStateWebhookDelete = async function(area, req, res)
     var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
     if (user_id === -1)
         return 'Can\'t find the user'
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${area.id}&hub.lease_seconds=86400`;
+    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${area.area_id}&hub.lease_seconds=86400`;
     let resp = await fetch(url, {
         'method': 'POST',
         'headers' : {'Client-ID' : process.env.TWITCH_ID}
