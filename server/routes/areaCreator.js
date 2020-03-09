@@ -40,29 +40,34 @@ async function checkAndSaveAREA(area_id, req, res)
 			err = await global.ActionMap.get(json.action.name)(json);
 		if (err)
 			global.sendResponse(res, 403, err);
-		else
+		else {
+			global.saveInDbAsync(global.CollectionArea, json);
 			global.sendResponse(res, 200, 'Area created')
+		}
 	}
 	else
 		global.sendResponse(res, 403, 'Action not found');
 }
 
-exports.deleteArea = function (req, res) {
-	if (!req.body.area_id || !req.body.user_id) {
+exports.deleteArea = async function (req, res) {
+	if (!req.body.area_id) {
 		global.sendResponse(res, 401, 'Need a area id');
 		return ;
 	}
-	global.findInDb(global.CollectionArea, {area_id : req.body.area_id}, req, res, redirectToAreaDelete)
-}
-
-function redirectToAreaDelete(result, req, res)
-{
+	let result = await global.findInDbAsync(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id})
 	if (!result) {
 		global.sendResponse(res, 401, 'Area not found');
 		return;
 	}
-	if (global.ActionDeleteWebhookMap.get(result.action.name))
-		global.ActionDeleteWebhookMap.get(result.action.name)(result, req, res)
+	if (global.ActionDeleteWebhookMap.get(result.action.name)) {
+		result = await global.ActionDeleteWebhookMap.get(result.action.name)(result)
+		if (result)
+			global.sendResponse(res, 401, result)
+		else {
+			global.deleteInDbAsync(global.CollectionArea, {area_id : req.body.area_id});
+			global.sendResponse(res, 200, 'Area deleted')
+		}
+	}
 	else
 		global.sendResponse(res, 500, 'Service not found')
 }
