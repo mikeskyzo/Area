@@ -6,11 +6,11 @@ module.exports = {
 		let sr = global.getParam(json.reaction.params, "subReddit");
 
 		if (!(title && text && sr))
-			return "Missing the title of the subreddit";
+			return "Missing the title, text or the subreddit";
 		return null;
 	},
 
-	submitReaction: async function (RedditAuthApi, area, res) {
+	submitReaction: async function (RedditAuthApi, area) {
 		let title = global.getParam(area.reaction.params, "title");
 		let text = global.getParam(area.reaction.params, "text");
 		let sr = global.getParam(area.reaction.params, "subReddit");
@@ -34,12 +34,8 @@ module.exports = {
 					}
 				}
 			)
-			.then ((response) => {
-				res.send();
-			})
 			.catch((error) => {
-				console.log(error);
-				global.sendResponse(res, 401, 'An error occured ');
+				return 'An error occured on reddit post subreddit';
 			});
 	}
 
