@@ -59,10 +59,8 @@ exports.redirect_auth = async function (req, json)
 exports.send_message = async function (area, res)
 {
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Discord});
-    if (!token) {
-		global.responseError(res, 401, 'No access token provide');
-		return;
-    }
+    if (!token)
+		return 'No access token provide'
     let body = {
         'content' : global.getParam(area.reaction.params, 'message'),
         username : global.getParam(area.reaction.params, 'username'),
@@ -75,9 +73,7 @@ exports.send_message = async function (area, res)
         'headers' : {'Content-Type' : 'application/json'}
     });
     if (response.status != 200 && response.status != 204)
-        global.responseError(res, 401, 'Can\'t send a discord message : ' + response.statusText);
-    else
-        res.send();
+        return 'Can\'t send a discord message : ' + response.statusText
 }
 
 exports.send_message_check_args = function(json)
