@@ -16,7 +16,7 @@ import okhttp3.*
 import java.io.IOException
 
 
-class createAccount : AppCompatActivity() {
+class CreateAccount : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +56,7 @@ class createAccount : AppCompatActivity() {
      * @param password: password of the user
      * @param server_location: server address
      */
-    fun askForAccountCreation(username: String, password: String, server_location: String) {
+    fun askForAccountCreation(username: String, password: String, server_location: String?) {
         val client = OkHttpClient()
 
         val formBody: RequestBody = FormBody.Builder()
@@ -90,10 +90,13 @@ class createAccount : AppCompatActivity() {
                             } else
                                 Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                         } else {
-                            val intent = Intent(getContext(), Start::class.java)
+                            val account = GsonBuilder().create().fromJson(body, Account::class.java)
+                            val intent = Intent(getContext(), Home::class.java)
+                            intent.putExtra("username", username)
+                            intent.putExtra("token", account.token)
                             intent.putExtra("server_location", server_location)
-                            Toast.makeText(getContext(), "Account successfully created", Toast.LENGTH_SHORT).show()
                             startActivity(intent)
+                            Toast.makeText(getContext(), "Account successfully created", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
