@@ -52,7 +52,7 @@ class Start : AppCompatActivity() {
         }
 
         buttonCreateAccount.setOnClickListener {
-            val intent = Intent(this, createAccount::class.java)
+            val intent = Intent(this, CreateAccount::class.java)
             intent.putExtra("server_location", editTextServerLocation.getText().toString())
             startActivity(intent)
         }
