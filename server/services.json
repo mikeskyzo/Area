@@ -397,7 +397,7 @@
 		},
 		{
 			"name": "Reddit",
-			"is_service_active": "is_service_active",
+			"is_service_active": "isServiceActive",
 			"generate_url_function": "generateUrl",
 			"redirect_auth_function": "redirectAuth",
 			"actions" : [
@@ -529,25 +529,25 @@
 		},
 		{
 			"name" : "Twitch",
-			"is_service_active" : "is_service_active",
+			"is_service_active" : "isServiceActive",
 			"check_token_function" : "CheckToken",
 			"actions" : [
 				{
-					"name" : "Twitch_Create_Webhook_New_Subscriber",
+					"name" : "newSubscriberWebhook",
 					"title" : "New Subscriber",
 					"description" : "Trigger when there's a new follower.",
 					"functions" : [
 						{
 							"type" : "create_action",
-							"name" : "Twitch_Create_Webhook_NewSubscriber"
+							"name" : "newSubscriberWebhookCreate"
 						},
 						{
 							"type" : "format_result",
-							"name" : "Twitch_Create_Webhook_NewSubscriber_FM"
+							"name" : "ignore"
 						},
 						{
 							"type" : "delete_action",
-							"name" : "Twitch_Delete_Webhook_NewSubscriber"
+							"name" : "newSubscriberWebhookDelete"
 						},
 						{
 							"type" : "confirm_webhook_function",
@@ -562,21 +562,21 @@
 					]
 				},
 				{
-					"name" : "Twitch_Create_Webhook_Stream_ChangeState",
+					"name" : "streamChangingOfStateWebhook",
 					"title" : "Streamer change State",
 					"description" : "Trigger when the streamer change his stream state.",
 					"functions" : [
 						{
 							"type" : "create_action",
-							"name" : "Twitch_Create_Webhook_StreamChangeState"
+							"name" : "streamChangingOfStateWebhookCreate"
 						},
 						{
 							"type" : "format_result",
-							"name" : "Twitch_Create_Webhook_StreamChangeState_FM"
+							"name" : "ignore"
 						},
 						{
 							"type" : "delete_action",
-							"name" : "Twitch_Delete_Webhook_StreamChangeState"
+							"name" : "streamChangingOfStateWebhookDelete"
 						},
 						{
 							"type" : "confirm_webhook_function",
