@@ -33,7 +33,7 @@ exports.redirect_auth = async function (req, json)
 		global.saveInDbAsync(global.CollectionToken, json);
 	})
 	.catch(function (err){
-		console.log(err);
+		console.error(err);
 	})
 }
 
@@ -113,16 +113,16 @@ async function createWebhook(event, json)
 		'headers' : {'Authorization' : 'token ' + token.access_token},
 		'body' : JSON.stringify(body),
 	})
-	if (response.status != 201)
-		return 'fail';
 	let resJson;
 	try {
 		resJson = await response.json();
+		if (!resJson)
+			throw null;
+		if (response.status != 201)
+			throw null;
 	} catch (err) {
 		return 'Failed to create webhook on Github : ' + response.statusText;
 	}
-	if (!resJson)
-		return 'Gros fail';
 	json.action.webhook_id = resJson.id;
 }
 
