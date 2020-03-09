@@ -529,7 +529,7 @@
 		},
 		{
 			"name" : "Twitch",
-			"is_service_active" : "isServiceActive",
+			"is_service_active" : "is_service_active",
 			"check_token_function" : "CheckToken",
 			"actions" : [
 				{
@@ -543,7 +543,7 @@
 						},
 						{
 							"type" : "format_result",
-							"name" : "ignore"
+							"name" : "TwitchFormatResult"
 						},
 						{
 							"type" : "delete_action",
@@ -572,7 +572,7 @@
 						},
 						{
 							"type" : "format_result",
-							"name" : "ignore"
+							"name" : "TwitchFormatResult"
 						},
 						{
 							"type" : "delete_action",
