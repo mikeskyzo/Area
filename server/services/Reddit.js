@@ -66,7 +66,8 @@ module.exports = {
 
 	generalSettings: generalSettings,
 
-	is_service_active: async function (user_id) {
+	//
+	isServiceActive: async function (user_id) {
 		let token = await global.findInDbAsync(
 			global.CollectionToken, {
 				user_id: user_id,
