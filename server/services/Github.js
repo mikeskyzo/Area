@@ -92,10 +92,8 @@ async function createWebhook(event, json)
 	const url = 'https://api.github.com/repos/' + username + '/' + repository + '/hooks';
 
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : json.user_id, service : global.Services.Github});
-	if (!token || !token.access_token) {
-		global.sendResponse(res, 401, 'No access token provide for Github');
-		return;
-	}
+	if (!token || !token.access_token)
+		return 'No access token provide for Github';
 	const body = {
 		"name": "web",
 		"active": true,

@@ -17,7 +17,6 @@ exports.generate_url = function (token)
 exports.redirect_auth = async function (req, json)
 {
 	var token = await global.findSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Spotify})
-	console.log(token);
 	if (token)
         global.deleteSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Spotify});
 
@@ -47,7 +46,7 @@ exports.redirect_auth = async function (req, json)
 		global.saveInDbAsync(global.CollectionToken, json);
 	})
 	.catch(function (err){
-		console.log(err);
+		console.error(err);
 	})
 }
 
@@ -56,7 +55,7 @@ async function getSongByName(song_name, token)
     let url = 'https://api.spotify.com/v1/search?q=' + song_name + '&type=track'
     let response = await fetch(url, {
         'method': 'GET',
-        'headers' : { 'Authorization' : 'Bearer ' + token.access_token }
+        'headers' : { 'Authorization' : 'Bearer ' + token }
     });
     if (response.status != 200)
 		return false;
@@ -75,7 +74,7 @@ async function addSongToQueue(track_id, token)
 	let url = 'https://api.spotify.com/v1/me/player/add-to-queue?uri=' + track_id;
     let response = await fetch(url, {
         'method': 'POST',
-        'headers' : {'Authorization' : 'Bearer ' + token.access_token}
+        'headers' : {'Authorization' : 'Bearer ' + token}
 	})
 	if (response.status != 204) {
 		return false;
@@ -83,82 +82,64 @@ async function addSongToQueue(track_id, token)
 	return true;
 }
 
-exports.SkipSong = async function(area, res)
+exports.SkipSong = async function(area)
 {
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
-    if (!token) {
-		global.sendResponse(res, 401, 'No access token provide');
-		return;
-	}
-	url = 'https://api.spotify.com/v1/me/player/next';
-    let response = await fetch(url, {
-        'method': 'POST',
-        'headers' : {'Authorization' : 'Bearer ' + token.access_token}
-	})
-	if (response.status != 204) {
-		global.sendResponse(res, 401, 'Spotify failed to play next song');
-		return;
-	}
-	res.send();
-}
-
-exports.addSongToQueue = async function(area, res)
-{
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
-    if (!token) {
-		global.sendResponse(res, 401, 'No access token provide');
-		return;
-	}
-	let track_id = await getSongByName(global.getParam(area.reaction.params, 'song_name'), token);
-	if (!track_id) {
-		global.sendResponse(res, 401, 'Spotify didn\'t find the song')
-		return;
-	}
-	if (!(await addSongToQueue(track_id, token)))
-		global.sendResponse(res, 401, 'Spotify failed add song queue');
-}
-
-exports.playSong = async function (area, res)
-{
-	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
-    if (!token) {
+    if (!token)
 		return 'No access token provide';
-	}
-	let track_id = await getSongByName(global.getParam(area.reaction.params, 'song_name'), token);
-	if (!track_id) {
-		return 'Spotify didn\'t find the song';
-	}
-	if (!(await addSongToQueue(track_id, token))) {
-		return 'Spotify failed add song queue';
-	}
-	url = 'https://api.spotify.com/v1/me/player/next';
+	let url = 'https://api.spotify.com/v1/me/player/next';
     let response = await fetch(url, {
         'method': 'POST',
         'headers' : {'Authorization' : 'Bearer ' + token.access_token}
 	})
-	if (response.status != 204) {
+	console.log(response);
+	if (response.status != 204)
 		return 'Spotify failed to play next song';
-	}
 }
 
-exports.setVolume = async function(area, res)
+exports.addSongToQueue = async function(area)
 {
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
-    if (!token) {
-		global.sendResponse(res, 401, 'No access token provide');
-		return;
-	}
-	url = 'https://api.spotify.com/v1/me/player/volume?volume_percent=' + global.getParam(area.reaction.params, 'volume');
+    if (!token)
+		return 'No access token provide';
+	let track_id = await getSongByName(global.getParam(area.reaction.params, 'song_name'), token.access_token);
+	if (!track_id)
+		return 'Spotify didn\'t find the song';
+	if (!(await addSongToQueue(track_id, token)))
+		return 'Spotify failed add song queue';
+}
+
+exports.playSong = async function (area)
+{
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
+    if (!token)
+		return 'No access token provide';
+	let track_id = await getSongByName(global.getParam(area.reaction.params, 'song_name'), token.access_token);
+	if (!track_id)
+		return 'Spotify didn\'t find the song';
+	if (!(await addSongToQueue(track_id, token)))
+		return 'Spotify failed add song queue';
+	let url = 'https://api.spotify.com/v1/me/player/next';
+    let response = await fetch(url, {
+        'method': 'POST',
+        'headers' : {'Authorization' : 'Bearer ' + token.access_token}
+	})
+	if (response.status != 204)
+		return 'Spotify failed to play next song';
+}
+
+exports.setVolume = async function(area)
+{
+	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Spotify});
+    if (!token)
+		return 'No access token provide';
+	let url = 'https://api.spotify.com/v1/me/player/volume?volume_percent=' + global.getParam(area.reaction.params, 'volume');
     let response = await fetch(url, {
         'method': 'PUT',
         'headers' : {'Authorization' : 'Bearer ' + token.access_token}
 	})
-	if (response.status != 204) {
-		console.log('Spotify failed to set volume');
-		global.sendResponse(res, 401, 'Spotify failed to set volume');
-		return;
-	}
-	res.send();
+	if (response.status != 204)
+		return 'Spotify failed to set volume';
 }
 
 exports.SkipSongCheckArgs = function(json)
