@@ -32,7 +32,7 @@ module.exports = {
 					}
 				}
 			)
-			.then (function (response){
+			.then (function (response) {
 				res.send();
 			})
 			.catch((error) => {
