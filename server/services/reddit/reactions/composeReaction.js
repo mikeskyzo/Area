@@ -6,7 +6,7 @@ module.exports = {
 		let text = global.getParam(json.reaction.params, "text");
 
 		if (!(to && subject && text))
-			return "The required datas aren't all here.";
+			return "Missing the title, text or the subreddit";
 		return null;
 	},
 
@@ -32,12 +32,8 @@ module.exports = {
 					}
 				}
 			)
-			.then (function (response){
-				res.send();
-			})
 			.catch((error) => {
-				console.log(error);
-				global.sendResponse(res, 401, 'An error occured ');
+				return 'An error occurred on Reddit'
 			});
 	}
 
