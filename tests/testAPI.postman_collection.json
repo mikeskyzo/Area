@@ -418,6 +418,191 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "AuthorizeOauth",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.reddit.com/api/v1/authorize?client_id=xxa4cp-hsWE_iA&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=permanent&state=none",
+					"protocol": "https",
+					"host": [
+						"www",
+						"reddit",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "xxa4cp-hsWE_iA"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://areacoon-api.eu.ngrok.io/auth/redirect"
+						},
+						{
+							"key": "scope",
+							"value": "edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread"
+						},
+						{
+							"key": "response_type",
+							"value": "code"
+						},
+						{
+							"key": "duration",
+							"value": "permanent"
+						},
+						{
+							"key": "state",
+							"value": "none"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Access_token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "466F9UWdI-Eh1iz7AhN8zNyszE8",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "xxa4cp-hsWE_iA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=QnuHuFcupyjgN6jquJ0ckzbKbd0&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect",
+					"protocol": "https",
+					"host": [
+						"www",
+						"reddit",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"access_token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code"
+						},
+						{
+							"key": "code",
+							"value": "QnuHuFcupyjgN6jquJ0ckzbKbd0"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://areacoon-api.eu.ngrok.io/auth/redirect"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RedditComposePrivateMessage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 313895577531-no8giX40PwgUtb1Ag1v6TLurlSY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://oauth.reddit.com/api/compose?to=MinMatth-Magi&subject=test&text=Patrick Bruel",
+					"protocol": "https",
+					"host": [
+						"oauth",
+						"reddit",
+						"com"
+					],
+					"path": [
+						"api",
+						"compose"
+					],
+					"query": [
+						{
+							"key": "to",
+							"value": "MinMatth-Magi"
+						},
+						{
+							"key": "subject",
+							"value": "test"
+						},
+						{
+							"key": "text",
+							"value": "Patrick Bruel"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RedditPostInSubreddit",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer 313895577531-no8giX40PwgUtb1Ag1v6TLurlSY"
+					}
+				],
+				"url": {
+					"raw": "https://oauth.reddit.com/api/submit?title=Area_Dashboard++&text=Ceci est un post testant l'api de reddit&sr=Area_coon_test&kind=self",
+					"protocol": "https",
+					"host": [
+						"oauth",
+						"reddit",
+						"com"
+					],
+					"path": [
+						"api",
+						"submit"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Area_Dashboard++"
+						},
+						{
+							"key": "text",
+							"value": "Ceci est un post testant l'api de reddit"
+						},
+						{
+							"key": "sr",
+							"value": "Area_coon_test"
+						},
+						{
+							"key": "kind",
+							"value": "self"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
