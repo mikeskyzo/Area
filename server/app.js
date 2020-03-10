@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser= require('body-parser')
 const path = require('path');
-const localtunnel = require('localtunnel');
 const device = require('express-device');
 
 const routes = require('./routes/routes');
@@ -50,9 +49,9 @@ async function createTunnel(domain)
     global.redirect_url = global.url + '/auth/redirect'
     global.webhooks_url = global.url + '/webhooks/'
     console.log('\x1b[36m%s\x1b[0m', '=================================================');
-    console.log('\x1b[36m%s\x1b[0m','The server is up !');
-    console.log('\x1b[36m%s\x1b[0m','Url of you\'r api : ' + global.url);
-    console.log('\x1b[36m%s\x1b[0m','=================================================');
+    console.log('\x1b[36m%s\x1b[0m', 'The server is up !');
+    console.log('\x1b[36m%s\x1b[0m', 'Url of you\'r api : ' + global.url);
+    console.log('\x1b[36m%s\x1b[0m', '=================================================');
 }
 
 var server = app.listen(8080, function () {

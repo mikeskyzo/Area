@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const FormData = require('form-data');
+const {URLSearchParams} = require('url');
 
 exports.is_service_active = async function (user_id)
 {
@@ -31,12 +31,12 @@ exports.redirect_auth = async function (req, json)
         global.deleteSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Discord});
 
     const url = 'https://discordapp.com/api/v6/oauth2/token';
-    const data = new FormData();
+	const data = new URLSearchParams();
 
     data.append('client_id', process.env.DISCORD_ID);
     data.append('client_secret', process.env.DISCORD_SECRET);
     data.append('grant_type', 'authorization_code');
-    data.append('redirect_uri', 'https://areacoon-api.eu.ngrok.io/auth/redirect');
+    data.append('redirect_uri', global.redirect_url);
     data.append('scope', 'webhook.incoming');
     data.append('code', code);
 	fetch(url, {
