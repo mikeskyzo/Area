@@ -275,11 +275,6 @@ class Area(
 ) : Serializable
 
 /**
- * User to create a JSON object of a list of areas retrieved from a request
- */
-class Areas(val areas: List<Area>) : Serializable
-
-/**
  * User to create a JSON object of a service retrieved from a request
  */
 class Service(val service: String, val active: Boolean)
