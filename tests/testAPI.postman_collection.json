@@ -381,6 +381,43 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "slack send message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNW9wZnRrN2x5bW41bSIsImlhdCI6MTU4Mzg1MjQ4MywiZXhwIjoxNTgzODU2MDgzfQ.ycYelX3bDpyI6Q9Hu2v-iSmyrDrc3S86KzUAuOyybzM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"area_name\" : \"Spotify play song\",\n\t\"color\" : \"Blue\",\n\t\"action\":{\n\t\t\"name\": \"newSubscriberWebhook\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"login\",\n\t\t\t\t\"value\" : \"Marcoleric\"\n\t\t\t}\n\t\t]\n\t},\n\t\"reaction\":{\n\t\t\"name\": \"slack_send_message\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"channel_id\",\n\t\t\t\t\"value\" : \"CV5JACMEU\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"name\" : \"message\",\n\t\t\t\t\"value\" : \"test\"\n\t\t\t}\n\t\t\t\n\t\t]\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://areacoon-api.eu.ngrok.io/createArea",
+					"protocol": "https",
+					"host": [
+						"areacoon-api",
+						"eu",
+						"ngrok",
+						"io"
+					],
+					"path": [
+						"createArea"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
