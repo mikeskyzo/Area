@@ -88,9 +88,3 @@ class Settings : AppCompatActivity() {
         })
     }
 }
-
-
-/**
- * Holds a list of services
- */
-class Services(val services: List<Service>) : Serializable

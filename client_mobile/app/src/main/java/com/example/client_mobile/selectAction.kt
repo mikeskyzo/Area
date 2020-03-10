@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.action_row.*
 import kotlinx.android.synthetic.main.activity_select_action.*
 import okhttp3.*
 import java.io.IOException
@@ -61,7 +60,7 @@ class selectAction : AppCompatActivity() {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    val allActions = GsonBuilder().create().fromJson(body, Actions::class.java)
+                    val allActions = GsonBuilder().create().fromJson(body, Array<Action>::class.java)
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
                         recyclerView_action.adapter = ActionAdapter(allActions, getContext(), token, resources)
@@ -90,13 +89,3 @@ class Action(val name: String, val service: String, val title: String, val descr
  * Used to create a json object of a Reaction
  */
 class Reaction(val name: String, val service: String, val title: String, val description: String, val params: List<Param> ) : Serializable
-
-/**
- * Used to create a json object of a Actions instance that holds a list of actions
- */
-class Actions(val actions: List<Action>) : Serializable
-
-/**
- * Used to create a json object of a Reactions instance that holds a list of reactions
- */
-class Reactions(val reactions: List<Reaction>): Serializable
