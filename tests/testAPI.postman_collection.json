@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "f452788d-0b90-4da4-ad55-8ab1c574feed",
+		"name": "testAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateWebhookTwitchNewSubscriber",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Client-ID",
+						"value": "5cfjsk5flx3vkouomr7a26y7usrxmz",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=50274020&hub.mode=subscribe&hub.callback=https://areacoon-api.eu.ngrok.io/about.json&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70",
+					"protocol": "https",
+					"host": [
+						"api",
+						"twitch",
+						"tv"
+					],
+					"path": [
+						"helix",
+						"webhooks",
+						"hub"
+					],
+					"query": [
+						{
+							"key": "hub.topic",
+							"value": "https://api.twitch.tv/helix/users/follows?to_id=50274020"
+						},
+						{
+							"key": "hub.mode",
+							"value": "subscribe"
+						},
+						{
+							"key": "hub.callback",
+							"value": "https://areacoon-api.eu.ngrok.io/about.json"
+						},
+						{
+							"key": "hub.lease_seconds",
+							"value": "86400"
+						},
+						{
+							"key": "hub.secret",
+							"value": "qj183vwtldxe1k62knihlw0i5cti70"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteWebhookTwitchNewSubscriber",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Client-ID",
+						"value": "5cfjsk5flx3vkouomr7a26y7usrxmz",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=50274020&hub.mode=unsubscribe&hub.callback=https://areacoon-api.eu.ngrok.io/about.json&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70",
+					"protocol": "https",
+					"host": [
+						"api",
+						"twitch",
+						"tv"
+					],
+					"path": [
+						"helix",
+						"webhooks",
+						"hub"
+					],
+					"query": [
+						{
+							"key": "hub.topic",
+							"value": "https://api.twitch.tv/helix/users/follows?to_id=50274020"
+						},
+						{
+							"key": "hub.mode",
+							"value": "unsubscribe"
+						},
+						{
+							"key": "hub.callback",
+							"value": "https://areacoon-api.eu.ngrok.io/about.json"
+						},
+						{
+							"key": "hub.lease_seconds",
+							"value": "86400"
+						},
+						{
+							"key": "hub.secret",
+							"value": "qj183vwtldxe1k62knihlw0i5cti70"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateWebhookTwitchStreamChangeState",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Client-ID",
+						"value": "5cfjsk5flx3vkouomr7a26y7usrxmz",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=50274020&hub.mode=subscribe&hub.callback=https://areacoon-api.eu.ngrok.io/about.json&hub.lease_seconds=86400",
+					"protocol": "https",
+					"host": [
+						"api",
+						"twitch",
+						"tv"
+					],
+					"path": [
+						"helix",
+						"webhooks",
+						"hub"
+					],
+					"query": [
+						{
+							"key": "hub.topic",
+							"value": "https://api.twitch.tv/helix/streams?user_id=50274020"
+						},
+						{
+							"key": "hub.mode",
+							"value": "subscribe"
+						},
+						{
+							"key": "hub.callback",
+							"value": "https://areacoon-api.eu.ngrok.io/about.json"
+						},
+						{
+							"key": "hub.lease_seconds",
+							"value": "86400"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteWebhookTwitchStreamChangeState",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Client-ID",
+						"value": "5cfjsk5flx3vkouomr7a26y7usrxmz",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=50274020&hub.mode=unsubscribe&hub.callback=https://areacoon-api.eu.ngrok.io/about.json&hub.lease_seconds=86400",
+					"protocol": "https",
+					"host": [
+						"api",
+						"twitch",
+						"tv"
+					],
+					"path": [
+						"helix",
+						"webhooks",
+						"hub"
+					],
+					"query": [
+						{
+							"key": "hub.topic",
+							"value": "https://api.twitch.tv/helix/streams?user_id=50274020"
+						},
+						{
+							"key": "hub.mode",
+							"value": "unsubscribe"
+						},
+						{
+							"key": "hub.callback",
+							"value": "https://areacoon-api.eu.ngrok.io/about.json"
+						},
+						{
+							"key": "hub.lease_seconds",
+							"value": "86400"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
