@@ -48,10 +48,11 @@ async function createTunnel(domain)
         region: 'eu'
     }, 8080);
     global.redirect_url = global.url + '/auth/redirect'
-    console.log('=================================================');
-    console.log("The server is up !");
-    console.log('Url of you\'r api : ' + global.url);
-    console.log('=================================================');
+    global.webhooks_url = global.url + '/webhooks/'
+    console.log('\x1b[36m%s\x1b[0m', '=================================================');
+    console.log('\x1b[36m%s\x1b[0m','The server is up !');
+    console.log('\x1b[36m%s\x1b[0m','Url of you\'r api : ' + global.url);
+    console.log('\x1b[36m%s\x1b[0m','=================================================');
 }
 
 var server = app.listen(8080, function () {

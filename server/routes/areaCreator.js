@@ -61,10 +61,11 @@ exports.deleteArea = async function (req, res) {
 	}
 	if (global.ActionDeleteWebhookMap.get(result.action.name)) {
 		result = await global.ActionDeleteWebhookMap.get(result.action.name)(result)
-		if (result)
+		if (typeof result == 'String')
 			global.sendResponse(res, 401, result)
 		else {
-			global.deleteInDbAsync(global.CollectionArea, {area_id : req.body.area_id});
+			if (!(result === false))
+				global.deleteInDbAsync(global.CollectionArea, {area_id : req.body.area_id});
 			global.sendResponse(res, 200, 'Area deleted')
 		}
 	}

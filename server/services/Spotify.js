@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-var btoa = require('btoa');
+const {URLSearchParams} = require('url');
 
 exports.is_service_active = async function (user_id)
 {
@@ -26,7 +26,6 @@ exports.redirect_auth = async function (req, json)
 
 	const code = req.query.code;
 
-	const {URLSearchParams} = require('url');
 	const data = new URLSearchParams();
 	data.append("grant_type", "authorization_code");
 	data.append("redirect_uri", global.redirect_url);
@@ -81,6 +80,7 @@ async function addSongToQueue(track_id, token)
         'headers' : {'Authorization' : 'Bearer ' + token}
 	})
 	if (response.status != 204) {
+		console.log(response)
 		return false;
 	}
 	return true;

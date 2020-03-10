@@ -43,7 +43,9 @@ function redirectToFinishWebhook(area, req, res)
 		return;
 	}
 	if (global.ActionFinishWebhook.get(area.action.name)) {
-		global.ActionFinishWebhook.get(area.action.name)(req, res, area);
+		let result = global.ActionFinishWebhook.get(area.action.name)(req, res, area);
+		if (result === true)
+			global.deleteInDbAsync(global.CollectionArea, {area_id : area.area_id});
 		return;
 	}
 	global.sendResponse(res, 500, 'Action not found')
