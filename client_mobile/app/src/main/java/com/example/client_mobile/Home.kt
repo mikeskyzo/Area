@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
@@ -128,7 +129,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 } else {
                     val tab = body.toString().split(" ")
                     if (tab[0] != "Tunnel") {
-                        val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
+                        println(body)
+                        val allAreas = Gson().fromJson(body, Array<Area>::class.java)
                         runOnUiThread {
                             loadingPanel.visibility = View.GONE
                             recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token, resources)

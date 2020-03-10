@@ -18,12 +18,12 @@ import kotlinx.android.synthetic.main.area_row.view.*
  * @param token: user token
  * @param resources: drawables resources (used to get icons)
  */
-class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderArea>() {
+class AreaAdapter(val allAreas: Array<Area>, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderArea>() {
     /**
      * Gets number of area
      */
     override fun getItemCount(): Int {
-        val nb = allAreas.areas.count()
+        val nb = allAreas.count()
         return nb
     }
 
@@ -41,7 +41,7 @@ class AreaAdapter(val allAreas: Areas, val context: Context?, val token: String?
      */
     override fun onBindViewHolder(holder: CustomViewHolderArea, position: Int) {
 
-        val area = allAreas.areas.get(position)
+        val area = allAreas.get(position)
 
         holder.view.textView_name.setText(area.area_name)
         if (area.color == "orange") {
