@@ -11,7 +11,6 @@ import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_settings.*
 import okhttp3.*
 import java.io.IOException
-import java.io.Serializable
 
 class Settings : AppCompatActivity() {
 
