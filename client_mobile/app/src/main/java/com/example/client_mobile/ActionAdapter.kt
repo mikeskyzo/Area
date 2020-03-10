@@ -17,13 +17,13 @@ import kotlinx.android.synthetic.main.action_row.view.*
  * @param token: user token
  */
 
-class ActionAdapter(val allActions: Actions, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderAction>() {
+class ActionAdapter(val allActions: Array<Action>, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderAction>() {
 
     /**
      * Gets the number of actions
      */
     override fun getItemCount(): Int {
-        val nb = allActions.actions.count()
+        val nb = allActions.count()
         return nb
     }
 
@@ -41,7 +41,7 @@ class ActionAdapter(val allActions: Actions, val context: Context?, val token: S
      */
     override fun onBindViewHolder(holder: CustomViewHolderAction, position: Int) {
 
-        val action = allActions.actions.get(position)
+        val action = allActions.get(position)
 
         val service_icon = resources.getIdentifier(
             action.service.decapitalize(),
@@ -57,7 +57,7 @@ class ActionAdapter(val allActions: Actions, val context: Context?, val token: S
             intent.putExtra("params", arrayAsString)
             intent.putExtra("action", action)
             intent.putExtra("token", token)
-            context?.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 }
