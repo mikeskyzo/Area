@@ -196,6 +196,154 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "spotify skip song",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNW9wZnRrN2x5bW41bSIsImlhdCI6MTU4Mzg0ODcxMSwiZXhwIjoxNTgzODUyMzExfQ.IAoHUoo2q4iR8_QsqwxJ_tuZ_tbuaj60j4WsHqP3hms",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"area_name\" : \"Spotify play song\",\n\t\"color\" : \"Blue\",\n\t\"action\":{\n\t\t\"name\": \"newSubscriberWebhook\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"login\",\n\t\t\t\t\"value\" : \"Marcoleric\"\n\t\t\t}\n\t\t]\n\t},\n\t\"reaction\":{\n\t\t\"name\": \"skip_song\",\n\t\t\"params\" :[\n\t\t\t{\n\n\t\t\t}\n\t\t]\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://areacoon-api.eu.ngrok.io/createArea",
+					"protocol": "https",
+					"host": [
+						"areacoon-api",
+						"eu",
+						"ngrok",
+						"io"
+					],
+					"path": [
+						"createArea"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "spotify set volume",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNW9wZnRrN2x5bW41bSIsImlhdCI6MTU4Mzg0ODcxMSwiZXhwIjoxNTgzODUyMzExfQ.IAoHUoo2q4iR8_QsqwxJ_tuZ_tbuaj60j4WsHqP3hms",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"area_name\" : \"Spotify play song\",\n\t\"color\" : \"Blue\",\n\t\"action\":{\n\t\t\"name\": \"newSubscriberWebhook\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"login\",\n\t\t\t\t\"value\" : \"Marcoleric\"\n\t\t\t}\n\t\t]\n\t},\n\t\"reaction\":{\n\t\t\"name\": \"set_volume\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"volume\",\n\t\t\t\t\"value\" : \"50\"\n\t\t\t}\n\t\t]\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://areacoon-api.eu.ngrok.io/createArea",
+					"protocol": "https",
+					"host": [
+						"areacoon-api",
+						"eu",
+						"ngrok",
+						"io"
+					],
+					"path": [
+						"createArea"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "spotify add song to queue",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNW9wZnRrN2x5bW41bSIsImlhdCI6MTU4Mzg0ODcxMSwiZXhwIjoxNTgzODUyMzExfQ.IAoHUoo2q4iR8_QsqwxJ_tuZ_tbuaj60j4WsHqP3hms",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"area_name\" : \"Spotify play song\",\n\t\"color\" : \"Blue\",\n\t\"action\":{\n\t\t\"name\": \"newSubscriberWebhook\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"login\",\n\t\t\t\t\"value\" : \"Marcoleric\"\n\t\t\t}\n\t\t]\n\t},\n\t\"reaction\":{\n\t\t\"name\": \"add_song_to_queue\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"song_name\",\n\t\t\t\t\"value\" : \"hey you\"\n\t\t\t}\n\t\t]\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://areacoon-api.eu.ngrok.io/createArea",
+					"protocol": "https",
+					"host": [
+						"areacoon-api",
+						"eu",
+						"ngrok",
+						"io"
+					],
+					"path": [
+						"createArea"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "spotify play song",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNW9wZnRrN2x5bW41bSIsImlhdCI6MTU4Mzg0ODcxMSwiZXhwIjoxNTgzODUyMzExfQ.IAoHUoo2q4iR8_QsqwxJ_tuZ_tbuaj60j4WsHqP3hms",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"area_name\" : \"Spotify play song\",\n\t\"color\" : \"Blue\",\n\t\"action\":{\n\t\t\"name\": \"newSubscriberWebhook\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"login\",\n\t\t\t\t\"value\" : \"Marcoleric\"\n\t\t\t}\n\t\t]\n\t},\n\t\"reaction\":{\n\t\t\"name\": \"play_song\",\n\t\t\"params\" :[\n\t\t\t{\n\t\t\t\t\"name\" : \"song_name\",\n\t\t\t\t\"value\" : \"hey you\"\n\t\t\t}\n\t\t]\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://areacoon-api.eu.ngrok.io/createArea",
+					"protocol": "https",
+					"host": [
+						"areacoon-api",
+						"eu",
+						"ngrok",
+						"io"
+					],
+					"path": [
+						"createArea"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
