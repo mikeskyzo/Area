@@ -96,12 +96,12 @@ class Start : AppCompatActivity() {
                         val code = response.code
                         loadingPanel.visibility = View.GONE
                         if (code >= 400 ) {
-                            val tab = body.toString().split(" ")
-                            if (tab[0] != "Tunnel") {
+                            if (code == 404) {
+                                Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            } else {
                                 val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
                                 Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
-                            } else
-                                Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            }
                         } else {
                             val account = GsonBuilder().create().fromJson(body, Account::class.java)
                             val intent = Intent(getContext(), Home::class.java)
