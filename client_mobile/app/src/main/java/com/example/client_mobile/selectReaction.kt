@@ -58,7 +58,7 @@ class selectReaction: AppCompatActivity() {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    val allReactions = GsonBuilder().create().fromJson(body, Reactions::class.java)
+                    val allReactions = GsonBuilder().create().fromJson(body, Array<Reaction>::class.java)
                     runOnUiThread {
                         loadingPanel.visibility = View.GONE
                         recyclerView_action.adapter = ReactionAdapter(allReactions, getContext(), token, resources)
