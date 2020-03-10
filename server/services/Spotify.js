@@ -42,7 +42,7 @@ exports.redirect_auth = async function (req, json)
 	.then(function (response) {
 		if (response.status == 200)
 			return response.json();
-		throw 'Failure : ' + response.statusText;
+		throw 'Spotify failed to get a token : ' + response.statusText;
 	})
 	.then(function (resjson) {
 		json.access_token = resjson.access_token
