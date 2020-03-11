@@ -45,24 +45,12 @@ class AreaAdapter(val allAreas: Array<Area>, val context: Context?, val token: S
         var color = ""
         holder.view.textView_name.setText(area.area_name)
         when (area.color) {
-            "orange" -> {
-                color = "#ff9800"
-            }
-            "red" -> {
-                color = "#e31c0e"
-            }
-            "blue" -> {
-                color = "#0e75e3"
-            }
-            "green" -> {
-                color = "#0ee320"
-            }
-            "yellow" -> {
-                color = "#e3dc0e"
-            }
-            "pink" -> {
-                color = "#f76dec"
-            }
+            "orange" -> { color = "#ff9800" }
+            "red" -> { color = "#e31c0e" }
+            "blue" -> { color = "#0e75e3" }
+            "green" -> { color = "#0ee320" }
+            "yellow" -> { color = "#e3dc0e" }
+            "pink" -> { color = "#f76dec" }
         }
         holder.view.textView_name.setBackgroundColor(Color.parseColor(color))
         holder.view.imageViewIconAction.setColorFilter(Color.parseColor(color))
