@@ -91,11 +91,9 @@ class Start : AppCompatActivity() {
                     loadingPanel.visibility = View.GONE
                     when {
                         code == 404 -> {
-                            println("a")
                             Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                         }
                         code >= 400 -> {
-                            println("b")
                             val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
                             Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
                         }
