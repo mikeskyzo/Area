@@ -17,8 +17,7 @@ import java.io.IOException
  */
 class SettingsAdapter(val services: Array<Service?>, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderSettings>() {
     override fun getItemCount(): Int {
-        var nb = services.count()
-        return nb
+        return services.count()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderSettings{
@@ -41,11 +40,6 @@ class SettingsAdapter(val services: Array<Service?>, val context: Context?, val 
      */
     fun deleteService(service: String) {
         val client = OkHttpClient()
-
-
-        val formBody: RequestBody = FormBody.Builder()
-            .add("service", service)
-            .build()
 
         val request: Request = Request.Builder()
             .url(Home.server_location.plus("/auth/delete/").plus(service))
