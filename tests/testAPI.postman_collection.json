@@ -198,7 +198,7 @@
 			"response": []
 		},
 		{
-			"name": "spotify skip song",
+			"name": "Spotify skip song",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -235,7 +235,7 @@
 			"response": []
 		},
 		{
-			"name": "spotify set volume",
+			"name": "Spotify set volume",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -272,7 +272,7 @@
 			"response": []
 		},
 		{
-			"name": "spotify add song to queue",
+			"name": "Spotify add song to queue",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -309,7 +309,7 @@
 			"response": []
 		},
 		{
-			"name": "spotify play song",
+			"name": "Spotify play song",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -383,7 +383,7 @@
 			"response": []
 		},
 		{
-			"name": "slack send message",
+			"name": "Slack send message",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -420,7 +420,7 @@
 			"response": []
 		},
 		{
-			"name": "AuthorizeOauth",
+			"name": "Reddit AuthorizeOauth",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -468,7 +468,7 @@
 			"response": []
 		},
 		{
-			"name": "Access_token",
+			"name": "Reddit Access_token",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -605,7 +605,7 @@
 			"response": []
 		},
 		{
-			"name": "areacoon connect",
+			"name": "Areacoon connect",
 			"request": {
 				"auth": {
 					"type": "bearer"
