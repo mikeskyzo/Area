@@ -33,34 +33,42 @@ async function checkAndSaveAREA(area_id, req, res)
 	json.reaction = req.body.reaction;
 
 	if (!global.ReactionCheckArgsMap.get(json.reaction.name))
-		responseError(res, 403, 'Reaction not found');
+		global.sendResponse(res, 403, 'Reaction not found');
 	else if (global.ActionMap.get(json.action.name)) {
 		let err = await global.ReactionCheckArgsMap.get(json.reaction.name)(json);
+		if (!err)
+			err = await global.ActionMap.get(json.action.name)(json);
 		if (err)
-			global.responseError(res, 403, err);
-		else
-			global.ActionMap.get(json.action.name)(res, json);
+			global.sendResponse(res, 403, err);
+		else {
+			global.saveInDbAsync(global.CollectionArea, json);
+			global.sendResponse(res, 200, 'Area created')
+		}
 	}
 	else
-		responseError(res, 403, 'Action not found');
+		global.sendResponse(res, 403, 'Action not found');
 }
 
-exports.deleteArea = function (req, res) {
-	if (!req.body.area_id || !req.body.user_id) {
-		global.responseError(res, 401, 'Need a area id');
+exports.deleteArea = async function (req, res) {
+	if (!req.body.area_id) {
+		global.sendResponse(res, 401, 'Need a area id');
 		return ;
 	}
-	global.findInDb(global.CollectionArea, {area_id : req.body.area_id}, req, res, redirectToAreaDelete)
-}
-
-function redirectToAreaDelete(result, req, res)
-{
+	let result = await global.findInDbAsync(global.CollectionArea, {user_id : req.body.user_id, area_id : req.body.area_id})
 	if (!result) {
-		global.responseError(res, 401, 'Area not found');
+		global.sendResponse(res, 401, 'Area not found');
 		return;
 	}
-	if (global.ActionDeleteWebhookMap.get(result.action.name))
-		global.ActionDeleteWebhookMap.get(result.action.name)(result, req, res)
+	if (global.ActionDeleteWebhookMap.get(result.action.name)) {
+		result = await global.ActionDeleteWebhookMap.get(result.action.name)(result)
+		if (typeof result == 'String')
+			global.sendResponse(res, 401, result)
+		else {
+			if (!(result === false))
+				global.deleteInDbAsync(global.CollectionArea, {area_id : req.body.area_id});
+			global.sendResponse(res, 200, 'Area deleted')
+		}
+	}
 	else
-		responseError(res, 500, 'Error, Service not found, please contact Mike')
+		global.sendResponse(res, 500, 'Service not found')
 }

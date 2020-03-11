@@ -26,13 +26,13 @@ global.saveInDb = function (collection, json, res, success_message){
 	});
 };
 
-global.responseError = function(res, status, massage) {
-	res.status(status);
+global.sendResponse = function(res, status = 200, massage, success) {
+	if (!res) return;
+	res.status(status || 200);
 	res.json({
-		success : false,
-		message : massage
+		success : success || (status < 300 ? true : false),
+		message : massage || (status < 300 ? 'Everything happened properly' : 'Something went wrong')
 	});
-	return;
 };
 
 var jwt = require('jsonwebtoken');
@@ -42,11 +42,7 @@ exports.verifyToken = function(req, res, next)
 	let token = extractToken(req, res);
 	jwt.verify(token, global.secret, function(err, decoded) {
 		if (err) {
-			res.json({ success: false, message: 'Failed to authenticate token.' });
-			return;
-		}
-		if (decoded.exp > Date.now()){
-			res.json({ success: false, message: 'Token expired' });
+			global.sendResponse(res, 403, 'Failed to authenticate token.');
 			return;
 		}
 		req.body.user_id = decoded.id;
@@ -58,28 +54,20 @@ function extractToken(req, res)
 {
 	if (req.query.token)
 		return req.query.token;
-	if (!req.headers.authorization)  return res.status(401).send({ success: false, message: 'No authorization header.' });
+	if (!req.headers.authorization)  return global.sendResponse(res, 403, 'No authorization header.');
 	let token = req.headers.authorization.split(' ')[1];
-	if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
+	if (!token) return global.sendResponse(res, 403, 'No token provided.');
 	return token;
 }
 
 global.DoesUserExist = function (user_id, req, res, next) {
 	global.db.collection(global.CollectionUsers).findOne({id : user_id}, (err, result) => {
 		if (err) {
-			res.status(401);
-			res.json({
-				success : false,
-				message : err.message
-			});
+			global.sendResponse(res, 401, err.message);
 			return;
 		}
 		if(!result) {
-			res.status(401);
-			res.json({
-				success : false,
-				message : 'User not found'
-			})
+			global.sendResponse(res, 401, 'User not found');
 			return;
 		}
 		if (next)
@@ -129,7 +117,7 @@ global.deleteInDb = function (collection, params, req, res)
 {
 	global.db.collection(collection).deleteOne(params, function (err, result) {
 		if (err) {
-			global.responseError(res, 500, err.message)
+			global.sendResponse(res, 500, err.message)
 			return;
 		}
 		res.status(201);
@@ -145,7 +133,7 @@ global.findInDb = function (collection, params, req, res, next)
 {
 	global.db.collection(collection).findOne(params, (err, result) => {
 		if (err) {
-			global.responseError(res, 401, err.message)
+			global.sendResponse(res, 401, err.message)
 			return;
 		}
 		if (next)

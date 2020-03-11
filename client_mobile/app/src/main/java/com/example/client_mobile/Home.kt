@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
@@ -117,28 +118,20 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(
-                            getContext(),
-                            "Error 404: server not found",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } else {
-                    val tab = body.toString().split(" ")
-                    if (tab[0] != "Tunnel") {
-                        val allAreas = GsonBuilder().create().fromJson(body, Areas::class.java)
-                        runOnUiThread {
-                            loadingPanel.visibility = View.GONE
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", server_location)
+                            startActivity(intent)
+                        }
+                        code >= 200 -> {
+                            val allAreas = Gson().fromJson(body, Array<Area>::class.java)
                             recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token, resources)
                         }
-                    } else {
-                        runOnUiThread {
-                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        }
-                        val intent = Intent(getContext(), Start::class.java)
-                        startActivity(intent)
                     }
                 }
             }
@@ -164,23 +157,20 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    val tab = body.toString().split(" ")
-                    if (tab[0] != "Tunnel") {
-                        runOnUiThread {
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", server_location)
+                            startActivity(intent)
+                        }
+                        code >= 200 -> {
                             val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
                             createItemsServices(services)
                         }
-                    } else {
-                        runOnUiThread {
-                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        }
-                        val intent = Intent(getContext(), Start::class.java)
-                        startActivity(intent)
                     }
                 }
             }
@@ -271,11 +261,6 @@ class Area(
     val area_name: String,
     val color: String
 ) : Serializable
-
-/**
- * User to create a JSON object of a list of areas retrieved from a request
- */
-class Areas(val areas: List<Area>) : Serializable
 
 /**
  * User to create a JSON object of a service retrieved from a request
