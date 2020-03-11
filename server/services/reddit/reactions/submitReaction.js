@@ -10,7 +10,7 @@ module.exports = {
 		return null;
 	},
 
-	submitReaction: async function (RedditAuthApi, area) {
+	submitReaction: async function (area) {
 		let title = global.getParam(area.reaction.params, "title");
 		let text = global.getParam(area.reaction.params, "text");
 		let sr = global.getParam(area.reaction.params, "subReddit");

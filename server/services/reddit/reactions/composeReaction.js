@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 module.exports = {
 
 	composeReactionCheck: function (json) {
@@ -6,11 +8,11 @@ module.exports = {
 		let text = global.getParam(json.reaction.params, "text");
 
 		if (!(to && subject && text))
-			return "Missing the title, text or the subreddit";
+			return "Missing the title, text or the user";
 		return null;
 	},
 
-	composeReaction: async function (RedditAuthApi, area, res) {
+	composeReaction: async function (area) {
 		let to = global.getParam(area.reaction.params, "to");
 		let subject = global.getParam(area.reaction.params, "subject");
 		let text = global.getParam(area.reaction.params, "text");
@@ -20,21 +22,21 @@ module.exports = {
 				service: global.Services.Reddit
 			}
 		);
-
-		RedditAuthApi
-			.post(`/api/compose` +
-				`?to=${to}` +
-				`&subject=${subject}` +
-				`&text=` + text
-				,{} , {
-					headers: {
-						Authorization: `bearer ${token.access_token}`
-					}
+		fetch(generalSettings.redditAuthApi
+			+ `/api/compose`
+			+ `?to=${to}`
+			+ `&subject=${subject}`
+			+ `&text=${text}`,
+			{
+				'method': 'POST',
+				headers : {
+					'Authorization' : `bearer ${token.access_token}`
 				}
-			)
-			.catch((error) => {
-				return 'An error occurred on Reddit'
-			});
+			}
+		)
+		.catch((error) => {
+			return 'An error occurred on Reddit'
+		});
 	}
 
 };
