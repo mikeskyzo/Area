@@ -16,10 +16,10 @@ import kotlinx.android.synthetic.main.action_row.view.*
  * @param context: current context
  * @param token: user token
  */
-class ReactionAdapter(val allReactions: Reactions, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderReaction>() {
+class ReactionAdapter(val allReactions: Array<Reaction>, val context: Context?, val token: String?, val resources: Resources): RecyclerView.Adapter<CustomViewHolderReaction>() {
 
     override fun getItemCount(): Int {
-        val nb = allReactions.reactions.count()
+        val nb = allReactions.count()
         return nb
     }
 
@@ -31,7 +31,7 @@ class ReactionAdapter(val allReactions: Reactions, val context: Context?, val to
 
     override fun onBindViewHolder(holder: CustomViewHolderReaction, position: Int) {
 
-        val reaction = allReactions.reactions.get(position)
+        val reaction = allReactions.get(position)
 
         val service_icon = resources.getIdentifier(
             reaction.service.decapitalize(),
