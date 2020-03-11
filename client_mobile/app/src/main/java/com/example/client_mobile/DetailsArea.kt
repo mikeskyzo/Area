@@ -168,24 +168,12 @@ class DetailsArea : AppCompatActivity() {
 
         var color = ""
         when (detailedArea.color) {
-            "orange" -> {
-                color = "#ff9800"
-            }
-            "red" -> {
-                color = "#e31c0e"
-            }
-            "blue" -> {
-                color = "#0e75e3"
-            }
-            "green" -> {
-                color = "#0ee320"
-            }
-            "yellow" -> {
-                color = "#e3dc0e"
-            }
-            "pink" -> {
-                color = "#f76dec"
-            }
+            "orange" -> { color = "#ff9800" }
+            "red" -> { color = "#e31c0e" }
+            "blue" -> { color = "#0e75e3" }
+            "green" -> { color = "#0ee320" }
+            "yellow" -> { color = "#e3dc0e" }
+            "pink" -> { color = "#f76dec" }
         }
         textView_area_name.setTextColor(Color.parseColor(color))
     }
