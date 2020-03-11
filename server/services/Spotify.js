@@ -110,7 +110,7 @@ exports.addSongToQueue = async function(area)
 	if (!track_id)
 		return 'Spotify didn\'t find the song';
 	if (!(await addSongToQueue(track_id, token)))
-		return 'Spotify failed add song queue';
+		return 'Spotify failed to add song queue';
 };
 
 exports.playSong = async function (area)
@@ -155,7 +155,7 @@ exports.SongCheckArgs = function(json)
 {
 	let song = global.getParam(json.reaction.params, 'song_name');
     if (!song || song.trim() == '')
-	   return 'Missing a song name';
+	   return 'Missing song name';
     return null;
 };
 
@@ -163,6 +163,6 @@ exports.SetVolumeCheckArgs = function(json)
 {
 	let song = global.getParam(json.reaction.params, 'volume');
     if (!song || isNaN(song))
-	   return 'Missing a song name';
+	   return 'Missing volume value';
     return null;
 };
