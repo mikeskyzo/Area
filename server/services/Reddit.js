@@ -103,5 +103,4 @@ module.exports = {
 	composePrivateMessageCheck: (json) => {
 		return composeReaction.composeReactionCheck(json);
 	},
-
 };
