@@ -1,6 +1,6 @@
-const axios = require('axios');
-const submitReaction = require('./reddit/reactions/submitReaction');
-const composeReaction = require('./reddit/reactions/composeReaction');
+const axios = require("axios");
+const submitReaction = require("./reddit/reactions/submitReaction");
+const composeReaction = require("./reddit/reactions/composeReaction");
 
 /* General settings */
 const generalSettings = {
@@ -11,7 +11,7 @@ const generalSettings = {
 	// App related
 	clientId: process.env.REDDIT_ID,
 	clientSecret: process.env.REDDIT_SECRET,
-	redirectUri: 'https://areacoon-api.eu.ngrok.io/auth/redirect',
+	redirectUri: "https://areacoon-api.eu.ngrok.io/auth/redirect",
 };
 
 /* Initialize axios */
@@ -43,12 +43,9 @@ const checkToken = async function (json, access_token, refresh_token) {
 };
 
 const getAccessToken = async function (code) {
-	const grantType = 'authorization_code';
+	const grantType = "authorization_code";
 	return await RedditApi
-		.post(`api/v1/access_token` +
-			`?grant_type=${grantType}` +
-			`&code=${code}` +
-			`&redirect_uri=${generalSettings.redirectUri}`,
+		.post(`api/v1/access_token?grant_type=${grantType}&code=${code}&redirect_uri=${generalSettings.redirectUri}`,
 			{},
 			{
 				auth: {
@@ -58,7 +55,7 @@ const getAccessToken = async function (code) {
 			})
 		.catch(function (error) {
 			console.log(error);
-		})
+		});
 };
 
 module.exports = {
@@ -78,17 +75,11 @@ module.exports = {
 
 	// Return the service url to redirect the user to as a string
 	generateUrl: function (token) {
-		const responseType = 'code';
-		const scope = 'edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread';
-		const duration = 'permanent';
+		const responseType = "code";
+		const scope = "edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread";
+		const duration = "permanent";
 
-		return `${generalSettings.redditApi}/api/v1/authorize` +
-			`?client_id=${generalSettings.clientId}` +
-			`&redirect_uri=${generalSettings.redirectUri}` +
-			`&scope=${scope}` +
-			`&response_type=${responseType}` +
-			`&duration=${duration}` +
-			`&state=${token}`;
+		return `${generalSettings.redditApi}/api/v1/authorize?client_id=${generalSettings.clientId}&redirect_uri=${generalSettings.redirectUri}&scope=${scope}&response_type=${responseType}&duration=${duration}&state=${token}`;
 	},
 
 	// Called after authorized by user, used to save token in db
@@ -112,5 +103,4 @@ module.exports = {
 	composePrivateMessageCheck: (json) => {
 		return composeReaction.composeReactionCheck(json);
 	},
-
 };
