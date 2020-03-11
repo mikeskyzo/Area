@@ -7,7 +7,7 @@ exports.is_service_active = async function (user_id)
 	if (!token || !token.access_token)
 		return false;
 	return true;
-}
+};
 
 exports.generate_url = function (token)
 {
@@ -16,7 +16,7 @@ exports.generate_url = function (token)
 	+ "&response_type=code&redirect_uri=" + global.redirect_url
 	+ "&scope=user-modify-playback-state user-read-private user-read-currently-playing user-library-modify"
 	+ "&state=" + token;
-}
+};
 
 exports.redirect_auth = async function (req, json)
 {
@@ -33,7 +33,7 @@ exports.redirect_auth = async function (req, json)
 	data.append("client_secret", process.env.SPOTIFY_SECRET);
 	data.append("code", code);
 
-	const url = "https://accounts.spotify.com/api/token"
+	const url = "https://accounts.spotify.com/api/token";
 	fetch(url, {
 		'method': 'POST',
 		'headers': {"Content-Type": "application/x-www-form-urlencoded"},
@@ -51,7 +51,7 @@ exports.redirect_auth = async function (req, json)
 	.catch(function (err){
 		console.error(err);
 	})
-}
+};
 
 async function getSongByName(song_name, token)
 {
@@ -78,9 +78,9 @@ async function addSongToQueue(track_id, token)
     let response = await fetch(url, {
         'method': 'POST',
         'headers' : {'Authorization' : 'Bearer ' + token}
-	})
+	});
 	if (response.status != 204) {
-		console.log(response)
+		console.log(response);
 		return false;
 	}
 	return true;
@@ -95,11 +95,11 @@ exports.SkipSong = async function(area)
     let response = await fetch(url, {
         'method': 'POST',
         'headers' : {'Authorization' : 'Bearer ' + token.access_token}
-	})
+	});
 	console.log(response);
 	if (response.status != 204)
 		return 'Spotify failed to play next song';
-}
+};
 
 exports.addSongToQueue = async function(area)
 {
@@ -110,8 +110,8 @@ exports.addSongToQueue = async function(area)
 	if (!track_id)
 		return 'Spotify didn\'t find the song';
 	if (!(await addSongToQueue(track_id, token)))
-		return 'Spotify failed add song queue';
-}
+		return 'Spotify failed to add song queue';
+};
 
 exports.playSong = async function (area)
 {
@@ -127,10 +127,10 @@ exports.playSong = async function (area)
     let response = await fetch(url, {
         'method': 'POST',
         'headers' : {'Authorization' : 'Bearer ' + token.access_token}
-	})
+	});
 	if (response.status != 204)
 		return 'Spotify failed to play next song';
-}
+};
 
 exports.setVolume = async function(area)
 {
@@ -141,28 +141,28 @@ exports.setVolume = async function(area)
     let response = await fetch(url, {
         'method': 'PUT',
         'headers' : {'Authorization' : 'Bearer ' + token.access_token}
-	})
+	});
 	if (response.status != 204)
 		return 'Spotify failed to set volume';
-}
+};
 
 exports.SkipSongCheckArgs = function(json)
 {
 	return null;
-}
+};
 
 exports.SongCheckArgs = function(json)
 {
 	let song = global.getParam(json.reaction.params, 'song_name');
     if (!song || song.trim() == '')
-	   return 'Missing a song name';
+	   return 'Missing song name';
     return null;
-}
+};
 
 exports.SetVolumeCheckArgs = function(json)
 {
 	let song = global.getParam(json.reaction.params, 'volume');
     if (!song || isNaN(song))
-	   return 'Missing a song name';
+	   return 'Missing volume value';
     return null;
-}
+};
