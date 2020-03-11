@@ -1,9 +1,9 @@
 module.exports = {
 
 	submitReactionCheck: function (json) {
-		let title = global.getParam(json.reaction.params, "title");
-		let text = global.getParam(json.reaction.params, "text");
-		let sr = global.getParam(json.reaction.params, "subReddit");
+		const title = global.getParam(json.reaction.params, "title");
+		const text = global.getParam(json.reaction.params, "text");
+		const sr = global.getParam(json.reaction.params, "subReddit");
 
 		if (!(title && text && sr))
 			return "Missing the title, text or the subreddit";
@@ -23,11 +23,7 @@ module.exports = {
 		);
 
 		RedditAuthApi
-			.post(`/api/submit` +
-				`?title=${title}` +
-				`&text=${text}` +
-				`&sr=${sr}` +
-				`&kind=${kind}`,
+			.post(`/api/submit?title=${title}&text=${text}&sr=${sr}&kind=${kind}`,
 				{}, {
 					headers: {
 						Authorization: `bearer ${token.access_token}`
@@ -38,5 +34,4 @@ module.exports = {
 				return 'An error occured on reddit post subreddit';
 			});
 	}
-
 };

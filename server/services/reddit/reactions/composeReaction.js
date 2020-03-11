@@ -3,9 +3,9 @@ const fetch = require('node-fetch');
 module.exports = {
 
 	composeReactionCheck: function (json) {
-		let to = global.getParam(json.reaction.params, "to");
-		let subject = global.getParam(json.reaction.params, "subject");
-		let text = global.getParam(json.reaction.params, "text");
+		const to = global.getParam(json.reaction.params, "to");
+		const subject = global.getParam(json.reaction.params, "subject");
+		const text = global.getParam(json.reaction.params, "text");
 
 		if (!(to && subject && text))
 			return "Missing the title, text or the user";
@@ -38,5 +38,4 @@ module.exports = {
 			return 'An error occurred on Reddit'
 		});
 	}
-
 };

@@ -15,15 +15,7 @@ const enableViewsRoutes = async function(app) {
 	});
 	app.get('/disconnect', function (req, res) {
 		res.clearCookie('access_token');
-		res.clearCookie('githubConnect');
-		res.clearCookie('redditConnect');
-		res.clearCookie('slackConnect');
-		res.clearCookie('trelloConnect');
 		res.redirect('/login');
-	});
-
-	app.get('/home', function (req, res) {
-		res.render('home.ejs');
 	});
 
 	app.get('/dashboard', function (req, res) {
@@ -73,15 +65,15 @@ const enableLogicRoutes = async function (app) {
 		if (req.params.action === 'register') {
 			var username = req.body.usernameRegister;
 			var password = req.body.passwordRegister;
-			var server = req.body.serverRegister;
+			var serverAddress = req.body.serverRegister;
 
-			ServerApi.createUser(username, password, server, req, res);
+			ServerApi.createUser(req, res, username, password, serverAddress);
 		} else if (req.params.action === 'login') {
 			var username = req.body.usernameLogin;
 			var password = req.body.passwordLogin;
 			var serverAddress = req.body.serverLogin;
 
-			ServerApi.connectUser(username, password, serverAddress, req, res);
+			ServerApi.connectUser(req, res, username, password, serverAddress);
 		} else if (req.params.action == 'createArea') {
 			var areaToCreate = JSON.parse(req.body.area);
 			var result = await ServerApi.createArea(req, res, areaToCreate);
@@ -103,26 +95,20 @@ const enableLogicRoutes = async function (app) {
 	});
 
 	app.get('/client/:action', async function (req, res) {
-		if (req.params.action === 'getServerAddress') {
-			res.json({
-				success : true,
-				token : req.cookies.access_token,
-				server : req.cookies.server
-			})
-		} else if (req.params.action === 'getInitAction') {
-			const result = await ServerApi.initGetActions(req, res, req.cookies.server, req.cookies.access_token);
+		if (req.params.action === 'getInitAction') {
+			const result = await ServerApi.initGetActions(req, res);
 			res.json({
 				success : true,
 				data : result.data.actions
 			})
 		} else if (req.params.action === 'getInitReaction') {
-			const result = await ServerApi.initGetReactions(req, res, req.cookies.server, req.cookies.access_token);
+			const result = await ServerApi.initGetReactions(req, res);
 			res.json({
 				success: true,
 				data : result.data.reactions
 			})
 		} else if (req.params.action === 'getInitArea') {
-			const result = await ServerApi.initGetAreas(req, res, req.cookies.server, req.cookies.access_token);
+			const result = await ServerApi.initGetAreas(req, res);
 			res.json({
 				success : true,
 				data : result.data

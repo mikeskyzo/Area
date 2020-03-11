@@ -8,10 +8,11 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     var reactionList = document.getElementById("reaction-list");
     var actionCreator = document.getElementById("action-creator");
     var reactionCreator = document.getElementById("reaction-creator");
-    var createArea = document.getElementById("create-area-button");
+    var areaCreator = document.getElementById("area-creator");
+    var createArea;
+    var areaResult;
 
     var areaList = document.getElementById("area-list");
-    var areaResult = document.getElementById("area-create-result");
 
     var actionName = "";
     var reactionName = "";
@@ -22,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     var actionParam = [];
     var reactionParam = [];
 
+    var isActionDisplay = false;
+    var isReactionDisplay = false;
+
 
     async function initArea() {
         const resAction = await getAction();
@@ -30,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
 
         displayAction(resAction);
         displayReaction(resReaction);
-        setCreateArea();
         createRefreshButton();
         displayArea(resArea);
 
@@ -143,6 +146,10 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     }
 
     function createAreaFunction() {
+        var areaName = document.getElementById("areaName").value;
+
+        console.log(areaName);
+
         for (var i = 0; i != actionParam.length; i++)
             actionParamValue[i] = document.getElementById(actionParam[i]).value;
         for (var i = 0; i != reactionParam.length; i++)
@@ -150,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
 
         var data =
             JSON.stringify({
+                "area_name" : areaName,
                 "action" : {
                     "name" : actionName,
                     "params" : [
@@ -187,6 +195,37 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     }
 
     // --------------------------------------------------------------------------------- //
+    //                          function display create                                  //
+    // --------------------------------------------------------------------------------- //
+
+    function displayAreaCreation() {
+        var htmlCode = '' +
+            '<div class="input-field" style="margin-top: 10px;">' +
+            '<input id="areaName" type="text">' +
+            '<label for="areaName">Area name</label>' +
+            '</div>' +
+            '<div style="border-bottom: 4px solid #ff9800; margin-top: 20px; margin-bottom: 20px"></div>' +
+            '<div class="center">' +
+            '<div id="area-create-result"></div>' +
+            '<a id="create-area-button" class="orange waves-effect waves-light btn-large black-text" style="margin-top: 10px"><i class="material-icons left">add</i><b>Create Area</b></a>' +
+            '</div>';
+
+        areaCreator.innerHTML = htmlCode;
+        createArea = document.getElementById("create-area-button");
+        areaResult = document.getElementById("area-create-result");
+
+
+        setCreateArea();
+    }
+
+    function isAreaAvailable() {
+        if (isReactionDisplay == true && isActionDisplay == true)
+            displayAreaCreation();
+    }
+
+
+
+    // --------------------------------------------------------------------------------- //
     //                               function reaction                                   //
     // --------------------------------------------------------------------------------- //
 
@@ -204,6 +243,8 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     }
 
     function executeReaction(reaction) {
+        isReactionDisplay = true;
+
         reactionParamName = [];
         reactionParam = [];
         reactionName = reaction.name;
@@ -215,6 +256,8 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         );
         paramsHtml += '<div style="border-bottom:  4px solid #ff9800; margin-top: 20px; margin-bottom: 20px"></div>';
         reactionCreator.innerHTML = paramsHtml;
+
+        isAreaAvailable();
     }
 
     function setReactionButton(elem) {
@@ -266,6 +309,8 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     }
 
     function executeAction(action) {
+        isActionDisplay = true;
+
         actionParamName = [];
         actionParam = [];
         actionName = action.name;
@@ -277,6 +322,8 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         );
         paramsHtml += '<div style="border-bottom:  4px solid #ff9800; margin-top: 20px; margin-bottom: 20px"></div>';
         actionCreator.innerHTML = paramsHtml;
+
+        isAreaAvailable();
     }
 
     function setActionButton(elem) {
