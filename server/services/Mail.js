@@ -3,7 +3,7 @@ var nodemailer = require('nodemailer');
 exports.is_service_active = async function (user_id)
 {
 	return true;
-}
+};
 
 exports.send_message = async function (area)
 {
@@ -11,7 +11,7 @@ exports.send_message = async function (area)
 	let message = global.getParam(area.reaction.params, 'message');
 
 	if (!email || !message)
-		return 'Missing email or a message'
+		return 'Missing email or message';
 
 	var transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
@@ -33,14 +33,14 @@ exports.send_message = async function (area)
 
     transporter.sendMail(mailOptions, function(error, info){
         if (error)
-			return 'Something went wrong with the send of email';
+			return 'Something went wrong while sending the email';
     });
-}
+};
 
 exports.send_message_check_args = function(json)
 {
     if (!global.getParam(json.reaction.params, 'email'))
-		return 'Missing a email';
+		return 'Missing email';
     else if (!global.getParam(json.reaction.params, 'message'))
-		return 'Missing a message to send';
-}
+		return 'Missing message to send';
+};

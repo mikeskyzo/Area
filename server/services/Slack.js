@@ -6,7 +6,7 @@ exports.is_service_active = async function (user_id)
 	if (!token || !token.access_token)
 		return false;
 	return true;
-}
+};
 
 exports.generate_url = function (token)
 {
@@ -15,7 +15,7 @@ exports.generate_url = function (token)
 	+ '&redirect_uri=' + global.redirect_url
 	+ '&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read'
 	+ '&state=' + token;
-}
+};
 
 exports.redirect_auth = async function (req, json)
 {
@@ -45,7 +45,7 @@ exports.redirect_auth = async function (req, json)
 	.catch(function (err){
 		console.error(err);
 	})
-}
+};
 
 exports.send_message = async function (area)
 {
@@ -53,10 +53,10 @@ exports.send_message = async function (area)
 	let message = global.getParam(area.reaction.params, 'message');
 
 	if (!channel_id || !message)
-		return 'Missing channel ID or a message';
+		return 'Missing channel ID or message';
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Slack});
 	if (!token || !token.access_token)
-		return 'No access token provide';
+		return 'No access token provided';
 	let url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + channel_id + '&text=' + message;
 	try {
 		let resjson = await fetch(url, {
@@ -67,12 +67,12 @@ exports.send_message = async function (area)
 	} catch (err) {
 		return 'Error from Slack response' + err
 	}
-}
+};
 
 exports.send_message_check_args = function(json)
 {
     if (!global.getParam(json.reaction.params, 'channel_id'))
         return 'Missing channel ID';
     else if (!global.getParam(json.reaction.params, 'message'))
-		return 'Missing a message to send';
-}
+		return 'Missing message to send';
+};
