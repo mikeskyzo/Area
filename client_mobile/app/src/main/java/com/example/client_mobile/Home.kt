@@ -154,23 +154,17 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    val tab = body.toString().split(" ")
-                    if (tab[0] != "Tunnel") {
-                        runOnUiThread {
-                            val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
-                            createItemsServices(services)
-                        }
-                    } else {
-                        runOnUiThread {
-                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        }
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    if (code == 404) {
+                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                         val intent = Intent(getContext(), Start::class.java)
+                        intent.putExtra("server_location", server_location)
                         startActivity(intent)
+                    } else {
+                        val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+                        createItemsServices(services)
                     }
                 }
             }
