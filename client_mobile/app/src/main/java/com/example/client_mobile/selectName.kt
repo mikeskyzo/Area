@@ -122,30 +122,6 @@ class selectName : AppCompatActivity() {
                         }
                     }
                 }
-
-
-                /*if (body == "404") {
-                    loadingPanel.visibility = View.GONE
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        val code = response.code
-                        loadingPanel.visibility = View.GONE
-                        if (code >= 400) {
-                            Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
-                            val intent = Intent(getContext(), selectAction::class.java)
-                            intent.putExtra("token", token)
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(getContext(), "Area successfully created", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(getContext(), Home::class.java)
-                            intent.putExtra("token", token)
-                            startActivity(intent)
-                        }
-                    }
-                }*/
             }
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
