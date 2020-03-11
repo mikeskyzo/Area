@@ -59,24 +59,29 @@ class Settings : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        loadingPanel.visibility = View.GONE
-                        val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
-                        val listServices = ArrayList<Service>()
-
-                        for (i in 0 until services.size) {
-                            if (services[i].active == true) {
-                                listServices.add(services[i])
-                            }
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", server_location)
+                            startActivity(intent)
                         }
-                        val arrayServices = arrayOfNulls<Service>(listServices.size)
-                        listServices.toArray(arrayServices)
-                        recyclerView_services.adapter = SettingsAdapter(arrayServices, getContext(), token)
+                        code >= 200 -> {
+                            val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+                            val listServices = ArrayList<Service>()
+
+                            for (i in services.indices) {
+                                if (services[i].active) {
+                                    listServices.add(services[i])
+                                }
+                            }
+                            val arrayServices = arrayOfNulls<Service>(listServices.size)
+                            listServices.toArray(arrayServices)
+                            recyclerView_services.adapter = SettingsAdapter(arrayServices, getContext(), token)
+                        }
                     }
                 }
             }
