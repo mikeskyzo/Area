@@ -1,4 +1,7 @@
 const axios = require('axios');
+const fetch = require('node-fetch');
+const base64 = require('base-64');
+
 const submitReaction = require('./reddit/reactions/submitReaction');
 const composeReaction = require('./reddit/reactions/composeReaction');
 
@@ -11,20 +14,10 @@ const generalSettings = {
 	// App related
 	clientId: process.env.REDDIT_ID,
 	clientSecret: process.env.REDDIT_SECRET,
-	redirectUri: 'https://areacoon-api.eu.ngrok.io/auth/redirect',
+	redirectUri: global.redirect_url
 };
 
-/* Initialize axios */
-const RedditApi = axios.create({
-	baseURL: generalSettings.redditApi,
-	crossDomain: true
-});
-const RedditAuthApi = axios.create({
-	baseURL: generalSettings.redditAuthApi,
-	crossDomain: true
-});
-
-const checkToken = async function (json, access_token, refresh_token) {
+const saveToken = async function (json, access_token, refresh_token) {
 
 	// Make sure that no token already saved for this service
 	const token = await global.findInDbAsync(global.CollectionToken, {
@@ -44,22 +37,18 @@ const checkToken = async function (json, access_token, refresh_token) {
 
 const getAccessToken = async function (code) {
 	const grantType = 'authorization_code';
-	return await RedditApi
-		.post(`api/v1/access_token` +
-			`?grant_type=${grantType}` +
-			`&code=${code}` +
-			`&redirect_uri=${generalSettings.redirectUri}`,
-			{},
-			{
-				auth: {
-					username: generalSettings.clientId,
-					password: generalSettings.clientSecret
-				}
-			})
-		.catch(function (error) {
-			console.log(error);
-		})
-};
+	const oauth = base64.encode(`${generalSettings.clientId}:${generalSettings.clientSecret}`)
+	return await fetch(generalSettings.redditApi
+		+ `/api/v1/access_token`
+		+ `?grant_type=${grantType}`
+		+ `&code=${code}`
+		+ `&redirect_uri=${global.redirect_url}`,
+		{
+			'method': 'POST',
+			headers : {'Authorization' : `Basic ${oauth}`}
+		}
+	);
+}
 
 module.exports = {
 
@@ -84,7 +73,7 @@ module.exports = {
 
 		return `${generalSettings.redditApi}/api/v1/authorize` +
 			`?client_id=${generalSettings.clientId}` +
-			`&redirect_uri=${generalSettings.redirectUri}` +
+			`&redirect_uri=${global.redirect_url}` +
 			`&scope=${scope}` +
 			`&response_type=${responseType}` +
 			`&duration=${duration}` +
@@ -94,12 +83,14 @@ module.exports = {
 	// Called after authorized by user, used to save token in db
 	redirectAuth: async function (req, json) {
 		const newreq = await getAccessToken(req.query.code);
-		await checkToken(json, newreq.data.access_token, newreq.data.refresh_token);
+		let resJson = await newreq.json();
+		console.log(resJson);
+		await saveToken(json, resJson.access_token, resJson.refresh_token);
 	},
 
 	// SUBMIT
 	postInSubreddit: async (area) => {
-		await submitReaction.submitReaction(RedditAuthApi, area);
+		await submitReaction.submitReaction(area);
 	},
 	postInSubredditCheck: (json) => {
 		return submitReaction.submitReactionCheck(json);
@@ -107,7 +98,7 @@ module.exports = {
 
 	// COMPOSE
 	composePrivateMessage: async (area) => {
-		await composeReaction.composeReaction(RedditAuthApi, area);
+		await composeReaction.composeReaction(area);
 	},
 	composePrivateMessageCheck: (json) => {
 		return composeReaction.composeReactionCheck(json);
