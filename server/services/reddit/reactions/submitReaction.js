@@ -22,16 +22,21 @@ module.exports = {
 			}
 		);
 
-		RedditAuthApi
-			.post(`/api/submit?title=${title}&text=${text}&sr=${sr}&kind=${kind}`,
-				{}, {
-					headers: {
-						Authorization: `bearer ${token.access_token}`
-					}
+		fetch(generalSettings.redditAuthApi
+			+ `/api/submit`
+			+ `?title=${title}`
+			+ `&sr=${sr}`
+			+ `&text=${text}`
+			+ `&kind=${kind}`,
+			{
+				'method': 'POST',
+				headers : {
+					'Authorization' : `bearer ${token.access_token}`
 				}
-			)
-			.catch((error) => {
-				return 'An error occured on reddit post subreddit';
-			});
+			}
+		)
+		.catch((error) => {
+			return 'An error occured on reddit post subreddit';
+		});
 	}
 };
