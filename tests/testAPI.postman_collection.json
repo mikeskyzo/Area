@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "f452788d-0b90-4da4-ad55-8ab1c574feed",
-		"name": "testAPI",
+		"_postman_id": "92c01249-a755-4fb0-896e-f4a11be8bb64",
+		"name": "testAPI copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -599,6 +599,85 @@
 							"key": "kind",
 							"value": "self"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "areacoon connect",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "Marc",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "UnitTest",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/connectUser/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"connectUser",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Areacoon create account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "enter username here",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "enter password here",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"createUser"
 					]
 				}
 			},
