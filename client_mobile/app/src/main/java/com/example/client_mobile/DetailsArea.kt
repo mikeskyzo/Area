@@ -166,24 +166,28 @@ class DetailsArea : AppCompatActivity() {
             recyclerView_params_reaction.adapter = DetailsActionReactionAdapter(listParamsReaction)
         }
 
-        if (detailedArea.color == "orange") {
-            textView_area_name.setTextColor(Color.parseColor("#ff9800"))
+        var color = ""
+        when (detailedArea.color) {
+            "orange" -> {
+                color = "#ff9800"
+            }
+            "red" -> {
+                color = "#e31c0e"
+            }
+            "blue" -> {
+                color = "#0e75e3"
+            }
+            "green" -> {
+                color = "#0ee320"
+            }
+            "yellow" -> {
+                color = "#e3dc0e"
+            }
+            "pink" -> {
+                color = "#f76dec"
+            }
         }
-        if (detailedArea.color == "red") {
-            textView_area_name.setTextColor(Color.parseColor("#e31c0e"))
-        }
-        if (detailedArea.color == "blue") {
-            textView_area_name.setTextColor(Color.parseColor("#0e75e3"))
-        }
-        if (detailedArea.color == "green") {
-            textView_area_name.setTextColor(Color.parseColor("#0ee320"))
-        }
-        if (detailedArea.color == "yellow") {
-            textView_area_name.setTextColor(Color.parseColor("#e3dc0e"))
-        }
-        if (detailedArea.color == "pink") {
-            textView_area_name.setTextColor(Color.parseColor("#f76dec"))
-        }
+        textView_area_name.setTextColor(Color.parseColor(color))
     }
 
     /**
