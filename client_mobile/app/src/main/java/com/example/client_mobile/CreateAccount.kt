@@ -31,14 +31,19 @@ class CreateAccount : AppCompatActivity() {
         }
 
         buttonCreateAccount.setOnClickListener {
-            if (editTextUsername.length() == 0) {
-                Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show()
-            } else if (editTextPassword.length() == 0) {
-                Toast.makeText(this, "Please enter a password", Toast.LENGTH_SHORT).show()
-            } else if (editTextPassword.getText().toString() != editTextConfirmPassword.getText().toString()) {
-                Toast.makeText(this, "The password and the password confirmation must be the same", Toast.LENGTH_SHORT).show()
-            } else {
-                askForAccountCreation(editTextUsername.getText().toString(), editTextPassword.getText().toString(), server_location)
+            when {
+                editTextUsername.length() == 0 -> {
+                    Toast.makeText(this, "Please enter a username", Toast.LENGTH_SHORT).show()
+                }
+                editTextPassword.length() == 0 -> {
+                    Toast.makeText(this, "Please enter a password", Toast.LENGTH_SHORT).show()
+                }
+                editTextPassword.getText().toString() != editTextConfirmPassword.getText().toString() -> {
+                    Toast.makeText(this, "The password and the password confirmation must be the same", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    askForAccountCreation(editTextUsername.getText().toString(), editTextPassword.getText().toString(), server_location)
+                }
             }
         }
     }
@@ -73,23 +78,18 @@ class CreateAccount : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
+                val code = response.code
+                runOnUiThread {
                     loadingPanel.visibility = View.GONE
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        val code = response.code
-                        loadingPanel.visibility = View.GONE
-                        if (code >= 400) {
-                            val tab = body.toString().split(" ")
-                            if (tab[0] != "Tunnel") {
-                                val account = GsonBuilder().create().fromJson(body, Account::class.java)
-                                Toast.makeText(getContext(), account.message, Toast.LENGTH_SHORT).show()
-                            } else
-                                Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        } else {
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                        }
+                        code >= 400 -> {
+                            val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
+                            Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
+                        }
+                        code >= 200 -> {
                             val account = GsonBuilder().create().fromJson(body, Account::class.java)
                             val intent = Intent(getContext(), Home::class.java)
                             intent.putExtra("username", username)
@@ -100,7 +100,6 @@ class CreateAccount : AppCompatActivity() {
                         }
                     }
                 }
-
             }
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
