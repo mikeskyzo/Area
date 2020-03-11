@@ -75,18 +75,17 @@ class DetailsArea : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
+                val code = response.code
+                runOnUiThread {
                     loadingPanel.visibility = View.GONE
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        val code = response.code
-                        loadingPanel.visibility = View.GONE
-                        if (code >= 400) {
+                    when {
+                        code == 404 -> {
                             Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        } else {
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", server_location)
+                            startActivity(intent)
+                        }
+                        code >= 200 -> {
                             Toast.makeText(getContext(), "Area deleted", Toast.LENGTH_SHORT).show()
                             val intent = Intent(getContext(), Home::class.java)
                             intent.putExtra("token", token)
@@ -121,24 +120,20 @@ class DetailsArea : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        loadingPanel.visibility = View.GONE
-                    }
-                    val tab = body.toString().split(" ")
-                    if (tab[0] != "Tunnel") {
-                        val detailedArea = GsonBuilder().create().fromJson(body, DetailedArea::class.java)
-                        setDetails(detailedArea)
-                    } else {
-                        runOnUiThread {
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    when {
+                        code == 404 -> {
                             Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", server_location)
+                            startActivity(intent)
                         }
-                        val intent = Intent(getContext(), Start::class.java)
-                        startActivity(intent)
+                        code >= 200 -> {
+                            val detailedArea = GsonBuilder().create().fromJson(body, DetailedArea::class.java)
+                            setDetails(detailedArea)
+                        }
                     }
                 }
             }
@@ -171,24 +166,16 @@ class DetailsArea : AppCompatActivity() {
             recyclerView_params_reaction.adapter = DetailsActionReactionAdapter(listParamsReaction)
         }
 
-        if (detailedArea.color == "orange") {
-            textView_area_name.setTextColor(Color.parseColor("#ff9800"))
+        var color = ""
+        when (detailedArea.color) {
+            "orange" -> { color = "#ff9800" }
+            "red" -> { color = "#e31c0e" }
+            "blue" -> { color = "#0e75e3" }
+            "green" -> { color = "#0ee320" }
+            "yellow" -> { color = "#e3dc0e" }
+            "pink" -> { color = "#f76dec" }
         }
-        if (detailedArea.color == "red") {
-            textView_area_name.setTextColor(Color.parseColor("#e31c0e"))
-        }
-        if (detailedArea.color == "blue") {
-            textView_area_name.setTextColor(Color.parseColor("#0e75e3"))
-        }
-        if (detailedArea.color == "green") {
-            textView_area_name.setTextColor(Color.parseColor("#0ee320"))
-        }
-        if (detailedArea.color == "yellow") {
-            textView_area_name.setTextColor(Color.parseColor("#e3dc0e"))
-        }
-        if (detailedArea.color == "pink") {
-            textView_area_name.setTextColor(Color.parseColor("#f76dec"))
-        }
+        textView_area_name.setTextColor(Color.parseColor(color))
     }
 
     /**

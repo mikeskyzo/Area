@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const client_id = '5cfjsk5flx3vkouomr7a26y7usrxmz';
+const {URLSearchParams} = require('url');
 
 async function Twitch_UserId (login)
 {
@@ -13,119 +13,78 @@ async function Twitch_UserId (login)
     if(json.data != [])
         if(json.data[0].hasOwnProperty('id'))
             return(json.data[0].id);
-    return(84);
+    return(-1);
 };
 
-exports.Twitch_Create_Webhook_NewSubscriber = async function(res, json, next)
+exports.newSubscriberWebhookCreate = async function(json)
 {
-    await global.saveInDbAsync(global.CollectionArea, json);
-    var user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
-    if (user_id === 84) {
-        global.responseError(res, 404, 'error, the username is does not match with Twitch database');
-        return ;
-    }
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
+    return (await makeRequest(json, 'https://api.twitch.tv/helix/users/follows?to_id={user_id}', 'subscribe'))
+};
+
+exports.newSubscriberWebhookDelete = async function(json)
+{
+    await makeRequest(json, 'https://api.twitch.tv/helix/users/follows?to_id={user_id}', 'unsubscribe')
+    return false;
+};
+
+exports.streamChangingOfStateWebhookCreate = async function(json)
+{
+    return (await makeRequest(json, 'https://api.twitch.tv/helix/streams?user_id={user_id}', 'subscribe'))
+};
+
+exports.streamChangingOfStateWebhookDelete = async function(json)
+{
+    await makeRequest(json, 'https://api.twitch.tv/helix/streams?user_id={user_id}', 'unsubscribe')
+    return false;
+};
+
+async function makeRequest(json, hub_topic, hub_mode)
+{
+    let user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
+    if (user_id === -1)
+        return 'User not found'
+    let url = 'https://api.twitch.tv/helix/webhooks/hub';
+    hub_topic = hub_topic.replace('{user_id}', `${user_id}`)
+
+    const data = new URLSearchParams();
+	data.append("hub.topic", hub_topic);
+	data.append("hub.mode", hub_mode);
+	data.append("hub.callback", global.webhooks_url + json.area_id);
+	data.append("hub.lease_seconds", 86400);
+
     let resp = await fetch(url, {
-        'method': 'POST',
-        'headers' : {'Client-ID' : client_id}
+        method : 'POST',
+        headers : {'Client-ID' : process.env.TWITCH_ID},
+        body : data
     });
 
     if (resp.status == 202)
-        res.status(202).send(`Webhook created on the user ${user_id}`);
-    else
-        global.responseError(res, 401, 'error, webhook not created, maybe you created too much webhook at once');
-};
-
-exports.Twitch_Create_Webhook_NewSubscriber_FM = async function(req, res, area, next)
-{
-    next(area, res);
+        return;
+    try {
+        let resJson = await resp.json();
+        if (!resjson || !resJson.message)
+            throw '';
+        throw resJson.message
+    } catch (err) {
+        return `Failed to ${hub_mode} webhook on Twitch : ${err || resp.statusText}`;
+    }
 }
-
-exports.Twitch_Delete_Webhook_NewSubscriber = async function(area, req, res)
-{
-    var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
-    if (user_id === 84) {
-        global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
-        return ;
-    }
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${area.id}&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70`;
-    let resp = await fetch(url, {
-        'method': 'POST',
-        'headers' : {'Client-ID' : client_id}
-    });
-
-    if (resp.status == 202) {
-        await global.deleteInDbAsync(global.CollectionArea, area);
-        res.status(202).send(`Webhook created on the user ${user_id}`);
-    }
-    else
-        global.responseError(res, 401, 'error, webhook not deleted');
-};
-
-
-
-exports.Twitch_Create_Webhook_StreamChangeState = async function(res, json, next)
-{
-    await global.saveInDbAsync(global.CollectionArea, json);
-    var user_id = await Twitch_UserId(global.getParam(json.action.params, 'login'));
-    if (user_id === 84) {
-        global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
-        return ;
-    }
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=subscribe&hub.callback=${global.url}/webhooks/${json.area_id}&hub.lease_seconds=86400`;
-    let resp = await fetch(url, {
-        'method': 'POST',
-        'headers' : {'Client-ID' : client_id}
-    });
-
-    if (resp.status == 202) {
-        res.status(202).send(`Webhook created on the user ${user_id}`);
-    }
-    else
-        global.responseError(res, 401, 'error, webhook not created, maybe you created too much webhook at once');
-};
-
-exports.Twitch_Create_Webhook_StreamChangeState_FM = async function(req, res, area, next){
-    next(area, res);
-}
-
-exports.Twitch_Delete_Webhook_StreamChangeState = async function(area, req, res)
-{
-    var user_id = await Twitch_UserId(global.getParam(area.action.params, 'login'));
-    if (user_id === 84) {
-        global.responseError(res, 404, 'error, the username is does not match with Twitch databse');
-        return ;
-    }
-    let url = `https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=${user_id}&hub.mode=unsubscribe&hub.callback=${global.url}/webhooks/${area.id}&hub.lease_seconds=86400`;
-    let resp = await fetch(url, {
-        'method': 'POST',
-        'headers' : {'Client-ID' : client_id}
-    });
-
-    if (resp.status == 202) {
-        await global.deleteInDbAsync(global.CollectionArea, area);
-        res.status(202).send(`Webhook created on the user ${user_id}`);
-    }
-    else
-        global.responseError(res, 401, 'error, webhook not deleted');
-};
-
-
-exports.Twitch_Create_Webhook_StreamChangeState_CA = async function(req, res, area, next)
-{
-    if (!global.getParam(area.action.params, 'login'))
-        return 'Missing login';
-    else
-        return null;
-};
 
 exports.confirmWebhookFunctionTwitch = function(req, res, area)
 {
-    res.send(req.query["hub.challenge"], 200);
-};
+    if (req.query["hub.mode"] == 'denied')
+        ; // Delete the area and write in the log
+    res.send(req.query["hub.challenge"]);
+    if (req.query["hub.mode"] == 'unsubscribe')
+        return true;
+}
 
+exports.TwitchFormatResult = async function(req)
+{
+	return {};
+}
 
 exports.is_service_active = async function(user_id)
 {
-    return true;
-};
+    return true
+}

@@ -17,8 +17,7 @@ import java.io.IOException
  */
 class SettingsAdapter(val services: Array<Service?>, val context: Context?, val token: String?): RecyclerView.Adapter<CustomViewHolderSettings>() {
     override fun getItemCount(): Int {
-        var nb = services.count()
-        return nb
+        return services.count()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolderSettings{
@@ -42,11 +41,6 @@ class SettingsAdapter(val services: Array<Service?>, val context: Context?, val 
     fun deleteService(service: String) {
         val client = OkHttpClient()
 
-
-        val formBody: RequestBody = FormBody.Builder()
-            .add("service", service)
-            .build()
-
         val request: Request = Request.Builder()
             .url(Home.server_location.plus("/auth/delete/").plus(service))
             .header("Authorization", "token ".plus(token.toString()))
@@ -56,17 +50,22 @@ class SettingsAdapter(val services: Array<Service?>, val context: Context?, val 
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
-                    (context as Activity).runOnUiThread {
-                        Toast.makeText(context, "Error 404: server not found", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                } else {
-                    (context as Activity).runOnUiThread {
-                        val intent = Intent(context, Settings::class.java)
-                        intent.putExtra("token", token)
-                        intent.putExtra("server_location", Home.server_location)
-                        context.startActivity(intent)
+                val code = response.code
+                (context as Activity).runOnUiThread {
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(context, body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(context, Start::class.java)
+                            intent.putExtra("server_location", Home.server_location)
+                            context.startActivity(intent)
+                        }
+                        code >= 200 -> {
+                            Toast.makeText(context, "Unsubscription successful", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(context, Settings::class.java)
+                            intent.putExtra("token", token)
+                            intent.putExtra("server_location", Home.server_location)
+                            context.startActivity(intent)
+                        }
                     }
                 }
             }

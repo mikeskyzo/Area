@@ -10,7 +10,11 @@ exports.is_service_active = async function (user_id)
 
 exports.generate_url = function (token)
 {
-	return 'https://slack.com/oauth/v2/authorize?client_id=' + process.env.SLACK_ID + '&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read&state=' + token;
+	return 'https://slack.com/oauth/v2/authorize?'
+	+ 'client_id=' + process.env.SLACK_ID
+	+ '&redirect_uri=' + global.redirect_url
+	+ '&user_scope=chat:write%20channels:read%20groups:read%20mpim:read%20im:read'
+	+ '&state=' + token;
 }
 
 exports.redirect_auth = async function (req, json)
@@ -21,7 +25,10 @@ exports.redirect_auth = async function (req, json)
 	if (token)
         global.deleteSomeInDbAsync(global.CollectionToken, {user_id : req.body.user_id, service : global.Services.Slack});
 
-	const url = 'https://slack.com/api/oauth.v2.access?client_id=' + process.env.SLACK_ID + '&client_secret=' + process.env.SLACK_SECRET + '&code=' + code;
+	const url = 'https://slack.com/api/oauth.v2.access?client_id=' + process.env.SLACK_ID
+	+ '&client_secret='	+ process.env.SLACK_SECRET
+	+ '&code=' + code
+	+ '&redirect_uri=' + global.redirect_url;
 	fetch(url, {
 		'method': 'POST',
 		headers : {"Accept": "application/json"}
@@ -29,51 +36,37 @@ exports.redirect_auth = async function (req, json)
 	.then(function (response) {
 		if (response.status == 200)
 			return response.json();
-		throw 'Failur : ' + res;
+		throw 'Failure : ' + res;
 	})
 	.then(function (resjson) {
 		json.access_token = resjson.authed_user.access_token;
 		global.saveInDbAsync(global.CollectionToken, json);
 	})
 	.catch(function (err){
-		console.log(err);
+		console.error(err);
 	})
 }
 
-exports.send_message = async function (area, res)
+exports.send_message = async function (area)
 {
 	let channel_id = global.getParam(area.reaction.params, 'channel_id');
 	let message = global.getParam(area.reaction.params, 'message');
 
-	if (!channel_id || !message) {
-		global.responseError(res, 401, 'Missing channel ID or a message')
-		return;
-	}
-
+	if (!channel_id || !message)
+		return 'Missing channel ID or a message';
 	var token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Slack});
-	if (!token || !token.access_token) {
-		global.responseError(res, 401, 'No access token provide');
-		return;
+	if (!token || !token.access_token)
+		return 'No access token provide';
+	let url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + channel_id + '&text=' + message;
+	try {
+		let resjson = await fetch(url, {
+			'method': 'POST',
+		}).json();
+		if (resjson.ok == false)
+			return 'Bad response from slack : ' + resjson.error
+	} catch (err) {
+		return 'Error from Slack response' + err
 	}
-	var url = 'https://slack.com/api/chat.postMessage?token=' + token.access_token + '&channel=' + channel_id + '&text=' + message;
-	fetch(url, {
-		'method': 'POST',
-	})
-	.then(function (response) {
-		return response.json();
-	})
-	.then(function (resjson) {
-		if (resjson.ok == false) {
-			console.error('Bad response from slack : ' + resjson.error);
-			res.status(500).send();
-		} else {
-			res.send();
-		}
-		return;
-	})
-	.catch(function (error) {
-		global.responseError(res, 500, 'err : ' + error)
-	});
 }
 
 exports.send_message_check_args = function(json)
@@ -82,6 +75,4 @@ exports.send_message_check_args = function(json)
         return 'Missing channel ID';
     else if (!global.getParam(json.reaction.params, 'message'))
 		return 'Missing a message to send';
-    else
-		return null;
 }
