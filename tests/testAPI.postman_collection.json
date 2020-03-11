@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "92c01249-a755-4fb0-896e-f4a11be8bb64",
-		"name": "testAPI copy",
+		"_postman_id": "be57c0f1-0abf-49e4-9c76-2bd2c42900c6",
+		"name": "testAPI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -17,7 +17,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=50274020&hub.mode=subscribe&hub.callback=https://areacoon-api.eu.ngrok.io/about.json&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70",
+					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=50274020&hub.mode=subscribe&hub.callback=https://areacoon-api.eu.ngrok.io&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70",
 					"protocol": "https",
 					"host": [
 						"api",
@@ -40,7 +40,7 @@
 						},
 						{
 							"key": "hub.callback",
-							"value": "https://areacoon-api.eu.ngrok.io/about.json"
+							"value": "https://areacoon-api.eu.ngrok.io"
 						},
 						{
 							"key": "hub.lease_seconds",
@@ -67,7 +67,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=50274020&hub.mode=unsubscribe&hub.callback=https://areacoon-api.eu.ngrok.io/about.json&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70",
+					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/users/follows?to_id=50274020&hub.mode=unsubscribe&hub.callback=https://areacoon-api.eu.ngrok.io&hub.lease_seconds=86400&hub.secret=qj183vwtldxe1k62knihlw0i5cti70",
 					"protocol": "https",
 					"host": [
 						"api",
@@ -90,7 +90,7 @@
 						},
 						{
 							"key": "hub.callback",
-							"value": "https://areacoon-api.eu.ngrok.io/about.json"
+							"value": "https://areacoon-api.eu.ngrok.io"
 						},
 						{
 							"key": "hub.lease_seconds",
@@ -117,7 +117,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=50274020&hub.mode=subscribe&hub.callback=https://areacoon-api.eu.ngrok.io/about.json&hub.lease_seconds=86400",
+					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=50274020&hub.mode=subscribe&hub.callback=https://areacoon-api.eu.ngrok.io&hub.lease_seconds=86400",
 					"protocol": "https",
 					"host": [
 						"api",
@@ -140,7 +140,7 @@
 						},
 						{
 							"key": "hub.callback",
-							"value": "https://areacoon-api.eu.ngrok.io/about.json"
+							"value": "https://areacoon-api.eu.ngrok.io"
 						},
 						{
 							"key": "hub.lease_seconds",
@@ -163,7 +163,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=50274020&hub.mode=unsubscribe&hub.callback=https://areacoon-api.eu.ngrok.io/about.json&hub.lease_seconds=86400",
+					"raw": "https://api.twitch.tv/helix/webhooks/hub?hub.topic=https://api.twitch.tv/helix/streams?user_id=50274020&hub.mode=unsubscribe&hub.callback=https://areacoon-api.eu.ngrok.io&hub.lease_seconds=86400",
 					"protocol": "https",
 					"host": [
 						"api",
@@ -186,12 +186,679 @@
 						},
 						{
 							"key": "hub.callback",
-							"value": "https://areacoon-api.eu.ngrok.io/about.json"
+							"value": "https://areacoon-api.eu.ngrok.io"
 						},
 						{
 							"key": "hub.lease_seconds",
 							"value": "86400"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RedditAuthorizeOauth",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.reddit.com/api/v1/authorize?client_id=xxa4cp-hsWE_iA&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=permanent&state=none",
+					"protocol": "https",
+					"host": [
+						"www",
+						"reddit",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "xxa4cp-hsWE_iA"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://areacoon-api.eu.ngrok.io/auth/redirect"
+						},
+						{
+							"key": "scope",
+							"value": "edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread"
+						},
+						{
+							"key": "response_type",
+							"value": "code"
+						},
+						{
+							"key": "duration",
+							"value": "permanent"
+						},
+						{
+							"key": "state",
+							"value": "none"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RedditGetAccessToken",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "466F9UWdI-Eh1iz7AhN8zNyszE8",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "xxa4cp-hsWE_iA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=QnuHuFcupyjgN6jquJ0ckzbKbd0&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect",
+					"protocol": "https",
+					"host": [
+						"www",
+						"reddit",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"access_token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code"
+						},
+						{
+							"key": "code",
+							"value": "QnuHuFcupyjgN6jquJ0ckzbKbd0"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://areacoon-api.eu.ngrok.io/auth/redirect"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RedditComposePrivateMessage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 313895577531-no8giX40PwgUtb1Ag1v6TLurlSY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://oauth.reddit.com/api/compose?to=MinMatth-Magi&subject=test&text=Patrick Bruel",
+					"protocol": "https",
+					"host": [
+						"oauth",
+						"reddit",
+						"com"
+					],
+					"path": [
+						"api",
+						"compose"
+					],
+					"query": [
+						{
+							"key": "to",
+							"value": "MinMatth-Magi"
+						},
+						{
+							"key": "subject",
+							"value": "test"
+						},
+						{
+							"key": "text",
+							"value": "Patrick Bruel"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RedditPostInSubreddit",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer 313895577531-no8giX40PwgUtb1Ag1v6TLurlSY"
+					}
+				],
+				"url": {
+					"raw": "https://oauth.reddit.com/api/submit?title=Area_Dashboard++&text=Ceci est un post testant l'api de reddit&sr=Area_coon_test&kind=self",
+					"protocol": "https",
+					"host": [
+						"oauth",
+						"reddit",
+						"com"
+					],
+					"path": [
+						"api",
+						"submit"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Area_Dashboard++"
+						},
+						{
+							"key": "text",
+							"value": "Ceci est un post testant l'api de reddit"
+						},
+						{
+							"key": "sr",
+							"value": "Area_coon_test"
+						},
+						{
+							"key": "kind",
+							"value": "self"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Areacoon connect",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "Marc",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "UnitTest",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/connectUser/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"connectUser",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Areacoon create account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "enter username here",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "enter password here",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubAuthorizeOauth",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://github.com/login/oauth/authorize?client_id=a5c1a4e56df11fc5735a&scope=admin:repo_hook%20repo&state=testPostman",
+					"protocol": "https",
+					"host": [
+						"github",
+						"com"
+					],
+					"path": [
+						"login",
+						"oauth",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "a5c1a4e56df11fc5735a"
+						},
+						{
+							"key": "scope",
+							"value": "admin:repo_hook%20repo"
+						},
+						{
+							"key": "state",
+							"value": "testPostman"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubGetAccessToken",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://github.com/login/oauth/access_token?client_id=a5c1a4e56df11fc5735a&client_secret=d34b0ddb1e2990542e7c42ea6faa1f668a5d8e20&code=YOURCODEHERE",
+					"protocol": "https",
+					"host": [
+						"github",
+						"com"
+					],
+					"path": [
+						"login",
+						"oauth",
+						"access_token"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "a5c1a4e56df11fc5735a"
+						},
+						{
+							"key": "client_secret",
+							"value": "d34b0ddb1e2990542e7c42ea6faa1f668a5d8e20"
+						},
+						{
+							"key": "code",
+							"value": "YOURCODEHERE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubDeleteWebhook",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token YOURTOKENHERE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks/190814594",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks",
+						"190814594"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnIssues",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token YOURTOKENHERE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"issues\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnPush",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "token YOURTOKENHERE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"push\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnPublic",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "token YOURTOKENHERE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"public\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnLabel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "token YOURTOKENHERE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"label\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnRepository",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "token YOURTOKENHERE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"repository\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnStar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "token YOURTOKENHERE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"star\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnCommitComment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "token YOURTOKENHERE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"commit_comment\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnCreate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "token YOURTOKENHERE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"create\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GithubCreateWebhookOnFork",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "token YOURTOKENHERE"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"web\",\n\t\"active\": true,\n\t\"events\": [\n\t  \"fork\"\n\t],\n\t\"config\": {\n\t\t\"url\": \"https://areacoon-api.eu.ngrok.io\",\n\t\t\"content_type\": \"json\",\n\t\t\"insecure_ssl\": \"0\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api.github.com/repos/Zargith/testsPostman/hooks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"github",
+						"com"
+					],
+					"path": [
+						"repos",
+						"Zargith",
+						"testsPostman",
+						"hooks"
 					]
 				}
 			},
@@ -414,270 +1081,6 @@
 					],
 					"path": [
 						"createArea"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Reddit AuthorizeOauth",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://www.reddit.com/api/v1/authorize?client_id=xxa4cp-hsWE_iA&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect&scope=edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread&response_type=code&duration=permanent&state=none",
-					"protocol": "https",
-					"host": [
-						"www",
-						"reddit",
-						"com"
-					],
-					"path": [
-						"api",
-						"v1",
-						"authorize"
-					],
-					"query": [
-						{
-							"key": "client_id",
-							"value": "xxa4cp-hsWE_iA"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "https://areacoon-api.eu.ngrok.io/auth/redirect"
-						},
-						{
-							"key": "scope",
-							"value": "edit identity flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread"
-						},
-						{
-							"key": "response_type",
-							"value": "code"
-						},
-						{
-							"key": "duration",
-							"value": "permanent"
-						},
-						{
-							"key": "state",
-							"value": "none"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Reddit Access_token",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "password",
-							"value": "466F9UWdI-Eh1iz7AhN8zNyszE8",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "xxa4cp-hsWE_iA",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "https://www.reddit.com/api/v1/access_token?grant_type=authorization_code&code=QnuHuFcupyjgN6jquJ0ckzbKbd0&redirect_uri=https://areacoon-api.eu.ngrok.io/auth/redirect",
-					"protocol": "https",
-					"host": [
-						"www",
-						"reddit",
-						"com"
-					],
-					"path": [
-						"api",
-						"v1",
-						"access_token"
-					],
-					"query": [
-						{
-							"key": "grant_type",
-							"value": "authorization_code"
-						},
-						{
-							"key": "code",
-							"value": "QnuHuFcupyjgN6jquJ0ckzbKbd0"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "https://areacoon-api.eu.ngrok.io/auth/redirect"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "RedditComposePrivateMessage",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "bearer 313895577531-no8giX40PwgUtb1Ag1v6TLurlSY",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "https://oauth.reddit.com/api/compose?to=MinMatth-Magi&subject=test&text=Patrick Bruel",
-					"protocol": "https",
-					"host": [
-						"oauth",
-						"reddit",
-						"com"
-					],
-					"path": [
-						"api",
-						"compose"
-					],
-					"query": [
-						{
-							"key": "to",
-							"value": "MinMatth-Magi"
-						},
-						{
-							"key": "subject",
-							"value": "test"
-						},
-						{
-							"key": "text",
-							"value": "Patrick Bruel"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "RedditPostInSubreddit",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "bearer 313895577531-no8giX40PwgUtb1Ag1v6TLurlSY"
-					}
-				],
-				"url": {
-					"raw": "https://oauth.reddit.com/api/submit?title=Area_Dashboard++&text=Ceci est un post testant l'api de reddit&sr=Area_coon_test&kind=self",
-					"protocol": "https",
-					"host": [
-						"oauth",
-						"reddit",
-						"com"
-					],
-					"path": [
-						"api",
-						"submit"
-					],
-					"query": [
-						{
-							"key": "title",
-							"value": "Area_Dashboard++"
-						},
-						{
-							"key": "text",
-							"value": "Ceci est un post testant l'api de reddit"
-						},
-						{
-							"key": "sr",
-							"value": "Area_coon_test"
-						},
-						{
-							"key": "kind",
-							"value": "self"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Areacoon connect",
-			"request": {
-				"auth": {
-					"type": "bearer"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "username",
-							"value": "Marc",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "UnitTest",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/connectUser/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"connectUser",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Areacoon create account",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "username",
-							"value": "enter username here",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "enter password here",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/createUser",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"createUser"
 					]
 				}
 			},
