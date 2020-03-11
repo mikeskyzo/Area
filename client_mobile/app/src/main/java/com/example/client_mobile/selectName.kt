@@ -98,7 +98,33 @@ class selectName : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", Home.server_location)
+                            startActivity(intent)
+                        }
+                        code >= 400 -> {
+                            Toast.makeText(getContext(), "Failed to created area : " + response.message, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), selectAction::class.java)
+                            intent.putExtra("token", token)
+                            startActivity(intent)
+                        }
+                        code >= 200 -> {
+                            Toast.makeText(getContext(), "Area successfully created", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Home::class.java)
+                            intent.putExtra("token", token)
+                            startActivity(intent)
+                        }
+                    }
+                }
+
+
+                /*if (body == "404") {
                     loadingPanel.visibility = View.GONE
                     runOnUiThread {
                         Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
@@ -119,7 +145,7 @@ class selectName : AppCompatActivity() {
                             startActivity(intent)
                         }
                     }
-                }
+                }*/
             }
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
