@@ -86,24 +86,26 @@ class Start : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                    runOnUiThread {
-                        val code = response.code
-                        loadingPanel.visibility = View.GONE
-                        if (code == 404) {
-                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        }
-                        else if (code >= 400 ) {
-                            val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
-                            Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
-                        } else {
-                            val account = GsonBuilder().create().fromJson(body, Account::class.java)
-                            val intent = Intent(getContext(), Home::class.java)
-                            intent.putExtra("username", username)
-                            intent.putExtra("token", account.token)
-                            intent.putExtra("server_location", serverLocation)
-                            startActivity(intent)
-                        }
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    if (code == 404) {
+                        println("a")
+                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
                     }
+                    else if (code >= 400) {
+                        println("b")
+                        val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
+                        Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
+                    } else {
+                        val account = GsonBuilder().create().fromJson(body, Account::class.java)
+                        val intent = Intent(getContext(), Home::class.java)
+                        intent.putExtra("username", username)
+                        intent.putExtra("token", account.token)
+                        intent.putExtra("server_location", serverLocation)
+                        startActivity(intent)
+                    }
+                }
             }
             override fun onFailure(call: Call, e: IOException) {
                 println("Failed to execute request")
