@@ -52,7 +52,7 @@ class Start : AppCompatActivity() {
         }
 
         buttonCreateAccount.setOnClickListener {
-            val intent = Intent(this, createAccount::class.java)
+            val intent = Intent(this, CreateAccount::class.java)
             intent.putExtra("server_location", editTextServerLocation.getText().toString())
             startActivity(intent)
         }
@@ -86,23 +86,18 @@ class Start : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
+                val code = response.code
+                runOnUiThread {
                     loadingPanel.visibility = View.GONE
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        val code = response.code
-                        loadingPanel.visibility = View.GONE
-                        if (code >= 400 ) {
-                            val tab = body.toString().split(" ")
-                            if (tab[0] != "Tunnel") {
-                                val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
-                                Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
-                            } else
-                                Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        } else {
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                        }
+                        code >= 400 -> {
+                            val resp = GsonBuilder().create().fromJson(body, BodyResp::class.java)
+                            Toast.makeText(getContext(), resp.message, Toast.LENGTH_SHORT).show()
+                        }
+                        code >= 200 -> {
                             val account = GsonBuilder().create().fromJson(body, Account::class.java)
                             val intent = Intent(getContext(), Home::class.java)
                             intent.putExtra("username", username)
