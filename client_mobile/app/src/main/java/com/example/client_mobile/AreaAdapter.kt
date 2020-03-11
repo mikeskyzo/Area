@@ -73,7 +73,6 @@ class AreaAdapter(val allAreas: Array<Area>, val context: Context?, val token: S
             intent.putExtra("token", token)
             intent.putExtra("area_id", area.area_id)
             context?.startActivity(intent)
-            Toast.makeText(holder.view.context, area.area_id, Toast.LENGTH_SHORT).show()
         }
         holder.view.imageViewIconAction.setImageResource(resources.getIdentifier(
             area.action.decapitalize(),
