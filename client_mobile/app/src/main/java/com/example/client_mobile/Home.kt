@@ -121,14 +121,17 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 val code = response.code
                 runOnUiThread {
                     loadingPanel.visibility = View.GONE
-                    if (code == 404) {
-                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        val intent = Intent(getContext(), Start::class.java)
-                        intent.putExtra("server_location", server_location)
-                        startActivity(intent)
-                    } else {
-                        val allAreas = Gson().fromJson(body, Array<Area>::class.java)
-                        recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token, resources)
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", server_location)
+                            startActivity(intent)
+                        }
+                        code >= 200 -> {
+                            val allAreas = Gson().fromJson(body, Array<Area>::class.java)
+                            recyclerView_areas.adapter = AreaAdapter(allAreas, getContext(), token, resources)
+                        }
                     }
                 }
             }
@@ -157,14 +160,17 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 val code = response.code
                 runOnUiThread {
                     loadingPanel.visibility = View.GONE
-                    if (code == 404) {
-                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
-                        val intent = Intent(getContext(), Start::class.java)
-                        intent.putExtra("server_location", server_location)
-                        startActivity(intent)
-                    } else {
-                        val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
-                        createItemsServices(services)
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", server_location)
+                            startActivity(intent)
+                        }
+                        code >= 200 -> {
+                            val services = GsonBuilder().create().fromJson(body, Array<Service>::class.java)
+                            createItemsServices(services)
+                        }
                     }
                 }
             }
