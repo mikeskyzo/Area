@@ -120,24 +120,20 @@ class DetailsArea : AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        loadingPanel.visibility = View.GONE
-                    }
-                    val tab = body.toString().split(" ")
-                    if (tab[0] != "Tunnel") {
-                        val detailedArea = GsonBuilder().create().fromJson(body, DetailedArea::class.java)
-                        setDetails(detailedArea)
-                    } else {
-                        runOnUiThread {
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    when {
+                        code == 404 -> {
                             Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", server_location)
+                            startActivity(intent)
                         }
-                        val intent = Intent(getContext(), Start::class.java)
-                        startActivity(intent)
+                        code >= 200 -> {
+                            val detailedArea = GsonBuilder().create().fromJson(body, DetailedArea::class.java)
+                            setDetails(detailedArea)
+                        }
                     }
                 }
             }
