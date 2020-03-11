@@ -58,7 +58,6 @@ class selectParameter : AppCompatActivity() {
 
         buttonCreateReaction.setOnClickListener {
             val list = ArrayList<String>()
-            //gets all editText
             for (i in 0 until (recyclerView_param.adapter as ParameterAdapter).itemCount) {
                 val holder: CustomViewHolderParam = recyclerView_param.findViewHolderForAdapterPosition(i) as CustomViewHolderParam
                 list.add(holder.view.editTextParameter.text.toString())

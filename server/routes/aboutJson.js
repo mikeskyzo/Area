@@ -29,9 +29,7 @@ exports.sendAbout = function(req, res) {
 
 exports.getReactions = async function (req, res)
 {
-	var json = {
-		reactions : []
-	};
+	var json = [];
 	for (var nb in global.Services) {
 		if (global.ServiceIsActiveMap.get(global.Services[nb])) {
 			if (await global.ServiceIsActiveMap.get(global.Services[nb])(req.body.user_id)) {
@@ -41,6 +39,8 @@ exports.getReactions = async function (req, res)
 					delete reactions[i].functions;
 					reactions[i].service = global.Services[nb];
 				}
+				if (reactions)
+					json = json.concat(reactions);
 				mergeJSON.merge(json.reactions, reactions);
 			}
 		}
@@ -50,9 +50,7 @@ exports.getReactions = async function (req, res)
 
 exports.getActions = async function (req, res)
 {
-	var json = {
-		actions : []
-	};
+	var json = [];
 	for (var nb in global.Services) {
 		if (global.ServiceIsActiveMap.get(global.Services[nb])) {
 			if (await global.ServiceIsActiveMap.get(global.Services[nb])(req.body.user_id)) {
@@ -62,7 +60,8 @@ exports.getActions = async function (req, res)
 					delete actions[i].functions;
 					actions[i].service = global.Services[nb];
 				}
-				mergeJSON.merge(json.actions, actions);
+				if (actions)
+					json = json.concat(actions);
 			}
 		}
 	}

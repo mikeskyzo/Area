@@ -53,15 +53,21 @@ class selectReaction: AppCompatActivity() {
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body?.string()
-                if (body == "404") {
-                    runOnUiThread {
-                        Toast.makeText(getContext(), "Error 404: server not found", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    val allReactions = GsonBuilder().create().fromJson(body, Reactions::class.java)
-                    runOnUiThread {
-                        loadingPanel.visibility = View.GONE
-                        recyclerView_action.adapter = ReactionAdapter(allReactions, getContext(), token, resources)
+                val code = response.code
+                runOnUiThread {
+                    loadingPanel.visibility = View.GONE
+                    when {
+                        code == 404 -> {
+                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(getContext(), Start::class.java)
+                            intent.putExtra("server_location", Home.server_location)
+                            startActivity(intent)
+                        }
+                        code >= 200 -> {
+                            val allReactions = GsonBuilder().create().fromJson(body, Array<Reaction>::class.java)
+                            loadingPanel.visibility = View.GONE
+                            recyclerView_action.adapter = ReactionAdapter(allReactions, getContext(), token, resources)
+                        }
                     }
                 }
             }
