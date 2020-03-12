@@ -99,13 +99,13 @@ const enableLogicRoutes = async function (app) {
 			const result = await ServerApi.initGetActions(req, res);
 			res.json({
 				success : true,
-				data : result.data.actions
+				data : result.data
 			})
 		} else if (req.params.action === 'getInitReaction') {
 			const result = await ServerApi.initGetReactions(req, res);
 			res.json({
 				success: true,
-				data : result.data.reactions
+				data : result.data
 			})
 		} else if (req.params.action === 'getInitArea') {
 			const result = await ServerApi.initGetAreas(req, res);
