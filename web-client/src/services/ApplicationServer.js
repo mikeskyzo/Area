@@ -27,8 +27,8 @@ exports.connectUser = function(req, res, username, password, server) {
 			}
 		}
 	).then(function(response) {
-		res.cookie('access_token', response.token);
-		generalSettings.access_token = response.token;
+		res.cookie('access_token', response.data.token);
+		generalSettings.access_token = response.data.token;
 		res.cookie('server', server);
 		generalSettings.url = server;
 		res.redirect('/dashboard');
@@ -56,14 +56,16 @@ exports.createUser = function(req, res, username, password, server) {
 			}
 		}
 	).then(function(response) {
-		res.cookie('access_token', response.token);
-		generalSettings.access_token = response.token;
+		//res.cookie('register_status', "true");
+		res.cookie('access_token', response.data.token);
+		generalSettings.access_token = response.data.token;
 		res.cookie('server', server);
 		generalSettings.url = server;
 		res.redirect('/dashboard');
 	}).catch(function(error) {
-		if (error.response.status < 300) {
-			console.log(error.response.data.message);
+		if (error.response.status === 401) {
+			res.cookie('register_status', "false");
+			res.redirect('/register');
 		} else {
 			res.redirect('/error');
 		}
