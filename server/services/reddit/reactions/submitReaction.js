@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 
+const redditAuthApi = `https://oauth.reddit.com`
+
 module.exports = {
 
 	submitReactionCheck: function (json) {
@@ -24,7 +26,7 @@ module.exports = {
 			}
 		);
 
-		fetch(generalSettings.redditAuthApi
+		fetch(redditAuthApi
 			+ `/api/submit`
 			+ `?title=${title}`
 			+ `&sr=${sr}`
