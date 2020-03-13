@@ -133,7 +133,7 @@ exports.deleteWebhook = async function (area)
 		return;
 
 	const token = await global.findInDbAsync(global.CollectionToken, {user_id : area.user_id, service : global.Services.Github});
-	if (!tokenn || !token.access_token)
+	if (!token || !token.access_token)
 		return "No access token provide";
 	const url =  `https://api.github.com/repos/${username}/${repository}/hooks/${area.action.webhook_id}`;
 	fetch(url, {

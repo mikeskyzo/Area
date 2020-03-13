@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 
+const redditAuthApi = `https://oauth.reddit.com`
+
 module.exports = {
 
 	composeReactionCheck: function (json) {
@@ -22,7 +24,7 @@ module.exports = {
 				service: global.Services.Reddit
 			}
 		);
-		fetch(generalSettings.redditAuthApi
+		fetch(redditAuthApi
 			+ `/api/compose`
 			+ `?to=${to}`
 			+ `&subject=${subject}`
