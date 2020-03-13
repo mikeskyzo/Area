@@ -5,6 +5,9 @@ exports.sendAbout = function(req, res) {
 	var services = servicesJson.services;
 	for (nb in services) {
 		delete services[nb].check_token_function;
+		delete services[nb].is_service_active;
+		delete services[nb].generate_url_function;
+		delete services[nb].redirect_auth_function;
 		for (i in services[nb].actions) {
 			delete services[nb].actions[i].title;
 			delete services[nb].actions[i].functions;
