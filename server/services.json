@@ -400,8 +400,6 @@
 			"is_service_active": "isServiceActive",
 			"generate_url_function": "generateUrl",
 			"redirect_auth_function": "redirectAuth",
-			"actions" : [
-			],
 			"reactions" : [
 				{
 					"name": "postInSubreddit",
