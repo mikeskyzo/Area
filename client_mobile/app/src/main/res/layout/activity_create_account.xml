@@ -6,6 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".CreateAccount">
 
+    <EditText
+        android:id="@+id/editTextServerLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_edit_location_orange_24dp"
+        android:drawableLeft="@drawable/ic_edit_location_orange_24dp"
+        android:drawablePadding="5dp"
+        android:ems="10"
+        android:hint="@string/server_location"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:text="@string/server_addr"
+        app:backgroundTint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword"
+        app:layout_constraintVertical_bias="0.100000024" />
+
     <TextView
         android:id="@+id/textViewCreateAccount"
         android:layout_width="278dp"
@@ -86,8 +105,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword"
-        app:layout_constraintVertical_bias="0.272" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextServerLocation"
+        app:layout_constraintVertical_bias="0.24000001" />
 
     <ImageButton
         android:id="@+id/imageButtonBack"
@@ -106,13 +125,14 @@
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" >
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonCreateAccount">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateDrawable="@drawable/progress"
-            android:indeterminate="true" />
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progress" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
