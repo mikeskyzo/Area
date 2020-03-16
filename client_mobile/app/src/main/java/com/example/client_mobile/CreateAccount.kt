@@ -24,9 +24,11 @@ class CreateAccount : AppCompatActivity() {
         loadingPanel.visibility = View.GONE
 
         val server_location = intent.getStringExtra("server_location")
+        editTextServerLocation.setText(server_location)
 
         imageButtonBack.setOnClickListener {
             val intent = Intent(this, Start::class.java)
+            intent.putExtra("server_location", editTextServerLocation.text.toString())
             startActivity(intent)
         }
 
