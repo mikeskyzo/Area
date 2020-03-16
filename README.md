@@ -56,6 +56,18 @@ Features
     * Gmail
     * Trello
     * GitHub
+    
+----------------------
+Unit tests
+----------------------
+
+if you want to try some unit test on the api of the project, you'll need to install Postman first.
+Go into the "tests" folder and in "unit tests". you'll find two files. One for the unit test collection and the other for the environment variables.
+
+load those two files into Postman and run the collection. You can choose which test to run. however, be sure to put "create user" or "connect user" (if you already used the create user first) first or the other tests won't work.
+
+
+don't run "Create user" and "connect user" at the same time or it'll cause problems for the other tests 
 
 ----------------------
 How to contribute ?
