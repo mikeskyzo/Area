@@ -69,7 +69,7 @@ class AreaAdapter(val allAreas: Array<Area>, val context: Context?, val token: S
         holder.view.imageViewIconReaction.setImageResource(resources.getIdentifier(
             area.reaction.decapitalize(),
             "drawable",
-            context!!.packageName))
+            context.packageName))
     }
 }
 
