@@ -54,7 +54,7 @@ class CreateAccount : AppCompatActivity() {
      * Returns the current context
      */
     fun getContext(): Context? {
-        return this as Context
+        return this
     }
 
     /**
