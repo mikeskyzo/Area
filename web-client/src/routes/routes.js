@@ -102,9 +102,6 @@ const enableLogicRoutes = async function (app) {
 	app.get('/client/:action', async function (req, res) {
 		if (req.params.action === 'getInitAction') {
 			const result = await ServerApi.initGetActions(req, res);
-
-			console.log(result);
-
 			res.json({
 				success : true,
 				data : result.data

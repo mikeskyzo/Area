@@ -1,7 +1,6 @@
 html, body {
     margin: 0;
     height: 100%;
-    overflow: hidden;
 }
 
 .row .col {
@@ -24,7 +23,7 @@ html, body {
 } /*Background and text color when a tab is active*/
 
 .tabs .indicator {
-    background-color:white;
+    background-color:dimgrey;
 } /*Color of underline*/
 
 .flex {
