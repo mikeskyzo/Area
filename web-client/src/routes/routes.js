@@ -92,7 +92,9 @@ const enableLogicRoutes = async function (app) {
 			res.send();
 		} else if (req.params.action == 'changeServer') {
 			server_address = req.body.newAddress;
-			console.log(server_address);
+			if (server_address.charAt(server_address.length - 1) == '/') {
+				server_address = server_address.substr(0, server_address.length - 1);
+			}
 			res.redirect('/register')
 		} else {
 			res.redirect('/error');
