@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function (req, res) {
 
         if (resLogin.success === false) {
             let errorMessage = '' +
-                '<div id="message" class="orange-text" style="font-size: 20px">' + resLogin.data + '</div>';
+                '<div id="message" class="black-text" style="font-size: 20px">' + resLogin.data + '</div>';
 
             errorContainer.innerHTML = errorMessage;
         }

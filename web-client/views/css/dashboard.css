@@ -1,6 +1,11 @@
 html, body {
     margin: 0;
     height: 100%;
+    overflow-x: hidden;
+}
+
+nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i {
+    line-height: 40px;
 }
 
 .row .col {

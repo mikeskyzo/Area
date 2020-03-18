@@ -2,6 +2,10 @@ $(document).ready(function(){
     $('.tabs').tabs();
 });
 
+$(document).ready(function(){
+    $('.modal').modal();
+});
+
 document.addEventListener('DOMContentLoaded', function (req, res) {
 
     var actionList = document.getElementById("action-list");
@@ -87,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         var params = '' +
             '<div id="' + elem.area_id + '_' + elem.area_name + '" style="margin: 20px 40px 20px;">' +
                 '<div style="font-size: 30px; margin-left: 10px"><b>' + elem.area_name +
-                '</b><a id="' + elem.area_id + '" class="right btn-floating btn-small waves-effect waves-light black-text orange" style="margin-right: 10px; margin-top: 5px"><i class="material-icons black-text">close</i></a></div>' +
-                '<div class="col s12" style="background: #ff9800;  border: 4px solid #000000;">' +
-                    '<div id="areaAction" class="col s6" style="background: #ff9800;">' +
+                '</b><a id="' + elem.area_id + '" class="right btn-floating btn-small waves-effect waves-light black" style="margin-right: 10px; margin-top: 5px"><i class="material-icons white-text">close</i></a></div>' +
+                '<div class="col s12" style="background: white;  border: 4px solid #000000;">' +
+                    '<div id="areaAction" class="col s6" style="background: white;">' +
                         '<div class="center" style="font-size: 20px"><u>Action : ' + elem.action.name + '</u></div>' +
                         '<div id="areaActionParameters">';
 
@@ -99,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
 
         params += '</div>' +
             '</div>' +
-            '<div id="areaReaction" class="col s6" style="background: #ff9800;">' +
+            '<div id="areaReaction" class="col s6" style="background: white;">' +
             '<div class="center" style="font-size: 20px"><u>Reaction : ' + elem.reaction.name + '</u></div>' +
             '<div id="areaReactionParameters">';
 
@@ -201,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     function displayAreaCreation() {
         var htmlCode = '' +
             '<div class="input-field" style="margin-top: 10px;">' +
-            '<input id="areaName" type="text">' +
+            '<input id="areaName" type="text" class="black-text">' +
             '<label for="areaName">Area name</label>' +
             '</div>' +
             '<div style="border-bottom: 4px solid #1b1b1b; margin-top: 20px; margin-bottom: 20px"></div>' +
@@ -235,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
 
         var params = '' +
             '<div class="input-field" style="margin-top: 10px;">' +
-            '<input id="' + reactionName + '_' + elem.name + '" type="text">' +
+            '<input id="' + reactionName + '_' + elem.name + '" type="text" class="black-text">' +
             '<label for="' + reactionName + '_' + elem.name + '">' + elem.name + '</label>' +
             '</div>' +
             '<div style="margin-bottom: 10px; margin-left: 30px;"> <i class="material-icons small">subdirectory_arrow_right</i>' + elem.description + '</div>'
@@ -301,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
 
         var params = '' +
             '<div class="input-field" style="margin-top: 10px">' +
-                '<input id="' + actionName + '_' + elem.name + '" type="text">' +
+                '<input id="' + actionName + '_' + elem.name + '" type="text" class="black-text">' +
                 '<label for="' + actionName + '_' + elem.name + '">' + elem.name + '</label>' +
             '</div>' +
             '<div style="margin-bottom: 10px; margin-left: 30px;"> <i class="material-icons small">subdirectory_arrow_right</i>' + elem.description + '</div>'
