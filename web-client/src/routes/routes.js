@@ -1,4 +1,5 @@
 const ServerApi = require('../services/ApplicationServer');
+var server_address = "https://areacoon-api.eu.ngrok.io";
 
 const enableViewsRoutes = async function(app) {
 
@@ -15,6 +16,8 @@ const enableViewsRoutes = async function(app) {
 	});
 	app.get('/disconnect', function (req, res) {
 		res.clearCookie('access_token');
+		res.cookie('login_status', "true");
+		res.cookie('register_status', "true");
 		res.redirect('/login');
 	});
 
@@ -65,15 +68,13 @@ const enableLogicRoutes = async function (app) {
 		if (req.params.action === 'register') {
 			var username = req.body.usernameRegister;
 			var password = req.body.passwordRegister;
-			var serverAddress = req.body.serverRegister;
 
-			ServerApi.createUser(req, res, username, password, serverAddress);
+			ServerApi.createUser(req, res, username, password, server_address);
 		} else if (req.params.action === 'login') {
 			var username = req.body.usernameLogin;
 			var password = req.body.passwordLogin;
-			var serverAddress = req.body.serverLogin;
 
-			ServerApi.connectUser(req, res, username, password, serverAddress);
+			ServerApi.connectUser(req, res, username, password, server_address);
 		} else if (req.params.action == 'createArea') {
 			var areaToCreate = JSON.parse(req.body.area);
 			var result = await ServerApi.createArea(req, res, areaToCreate);
@@ -89,6 +90,10 @@ const enableLogicRoutes = async function (app) {
 			var url = "/auth/delete/" + service;
 			ServerApi.disconnectService(req, res, url);
 			res.send();
+		} else if (req.params.action == 'changeServer') {
+			server_address = req.body.newAddress;
+			console.log(server_address);
+			res.redirect('/register')
 		} else {
 			res.redirect('/error');
 		}
@@ -97,6 +102,9 @@ const enableLogicRoutes = async function (app) {
 	app.get('/client/:action', async function (req, res) {
 		if (req.params.action === 'getInitAction') {
 			const result = await ServerApi.initGetActions(req, res);
+
+			console.log(result);
+
 			res.json({
 				success : true,
 				data : result.data
@@ -121,6 +129,28 @@ const enableLogicRoutes = async function (app) {
 				server : req.cookies.server,
 				token : req.cookies.access_token
 			})
+		} else if (req.params.action === 'getRegisterStatus') {
+			if (req.cookies.register_status === "false") {
+				res.json({
+					success : false,
+					data: "Error : Username already taken"
+				});
+			} else {
+				res.json({
+					success : true
+				})
+			}
+		} else if (req.params.action === 'getLoginStatus') {
+			if (req.cookies.register_status === "false") {
+				res.json({
+					success : false,
+					data: "Error : User not found"
+				});
+			} else {
+				res.json({
+					success : true
+				})
+			}
 		}
 	});
 };
