@@ -20,7 +20,7 @@
     </div>
 
     <div class="container">
-        <div class="left orange">
+        <div class="left" style="background: #363636">
             <div class="login black-text">Login</div>
             <div class="no_account black-text">
                 You don't have an account yet ?<br>
@@ -29,29 +29,29 @@
         </div>
         <div class="right black">
             <form class="form" method="POST" action="/client/login">
-                <label for="user" class="orange-text">Username</label>
+                <label for="user" class="white-text">Username</label>
                 <input type="text" name="usernameLogin" class="white-text" required>
-                <label for="password" class="orange-text">Password</label>
+                <label for="password" class="white-text">Password</label>
                 <input type="password" name="passwordLogin" class="white-text" required>
-                <input class="btn orange" type="submit" style="margin-top:25px; color:black;" value="Login">
+                <input class="btn white" type="submit" style="margin-top:25px; color:black;" value="Login">
             </form>
         </div>
     </div>
 
     <div class="center" style="margin-left: auto; margin-right: auto; width: 40%; margin-top: 100px; position: relative">
         <form method="POST" action="/client/changeServer">
-            <label class="orange-text">If you want to change the server address, it's here !</label>
-            <input type="text" name="newAddress" class="white-text center" required>
-            <input class="btn orange" type="submit" style="color:black;" value="Change">
+            <label class="black-text">If you want to change the server address, it's here !</label>
+            <input type="text" name="newAddress" class="black-text center" required>
+            <input class="btn black" type="submit" style="color:white;" value="Change">
         </form>
     </div>
 
     <div id="help-button" style="text-align: right; margin-right: 25px">
-        <a href="#modalHelp" class="btn-floating btn waves-effect waves-light modal-trigger orange"><i class="material-icons black-text">help_outline</i></a>
+        <a href="#modalHelp" class="btn-floating btn waves-effect waves-light modal-trigger black"><i class="material-icons white-text">help_outline</i></a>
     </div>
 
     <div id="modalHelp" class="modal">
-        <div class="modal-content orange black-text">
+        <div class="modal-content white black-text">
             <h4>You need help with the registration / connexion ?</h4>
             <p>To register you need to enter a username and a password then click on the Register button.<br>
                 If you have any trouble with creating an account make sure the username you're using isn't already taken. If it is, a message will appear.<br>
@@ -59,7 +59,7 @@
                 You can also change the server address as you wish but you can also use our own server by default
             </p>
         </div>
-        <div class="modal-footer orange black-text">
+        <div class="modal-footer white black-text">
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Done</a>
         </div>
     </div>

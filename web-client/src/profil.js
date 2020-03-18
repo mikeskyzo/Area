@@ -39,13 +39,13 @@ document.addEventListener("DOMContentLoaded", function (req, res) {
     function createDeconnexionButton(elem, status) {
         disconnectButton.push(elem.service);
         var button = '' +
-            '<a id="' + elem.service + '" class="btnOAuth center waves-effect waves-light orange btn">' + elem.service + status + '</a><br>';
+            '<a id="' + elem.service + '" class="btnOAuth center waves-effect waves-light black white-text btn">' + elem.service + status + '</a><br>';
         return button;
     }
 
     function createConnexionButton(elem, status, server, token) {
         var button = '' +
-            '<a href="' + server + '/Auth/connect/' + elem.service + '?token=' + token + '" class="btnOAuth center waves-effect waves-light orange btn">' + elem.service + status + '</a><br>';
+            '<a href="' + server + '/Auth/connect/' + elem.service + '?token=' + token + '" class="btnOAuth center waves-effect waves-light black white-text btn">' + elem.service + status + '</a><br>';
         return button;
     }
 
