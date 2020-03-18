@@ -1,6 +1,7 @@
 html, body {
     margin: 0;
     height: 100%;
+    overflow: hidden;
 }
 
 .row .col {
@@ -9,21 +10,21 @@ html, body {
 
 .tabs .tab a{
     background-color:#1b1b1b;
-    color:#ff9800;
+    color:white;
 } /*Black color to the text*/
 
 .tabs .tab a:hover {
     background-color:#1b1b1b;
-    color: #ff9800;
+    color: white;
 } /*Text color on hover*/
 
 .tabs .tab a.active {
     background-color:#1b1b1b;
-    color:#ff9800;
+    color:white;
 } /*Background and text color when a tab is active*/
 
 .tabs .indicator {
-    background-color:#ff9800;
+    background-color:white;
 } /*Color of underline*/
 
 .flex {
@@ -38,28 +39,28 @@ html, body {
 
 /* label color */
 .input-field label {
-    color: #ff9800;
+    color: #1b1b1b;
 }
 /* label focus color */
 .input-field input[type=text]:focus + label {
-    color: #ff9800 !important;
+    color: #1b1b1b !important;
 }
 /* label underline focus color */
 .input-field input[type=text]:focus {
-    border-bottom: 1px solid #ff9800 !important;
-    box-shadow: 0 1px 0 0 #ff9800 !important;
+    border-bottom: 1px solid #1b1b1b !important;
+    box-shadow: 0 1px 0 0 #1b1b1b !important;
 }
 /* valid color */
 .input-field input[type=text].valid {
-    border-bottom: 1px solid #ff9800;
-    box-shadow: 0 1px 0 0 #ff9800;
+    border-bottom: 1px solid #1b1b1b;
+    box-shadow: 0 1px 0 0 #1b1b1b;
 }
 /* invalid color */
 .input-field input[type=text].invalid {
-    border-bottom: 1px solid #ff9800;
-    box-shadow: 0 1px 0 0 #ff9800;
+    border-bottom: 1px solid #1b1b1b;
+    box-shadow: 0 1px 0 0 #1b1b1b;
 }
 /* icon prefix focus color */
 .input-field .prefix.active {
-    color: #ff9800;
+    color: #1b1b1b;
 }

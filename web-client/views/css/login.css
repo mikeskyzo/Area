@@ -65,8 +65,8 @@ body {
     color: #F1F1F2;
     position: relative;
     width: 50%;
-    height: 120%;
 }
+
 @media (max-width: 767px) {
     .right {
         flex-shrink: 0;
@@ -76,10 +76,7 @@ body {
     }
 }
 .form {
-    margin-top: 30px;
-    margin-right: 40px;
-    margin-left: 40px;
-    margin-bottom: 20px;
+    margin: 40px;
     position: absolute;
 }
 label {

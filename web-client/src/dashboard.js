@@ -204,10 +204,10 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
             '<input id="areaName" type="text">' +
             '<label for="areaName">Area name</label>' +
             '</div>' +
-            '<div style="border-bottom: 4px solid #ff9800; margin-top: 20px; margin-bottom: 20px"></div>' +
+            '<div style="border-bottom: 4px solid #1b1b1b; margin-top: 20px; margin-bottom: 20px"></div>' +
             '<div class="center">' +
             '<div id="area-create-result"></div>' +
-            '<a id="create-area-button" class="orange waves-effect waves-light btn-large black-text" style="margin-top: 10px"><i class="material-icons left">add</i><b>Create Area</b></a>' +
+            '<a id="create-area-button" class="black waves-effect waves-light btn-large white-text" style="margin-top: 10px"><i class="material-icons left">add</i><b>Create Area</b></a>' +
             '</div>';
 
         areaCreator.innerHTML = htmlCode;
@@ -249,12 +249,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         reactionParam = [];
         reactionName = reaction.name;
         let paramsHtml = '' +
-            '<div class="center orange-text" style="margin-top: 10px; font-size: 20px"><b>Reaction : ' + reaction.name + '</b></div>';
+            '<div class="center black-text" style="margin-top: 10px; font-size: 20px"><b>Reaction : ' + reaction.name + '</b></div>';
 
         reaction.params.forEach(elem =>
             paramsHtml += createReactionParamsTemplate(elem, reaction.name)
         );
-        paramsHtml += '<div style="border-bottom:  4px solid #ff9800; margin-top: 20px; margin-bottom: 20px"></div>';
+        paramsHtml += '<div style="border-bottom:  4px solid #1b1b1b; margin-top: 20px; margin-bottom: 20px"></div>';
         reactionCreator.innerHTML = paramsHtml;
 
         isAreaAvailable();
@@ -270,12 +270,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     function createReactionTemplate(elem) {
         var newReaction = '' +
             '<div style="margin: 20px">' +
-                '<span class="orange-text right"><b>' + elem.service + '</b></span><br>' +
-                '<span class="orange-text right"><u>' + elem.title + ' :</u></span>' +
-                '<a id="' + elem.name + '" class="left btn-floating btn waves-effect waves-light orange" style="margin-bottom: 10px"><i class="material-icons black-text">keyboard_arrow_left</i></a><br>' +
-                '<span class="orange-text right">' + elem.description + '</span><br>' +
+                '<span class="white-text right"><b>' + elem.service + '</b></span><br>' +
+                '<span class="white-text right"><u>' + elem.title + ' :</u></span>' +
+                '<a id="' + elem.name + '" class="left btn-floating btn waves-effect waves-light white" style="margin-bottom: 10px"><i class="material-icons black-text">keyboard_arrow_left</i></a><br>' +
+                '<span class="white-text right">' + elem.description + '</span><br>' +
             '</div>' +
-            '<div style="border-bottom: 4px solid #ff9800;"></div>'
+            '<div style="border-bottom: 4px solid white;"></div>'
         return newReaction;
     }
 
@@ -315,12 +315,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         actionParam = [];
         actionName = action.name;
         let paramsHtml = '' +
-            '<div class="center orange-text" style="margin-top: 10px; font-size: 20px"><b>Action : ' + action.name + '</b></div>';
+            '<div class="center black-text" style="margin-top: 10px; font-size: 20px"><b>Action : ' + action.name + '</b></div>';
 
         action.params.forEach(elem =>
             paramsHtml += createActionParamsTemplate(elem, action.name)
         );
-        paramsHtml += '<div style="border-bottom:  4px solid #ff9800; margin-top: 20px; margin-bottom: 20px"></div>';
+        paramsHtml += '<div style="border-bottom:  4px solid #1b1b1b; margin-top: 20px; margin-bottom: 20px"></div>';
         actionCreator.innerHTML = paramsHtml;
 
         isAreaAvailable();
@@ -336,12 +336,12 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     function createActionTemplate(elem) {
         var newAction = '' +
             '<div style="margin: 20px">' +
-                '<span class="orange-text"><b>' + elem.service + '</b></span><br>' +
-                '<span class="orange-text"><u>' + elem.title + ' :</u></span>' +
-                '<a id="' + elem.name + '" class="right btn-floating btn waves-effect waves-light orange" style="margin-bottom: 10px"><i class="material-icons black-text">keyboard_arrow_right</i></a><br>' +
-                '<span class="orange-text">' + elem.description + '</span><br>' +
+                '<span class="white-text"><b>' + elem.service + '</b></span><br>' +
+                '<span class="white-text"><u>' + elem.title + ' :</u></span>' +
+                '<a id="' + elem.name + '" class="right btn-floating btn waves-effect waves-light white" style="margin-bottom: 10px"><i class="material-icons black-text">keyboard_arrow_right</i></a><br>' +
+                '<span class="white-text">' + elem.description + '</span><br>' +
             '</div>' +
-            '<div style="border-bottom: 4px solid #ff9800;"></div>'
+            '<div style="border-bottom: 4px solid white;"></div>'
         return newAction;
     }
 
