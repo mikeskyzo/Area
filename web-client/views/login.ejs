@@ -5,13 +5,20 @@
     <title>Areacoon</title>
     <link rel="shortcut icon" type="image/png" href="../public/images/favicon.png"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style type="text/css">
         <%- include('css/login.css'); -%>
     </style>
 </head>
 
 <body>
+
+
+
 <div class="page">
+    <div class="center" id="error-container" style="margin-bottom: 20px">
+    </div>
+
     <div class="container">
         <div class="left orange">
             <div class="login black-text">Login</div>
@@ -26,14 +33,46 @@
                 <input type="text" name="usernameLogin" class="white-text" required>
                 <label for="password" class="orange-text">Password</label>
                 <input type="password" name="passwordLogin" class="white-text" required>
-                <label for="serverAddress" class="orange-text">Server address</label>
-                <input type="text" name="serverLogin" class="white-text" required>
                 <input class="btn orange" type="submit" style="margin-top:25px; color:black;" value="Login">
             </form>
         </div>
     </div>
+
+    <div class="center" style="margin-left: auto; margin-right: auto; width: 40%; margin-top: 100px; position: relative">
+        <form method="POST" action="/client/changeServer">
+            <label class="orange-text">If you want to change the server address, it's here !</label>
+            <input type="text" name="newAddress" class="white-text center">
+            <input class="btn orange" type="submit" style="color:black;" value="Change">
+        </form>
+    </div>
+
+    <div id="help-button" style="text-align: right; margin-right: 25px">
+        <a href="#modalHelp" class="btn-floating btn waves-effect waves-light modal-trigger orange"><i class="material-icons black-text">help_outline</i></a>
+    </div>
+
+    <div id="modalHelp" class="modal">
+        <div class="modal-content orange black-text">
+            <h4>You need help with the registration / connexion ?</h4>
+            <p>To register you need to enter a username and a password then click on the Register button.<br>
+                If you have any trouble with creating an account make sure the username you're using isn't already taken. If it is, a message will appear.<br>
+                <br>
+                You can also change the server address as you wish but you can also use our own server by default
+            </p>
+        </div>
+        <div class="modal-footer orange black-text">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Done</a>
+        </div>
+    </div>
+
 </div>
 
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    <%- include('../src/login.js'); -%>
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
+
 </html>
