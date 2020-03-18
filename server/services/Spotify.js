@@ -72,15 +72,16 @@ async function getSongByName(song_name, token)
 	return track_id;
 }
 
-async function addSongToQueue(track_id, token)
+async function addSongToQueue_request(track_id, token)
 {
-	let url = 'https://api.spotify.com/v1/me/player/add-to-queue?uri=' + track_id;
+	let url = `https://api.spotify.com/v1/me/player/add-to-queue?uri=${track_id}`;
     let response = await fetch(url, {
         'method': 'POST',
         'headers' : {'Authorization' : 'Bearer ' + token}
 	});
 	if (response.status != 204) {
 		console.log(response);
+		console.log(token);
 		return false;
 	}
 	return true;
@@ -109,7 +110,7 @@ exports.addSongToQueue = async function(area)
 	let track_id = await getSongByName(global.getParam(area.reaction.params, 'song_name'), token.access_token);
 	if (!track_id)
 		return 'Spotify didn\'t find the song';
-	if (!(await addSongToQueue(track_id, token)))
+	if (!(await addSongToQueue_request(track_id, token.access_token)))
 		return 'Spotify failed to add song queue';
 };
 
@@ -121,7 +122,7 @@ exports.playSong = async function (area)
 	let track_id = await getSongByName(global.getParam(area.reaction.params, 'song_name'), token.access_token);
 	if (!track_id)
 		return 'Spotify didn\'t find the song';
-	if (!(await addSongToQueue(track_id, token)))
+	if (!(await addSongToQueue_request(track_id, token.access_token)))
 		return 'Spotify failed add song queue';
 	let url = 'https://api.spotify.com/v1/me/player/next';
     let response = await fetch(url, {
