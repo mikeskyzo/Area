@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-router.post('/webhooks/:areaId', function(req, res) {
-	global.findInDb(global.CollectionArea, {area_id : req.params.areaId}, req, res, redirectToArea);
+router.post('/webhooks/:areaId', async function(req, res) {
+	let area = await global.findInDbAsync(global.CollectionArea, {area_id : req.params.areaId});
+	redirectToArea(area, req, res);
 });
 
-router.get('/webhooks/:areaId', function(req, res) {
-	global.findInDb(global.CollectionArea, {area_id : req.params.areaId}, req, res, redirectToFinishWebhook);
+router.get('/webhooks/:areaId', async function(req, res) {
+	let area = await global.findInDbAsync(global.CollectionArea, {area_id : req.params.areaId});
+	redirectToFinishWebhook(area, req, res);
 });
 
 module.exports = router;
