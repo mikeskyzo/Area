@@ -150,9 +150,10 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     }
 
     function createAreaFunction() {
-        var areaName = document.getElementById("areaName").value;
+        actionParamValue = [];
+        reactionParamValue = [];
 
-        console.log(areaName);
+        var areaName = document.getElementById("areaName").value;
 
         for (var i = 0; i != actionParam.length; i++)
             actionParamValue[i] = document.getElementById(actionParam[i]).value;
@@ -249,6 +250,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
     function executeReaction(reaction) {
         isReactionDisplay = true;
 
+        console.log(reactionParamName);
         reactionParamName = [];
         reactionParam = [];
         reactionName = reaction.name;
@@ -259,7 +261,8 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
             paramsHtml += createReactionParamsTemplate(elem, reaction.name)
         );
         paramsHtml += '<div style="border-bottom:  4px solid #1b1b1b; margin-top: 20px; margin-bottom: 20px"></div>';
-        reactionCreator.innerHTML = paramsHtml;
+        reactionCreator.innerHTML = paramsHtml;        console.log(areaName);
+
 
         isAreaAvailable();
     }
