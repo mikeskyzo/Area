@@ -7,25 +7,6 @@ global.CollectionArea = 'Area'
 
 global.secret = 'secret';
 
-global.saveInDb = function (collection, json, res, success_message){
-
-	global.db.collection(collection).insertOne(json, (err, result) => {
-		if (err) {
-			res.status(401);
-			res.json({
-				success : false,
-				message : err.message
-			});
-		} else {
-			res.status(201);
-			res.json({
-				success : true,
-				message : success_message,
-			})
-		}
-	});
-};
-
 global.sendResponse = function(res, status = 200, massage, success) {
 	if (!res) return;
 	res.status(status || 200);
@@ -75,15 +56,6 @@ global.DoesUserExist = function (user_id, req, res, next) {
 	});
 }
 
-global.getToken = function (user_id, service, result, next) {
-	global.db.collection(global.CollectionToken).findOne({id : user_id, service : service}, (err, rslt) => {
-		if (err) return;
-		if(!rslt) return;
-		if (next)
-			next(params, result, rslt);
-	});
-}
-
 global.findInDbAsync = async function (collection, param) {
 	return db.collection(collection).findOne(param);
 }
@@ -106,39 +78,6 @@ global.deleteSomeInDbAsync = async function (collection, param) {
 
 global.saveInDbAsync = async function (collection, param) {
 	return db.collection(collection).insertOne(param);
-}
-
-global.saveAREA = function (res, json)
-{
-	global.saveInDb(global.CollectionArea, json, res, 'Area created successfully');
-}
-
-global.deleteInDb = function (collection, params, req, res)
-{
-	global.db.collection(collection).deleteOne(params, function (err, result) {
-		if (err) {
-			global.sendResponse(res, 500, err.message)
-			return;
-		}
-		res.status(201);
-		res.json({
-			success : true,
-			message : 'Deleted',
-		});
-		return;
-	});
-}
-
-global.findInDb = function (collection, params, req, res, next)
-{
-	global.db.collection(collection).findOne(params, (err, result) => {
-		if (err) {
-			global.sendResponse(res, 401, err.message)
-			return;
-		}
-		if (next)
-			next(result, req, res);
-	});
 }
 
 global.getParam = function (params, name)

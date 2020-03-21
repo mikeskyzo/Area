@@ -79,11 +79,8 @@ async function addSongToQueue_request(track_id, token)
         'method': 'POST',
         'headers' : {'Authorization' : 'Bearer ' + token}
 	});
-	if (response.status != 204) {
-		console.log(response);
-		console.log(token);
+	if (response.status != 204)
 		return false;
-	}
 	return true;
 }
 
@@ -97,7 +94,6 @@ exports.SkipSong = async function(area)
         'method': 'POST',
         'headers' : {'Authorization' : 'Bearer ' + token.access_token}
 	});
-	console.log(response);
 	if (response.status != 204)
 		return 'Spotify failed to play next song';
 };

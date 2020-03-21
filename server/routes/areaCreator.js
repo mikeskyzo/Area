@@ -65,7 +65,7 @@ exports.deleteArea = async function (req, res) {
 			global.sendResponse(res, 401, result)
 		else {
 			if (!(result === false))
-				global.deleteInDbAsync(global.CollectionArea, {area_id : req.body.area_id});
+				await global.deleteInDbAsync(global.CollectionArea, {area_id : req.body.area_id});
 			global.sendResponse(res, 200, 'Area deleted')
 		}
 	}
