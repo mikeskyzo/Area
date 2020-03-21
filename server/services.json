@@ -230,7 +230,7 @@
 						},
 						{
 							"type" : "format_result",
-							"name" : "FormatWebhookCheckAction"
+							"name" : "FormatWebhookCheckZen"
 						},
 						{
 							"type" : "delete_action",
