@@ -18,7 +18,7 @@ exports.redirectToService = function(req, res)
 		redirectToClient(res, json.support);
 }
 
-exports.getTokenFromService = function(req, res)
+exports.getTokenFromService = async function(req, res)
 {
 	let token = getToken(req);
 	if (!token)
@@ -30,7 +30,7 @@ exports.getTokenFromService = function(req, res)
 			user_id : token.user_id,
 			service : token.service
 		};
-		global.ServiceRedirectAuthMap.get(token.service, token.user_id)(req, json);
+		await global.ServiceRedirectAuthMap.get(token.service, token.user_id)(req, json);
 		redirectToClient(res, token.support);
 	}
 }

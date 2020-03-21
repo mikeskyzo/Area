@@ -1,7 +1,7 @@
 var uniqid = require('uniqid');
 var jwt = require('jsonwebtoken');
 
-exports.creatUser = function(req, res) {
+exports.creatUser = async function(req, res) {
     var username = req.body.username;
     var pass = req.body.password;
     if (!username || !pass) {
@@ -12,33 +12,26 @@ exports.creatUser = function(req, res) {
         });
         return;
     }
-    global.db.collection(global.CollectionUsers).findOne({name : username.toLowerCase()}, (err, result) => {
-        if (result) {
-            global.sendResponse(res, 401, 'Username already taken');
-            return;
-        }
-
-        var id = uniqid();
-        global.db.collection(global.CollectionUsers).insertOne({name : username.toLowerCase(), pass : pass, id : id}, (err, result) => {
-            if (err) {
-                res.status(501);
-                res.json({
-                    success : false,
-                    message : err.message
-                });
-            } else {
-                res.status(201);
-                var token = jwt.sign({ id: id }, global.secret, {
-                    expiresIn: '1h'
-                });
-                res.json({
-                    success : true,
-                    message : 'Created successfully',
-                    token : token
-                })
-            }
-        })
+    let result = await global.findInDbAsync(global.CollectionUsers, {name : username.toLowerCase()});
+    if (result) {
+        global.sendResponse(res, 401, 'Username already taken');
+        return;
+    }
+    let id = uniqid();
+    result = await global.saveInDbAsync(global.CollectionUsers, {name : username.toLowerCase(), pass : pass, id : id})
+    if (result.insertedCount == 0) {
+        global.sendResponse(res, 501, 'Failed to create a new user', false)
+        return;
+    }
+    var token = jwt.sign({ id: id }, global.secret, {
+        expiresIn: '1h'
     });
+    res.status(201);
+    res.json({
+        success : true,
+        message : 'Created successfully',
+        token : token
+    })
 }
 
 exports.connectUser = async function(req, res) {
@@ -52,34 +45,20 @@ exports.connectUser = async function(req, res) {
         });
         return;
     }
-
-    global.db.collection(global.CollectionUsers).findOne({name : username.toLowerCase(), pass : pass}, (err, result) => {
-        if (err) {
-            res.status(401);
-            res.json({
-                success : false,
-                message : err.message
-            });
-        } else {
-            if(!result) {
-                res.status(401);
-                res.json({
-                    success : false,
-                    message : 'User not found'
-                })
-            } else {
-                res.status(200);
-                var token = jwt.sign({ id: result.id }, global.secret, {
-                    expiresIn: '1h'
-                });
-                res.json({
-                    success : true,
-                    message : 'Connect successfully',
-                    token : token
-                });
-            }
-        }
-    })
+    let result = await global.findInDbAsync(global.CollectionUsers, {name : username.toLowerCase()});
+    if (!result) {
+        global.sendResponse(res, 401, 'User not found', false)
+        return;
+    }
+    res.status(200);
+    var token = jwt.sign({ id: result.id }, global.secret, {
+        expiresIn: '1h'
+    });
+    res.json({
+        success : true,
+        message : 'Connect successfully',
+        token : token
+    });
 }
 
 exports.changeUsername = async function (req, res)
