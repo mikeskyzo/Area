@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
                 '</b><a id="' + elem.area_id + '" class="right btn-floating btn-small waves-effect waves-light black" style="margin-right: 10px; margin-top: 5px"><i class="material-icons white-text">close</i></a></div>' +
                 '<div class="col s12" style="background: white;  border: 4px solid #000000;">' +
                     '<div id="areaAction" class="col s6" style="background: white;">' +
-                        '<div class="center" style="font-size: 20px"><u>Action : ' + elem.action.name + '</u></div>' +
+                        '<div class="center" style="font-size: 20px"><u>Action : ' + elem.action.title + '</u></div>' +
                         '<div id="areaActionParameters">';
 
         elem.action.params.forEach(elem =>
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function (req, res) {
         params += '</div>' +
             '</div>' +
             '<div id="areaReaction" class="col s6" style="background: white;">' +
-            '<div class="center" style="font-size: 20px"><u>Reaction : ' + elem.reaction.name + '</u></div>' +
+            '<div class="center" style="font-size: 20px"><u>Reaction : ' + elem.reaction.title + '</u></div>' +
             '<div id="areaReactionParameters">';
 
         elem.reaction.params.forEach(elem =>
