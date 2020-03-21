@@ -8,7 +8,6 @@ const webhooks = require('./routes/webhooks');
 
 const ngrok = require('ngrok');
 
-const logger = require('morgan');
 const process = require('process')
 
 const utils = require('./src/utils')
@@ -19,7 +18,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(device.capture());
