@@ -9,9 +9,13 @@ async function Twitch_UserId (login)
 		"headers" : {"Client-ID" : process.env.TWITCH_ID}
 	});
 	let json = await object.json();
-	if(json.data != [])
-		if(json.data[0].hasOwnProperty("id"))
-			return(json.data[0].id);
+	try {
+		if(json.data != [])
+			if(json.data[0].hasOwnProperty("id"))
+				return(json.data[0].id);
+	} catch (err) {
+		return(-1);
+	}
 	return(-1);
 }
 
