@@ -12,7 +12,7 @@
     "merge-json": "0.1.0-b.3",
     "mongodb": "^3.4.1",
     "ngrok": "3.2.7",
-    "node-fetch": "2.6.0",
+    "node-fetch": "2.6.1",
     "uniqid": "5.2.0",
     "url": "^0.11.0",
     "nodemailer": "6.4.3",
